@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Icon, Input, Button, Checkbox } from 'antd';
+
+import RegistModal from './RegistModal';
 import apiAccess from '../Helpers/apiAccess'
 
 class LoginForm extends Component {
@@ -8,14 +10,10 @@ class LoginForm extends Component {
     super(props);
     this.state = {
       visible: false,
-      username: '',
+      email: '',
       password: '',
       modal: false
     };
-  }
-
-  openModal = () =>{
-    this.state.modal = false
   }
 
   handleSubmit = (e) => {
@@ -24,9 +22,9 @@ class LoginForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         apiAccess({
-          url: 'http://localhost:8000/login',
+          url: 'http://localhost:8000/users/login',
           method: 'POST',
-          payload: {username: this.state.username,
+          payload: {email: this.state.email,
                     password: this.state.password},
           attemptAction: () => this.props.dispatch({ type: 'LOGIN_ATTEMPT' }),
           successAction: (json) => this.props.dispatch({ type: 'LOGIN_SUCCESS', json }),
@@ -40,14 +38,14 @@ class LoginForm extends Component {
   render () {
     const { getFieldDecorator } = this.props.form;
     console.log('LoginForm props', this.props);
-    console.log('form', this.props.form.getFieldValue('username'));
+    console.log('form', this.props.form.getFieldValue('email'));
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <Form.Item>
-          {getFieldDecorator('username', {
-            rules: [{ required: true, message: 'Please input your username!' }],
+          {getFieldDecorator('email', {
+            rules: [{ required: true, message: 'Please input your email!' }],
           })(
-             <Input addonBefore={<Icon type="lock" />} type="text" placeholder="username" />
+             <Input addonBefore={<Icon type="lock" />} type="text" placeholder="Email" />
           )}
         </Form.Item>
         <Form.Item>
@@ -68,7 +66,6 @@ class LoginForm extends Component {
           <Button type="primary" htmlType="submit" className="login-form-button">
             Log in
           </Button>
-          <a onClick = {this.openModal}>register now!</a>
 
       </Form.Item>
 

@@ -1,4 +1,6 @@
 import React, { PropTypes, Component } from 'react';
+
+import apiAccess from '../Helpers/apiAccess'
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button } from 'antd';
 
 
@@ -18,7 +20,7 @@ const residences = [{
 
 }];
 
-const roles = [{
+const role = [{
   value: 'Customer Service',
   label: 'Customer Service',
 
@@ -43,16 +45,45 @@ const RegistForm = Form.create()(React.createClass({
   getInitialState() {
     return {
       passwordDirty: false,
-    };
-  },
+      email: "",
+      password: "",
+      confirm: "",
+      nickname: "",
+      name:"",
+      Surname:"",
+      role:"",
+      residence:"",
+      phone:""
+      }
+    },
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
-      }
-    });
+
+        let payload = {email: this.props.form.getFieldValue('email'),
+                      password: this.props.form.getFieldValue('password'),
+                      confirm: this.props.form.getFieldValue('confirm'),
+                      nickname: this.props.form.getFieldValue('nickname'),
+                      name:this.props.form.getFieldValue('name'),
+                      surname:this.props.form.getFieldValue('surname'),
+                      role:this.props.form.getFieldValue('role'),
+                      residence:this.props.form.getFieldValue('residence'),
+                      phone:this.props.form.getFieldValue('phone')}
+
+          apiAccess({
+            url: 'http://localhost:8000/register',
+            method: 'POST',
+            payload: payload,
+            attemptAction: () => this.props.dispatch({ type: 'REGIST_ATTEMPT' }),
+            successAction: (json) => this.props.dispatch({ type: 'REGIST_SUCCESS', payload }),
+            failureAction: () => this.props.dispatch({ type: 'REGIST_FAILED' })
+          })
+        }else
+            console.log("error")
+      });
   },
+
   handlePasswordBlur(e) {
     const value = e.target.value;
     this.setState({ passwordDirty: this.state.passwordDirty || !!value });
@@ -74,6 +105,7 @@ const RegistForm = Form.create()(React.createClass({
   },
 
   render() {
+
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
       labelCol: { span: 6 },
@@ -181,7 +213,7 @@ const RegistForm = Form.create()(React.createClass({
           )}
           hasFeedback
         >
-          {getFieldDecorator('Surname', {
+          {getFieldDecorator('surname', {
             rules: [{ required: true, message: 'Please input your surname!' }],
           })(
             <Input />
@@ -189,13 +221,13 @@ const RegistForm = Form.create()(React.createClass({
         </FormItem>
         <FormItem
           {...formItemLayout}
-          label="Roles"
+          label="role"
         >
-          {getFieldDecorator('roles', {
+          {getFieldDecorator('role', {
             initialValue: ['CEO', 'Customer Service', 'Operation','Finance','Tour Guide','Manager'],
             rules: [{ type: 'array', required: true, message: 'Please select your role!' }],
           })(
-            <Cascader options={roles} />
+            <Cascader options={role} />
           )}
         </FormItem>
         <FormItem
@@ -227,5 +259,7 @@ const RegistForm = Form.create()(React.createClass({
     );
   },
 }));
+
+
 
 export default RegistForm;

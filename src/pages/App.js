@@ -1,10 +1,37 @@
 import React from 'react'
 import LoginPage from "./LoginPage";
+import DashboardPage from "./DashboardPage";
+import { connect } from 'react-redux'
 
-const App = () => (
-  <div>
-    <LoginPage/>
-  </div>
-)
+const App = React.createClass({
+  getDefaultProps () {
+    return {
+      loggedIn: false
+    }
+  },
 
-export default App
+  changePage () {
+    if (!this.props.loggedIn) {
+      return (
+        <LoginPage />
+      )
+    } else {
+      return (
+        <DashboardPage />
+      )
+    }
+  },
+  render () {
+    return (
+      <div>
+        {this.changePage()}
+      </div>
+    )
+  }
+})
+
+const mapStateToProps = (state) => ({
+  loggedIn: state.login.loggedIn
+})
+
+export default connect(mapStateToProps)(App)

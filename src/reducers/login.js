@@ -23,15 +23,7 @@ const login = (state = INITIAL_STATE, action) => {
       return {
         //pop up
       }
-    // case 'LOGIN_FAILED':
-    //     id: action.id,
-    //     text: action.text,
-    //     completed: false
-    //
-    //   return {
-    //     ...state,
-    //     completed: !state.completed
-    //   }
+  
     default:
       return state
   }

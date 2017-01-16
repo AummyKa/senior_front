@@ -39,16 +39,17 @@ class LoginPage extends Component {
 
     // componentDidMount () {
     //     dispatch({login(username,password)
-    //     // fetch('http://localhost:8000')
-    //     // .then(response => response.json())
-    //     // .then(json => {
-    //     //     this.setState({ people: json })
-    //     // })
+    //     fetch('http://localhost:8000')
+    //     .then(response => response.json())
+    //     .then(json => {
+    //         this.setState({ people: json })
+    //     })
     // }
 
     componentWillReceiveProps (nextProps) {
       if (this.props.loggedIn !== nextProps.loggedIn) {
         this.context.router.replace('/dashboard')
+
       }
     }
 
@@ -72,6 +73,7 @@ class LoginPage extends Component {
                         <h2 style={font_style}>Login</h2>
 
                         <LoginForm dispatch={this.props.dispatch} />
+                        <RegistModal dispatch={this.props.dispatch}  / >
 
                     </Col>
             </Row>

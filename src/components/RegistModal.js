@@ -4,6 +4,7 @@ import RegistForm from './RegistForm.js';
 
 import style from '../../public/css/login.css';
 
+
 import { Modal, Button } from 'antd';
 
 const RegistModal = React.createClass({
@@ -34,7 +35,7 @@ const RegistModal = React.createClass({
         <a onClick={this.showModal}>Create a new account</a>
         <Modal title="Registration" visible={this.state.visible}
           onCancel={this.handleCancel} style = {style}>
-         <RegistForm />
+         <RegistForm dispatch={this.props.dispatch} />
         </Modal>
       </div>
     );

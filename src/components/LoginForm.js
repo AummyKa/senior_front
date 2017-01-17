@@ -22,7 +22,7 @@ class LoginForm extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         apiAccess({
-          url: 'http://localhost:8000/users/login',
+          url: 'http://localhost:8000/login',
           method: 'POST',
           payload: {email: this.state.email,
                     password: this.state.password},

@@ -8,6 +8,9 @@ class SideBar extends Component {
           return(
           <div className = 'side-bar'>
 
+            <div className = "menu" >
+              
+            </div>
 
           </div>
       );

@@ -262,4 +262,5 @@ const RegistForm = Form.create()(React.createClass({
 
 
 
+
 export default RegistForm;

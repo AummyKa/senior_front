@@ -12,7 +12,7 @@ const regist = (state = INITIAL_STATE, action) => {
         //loading sign
       }
     case 'REGIST_SUCCESS':
-    Cookies.set('success', action.json.success)
+
     console.log(action)
       return {
         registed: true

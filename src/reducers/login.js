@@ -20,10 +20,12 @@ const login = (state = INITIAL_STATE, action) => {
         loggedIn: true
       }
     case 'LOGIN_FAILURE':
+        console.log("fail to login")
       return {
+
         //pop up
       }
-  
+
     default:
       return state
   }

@@ -1,14 +1,18 @@
 import { combineReducers } from 'redux'
 import login from './login'
 import regist from './regist'
+import pageStatus from './pageStatus'
+import guideDetail from './guideDetail'
+import search from './search'
 
-console.log({ login })
+
 
 const admin = combineReducers({
     login,
-    regist
-
-
+    regist,
+    pageStatus,
+    guideDetail,
+    search
 })
 
 export default admin

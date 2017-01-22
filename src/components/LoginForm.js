@@ -10,7 +10,7 @@ class LoginForm extends Component {
     super(props);
     this.state = {
       visible: false,
-      email: '',
+      username: '',
       password: '',
       modal: false
     };
@@ -18,14 +18,14 @@ class LoginForm extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(apiAccess )
+    console.log(this.props.form.getFieldValue('username'))
     this.props.form.validateFields((err, values) => {
       if (!err) {
         apiAccess({
           url: 'http://localhost:8000/login',
           method: 'POST',
-          payload: {email: this.state.email,
-                    password: this.state.password},
+          payload: {username: this.props.form.getFieldValue('username'), //username is an email
+                    password: this.props.form.getFieldValue('password')},
           attemptAction: () => this.props.dispatch({ type: 'LOGIN_ATTEMPT' }),
           successAction: (json) => this.props.dispatch({ type: 'LOGIN_SUCCESS', json }),
           failureAction: () => this.props.dispatch({ type: 'LOGIN_FAILED' })
@@ -37,15 +37,15 @@ class LoginForm extends Component {
 
   render () {
     const { getFieldDecorator } = this.props.form;
-    console.log('LoginForm props', this.props);
-    console.log('form', this.props.form.getFieldValue('email'));
+    // console.log('LoginForm props', this.props);
+    // console.log('form', this.props.form.getFieldValue('username'));
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <Form.Item>
-          {getFieldDecorator('email', {
-            rules: [{ required: true, message: 'Please input your email!' }],
+          {getFieldDecorator('username', {
+            rules: [{ required: true, message: 'Please input your username!' }],
           })(
-             <Input addonBefore={<Icon type="lock" />} type="text" placeholder="Email" />
+             <Input addonBefore={<Icon type="lock" />} type="text" placeholder="username" />
           )}
         </Form.Item>
         <Form.Item>

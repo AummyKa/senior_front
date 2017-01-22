@@ -1,45 +1,71 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import LoginForm from './LoginForm.js';
 import RegistForm from './RegistForm.js';
 
+
 import style from '../../public/css/login.css';
 
+import { Modal,Button } from 'react-bootstrap';
 
-import { Modal, Button } from 'antd';
+
+
 
 const RegistModal = React.createClass({
 
   getInitialState() {
-    return { visible: false };
+    return { show: false };
   },
-  showModal() {
-    this.setState({
-      visible: true,
-    });
+
+  componentWillReceiveProps (nextProps) {
+    console.log(nextProps)
+    if(nextProps.registed){
+      this.setState({show: false})
+    }
   },
-  handleOk() {
-    console.log('Clicked OK');
-    this.setState({
-      visible: false,
-    });
-  },
-  handleCancel(e) {
-    console.log(e);
-    this.setState({
-      visible: false,
-    });
-  },
+
+
   render() {
+    let close = () => this.setState({ show: false});
+
+
     return (
+
       <div>
-        <a onClick={this.showModal}>Create a new account</a>
-        <Modal title="Registration" visible={this.state.visible}
-          onCancel={this.handleCancel} style = {style}>
-         <RegistForm dispatch={this.props.dispatch} />
+      <a
+        bsStyle="primary"
+        bsSize="large"
+        onClick={() => this.setState({ show: true})}
+      >
+        Create an account
+      </a>
+
+      <div className="modal-container" style={{height: 200}}>
+
+        <Modal
+          show={this.state.show}
+          onHide={close}
+          container={this}
+          aria-labelledby="contained-modal-title"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title">Registration</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <RegistForm dispatch={this.props.dispatch} />
+          </Modal.Body>
+
         </Modal>
       </div>
+    </div>
     );
   },
 });
 
-export default RegistModal;
+const mapStateToProps = (state) => ({
+  registed: state.regist.registed
+})
+
+
+
+export default connect(mapStateToProps)(RegistModal);

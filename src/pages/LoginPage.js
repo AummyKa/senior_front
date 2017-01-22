@@ -1,20 +1,19 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux'
-import { login } from '../actions'
 
 import LoginForm from '../components/LoginForm';
 import RegistModal from '../components/RegistModal';
 
-import { Row,Col, Form, Icon, Input, Button, Checkbox } from 'antd';
 
-const imgUrl = "./img";
-const source = "bg.jpg";
-const font_style ={
+
+
+
+const font_style={
     padding: 20
 }
 
 
-const login_style = {
+const login_style= {
     padding: 10,
     margin: 20,
     marginTop: 160,
@@ -30,12 +29,18 @@ class LoginPage extends Component {
 
     constructor (props) {
         super(props)
-        this.state = { people: [] }
+        this.state = {
+          people: []
+
+
+        }
     }
 
     static contextTypes = {
       router: PropTypes.object.isRequired
     }
+
+
 
     // componentDidMount () {
     //     dispatch({login(username,password)
@@ -46,9 +51,11 @@ class LoginPage extends Component {
     //     })
     // }
 
+
     componentWillReceiveProps (nextProps) {
+
       if (this.props.loggedIn !== nextProps.loggedIn) {
-        this.context.router.replace('/dashboard')
+        this.context.router.replace('/home')
 
       }
     }
@@ -64,7 +71,6 @@ class LoginPage extends Component {
                             {/*{this.state.people.map(({ _id, name, age }) => {*/}
                                 {/*return <div key={_id}>#{_id} Name: {name}, Age: {age}</div>*/}
                             {/*})}*/}
-
                             <h1>Food tour</h1>
                         </div>
                     </Col>
@@ -84,7 +90,8 @@ class LoginPage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  loggedIn: state.login.loggedIn
+  loggedIn: state.login.loggedIn,
+  registed: state.regist.registed
 })
 
 

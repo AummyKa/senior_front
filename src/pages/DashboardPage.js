@@ -7,6 +7,7 @@ import SideBar from '../components/SideBar'
 import NavBar from '../components/NavBar'
 import Guide from '../components/content/Guide'
 import Home from '../components/content/Home'
+import PendingList from '../components/content/PendingList'
 
 class DashboardPage extends Component {
 
@@ -18,7 +19,8 @@ class DashboardPage extends Component {
       guide: false,
       schedule: false,
       tour: false,
-      finance: false
+      finance: false,
+      pendinglist: false
     }
   }
   static contextTypes = {
@@ -33,15 +35,17 @@ class DashboardPage extends Component {
       if(page!==previous){
         switch (page) {
           case 'home': //home
-              this.setState({home:true,guide:false})
+              this.setState({home:true,guide:false,pendinglist: false })
               break;
           case 'guide': //guide
-              this.setState({guide:true,home:false})
+              this.setState({guide:true,home:false, pendinglist: false})
               break;
+          case 'pendinglist':
+              console.log("page")
+              this.setState({pendinglist: true, guide:false, home:false})
           default:
             return ""
         }
-
       }
       // if(page = "home"){
       //   this.setState({home: true, guide: false})
@@ -67,8 +71,6 @@ class DashboardPage extends Component {
 
   }
 
-
-
   render(){
           return(
           <div>
@@ -80,10 +82,11 @@ class DashboardPage extends Component {
                           {/*})}*/}
                   </Col>
                   <Col span={18} >
-                    <NavBar />
+                    <NavBar dispatch={this.props.dispatch} />
                       <div style={{ padding: 60, minHeight: 360  }}>
                         { this.state.home ? <Home /> : null }
                         { this.state.guide ? <Guide dispatch={this.props.dispatch} /> : null }
+                        { this.state.pendinglist ? <PendingList /> : null }
                       </div>
                   </Col>
               </Row>

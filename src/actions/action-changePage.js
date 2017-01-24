@@ -24,6 +24,10 @@ export const changePage = (page) => {
             return {
                 type: 'MOVE_TO_FINANCE'
             }
+        case 'PendingList':
+            return {
+                type: 'MOVE_TO_PENDINGLIST'
+            }
 
         default:
             return ""

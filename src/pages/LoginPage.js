@@ -3,9 +3,7 @@ import { connect } from 'react-redux'
 
 import LoginForm from '../components/LoginForm';
 import RegistModal from '../components/RegistModal';
-
-
-
+import { Col, Row } from 'antd';
 
 
 const font_style={

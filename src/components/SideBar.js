@@ -8,7 +8,6 @@ const SubMenu = Menu.SubMenu;
 class SideBar extends Component {
 
   clickPage = (page) => {
-
     this.props.dispatch(changePage(page))
   }
 

@@ -34,6 +34,11 @@ const pageStatus = (state = INITIAL_STATE, action) => {
         return{
           pageMove: "finance"
         }
+    case 'MOVE_TO_PENDINGLIST': //tour
+        return{
+          pageMove: "pendinglist"
+        }
+
 
     default:
       return state

@@ -32,15 +32,9 @@ const RegistModal = React.createClass({
     return (
 
       <div>
-      <a
-        bsStyle="primary"
-        bsSize="large"
-        onClick={() => this.setState({ show: true})}
-      >
-        Create an account
-      </a>
+      <a onClick={() => this.setState({ show: true})}> Create an account </a>
 
-      <div className="modal-container" style={{height: 200}}>
+      <div className="modal-container" >
 
         <Modal
           show={this.state.show}

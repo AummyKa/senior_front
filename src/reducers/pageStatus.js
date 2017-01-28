@@ -38,7 +38,10 @@ const pageStatus = (state = INITIAL_STATE, action) => {
         return{
           pageMove: "pendinglist"
         }
-
+    case 'MOVE_TO_TOURS': //tour
+        return{
+          pageMove: "tours"
+        }
 
     default:
       return state

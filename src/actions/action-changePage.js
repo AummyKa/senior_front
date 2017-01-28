@@ -28,6 +28,10 @@ export const changePage = (page) => {
             return {
                 type: 'MOVE_TO_PENDINGLIST'
             }
+        case 'Tours':
+            return {
+                type: 'MOVE_TO_TOURS'
+            }
 
         default:
             return ""

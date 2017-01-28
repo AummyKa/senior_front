@@ -3,6 +3,9 @@ import { connect } from 'react-redux'
 
 import LoginForm from '../components/LoginForm';
 import RegistModal from '../components/RegistModal';
+
+import { error, info } from '../components/Modal'
+
 import { Col, Row } from 'antd';
 
 
@@ -30,15 +33,12 @@ class LoginPage extends Component {
         this.state = {
           people: []
 
-
         }
     }
 
     static contextTypes = {
       router: PropTypes.object.isRequired
     }
-
-
 
     // componentDidMount () {
     //     dispatch({login(username,password)
@@ -49,17 +49,41 @@ class LoginPage extends Component {
     //     })
     // }
 
-
     componentWillReceiveProps (nextProps) {
+
+      if(nextProps.failLogged){
+        let title = 'Login fail'
+        let content = 'Your username or password are wrong'
+
+        return(
+          <div>
+            {error(title,content)}
+          </div>
+        )
+      }
 
       if (this.props.loggedIn !== nextProps.loggedIn) {
         this.context.router.replace('/home')
 
       }
+
+      if(nextProps.registed){
+        let title = 'Register successful'
+        let content = 'You can login when your registration is approved'
+
+        return(
+          <div>
+            {info(title,content)}
+          </div>
+        )
+      }
+
+
     }
 
     render(){
         console.log('props in LoginPage', this.props)
+
 
         return(
             <div>
@@ -89,7 +113,8 @@ class LoginPage extends Component {
 
 const mapStateToProps = (state) => ({
   loggedIn: state.login.loggedIn,
-  registed: state.regist.registed
+  registed: state.regist.registed,
+  failLogged: state.login.failLogged
 })
 
 

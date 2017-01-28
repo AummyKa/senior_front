@@ -8,6 +8,7 @@ import NavBar from '../components/NavBar'
 import Guide from '../components/content/Guide'
 import Home from '../components/content/Home'
 import PendingList from '../components/content/PendingList'
+import Tours from '../components/content/Tours'
 
 class DashboardPage extends Component {
 
@@ -20,7 +21,9 @@ class DashboardPage extends Component {
       schedule: false,
       tour: false,
       finance: false,
-      pendinglist: false
+      pendinglist: false,
+      tours: false
+
     }
   }
   static contextTypes = {
@@ -32,17 +35,27 @@ class DashboardPage extends Component {
       let page = nextProps.pageState
       let previous = this.props.pageState
 
+      console.log(page)
+
       if(page!==previous){
         switch (page) {
           case 'home': //home
-              this.setState({home:true,guide:false,pendinglist: false })
+              this.setState({home:true,guide:false,pendinglist: false,
+              tours: false})
               break;
           case 'guide': //guide
-              this.setState({guide:true,home:false, pendinglist: false})
+              this.setState({guide:true,home:false, pendinglist: false,
+              tours: false})
               break;
           case 'pendinglist':
-              console.log("page")
-              this.setState({pendinglist: true, guide:false, home:false})
+              this.setState({pendinglist: true, guide:false, home:false,
+              tours: false})
+              break;
+          case 'tours':
+              console.log(page)
+              this.setState({tours: true,pendinglist: false, guide:false,
+              home:false})
+              break;
           default:
             return ""
         }
@@ -87,6 +100,7 @@ class DashboardPage extends Component {
                         { this.state.home ? <Home /> : null }
                         { this.state.guide ? <Guide dispatch={this.props.dispatch} /> : null }
                         { this.state.pendinglist ? <PendingList /> : null }
+                        { this.state.tours ? <Tours /> : null }
                       </div>
                   </Col>
               </Row>

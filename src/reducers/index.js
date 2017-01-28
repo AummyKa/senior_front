@@ -4,6 +4,7 @@ import regist from './regist'
 import pageStatus from './pageStatus'
 import guideDetail from './guideDetail'
 import search from './search'
+import userData from './userData'
 
 
 
@@ -12,7 +13,8 @@ const admin = combineReducers({
     regist,
     pageStatus,
     guideDetail,
-    search
+    search,
+    userData
 })
 
 export default admin

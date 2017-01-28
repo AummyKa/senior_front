@@ -76,7 +76,7 @@ const RegistForm = Form.create()(React.createClass({
             method: 'POST',
             payload: payload,
             attemptAction: () => this.props.dispatch({ type: 'REGIST_ATTEMPT' }),
-            successAction: (json) => this.props.dispatch({ type: 'REGIST_SUCCESS', payload }),
+            successAction: (json) => this.props.dispatch({ type: 'REGIST_SUCCESS', json }),
             failureAction: () => this.props.dispatch({ type: 'REGIST_FAILED' })
           })
         }else

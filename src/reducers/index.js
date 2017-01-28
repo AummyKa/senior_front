@@ -5,6 +5,7 @@ import pageStatus from './pageStatus'
 import guideDetail from './guideDetail'
 import search from './search'
 import userData from './userData'
+import pendingUser from './pendingUser'
 
 
 
@@ -14,7 +15,8 @@ const admin = combineReducers({
     pageStatus,
     guideDetail,
     search,
-    userData
+    userData,
+    pendingUser
 })
 
 export default admin

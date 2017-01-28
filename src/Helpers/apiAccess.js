@@ -13,7 +13,7 @@ console.log("jibi" + method)
 
 attemptAction()
 
-if(method = "POST"){
+if(method == "POST"){
 
   fetch(url, {
       method: method,
@@ -36,7 +36,7 @@ if(method = "POST"){
 
   })
 
-}else if(method = "GET") {
+}else if(method == "GET") {
 
   console.log("Helloooo")
 

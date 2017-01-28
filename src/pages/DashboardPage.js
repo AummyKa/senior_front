@@ -99,7 +99,7 @@ class DashboardPage extends Component {
                       <div style={{ padding: 60, minHeight: 360  }}>
                         { this.state.home ? <Home /> : null }
                         { this.state.guide ? <Guide dispatch={this.props.dispatch} /> : null }
-                        { this.state.pendinglist ? <PendingList /> : null }
+                        { this.state.pendinglist ? <PendingList dispatch={this.props.dispatch} /> : null }
                         { this.state.tours ? <Tours /> : null }
                       </div>
                   </Col>

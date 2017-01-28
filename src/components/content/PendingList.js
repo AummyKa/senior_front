@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import { Row,Col,Table, Input, Button } from 'antd';
 
 import SearchAutoSuggest from '../SearchAutoSuggest'
-
+import apiAccess from '../../Helpers/apiAccess'
 
 
 const Search = Input.Search
@@ -13,10 +13,10 @@ const columns = [{
   dataIndex: 'name',
   render: text => <a href="#">{text}</a>,
 }, {
-  title: 'Age',
+  title: 'Nickname',
   dataIndex: 'age',
 }, {
-  title: 'Address',
+  title: 'Email',
   dataIndex: 'address',
 }];
 
@@ -43,13 +43,19 @@ const data = [{
 }];
 
 
+
+
 const PendingList = React.createClass({
 
+
   getInitialState() {
+    this.getPendingList()
+
     return {
       filteredInfo: null,
       sortedInfo: null,
-      value: ''
+      value: '',
+      data: []
     };
   },
   handleChange(pagination, filters, sorter) {
@@ -68,9 +74,39 @@ const PendingList = React.createClass({
       sortedInfo: null,
     });
   },
+  getPendingList(){
+    apiAccess({
+      url: 'http://localhost:8000/pending',
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_PENDING_USER_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_PENDING_USER_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_PENDING_USER__FAILED' })
+    })
+  },
+
+
+  componentWillReceiveProps(nextProps){
+    console.log("BEFORE >>>>>>>>>>>>>>>>")
+    if(this.props.pendingUsers !== nextProps.pendingUsers){
+      console.log("AFTER >>>>>>>>>>>>>>>>")
+      for (var i = 0; j < nextProps.pendingUsers.length; i++){ //Iterate for wordsacross and wordsdown
+        console.log("Loop "+ i)
+        var subdata = nextProps.pendingUsers[j]; //Get the value for wordsacross and wordsdown
+        for (var j= 0; i < subdata.length; j++) { //Iterate over the words
+            console.log("Loop "+ i +"& Loop "+ j)
+            console.log(subdata[j])
+        }
+      }
+    }
+
+
+    this.setState({data: nextProps.pendingUsers})
+  },
 
 
   render() {
+
 
     //table
     const rowSelection = {
@@ -96,14 +132,14 @@ const PendingList = React.createClass({
       </div>
 
       <div className = "guide-filter">
-          <SearchAutoSuggest dispatch={this.props.dispatch} data = {data}
+          <SearchAutoSuggest dispatch={this.props.dispatch} data = {this.state.data}
             value = {this.state.value}/>
       </div>
 
       <div className = "guide-container">
         <div className="table-operations">
         </div>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+        <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} />
       </div>
     </div>
     );
@@ -114,7 +150,8 @@ function mapStateToProps(state) {
 
     return {
         guideDetail: state.guideDetail,
-        input: state.search.search_input
+        input: state.search.search_input,
+        pendingUsers: state.pendingUser.pendingUsers
     };
 }
 

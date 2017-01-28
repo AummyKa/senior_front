@@ -16,14 +16,14 @@ class SideBar extends Component {
 
   getName = () => {
 
-    apiAccess({
-      url: 'http://localhost:8000/staffs',
-      method: 'GET',
-      payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_NAME_OF_USER_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_NAME_OF_USER_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_NAME_OF_USER__FAILED' })
-    })
+    // apiAccess({
+    //   url: 'http://localhost:8000/staffs',
+    //   method: 'GET',
+    //   payload: null,
+    //   attemptAction: () => this.props.dispatch({ type: 'GET_NAME_OF_USER_ATTEMPT' }),
+    //   successAction: (json) => this.props.dispatch({ type: 'GET_NAME_OF_USER_SUCCESS', json }),
+    //   failureAction: () => this.props.dispatch({ type: 'GET_NAME_OF_USER__FAILED' })
+    // })
 
     return(
         <h5>Aummy</h5>

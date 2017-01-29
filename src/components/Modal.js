@@ -35,3 +35,18 @@ export const warning = (title,content) => {
     content: content,
   });
 }
+
+const confirm = Modal.confirm;
+
+export const showConfirm = (title,content) => {
+
+  confirm({
+    title: title,
+    content: content,
+    onOk() {
+
+
+    },
+    onCancel() {},
+  });
+}

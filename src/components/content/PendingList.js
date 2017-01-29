@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import { Row,Col,Table, Input, Button } from 'antd';
+import { Row,Col,Table, Input, Button, Modal } from 'antd';
 
 import SearchAutoSuggest from '../SearchAutoSuggest'
 import apiAccess from '../../Helpers/apiAccess'
+import { showConfirm } from '../Modal'
 
 
 const Search = Input.Search
 
-const columns = [{
+const confirm = Modal.confirm;
+
+const columns = [
+  {
   title: 'Name',
   dataIndex: 'name',
   render: text => <a href="#">{text}</a>,
@@ -18,6 +22,9 @@ const columns = [{
 }, {
   title: 'Email',
   dataIndex: 'email',
+},{
+  title: 'Position',
+  dataIndex: 'position',
 }];
 
 // const data = [{
@@ -52,7 +59,9 @@ const pendingUserData = (arrayJSON, resultJSON) =>{
       id: arrayJSON[i]._id,
       name: arrayJSON[i].name,
       nickname: arrayJSON[i].nickname,
-      email: arrayJSON[i].email
+      email: arrayJSON[i].email,
+      position: arrayJSON[i].role,
+      timeStamp: arrayJSON[i].create_date
     }
 
     resultJSON[i] = objectJSON
@@ -124,23 +133,31 @@ const PendingList = React.createClass({
       console.log(this.state.data)
     }
   },
+
   approveUser(selectedRows){
 
-    let result_id = getUserId(selectedRows)
+    confirm({
+      title: "Are you sure to approve these users",
+      content: "you can not change the aprovement again",
+      onOk() {
+        let result_id = getUserId(selectedRows)
 
-    console.log(result_id)
-    apiAccess({
-      url: 'http://localhost:8000/pending',
-      method: 'POST',
-      payload: selectedRows,
-      attemptAction: () => this.props.dispatch({ type: 'APPROVE_PENDING_USER_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'APPROVE_PENDING_USER_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'APPROVE_PENDING_USER__FAILED' })
-    })
+        console.log(result_id)
+        // apiAccess({
+        //   url: 'http://localhost:8000/pending',
+        //   method: 'POST',
+        //   payload: selectedRows,
+        //   attemptAction: () => this.props.dispatch({ type: 'APPROVE_PENDING_USER_ATTEMPT' }),
+        //   successAction: (json) => this.props.dispatch({ type: 'APPROVE_PENDING_USER_SUCCESS', json }),
+        //   failureAction: () => this.props.dispatch({ type: 'APPROVE_PENDING_USER__FAILED' })
+        // })
+
+      },
+      onCancel() {},
+    });
   },
 
   render() {
-
 
     //table
     const rowSelection = {

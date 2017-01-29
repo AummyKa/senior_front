@@ -9,6 +9,7 @@ import Guide from '../components/content/Guide'
 import Home from '../components/content/Home'
 import PendingList from '../components/content/PendingList'
 import Tours from '../components/content/Tours'
+import Schedule from '../components/content/Schedule'
 
 class DashboardPage extends Component {
 
@@ -41,20 +42,25 @@ class DashboardPage extends Component {
         switch (page) {
           case 'home': //home
               this.setState({home:true,guide:false,pendinglist: false,
-              tours: false})
+              tours: false, schedule:false})
               break;
           case 'guide': //guide
               this.setState({guide:true,home:false, pendinglist: false,
-              tours: false})
+              tours: false, schedule:false})
               break;
           case 'pendinglist':
               this.setState({pendinglist: true, guide:false, home:false,
-              tours: false})
+              tours: false, schedule:false})
               break;
           case 'tours':
               console.log(page)
               this.setState({tours: true,pendinglist: false, guide:false,
-              home:false})
+              home:false, schedule:false})
+              break;
+          case 'schedule':
+              console.log(page)
+              this.setState({tours: false,pendinglist: false, guide:false,
+              home:false, schedule: true})
               break;
           default:
             return ""
@@ -101,6 +107,7 @@ class DashboardPage extends Component {
                         { this.state.guide ? <Guide dispatch={this.props.dispatch} /> : null }
                         { this.state.pendinglist ? <PendingList dispatch={this.props.dispatch} /> : null }
                         { this.state.tours ? <Tours /> : null }
+                        { this.state.schedule ? <Schedule /> : null }
                       </div>
                   </Col>
               </Row>

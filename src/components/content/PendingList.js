@@ -14,36 +14,64 @@ const columns = [{
   render: text => <a href="#">{text}</a>,
 }, {
   title: 'Nickname',
-  dataIndex: 'age',
+  dataIndex: 'nickname',
 }, {
   title: 'Email',
-  dataIndex: 'address',
+  dataIndex: 'email',
 }];
 
-const data = [{
-  key: '1',
-  name: 'John Brown',
-  age: 32,
-  address: 'New York No. 1 Lake Park',
-}, {
-  key: '2',
-  name: 'Jim Green',
-  age: 42,
-  address: 'London No. 1 Lake Park',
-}, {
-  key: '3',
-  name: 'Joe Black',
-  age: 32,
-  address: 'Sidney No. 1 Lake Park',
-}, {
-  key: '4',
-  name: 'Disabled User',
-  age: 99,
-  address: 'Sidney No. 1 Lake Park',
-}];
+// const data = [{
+//   key: '1',
+//   name: 'John Brown',
+//   age: 32,
+//   address: 'New York No. 1 Lake Park',
+// }, {
+//   key: '2',
+//   name: 'Jim Green',
+//   age: 42,
+//   address: 'London No. 1 Lake Park',
+// }, {
+//   key: '3',
+//   name: 'Joe Black',
+//   age: 32,
+//   address: 'Sidney No. 1 Lake Park',
+// }, {
+//   key: '4',
+//   name: 'Disabled User',
+//   age: 99,
+//   address: 'Sidney No. 1 Lake Park',
+// }];
 
 
+const pendingUserData = (arrayJSON, resultJSON) =>{
 
+  for(var i = 0; i < arrayJSON.length; i++) {
+
+    var objectJSON = {
+      key: i,
+      id: arrayJSON[i]._id,
+      name: arrayJSON[i].name,
+      nickname: arrayJSON[i].nickname,
+      email: arrayJSON[i].email
+    }
+
+    resultJSON[i] = objectJSON
+}
+  //return resultJSON
+}
+
+const getUserId = (arrayJSON) =>{
+  let resultJSON = []
+  for(var i = 0; i < arrayJSON.length; i++) {
+
+    var objectJSON = {
+      id: arrayJSON[i].id,
+    }
+    resultJSON[i] = objectJSON
+}
+  return resultJSON
+
+}
 
 const PendingList = React.createClass({
 
@@ -55,7 +83,8 @@ const PendingList = React.createClass({
       filteredInfo: null,
       sortedInfo: null,
       value: '',
-      data: []
+      data: [],
+      selected: []
     };
   },
   handleChange(pagination, filters, sorter) {
@@ -86,24 +115,29 @@ const PendingList = React.createClass({
   },
 
 
+
   componentWillReceiveProps(nextProps){
-    console.log("BEFORE >>>>>>>>>>>>>>>>")
+
     if(this.props.pendingUsers !== nextProps.pendingUsers){
-      console.log("AFTER >>>>>>>>>>>>>>>>")
-      for (var i = 0; j < nextProps.pendingUsers.length; i++){ //Iterate for wordsacross and wordsdown
-        console.log("Loop "+ i)
-        var subdata = nextProps.pendingUsers[j]; //Get the value for wordsacross and wordsdown
-        for (var j= 0; i < subdata.length; j++) { //Iterate over the words
-            console.log("Loop "+ i +"& Loop "+ j)
-            console.log(subdata[j])
-        }
-      }
+
+      pendingUserData(nextProps.pendingUsers, this.state.data)
+      console.log(this.state.data)
     }
-
-
-    this.setState({data: nextProps.pendingUsers})
   },
+  approveUser(selectedRows){
 
+    let result_id = getUserId(selectedRows)
+
+    console.log(result_id)
+    apiAccess({
+      url: 'http://localhost:8000/pending',
+      method: 'POST',
+      payload: selectedRows,
+      attemptAction: () => this.props.dispatch({ type: 'APPROVE_PENDING_USER_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'APPROVE_PENDING_USER_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'APPROVE_PENDING_USER__FAILED' })
+    })
+  },
 
   render() {
 
@@ -111,10 +145,11 @@ const PendingList = React.createClass({
     //table
     const rowSelection = {
       onChange: (selectedRowKeys, selectedRows) => {
+        this.setState({selected: selectedRows})
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       },
       onSelect: (record, selected, selectedRows) => {
-        console.log(record, selected, selectedRows);
+
       },
       onSelectAll: (selected, selectedRows, changeRows) => {
         console.log(selected, selectedRows, changeRows);
@@ -125,6 +160,7 @@ const PendingList = React.createClass({
     };
 
 
+
     return (
       <div>
       <div className = "topic">
@@ -132,8 +168,16 @@ const PendingList = React.createClass({
       </div>
 
       <div className = "guide-filter">
+
+        <Row>
           <SearchAutoSuggest dispatch={this.props.dispatch} data = {this.state.data}
             value = {this.state.value}/>
+
+          <Col span = {22} offset={22} >
+          <Button type="primary" onClick={()=> this.approveUser(this.state.selected)}>Approve</Button>
+        </Col>
+        </Row>
+
       </div>
 
       <div className = "guide-container">

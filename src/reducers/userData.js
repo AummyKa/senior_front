@@ -8,7 +8,7 @@ const INITIAL_STATE = {
 const userData = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case 'GET_NAME_OF_USER_ATTEMPT':
-
+      console.log("hi")
       return {
         //loading sign
       }
@@ -18,7 +18,7 @@ const userData = (state = INITIAL_STATE, action) => {
       return {
 
       }
-    case 'GET_NAME_OF_USER__FAILED':
+    case 'GET_NAME_OF_USER_FAILED':
         console.log("fail")
       return {
         //pop up

@@ -53,12 +53,10 @@ class DashboardPage extends Component {
               tours: false, schedule:false})
               break;
           case 'tours':
-              console.log(page)
               this.setState({tours: true,pendinglist: false, guide:false,
               home:false, schedule:false})
               break;
           case 'schedule':
-              console.log(page)
               this.setState({tours: false,pendinglist: false, guide:false,
               home:false, schedule: true})
               break;
@@ -107,7 +105,7 @@ class DashboardPage extends Component {
                         { this.state.guide ? <Guide dispatch={this.props.dispatch} /> : null }
                         { this.state.pendinglist ? <PendingList dispatch={this.props.dispatch} /> : null }
                         { this.state.tours ? <Tours /> : null }
-                        { this.state.schedule ? <Schedule /> : null }
+                        { this.state.schedule ? <Schedule dispatch = {this.props.dispatch} /> : null }
                       </div>
                   </Col>
               </Row>

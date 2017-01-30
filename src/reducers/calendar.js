@@ -1,23 +1,24 @@
+
+
 const INITIAL_STATE = {
-  pendingUsers : {}
+  events: ''
 }
 
 // { type: 'LOGIN_SUCCESS', text }
-const pendingUser = (state = INITIAL_STATE, action) => {
+const calendar = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'GET_PENDING_USER_ATTEMPT':
+    case 'GET_CALENDAR_ATTEMPT':
 
       return {
         //loading sign
       }
-    case 'GET_PENDING_USER_SUCCESS':
+    case 'GET_CALENDAR_SUCCESS':
       // action: { type: 'LOGIN_SUCCESS', json: { token: '' }}
-      let data = action.json
-
+      console.log(action)
       return {
-        pendingUsers: action.json
+        event : action.json
       }
-    case 'GET_PENDING_USER__FAILED':
+    case 'GET_CALENDAR_FAILED':
         console.log("fail")
       return {
         //pop up
@@ -25,8 +26,7 @@ const pendingUser = (state = INITIAL_STATE, action) => {
 
     default:
       return ''
-
+  }
 }
-}
 
-export default pendingUser
+export default calendar

@@ -15,7 +15,7 @@ class Schedule extends Component {
           <h2>Schedule</h2>
         </div>
         <div className = "calendar">
-          <ShowCalendar />
+          <ShowCalendar dispatch = {this.props.dispatch} />
         </div>
       </div>
 

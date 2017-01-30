@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Calendar } from 'antd';
+import apiAccess from '../Helpers/apiAccess'
+
+
 
 const getListData = (value) => {
   let listData;
@@ -60,6 +63,20 @@ const monthCellRender = (value) => {
 }
 
 class ShowCalendar extends Component {
+
+constructor(props){
+  super(props)
+
+  apiAccess({
+    url: 'http://localhost:8000/login',
+    method: 'GET',
+    attemptAction: () => this.props.dispatch({ type: 'GET_CALENDAR_ATTEMPT' }),
+    successAction: (json) => this.props.dispatch({ type: 'GET_CALENDAR_SUCCESS', json }),
+    failureAction: () => this.props.dispatch({ type: 'GET_CALENDAR_FAILED' })
+  })
+
+}
+
 render(){
   return(
     <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />

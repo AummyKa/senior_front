@@ -9,12 +9,12 @@ successAction,
 failureAction
 }) => {
 
+attemptAction()
 console.log("jibi" + method)
 
-attemptAction()
 
 if(method == "POST"){
-
+console.log("jibu" + method)
   fetch(url, {
       method: method,
       headers: {

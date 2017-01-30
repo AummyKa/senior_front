@@ -1,12 +1,12 @@
 const INITIAL_STATE = {
-  approveUser : false
+  approvedUser : false
 }
 
 // { type: 'LOGIN_SUCCESS', text }
-const pendingUser = (state = INITIAL_STATE, action) => {
+const pendingApproved = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case 'APPROVE_PENDING_USER_ATTEMPT':
-
+        console.log("hi")
       return {
         //loading sign
       }
@@ -14,9 +14,9 @@ const pendingUser = (state = INITIAL_STATE, action) => {
       // action: { type: 'LOGIN_SUCCESS', json: { token: '' }}
       console.log("approve success")
         return {
-
+          approvedUser : true
       }
-    case 'APPROVE_PENDING_USER__FAILED':
+    case 'APPROVE_PENDING_USER_FAILED':
 
       console.log("approve fail")
       return {
@@ -24,9 +24,9 @@ const pendingUser = (state = INITIAL_STATE, action) => {
       }
 
     default:
-      return ''
+      return state
 
 }
 }
 
-export default pendingUser
+export default pendingApproved

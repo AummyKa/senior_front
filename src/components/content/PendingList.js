@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import { Row,Col,Table, Input, Button, Modal } from 'antd';
+import { Row,Col,Table, Input, Button, Modal, Form } from 'antd';
 
 import SearchAutoSuggest from '../SearchAutoSuggest'
 import apiAccess from '../../Helpers/apiAccess'
@@ -27,44 +27,26 @@ const columns = [
   dataIndex: 'position',
 }];
 
-// const data = [{
-//   key: '1',
-//   name: 'John Brown',
-//   age: 32,
-//   address: 'New York No. 1 Lake Park',
-// }, {
-//   key: '2',
-//   name: 'Jim Green',
-//   age: 42,
-//   address: 'London No. 1 Lake Park',
-// }, {
-//   key: '3',
-//   name: 'Joe Black',
-//   age: 32,
-//   address: 'Sidney No. 1 Lake Park',
-// }, {
-//   key: '4',
-//   name: 'Disabled User',
-//   age: 99,
-//   address: 'Sidney No. 1 Lake Park',
-// }];
-
 
 const pendingUserData = (arrayJSON, resultJSON) =>{
 
-  for(var i = 0; i < arrayJSON.length; i++) {
+  if(arrayJSON!=null){
+    for(var i = 0; i < arrayJSON.length; i++) {
 
-    var objectJSON = {
-      key: i,
-      id: arrayJSON[i]._id,
-      name: arrayJSON[i].name,
-      nickname: arrayJSON[i].nickname,
-      email: arrayJSON[i].email,
-      position: arrayJSON[i].role,
-      timeStamp: arrayJSON[i].create_date
-    }
+      var objectJSON = {
+        key: i,
+        id: arrayJSON[i]._id,
+        name: arrayJSON[i].name,
+        nickname: arrayJSON[i].nickname,
+        email: arrayJSON[i].email,
+        position: arrayJSON[i].role,
+        timeStamp: arrayJSON[i].create_date
+      }
 
-    resultJSON[i] = objectJSON
+      resultJSON[i] = objectJSON
+  }
+}else {
+  return resultJSON
 }
   //return resultJSON
 }
@@ -123,6 +105,64 @@ const PendingList = React.createClass({
     })
   },
 
+  approvedUser(selectedRows,props){
+
+    if(selectedRows!=null){
+      confirm({
+        title: "Are you sure to approve these users",
+        content: "you can not change the aprovement again",
+        onOk() {
+          let result_id = getUserId(selectedRows)
+          console.log(result_id)
+          apiAccess({
+            url: 'http://localhost:8000/staffs/pending',
+            method: 'POST',
+            payload: result_id,
+            attemptAction: () => props.dispatch({ type: 'APPROVE_PENDING_USER_ATTEMPT' }),
+            successAction: (json) => props.dispatch({ type: 'APPROVE_PENDING_USER_SUCCESS', json }),
+            failureAction: () => props.dispatch({ type: 'APPROVE_PENDING_USER__FAILED' })
+          })
+
+        },
+        onCancel() {},
+      });
+    }else{
+
+    }
+
+  },
+
+  // handleSubmit(e){
+  //   e.preventDefault();
+  //   console.log(this.props.approvedUser)
+  //   console.log(this.state.selected)
+  //   this.props.dispatch({type: 'GET_NAME_OF_USER_ATTEMPT'})
+  //   let selectedRows = this.state.selected
+  //     if(selectedRows!=null){
+  //       confirm({
+  //         title: "Are you sure to approve these users",
+  //         content: "you can not change the aprovement again",
+  //         onOk() {
+  //           let result_id = getUserId(selectedRows)
+  //           console.log(result_id)
+  //
+  //           apiAccess({
+  //             url: 'http://localhost:8000/staffs/pending',
+  //             method: 'POST',
+  //             payload: selectedRows,
+  //             attemptAction: () => this.props.dispatch({ type: 'APPROVE_PENDING_USER_ATTEMPT' }),
+  //             successAction: (json) => this.props.dispatch({ type: 'APPROVE_PENDING_USER_SUCCESS', json }),
+  //             failureAction: () => this.props.dispatch({ type: 'APPROVE_PENDING_USER__FAILED' })
+  //           })
+  //
+  //         },
+  //         onCancel() {},
+  //       });
+  //     }else{
+  //
+  //     }
+  //
+  // },
 
 
   componentWillReceiveProps(nextProps){
@@ -134,28 +174,6 @@ const PendingList = React.createClass({
     }
   },
 
-  approveUser(selectedRows){
-
-    confirm({
-      title: "Are you sure to approve these users",
-      content: "you can not change the aprovement again",
-      onOk() {
-        let result_id = getUserId(selectedRows)
-
-        console.log(result_id)
-        // apiAccess({
-        //   url: 'http://localhost:8000/pending',
-        //   method: 'POST',
-        //   payload: selectedRows,
-        //   attemptAction: () => this.props.dispatch({ type: 'APPROVE_PENDING_USER_ATTEMPT' }),
-        //   successAction: (json) => this.props.dispatch({ type: 'APPROVE_PENDING_USER_SUCCESS', json }),
-        //   failureAction: () => this.props.dispatch({ type: 'APPROVE_PENDING_USER__FAILED' })
-        // })
-
-      },
-      onCancel() {},
-    });
-  },
 
   render() {
 
@@ -177,7 +195,6 @@ const PendingList = React.createClass({
     };
 
 
-
     return (
       <div>
       <div className = "topic">
@@ -191,7 +208,9 @@ const PendingList = React.createClass({
             value = {this.state.value}/>
 
           <Col span = {22} offset={22} >
-          <Button type="primary" onClick={()=> this.approveUser(this.state.selected)}>Approve</Button>
+
+            <Button type="primary" onClick ={()=>this.approvedUser(this.state.selected,this.props)}>Approve</Button>
+
         </Col>
         </Row>
 
@@ -212,7 +231,8 @@ function mapStateToProps(state) {
     return {
         guideDetail: state.guideDetail,
         input: state.search.search_input,
-        pendingUsers: state.pendingUser.pendingUsers
+        pendingUsers: state.pendingUser.pendingUsers,
+        approvedUser: state.pendingApproved.approvedUser
     };
 }
 

@@ -1,7 +1,8 @@
 .box {
-  background-color: #CCC6C6;
-  width: 50px;
-  height: 60px
+  background-color: #F3C9BB;
+  width: 280px;
+  height: 280px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
 
 }
 
@@ -17,4 +18,27 @@
 .gutter-box {
   background: #BFBEB5;
   padding: 5px 0;
+}
+
+.img-box{
+  width: 280px;
+  height: 180px
+}
+
+.box-detail{
+  padding: 8px 8px 8px 8px
+}
+
+.add-event{
+  position: fixed;
+  bottom: 10%;
+  right: 5%;
+  width: 70px;
+  padding: 10px;
+  border-radius: 50px;
+  height: 70px;
+  color: white;
+  background-color: #EC643C;
+  font-size: 30px;
+  vertical-align: middle;
 }

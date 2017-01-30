@@ -1,14 +1,55 @@
 import React, { Component } from 'react';
-import { Row,Col } from 'antd';
+import {connect} from 'react-redux';
+import { Row,Col,Button } from 'antd';
 
+import AddTourModal from './AddTourModal'
 
 import Box from '../Box'
 
 
+const renderTour = (data) =>  {
+  if(data.length > 0){
+    return data.map((item,index) => (
+        <TourBox key = {index} item = {item}  />
+    ));
+  }else {
+    return [];
+  }
+}
+
+const TourBox = ({item}) => {
+  return (
+    <Col className="gutter-row" span={8}>
+      <Box data = {item} />
+    </Col>
+
+  )
+}
+
+const addTour = () => {
+
+}
+
+
 class Tours extends Component {
 
+  // const numbers = this.props.getTours;
+  // const listItems = numbers.map((number) =>
+  //   <li key={number.toString()}>
+  //     {number}
+  //   </li>
+  // );
+  constructor(props){
+    super(props)
+    this.state = {
+      data : this.props.getTours
+    }
+  }
 
   render() {
+
+    const tourBox = renderTour(this.state.data)
+
     return (
 
       <div>
@@ -19,15 +60,7 @@ class Tours extends Component {
         <div className = "tour-table">
             <div className="gutter-example">
               <Row gutter={16}>
-                <Col className="gutter-row" span={8}>
-                  <img src={'https://i.ytimg.com/vi/tntOCGkgt98/maxresdefault.jpg'} alt="boohoo" className="img-responsive"/>
-                </Col>
-                <Col className="gutter-row" span={8}>
-                  <img src={'http://www.rd.com/wp-content/uploads/sites/2/2016/04/01-cat-wants-to-tell-you-laptop.jpg'} alt="boohoo" className="img-responsive"/>
-                </Col>
-                <Col className="gutter-row" span={8}>
-                  <img src={'http://carltonvet.com.au/sites/default/files/styles/large/public/images/article/cats.jpg'} alt="boohoo" className="img-responsive"/>
-                </Col>
+                {tourBox}
               </Row>
             </div>
         </div>
@@ -35,11 +68,20 @@ class Tours extends Component {
 
    </Row>
 
+  <AddTourModal />
 
-      </div>
+
+    </div>
 
     );
   }
 }
 
-export default Tours
+function mapStateToProps(state) {
+
+    return {
+        getTours: state.getTours,
+    };
+}
+
+export default connect(mapStateToProps)(Tours)

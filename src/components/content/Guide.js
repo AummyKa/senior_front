@@ -89,7 +89,6 @@ const Guide = React.createClass({
       sortOrder: sortedInfo.columnKey === 'place' && sortedInfo.order,
     }];
 
-    
     return (
       <div>
       <div className = "topic">

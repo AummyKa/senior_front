@@ -132,37 +132,6 @@ const PendingList = React.createClass({
 
   },
 
-  // handleSubmit(e){
-  //   e.preventDefault();
-  //   console.log(this.props.approvedUser)
-  //   console.log(this.state.selected)
-  //   this.props.dispatch({type: 'GET_NAME_OF_USER_ATTEMPT'})
-  //   let selectedRows = this.state.selected
-  //     if(selectedRows!=null){
-  //       confirm({
-  //         title: "Are you sure to approve these users",
-  //         content: "you can not change the aprovement again",
-  //         onOk() {
-  //           let result_id = getUserId(selectedRows)
-  //           console.log(result_id)
-  //
-  //           apiAccess({
-  //             url: 'http://localhost:8000/staffs/pending',
-  //             method: 'POST',
-  //             payload: selectedRows,
-  //             attemptAction: () => this.props.dispatch({ type: 'APPROVE_PENDING_USER_ATTEMPT' }),
-  //             successAction: (json) => this.props.dispatch({ type: 'APPROVE_PENDING_USER_SUCCESS', json }),
-  //             failureAction: () => this.props.dispatch({ type: 'APPROVE_PENDING_USER__FAILED' })
-  //           })
-  //
-  //         },
-  //         onCancel() {},
-  //       });
-  //     }else{
-  //
-  //     }
-  //
-  // },
 
 
   componentWillReceiveProps(nextProps){
@@ -171,6 +140,13 @@ const PendingList = React.createClass({
 
       pendingUserData(nextProps.pendingUsers, this.state.data)
       console.log(this.state.data)
+    }
+
+    if(this.props.approvedUser!==nextProps.approvedUser){
+      if(this.props.approvedUser){
+        console.l
+        this.forceUpdate()
+      }
     }
   },
 
@@ -204,13 +180,9 @@ const PendingList = React.createClass({
       <div className = "guide-filter">
 
         <Row>
-          <SearchAutoSuggest dispatch={this.props.dispatch} data = {this.state.data}
-            value = {this.state.value}/>
-
+          <SearchAutoSuggest data = {this.state.data} value = {this.state.value}/>
           <Col span = {22} offset={22} >
-
             <Button type="primary" onClick ={()=>this.approvedUser(this.state.selected,this.props)}>Approve</Button>
-
         </Col>
         </Row>
 

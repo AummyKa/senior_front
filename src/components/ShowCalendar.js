@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Calendar } from 'antd';
 import apiAccess from '../Helpers/apiAccess'
-
+import {connect} from 'react-redux';
 
 
 const getListData = (value) => {
@@ -62,19 +62,50 @@ const monthCellRender = (value) => {
   </div> : null;
 }
 
+const getEventDate = (arrayJSON) =>{
+  let resultJSON = []
+  for(var i = 0; i < arrayJSON.length; i++) {
+
+    var objectJSON = {
+      start: getActualDate(arrayJSON[i].start),
+    }
+    resultJSON[i] = objectJSON
+}
+  return resultJSON
+
+}
+
+const getActualDate = (strDate) =>{
+  let actualDate = strDate.substring(0,strDate.indexOf("T"))
+  return actualDate
+
+}
+
+
+
+
+
 class ShowCalendar extends Component {
 
 constructor(props){
   super(props)
 
   apiAccess({
-    url: 'http://localhost:8000/login',
+    url: 'http://localhost:8000/calendar',
     method: 'GET',
     attemptAction: () => this.props.dispatch({ type: 'GET_CALENDAR_ATTEMPT' }),
     successAction: (json) => this.props.dispatch({ type: 'GET_CALENDAR_SUCCESS', json }),
     failureAction: () => this.props.dispatch({ type: 'GET_CALENDAR_FAILED' })
   })
 
+}
+
+componentWillReceiveProps(nextProps){
+  if(this.props.events !== nextProps.events){
+    let tour_event = nextProps.events
+    console.log(tour_event)
+    console.log(getEventDate(tour_event))
+  }
 }
 
 render(){
@@ -85,4 +116,10 @@ render(){
 }
 }
 
-export default ShowCalendar
+const mapStateToProps = (state) => {
+    return {
+        events : state.calendar.events
+    };
+}
+
+export default connect(mapStateToProps)(ShowCalendar)

@@ -10,6 +10,8 @@ import Home from '../components/content/Home'
 import PendingList from '../components/content/PendingList'
 import Tours from '../components/content/Tours'
 import Schedule from '../components/content/Schedule'
+import Staff from '../components/content/Staff'
+import GuideLayout from '../components/content/GuideLayout'
 
 class DashboardPage extends Component {
 
@@ -23,7 +25,8 @@ class DashboardPage extends Component {
       tour: false,
       finance: false,
       pendinglist: false,
-      tours: false
+      tours: false,
+      guideLay: false
 
     }
   }
@@ -35,31 +38,40 @@ class DashboardPage extends Component {
 
       let page = nextProps.pageState
       let previous = this.props.pageState
+      let curGuide = nextProps.curGuide
 
-      console.log(page)
+      if(curGuide!==null){
+        this.setState({home:false,guide:false,pendinglist: false,
+        tours: false, schedule:false, staff: false, guideLay: true})
+      }
 
       if(page!==previous){
         switch (page) {
           case 'home': //home
               this.setState({home:true,guide:false,pendinglist: false,
-              tours: false, schedule:false})
+              tours: false, schedule:false, staff: false,  guideLay: false})
               break;
           case 'guide': //guide
               this.setState({guide:true,home:false, pendinglist: false,
-              tours: false, schedule:false})
+              tours: false, schedule:false, staff: false,  guideLay: false})
               break;
           case 'pendinglist':
               this.setState({pendinglist: true, guide:false, home:false,
-              tours: false, schedule:false})
+              tours: false, schedule:false, staff: false,  guideLay: false})
               break;
           case 'tours':
               this.setState({tours: true,pendinglist: false, guide:false,
-              home:false, schedule:false})
+              home:false, schedule:false, staff: false,  guideLay: false})
               break;
           case 'schedule':
               this.setState({tours: false,pendinglist: false, guide:false,
-              home:false, schedule: true})
+              home:false, schedule: true, staff: false,  guideLay: false})
               break;
+          case 'staff':
+              this.setState({tours: false,pendinglist: false, guide:false,
+              home:false, schedule: false, staff: true,  guideLay: false})
+              break;
+
           default:
             return ""
         }
@@ -106,6 +118,8 @@ class DashboardPage extends Component {
                         { this.state.pendinglist ? <PendingList dispatch={this.props.dispatch} /> : null }
                         { this.state.tours ? <Tours /> : null }
                         { this.state.schedule ? <Schedule dispatch = {this.props.dispatch} /> : null }
+                        { this.state.staff ? <Staff dispatch = {this.props.dispatch} /> : null }
+                        { this.state.guideLay ? <GuideLayout /> : null }
                       </div>
                   </Col>
               </Row>
@@ -116,7 +130,8 @@ class DashboardPage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  pageState: state.pageStatus.pageMove
+  pageState: state.pageStatus.pageMove,
+  curGuide: state.guideProfile.curGuide
 })
 
 export default connect(mapStateToProps)(DashboardPage);

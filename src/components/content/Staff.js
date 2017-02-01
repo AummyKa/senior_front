@@ -3,12 +3,12 @@ import {connect} from 'react-redux';
 import { Row,Col,Table, Input, Button } from 'antd';
 
 import SearchAutoSuggest from '../SearchAutoSuggest'
-import { eachGuide } from '../../actions/action-guideProfile'
+
 
 
 const Search = Input.Search
 
-const Guide = React.createClass({
+const Staff = React.createClass({
 
   getInitialState() {
     return {
@@ -33,15 +33,9 @@ const Guide = React.createClass({
       sortedInfo: null,
     });
   },
-  eachGuide(event, index){
-    console.log("this is an event " +event)
-    console.log("this is name" + event.key)
-    let key = event.key
-
-    this.props.dispatch({type : "GUIDE_PROFILE",key})
-
+  eachGuide(key){
+    console.log(key)
   },
-
 
   render() {
 
@@ -100,27 +94,26 @@ const Guide = React.createClass({
     return (
       <div>
       <div className = "topic">
-        <h2>Guide</h2>
+        <h2>Staff</h2>
       </div>
 
       <div className = "guide-filter">
-
+          <SearchAutoSuggest dispatch={this.props.dispatch} data = {this.props.guideDetail}
+            value = {this.state.value}/>
       </div>
 
       <div className = "guide-container">
         <div className="table-operations">
         </div>
-        <Table columns={columns}
-          dataSource={this.props.guideDetail}
-          onChange={this.handleChange}
-          onRowClick = {this.eachGuide}/>
+        <Table columns={columns} dataSource={this.props.guideDetail} onChange={this.handleChange}
+           />
       </div>
     </div>
     );
   },
 });
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
 
     return {
         guideDetail: state.guideDetail,
@@ -128,7 +121,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(Guide)
-//
-// <SearchAutoSuggest dispatch={this.props.dispatch} data = {this.props.guideDetail}
-//   value = {this.state.value}/>
+export default connect(mapStateToProps)(Staff)

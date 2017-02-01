@@ -1,5 +1,4 @@
 export default function () {
-  console.log("nooooooooooooooooooooooooooo")
     return [
       {
         title: 'Historic Bangrak Food Tasting and Culture Tour',

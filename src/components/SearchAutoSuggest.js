@@ -1,8 +1,8 @@
+
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_Special_Characters
 import React, { Component } from 'react';
 import Autosuggest from 'react-autosuggest';
-import { Row,Col, Button } from 'antd';
-import {clickSearch} from '../actions/action-clickSearch'
+
 
 function escapeRegexCharacters(str) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -48,7 +48,7 @@ class SearchAutoSuggest extends React.Component {
 
   onSuggestionsFetchRequested = ({ value }) => {
     this.setState({
-      suggestions: getSuggestions(value,this.props.data)
+      suggestions: getSuggestions(this.props.value,this.props.data)
     });
   };
 
@@ -57,10 +57,6 @@ class SearchAutoSuggest extends React.Component {
       suggestions: []
     });
   };
-
-  searchName(value){
-     this.props.dispatch(clickSearch("SEARCH_GUIDE",value))
-  }
 
   render() {
     const { value, suggestions } = this.state;
@@ -71,21 +67,13 @@ class SearchAutoSuggest extends React.Component {
     };
 
     return (
-      <Row>
-        <Col span={7}>
-          <Autosuggest
-            suggestions={suggestions}
-            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-            getSuggestionValue={getSuggestionValue}
-            renderSuggestion={renderSuggestion}
-            inputProps={inputProps} />
-        </Col>
-        <Col span = {10}>
-          <Button icon="search" onClick ={()=> this.searchName(this.state.value)} >Search</Button>
-        </Col>
-
-      </Row>
+      <Autosuggest
+        suggestions={suggestions}
+        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        inputProps={inputProps} />
     );
   }
 }

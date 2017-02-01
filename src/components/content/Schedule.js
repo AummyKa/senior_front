@@ -19,10 +19,10 @@ class Schedule extends Component {
         </div>
       </div>
 
-
-
     );
   }
 }
+
+
 
 export default Schedule

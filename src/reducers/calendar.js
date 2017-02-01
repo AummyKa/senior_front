@@ -8,7 +8,6 @@ const INITIAL_STATE = {
 const calendar = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case 'GET_CALENDAR_ATTEMPT':
-
       return {
         //loading sign
       }
@@ -16,7 +15,7 @@ const calendar = (state = INITIAL_STATE, action) => {
       // action: { type: 'LOGIN_SUCCESS', json: { token: '' }}
       console.log(action)
       return {
-        event : action.json
+        events : action.json
       }
     case 'GET_CALENDAR_FAILED':
         console.log("fail")

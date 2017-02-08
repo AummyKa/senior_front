@@ -2,6 +2,7 @@ import React from 'react'
 import LoginPage from "./LoginPage";
 import DashboardPage from "./DashboardPage";
 import { connect } from 'react-redux'
+import { Router, Route, Link, browserHistory, IndexRoute  } from 'react-router'
 
 const App = React.createClass({
   getDefaultProps () {
@@ -25,6 +26,7 @@ const App = React.createClass({
     return (
       <div>
         {this.changePage()}
+        
       </div>
     )
   }

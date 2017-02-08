@@ -1,24 +1,23 @@
 const INITIAL_STATE = {
-  guideLists : {}
+  staffLists : {}
 }
 
 // { type: 'LOGIN_SUCCESS', text }
-const guideDetail = (state = INITIAL_STATE, action) => {
+const getStaffLists = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'GET_GUIDE_ATTEMPT':
+    case 'GET_STAFF_ATTEMPT':
 
       return {
         //loading sign
       }
-    case 'GET_GUIDE_SUCCESS':
+    case 'GET_STAFF_SUCCESS':
       // action: { type: 'LOGIN_SUCCESS', json: { token: '' }}
       let data = action.json
       console.log(data)
-
       return {
-        guideLists: data
+        staffLists: data
       }
-    case 'GET_GUIDE_FAILED':
+    case 'GET_STAFF_FAILED':
         console.log("fail")
       return {
         //pop up
@@ -30,4 +29,4 @@ const guideDetail = (state = INITIAL_STATE, action) => {
 }
 }
 
-export default guideDetail
+export default getStaffLists

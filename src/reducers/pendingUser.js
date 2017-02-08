@@ -13,11 +13,12 @@ const pendingUser = (state = INITIAL_STATE, action) => {
     case 'GET_PENDING_USER_SUCCESS':
       // action: { type: 'LOGIN_SUCCESS', json: { token: '' }}
       let data = action.json
-
+      console.log("hello")
+      console.log(data)
       return {
-        pendingUsers: action.json
+        pendingUsers: data
       }
-    case 'GET_PENDING_USER__FAILED':
+    case 'GET_PENDING_USER_FAILED':
         console.log("fail")
       return {
         //pop up

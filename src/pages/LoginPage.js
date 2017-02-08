@@ -62,9 +62,9 @@ class LoginPage extends Component {
         )
       }
 
+
       if (this.props.loggedIn !== nextProps.loggedIn) {
         this.context.router.replace('/home')
-
       }
 
       if(nextProps.registed){
@@ -83,7 +83,6 @@ class LoginPage extends Component {
 
     render(){
         console.log('props in LoginPage', this.props)
-
 
         return(
             <div>
@@ -114,7 +113,8 @@ class LoginPage extends Component {
 const mapStateToProps = (state) => ({
   loggedIn: state.login.loggedIn,
   registed: state.regist.registed,
-  failLogged: state.login.failLogged
+  failLogged: state.login.failLogged,
+  isLogout: state.logout.isLogout
 })
 
 

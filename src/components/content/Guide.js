@@ -4,17 +4,41 @@ import { Row,Col,Table, Input, Button } from 'antd';
 
 import SearchAutoSuggest from '../SearchAutoSuggest'
 import { eachGuide } from '../../actions/action-guideProfile'
-
+import apiAccess from '../../Helpers/apiAccess'
 
 const Search = Input.Search
+
+const GuideUserData = (arrayJSON,resultJSON) =>{
+
+  if(arrayJSON!=null){
+    for(var i = 0; i < arrayJSON.length; i++) {
+
+      var objectJSON = {
+        key: i,
+        _id: arrayJSON[i]._id,
+        name: arrayJSON[i].name,
+        email: arrayJSON[i].email,
+        role: arrayJSON[i].role
+      }
+
+      resultJSON[i] = objectJSON
+  }
+}else {
+  return resultJSON
+}
+  //return resultJSON
+}
 
 const Guide = React.createClass({
 
   getInitialState() {
+    this.getGuideList()
     return {
       filteredInfo: null,
       sortedInfo: null,
-      value: ''
+      value: '',
+      data: [],
+      cur_id: ''
     };
   },
   handleChange(pagination, filters, sorter) {
@@ -34,14 +58,29 @@ const Guide = React.createClass({
     });
   },
   eachGuide(event, index){
-    console.log("this is an event " +event)
-    console.log("this is name" + event.key)
-    let key = event.key
+    let id = event._id
 
-    this.props.dispatch({type : "GUIDE_PROFILE",key})
+    this.props.dispatch({type : "GUIDE_PROFILE",id})
 
   },
+  getGuideList(){
 
+    apiAccess({
+      url: 'http://localhost:8000/staffs/tour-guides',
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_GUIDE_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_GUIDE_FAILED' })
+    })
+  },
+  componentWillReceiveProps(nextProps){
+
+    if(this.props.guideLists !== nextProps.guideLists){
+      GuideUserData(nextProps.guideLists,this.state.data)
+      // this.setState({data: GuideUserData(nextProps.guideDetail,)})
+    }
+  },
 
   render() {
 
@@ -60,41 +99,28 @@ const Guide = React.createClass({
       sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
     },
     {
-      title: 'Nickname',
-      dataIndex: 'nickname',
-      key: 'nickname',
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
 
-      filteredValue: filteredInfo.nickname || null,
-      onFilter: (value, record) => record.nickname.includes(value),
-      sorter: (a, b) => a.nickname.length - b.nickname.length,
-      sortOrder: sortedInfo.columnKey === 'nickname' && sortedInfo.order,
+      filteredValue: filteredInfo.email || null,
+      onFilter: (value, record) => record.email.includes(value),
+      sorter: (a, b) => a.email.length - b.email.length,
+      sortOrder: sortedInfo.columnKey === 'email' && sortedInfo.order,
     },
     {
-
-      title: 'Expert',
-      dataIndex: 'expert',
-      key: 'expert',
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role',
       filters: [
-        { text: 'Morning', value: 'Morning' },
-        { text: 'Dinner', value: 'Dinner' },
-        { text: 'TukTuk', value: 'TukTuk' }
+        { text: 'Customer Service', value: 'Customer Service' },
+        { text: 'Operation', value: 'Operation' },
+        { text: 'Finance', value: 'Finance' }
       ],
-      filteredValue: filteredInfo.expert || null,
-      onFilter: (value, record) => record.expert.includes(value),
-      sorter: (a, b) => a.expert.length - b.expert.length,
-      sortOrder: sortedInfo.columnKey === 'expert' && sortedInfo.order,
-    }, {
-      title: 'Place',
-      dataIndex: 'place',
-      key: 'place',
-      filters: [
-        { text: 'Bangkok', value: 'Bangkok' },
-        { text: 'Chiangmai', value: 'Chiangmai' },
-      ],
-      filteredValue: filteredInfo.place || null,
-      onFilter: (value, record) => record.place.includes(value),
-      sorter: (a, b) => a.place.length - b.place.length,
-      sortOrder: sortedInfo.columnKey === 'place' && sortedInfo.order,
+      filteredValue: filteredInfo.role|| null,
+      onFilter: (value, record) => record.role.includes(value),
+      sorter: (a, b) => a.role.length - b.role.length,
+      sortOrder: sortedInfo.columnKey === 'role' && sortedInfo.order,
     }];
 
     return (
@@ -111,7 +137,7 @@ const Guide = React.createClass({
         <div className="table-operations">
         </div>
         <Table columns={columns}
-          dataSource={this.props.guideDetail}
+          dataSource={this.state.data}
           onChange={this.handleChange}
           onRowClick = {this.eachGuide}/>
       </div>
@@ -123,7 +149,7 @@ const Guide = React.createClass({
 function mapStateToProps(state) {
 
     return {
-        guideDetail: state.guideDetail,
+        guideLists: state.guideDetail.guideLists,
         input: state.search.search_input
     };
 }

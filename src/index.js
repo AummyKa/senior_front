@@ -5,7 +5,7 @@ import {createStore} from 'redux'
 import {Provider} from 'react-redux'
 // import configureStore from '../store/configureStore'
 
-import {Router, Route, browserHistory} from 'react-router';
+import {Router, IndexRoute, Route, browserHistory} from 'react-router';
 import reducer from './reducers'
 
 //Pages
@@ -30,6 +30,7 @@ ReactDOM.render(
     <Provider store={store}>
     <Router history={browserHistory}>
         <Route component={App}>
+            <IndexRoute component={LoginPage}/>
             <Route path="/" component={LoginPage}/>
             <Route path="/home" component={DashboardPage}/>
             <Route path="/guide" component={Guide}/>

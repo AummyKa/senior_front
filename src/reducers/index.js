@@ -10,7 +10,8 @@ import pendingApproved from './pendingApproved'
 import calendar from './calendar'
 import getTours from './getTours'
 import guideProfile from './guideProfile'
-
+import getStaffLists from './getStaffLists'
+import logout from './logout'
 
 
 const admin = combineReducers({
@@ -24,7 +25,9 @@ const admin = combineReducers({
     pendingApproved,
     calendar,
     getTours,
-    guideProfile
+    guideProfile,
+    getStaffLists,
+    logout
 })
 
 export default admin

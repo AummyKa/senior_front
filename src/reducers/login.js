@@ -12,14 +12,15 @@ const login = (state = INITIAL_STATE, action) => {
       }
     case 'LOGIN_SUCCESS':
       // action: { type: 'LOGIN_SUCCESS', json: { token: '' }}
-      Cookies.set('token', action.json.token)
-      console.log(action)
-
-      if(action.json.status == 'LOGIN_COMPLETED'){
+      Cookies.set('session', action.json.login_success)
+      console.log(action.json)
+      console.log(action.json.session)
+      if(action.json.login_success){
         return {
           loggedIn: true,
+          session: action.json.session
         }
-      }else if(action.json.status == 'LOGIN_INCOMPLETED'){
+      }else {
         return {
           failLogged: true
         }

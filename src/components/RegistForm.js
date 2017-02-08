@@ -1,12 +1,13 @@
 import React, { PropTypes, Component } from 'react';
+import { connect } from 'react-redux'
 
 import apiAccess from '../Helpers/apiAccess'
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button } from 'antd';
-
+import { error } from './Modal'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const residences = [{
+const workplace = [{
   value: 'Bangkok',
   label: 'Bangkok',
 
@@ -40,6 +41,15 @@ const role = [{
 
 }];
 
+const title = [{
+  value: 'Ms.',
+  label: 'Ms.',
+
+}, {
+  value: 'Mr.',
+  label: 'Mr.',
+}]
+
 const RegistForm = Form.create()(React.createClass({
 
   getInitialState() {
@@ -48,11 +58,11 @@ const RegistForm = Form.create()(React.createClass({
       email: "",
       password: "",
       confirm: "",
-      nickname: "",
+      title: "",
       name:"",
       Surname:"",
       role:"",
-      residence:"",
+      workplace:"",
       phone:""
       }
     },
@@ -64,11 +74,11 @@ const RegistForm = Form.create()(React.createClass({
         let payload = {email: this.props.form.getFieldValue('email'),
                       password: this.props.form.getFieldValue('password'),
                       confirm: this.props.form.getFieldValue('confirm'),
-                      nickname: this.props.form.getFieldValue('nickname'),
+                      title: this.props.form.getFieldValue('title'),
                       name:this.props.form.getFieldValue('name'),
                       surname:this.props.form.getFieldValue('surname'),
                       role:this.props.form.getFieldValue('role'),
-                      residence:this.props.form.getFieldValue('residence'),
+                      workplace:this.props.form.getFieldValue('workplace'),
                       phone:this.props.form.getFieldValue('phone')}
 
           apiAccess({
@@ -82,6 +92,8 @@ const RegistForm = Form.create()(React.createClass({
         }else
             console.log("error")
       });
+
+      this.checkDuplicate
   },
 
   handlePasswordBlur(e) {
@@ -90,19 +102,53 @@ const RegistForm = Form.create()(React.createClass({
   },
   checkPassword(rule, value, callback) {
     const form = this.props.form;
-    if (value && value !== form.getFieldValue('password')) {
+
+    if(value && value !== form.getFieldValue('password')){
       callback('Two passwords that you enter is inconsistent!');
-    } else {
+    }else {
       callback();
     }
+
   },
   checkConfirm(rule, value, callback) {
     const form = this.props.form;
-    if (value && this.state.passwordDirty) {
+    if(value.length < 6 || value.length > 14 ) {
+     callback('Your password must have 6 to 14 characters');
+   }else if (value && this.state.passwordDirty) {
       form.validateFields(['confirm'], { force: true });
     }
     callback();
   },
+  checkDuplicate() {
+    if (!this.props.duplicated) {
+      let title = "Email is already used, please try another email"
+      return(
+        <div>
+          {error(title,"")}
+        </div>
+      )
+    }
+
+  },
+  //name, surname
+  checkString(rule, value, callback){
+    if(!value.match(/^[a-zA-Z]/)){
+      console.log("nooo")
+      callback('input should contains only alphabets');
+    }else if(value.length > 40 ) {
+     callback('number of characters should not exceed 40 characters');
+   }else {
+     callback()
+   }
+ },
+ checkTel(rule, value, callback){
+   if(!value.match(/^[0-9]+$/) || value.length != 9){
+     callback('the input should be an appropriate phone number');
+   }else {
+     callback()
+   }
+ },
+
 
   render() {
 
@@ -133,9 +179,8 @@ const RegistForm = Form.create()(React.createClass({
         >
           {getFieldDecorator('email', {
             rules: [{
-              type: 'email', message: 'The input is not valid E-mail!',
-            }, {
-              required: true, message: 'Please input your E-mail!',
+              type: 'email', message: 'The input is not valid E-mail!'},{
+              required: true, message: 'Please input your E-mail!'
             }],
           })(
             <Input />
@@ -173,20 +218,13 @@ const RegistForm = Form.create()(React.createClass({
         </FormItem>
         <FormItem
           {...formItemLayout}
-          label={(
-            <span>
-              Nickname&nbsp;
-              <Tooltip title="What do you want other to call you?">
-                <Icon type="question-circle-o" />
-              </Tooltip>
-            </span>
-          )}
-          hasFeedback
+          label="Title"
         >
-          {getFieldDecorator('nickname', {
-            rules: [{ required: true, message: 'Please input your nickname!' }],
+          {getFieldDecorator('title', {
+            initialValue: ['Mr.'],
+            rules: [{ type: 'array', required: true, message: 'Please select your title!' }],
           })(
-            <Input />
+            <Cascader options={title} />
           )}
         </FormItem>
         <FormItem
@@ -199,7 +237,10 @@ const RegistForm = Form.create()(React.createClass({
           hasFeedback
         >
           {getFieldDecorator('name', {
-            rules: [{ required: true, message: 'Please input your name!' }],
+            rules: [{ required: true, message: 'Please input your name!' },
+            {
+              validator: this.checkString,
+            }],
           })(
             <Input />
           )}
@@ -214,17 +255,20 @@ const RegistForm = Form.create()(React.createClass({
           hasFeedback
         >
           {getFieldDecorator('surname', {
-            rules: [{ required: true, message: 'Please input your surname!' }],
+            rules: [{ required: true, message: 'Please input your surname!' },
+            {
+              validator: this.checkString,
+            }],
           })(
             <Input />
           )}
         </FormItem>
         <FormItem
           {...formItemLayout}
-          label="role"
+          label="Role"
         >
           {getFieldDecorator('role', {
-            initialValue: ['CEO', 'Customer Service', 'Operation','Finance','Tour Guide','Manager'],
+            initialValue: ['Customer Service'],
             rules: [{ type: 'array', required: true, message: 'Please select your role!' }],
           })(
             <Cascader options={role} />
@@ -232,13 +276,13 @@ const RegistForm = Form.create()(React.createClass({
         </FormItem>
         <FormItem
           {...formItemLayout}
-          label="Habitual Residence"
+          label="workplace"
         >
-          {getFieldDecorator('residence', {
-            initialValue: ['Bangkok', 'Chiangmai', 'Phuket'],
-            rules: [{ type: 'array', required: true, message: 'Please select your habitual residence!' }],
+          {getFieldDecorator('workplace', {
+            initialValue: ['Bangkok'],
+            rules: [{ type: 'array', required: true, message: 'Please select your habitual workplace!' }],
           })(
-            <Cascader options={residences} />
+            <Cascader options={workplace} />
           )}
         </FormItem>
         <FormItem
@@ -246,7 +290,8 @@ const RegistForm = Form.create()(React.createClass({
           label="Phone Number"
         >
           {getFieldDecorator('phone', {
-            rules: [{ required: true, message: 'Please input your phone number!' }],
+            rules: [{ required: true, message: 'Please input your phone number!' },
+          { validator: this.checkTel}],
           })(
             <Input addonBefore={prefixSelector} />
           )}
@@ -260,7 +305,8 @@ const RegistForm = Form.create()(React.createClass({
   },
 }));
 
+const mapStateToProps = (state) => ({
+  duplicated: state.regist.duplicated
+})
 
-
-
-export default RegistForm;
+export default connect(mapStateToProps)(RegistForm);

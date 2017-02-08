@@ -32,7 +32,7 @@ export const changePage = (page) => {
             return {
                 type: 'MOVE_TO_TOURS'
             }
-
+      
         default:
             return ""
     }

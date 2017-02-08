@@ -119,7 +119,7 @@ class DashboardPage extends Component {
                         { this.state.tours ? <Tours /> : null }
                         { this.state.schedule ? <Schedule dispatch = {this.props.dispatch} /> : null }
                         { this.state.staff ? <Staff dispatch = {this.props.dispatch} /> : null }
-                        { this.state.guideLay ? <GuideLayout /> : null }
+                        { this.state.guideLay ? <GuideLayout dispatch = {this.props.dispatch} /> : null }
                       </div>
                   </Col>
               </Row>

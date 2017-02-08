@@ -64,24 +64,35 @@ const monthCellRender = (value) => {
 
 const getEventDate = (arrayJSON) =>{
   let resultJSON = []
+  console.log("the length is "+ arrayJSON.length)
   for(var i = 0; i < arrayJSON.length; i++) {
 
-    var objectJSON = {
-      start: getActualDate(arrayJSON[i].start),
+    resultJSON[i] = {
+      start: arrayJSON[i].startDate
     }
-    resultJSON[i] = objectJSON
-}
+  }
   return resultJSON
 
 }
 
-const getActualDate = (strDate) =>{
-  let actualDate = strDate.substring(0,strDate.indexOf("T"))
-  return actualDate
+const countEvent = (tour_event) => {
+  let dataCollection = []
+  let count = ""
+  let date = tour_event.start[0]
+  for(var i = 0; i < tour_event.length; i++){
+      let curDate = tour_event[i].start
+      if(date!==curDate){
+        let date = curDate
+        let count = 1
+        dataCollection.push({date: curDate, value: count});
+      }else{
+        count++
+        dataCollection['date']['value'] = count
+      }
+  }
+  return dataCollection
 
 }
-
-
 
 
 
@@ -103,8 +114,9 @@ constructor(props){
 componentWillReceiveProps(nextProps){
   if(this.props.events !== nextProps.events){
     let tour_event = nextProps.events
-    console.log(tour_event)
     console.log(getEventDate(tour_event))
+    let eventDate = getEventDate(tour_event)
+    console.log(countEvent(eventDate))
   }
 }
 

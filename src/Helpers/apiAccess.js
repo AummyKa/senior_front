@@ -10,11 +10,10 @@ failureAction
 }) => {
 
 attemptAction()
-console.log("jibi" + method)
 
 
 if(method == "POST"){
-console.log("jibu" + method)
+
   fetch(url, {
       method: method,
       headers: {
@@ -48,7 +47,7 @@ console.log("jibu" + method)
 
   })
   .then(response => {
-    console.log({ data: response.data })
+    console.log({ data: response.json })
       if (response.ok) {
         return response.json()
         .then(json => successAction(json))

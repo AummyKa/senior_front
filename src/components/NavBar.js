@@ -1,23 +1,55 @@
 import { Menu, Icon } from 'antd';
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import {changePage} from '../actions/action-changePage'
+import apiAccess from '../Helpers/apiAccess'
+import { connect } from 'react-redux'
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
 
-const NavBar = React.createClass({
-  getInitialState() {
-    return {
-      current: 'mail',
-    };
-  },
-  handleClick(e) {
-    console.log('click ', e.key);
-      this.props.dispatch(changePage(e.key))
-    this.setState({
-      current: e.key,
-    });
-  },
+
+
+class NavBar extends Component {
+
+
+  constructor(props){
+    super(props)
+    this.state = {
+      current: 'mail'
+    }
+  }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
+  handleClick = (e) => {
+
+    if(e.key=="Logout"){
+      apiAccess({
+        url: 'http://localhost:8000/logout',
+        method: 'GET',
+        payload: {},
+        attemptAction: () => this.props.dispatch({ type: 'LOGOUT_ATTEMPT' }),
+        successAction: (json) => this.props.dispatch({ type: 'LOGOUT_SUCCESS', json }),
+        failureAction: () => this.props.dispatch({ type: 'LOGOUT_FAILED' })
+      })
+    }else{
+      console.log('click ', e.key);
+        this.props.dispatch(changePage(e.key))
+      this.setState({
+        current: e.key,
+      });
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    console.log(nextProps.isLogout)
+    if(this.props.isLogout !== nextProps.isLogout){
+      this.context.router.replace('/')
+      // this.setState({data: GuideUserData(nextProps.guideDetail,)})
+    }
+  }
 
   render() {
     return (
@@ -34,13 +66,20 @@ const NavBar = React.createClass({
             <Icon type="user" />Pending List
           </Menu.Item>
           <Menu.Item key="Logout">
-            <Icon type="loggedIn" />Log out
+            <Icon type="loggedIn" /> Log out
           </Menu.Item>
 
       </Menu>
       </div>
     );
-  },
-});
+  }
+}
 
-export default NavBar
+function mapStateToProps(state) {
+
+    return {
+        isLogout: state.logout.isLogout
+    };
+}
+
+export default connect(mapStateToProps)(NavBar)

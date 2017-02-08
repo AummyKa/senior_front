@@ -34,3 +34,43 @@
   height: 360px
 
 }
+
+.guide-personal-content{
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  font-size: 18px;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+
+.edit-guide-profile{
+  position: fixed;
+  bottom: 10%;
+  right: 5%;
+  width: 70px;
+  padding: 10px;
+  border-radius: 50px;
+  height: 70px;
+  color: white;
+  background-color: #EC643C;
+  font-size: 20px;
+  vertical-align: middle;
+}
+
+.normal-input .ant-input {
+  width: 200px;
+  margin: 0 -5px -5px 0;
+}
+
+.big-input .ant-input {
+  margin: 0 -10px 0px 0;
+}
+
+.tel-input .ant-input {
+  margin: 0 -20px 0px 0;
+}
+
+.guide-edit-button{
+  vertical-align: middle;
+}

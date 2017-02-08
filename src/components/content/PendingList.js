@@ -17,38 +17,37 @@ const columns = [
   dataIndex: 'name',
   render: text => <a href="#">{text}</a>,
 }, {
-  title: 'Nickname',
-  dataIndex: 'nickname',
-}, {
   title: 'Email',
   dataIndex: 'email',
 },{
-  title: 'Position',
-  dataIndex: 'position',
+  title: 'Roles',
+  dataIndex: 'role',
 }];
 
 
-const pendingUserData = (arrayJSON, resultJSON) =>{
+const pendingUserData = (arrayJSON) =>{
 
-  if(arrayJSON!=null){
-    for(var i = 0; i < arrayJSON.length; i++) {
+  let resultJSON = []
 
-      var objectJSON = {
-        key: i,
-        id: arrayJSON[i]._id,
-        name: arrayJSON[i].name,
-        nickname: arrayJSON[i].nickname,
-        email: arrayJSON[i].email,
-        position: arrayJSON[i].role,
-        timeStamp: arrayJSON[i].create_date
-      }
+    try{
+      for(var i = 0; i < arrayJSON.length; i++) {
 
-      resultJSON[i] = objectJSON
+        var objectJSON = {
+          key: i,
+          _id: arrayJSON[i]._id,
+          name: arrayJSON[i].name,
+          email: arrayJSON[i].email,
+          role: arrayJSON[i].role
+        }
+
+        resultJSON[i] = objectJSON
+    }
+  }catch(e){
+    console.log(e)
   }
-}else {
+
+
   return resultJSON
-}
-  //return resultJSON
 }
 
 const getUserId = (arrayJSON) =>{
@@ -56,7 +55,7 @@ const getUserId = (arrayJSON) =>{
   for(var i = 0; i < arrayJSON.length; i++) {
 
     var objectJSON = {
-      id: arrayJSON[i].id,
+      _id: arrayJSON[i]._id,
     }
     resultJSON[i] = objectJSON
 }
@@ -98,7 +97,6 @@ const PendingList = React.createClass({
     apiAccess({
       url: 'http://localhost:8000/pending',
       method: 'GET',
-      payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_PENDING_USER_ATTEMPT' }),
       successAction: (json) => this.props.dispatch({ type: 'GET_PENDING_USER_SUCCESS', json }),
       failureAction: () => this.props.dispatch({ type: 'GET_PENDING_USER__FAILED' })
@@ -113,9 +111,10 @@ const PendingList = React.createClass({
         content: "you can not change the aprovement again",
         onOk() {
           let result_id = getUserId(selectedRows)
+          console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!")
           console.log(result_id)
           apiAccess({
-            url: 'http://localhost:8000/staffs/pending',
+            url: 'http://localhost:8000/staffs/activate-pending-staffs',
             method: 'POST',
             payload: result_id,
             attemptAction: () => props.dispatch({ type: 'APPROVE_PENDING_USER_ATTEMPT' }),
@@ -137,17 +136,10 @@ const PendingList = React.createClass({
   componentWillReceiveProps(nextProps){
 
     if(this.props.pendingUsers !== nextProps.pendingUsers){
-
-      pendingUserData(nextProps.pendingUsers, this.state.data)
-      console.log(this.state.data)
+      pendingUserData(nextProps.pendingUsers)
+      this.setState({data: pendingUserData(nextProps.pendingUsers)})
     }
-
-    if(this.props.approvedUser!==nextProps.approvedUser){
-      if(this.props.approvedUser){
-        console.l
-        this.forceUpdate()
-      }
-    }
+  
   },
 
 
@@ -204,7 +196,8 @@ function mapStateToProps(state) {
         guideDetail: state.guideDetail,
         input: state.search.search_input,
         pendingUsers: state.pendingUser.pendingUsers,
-        approvedUser: state.pendingApproved.approvedUser
+        approvedUser: state.pendingApproved.approvedUser,
+        session: state.login.session
     };
 }
 

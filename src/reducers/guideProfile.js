@@ -1,13 +1,25 @@
 const INITIAL_STATE = {
-  curGuide : ''
+  curGuide : false,
+  curGuideProfile : ''
 }
 // { type: 'LOGIN_SUCCESS', text }
 const guideProfile = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'GUIDE_PROFILE':
+    case 'GET_GUIDE_PROFILE_ATTEMPT':
+
+      return {
+
+      }
+    case 'GET_GUIDE_PROFILE_SUCCESS':
       console.log(action)
       return {
-        curGuide : action.key
+        curGuide : true,
+        curGuideProfile : action.json
+      }
+    case 'GET_GUIDE_PROFILE_FAILED':
+
+      return {
+
       }
       default:
         return state

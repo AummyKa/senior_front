@@ -79,7 +79,7 @@ const RegistForm = Form.create()(React.createClass({
                       surname:this.props.form.getFieldValue('surname'),
                       role:this.props.form.getFieldValue('role'),
                       workplace:this.props.form.getFieldValue('workplace'),
-                      phone:this.props.form.getFieldValue('phone')}
+                      phone:"0"+ this.props.form.getFieldValue('phone')}
 
           apiAccess({
             url: 'http://localhost:8000/register',

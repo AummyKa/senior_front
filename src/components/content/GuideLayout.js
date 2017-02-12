@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import { Row,Col,Radio, Button } from 'antd';
+import {connect} from 'react-redux';
 
 import GuidePersonal from './GuidePersonal'
+import GuideExperience from './GuideExperience'
+import GuideRevenue from './GuideRevenue'
+import GuideTimetable from './GuideTimetable'
 
 class GuideLayout extends Component {
 
@@ -26,7 +30,7 @@ class GuideLayout extends Component {
     // this.changeGuidePage(guide_page)
     switch (guide_page) {
       case "personal":
-        this.setState({guidePersonal:true,experience: false,revenue: false,timetable: false})
+        this.setState({guidePersonal:true,guideExperience: false,guideRevenue: false,guideTimetable: false})
         if(this.state.btnColor1!="#C5C1C0"){
           this.setState({btnColor1 :"#C5C1C0",btnColor2 :"#DCD5D3",btnColor3 :"#DCD5D3",btnColor4 :"#DCD5D3"})
         }else
@@ -34,6 +38,7 @@ class GuideLayout extends Component {
 
         break;
       case "experience":
+        this.setState({guidePersonal:false,guideExperience: true,guideRevenue: false,guideTimetable: false})
         if(this.state.btnColor2!="#C5C1C0"){
           this.setState({btnColor2 :"#C5C1C0",btnColor1 :"#DCD5D3",btnColor3 :"#DCD5D3",btnColor4 :"#DCD5D3"})
         }else
@@ -98,7 +103,10 @@ class GuideLayout extends Component {
 
         <div className = "guide-detail">
           { this.state.guidePersonal ? <GuidePersonal /> : null }
-        </div>        
+          { this.state.guideExperience ? <GuideExperience curGuideProfile = {this.props.curGuideProfile} /> : null }
+          { this.state.guideRevenue ? <GuideRevenue /> : null }
+          { this.state.guideTimetable ? <GuideTimetable /> : null }
+        </div>
 
       </div>
 
@@ -106,4 +114,8 @@ class GuideLayout extends Component {
   }
 }
 
-export default GuideLayout
+const mapStateToProps = (state) => ({
+  curGuideProfile: state.guideProfile.curGuideProfile
+})
+
+export default connect(mapStateToProps)(GuideLayout)

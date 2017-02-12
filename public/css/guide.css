@@ -35,7 +35,7 @@
 
 }
 
-.guide-personal-content{
+.guide-content{
   padding-left: 40px;
   padding-right: 40px;
   padding-top: 30px;
@@ -67,10 +67,10 @@
   margin: 0 -10px 0px 0;
 }
 
-.tel-input .ant-input {
+.phone-input .ant-input {
   margin: 0 -20px 0px 0;
 }
 
 .guide-edit-button{
-  vertical-align: middle;
+  text-align: center;
 }

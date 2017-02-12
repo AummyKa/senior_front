@@ -38,9 +38,8 @@ class DashboardPage extends Component {
 
       let page = nextProps.pageState
       let previous = this.props.pageState
-      let curGuide = nextProps.curGuide
-
-      if(curGuide!==null){
+      console.log(nextProps.curGuide)
+      if(this.props.curGuide!== nextProps.curGuide){
         this.setState({home:false,guide:false,pendinglist: false,
         tours: false, schedule:false, staff: false, guideLay: true})
       }

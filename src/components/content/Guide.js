@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import { Row,Col,Table, Input, Button } from 'antd';
 
 import SearchAutoSuggest from '../SearchAutoSuggest'
-import { eachGuide } from '../../actions/action-guideProfile'
+
 import apiAccess from '../../Helpers/apiAccess'
 
 const Search = Input.Search
@@ -60,7 +60,16 @@ const Guide = React.createClass({
   eachGuide(event, index){
     let id = event._id
 
-    this.props.dispatch({type : "GUIDE_PROFILE",id})
+    apiAccess({
+     url: 'http://localhost:8000/staffs/id/'+id,
+     method: 'GET',
+     payload: null,
+     attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_ATTEMPT' }),
+     successAction: (json) => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_SUCCESS', json }),
+     failureAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_FAILED' })
+   })
+
+
 
   },
   getGuideList(){

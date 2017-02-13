@@ -1,19 +1,29 @@
+import Cookies from 'js-cookie'
+
 const INITIAL_STATE = {
   curGuide : false,
-  curGuideProfile : ''
+  curGuideProfile : '',
+  guide_id: ''
 }
 // { type: 'LOGIN_SUCCESS', text }
 const guideProfile = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'GET_GUIDE_PROFILE_ATTEMPT':
+    case 'EACH_GUIDE_ID':
 
+    Cookies.set('guide_id', action.guide_id)
+
+    return{
+        curGuide : true,
+        guide_id : action.guide_id
+    }
+    case 'GET_GUIDE_PROFILE_ATTEMPT':
       return {
 
       }
     case 'GET_GUIDE_PROFILE_SUCCESS':
-      console.log(action)
+
       return {
-        curGuide : true,
+
         curGuideProfile : action.json
       }
     case 'GET_GUIDE_PROFILE_FAILED':

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Row,Col,Radio,Button,Input, DatePicker,Form } from 'antd';
 import {connect} from 'react-redux';
+
+import Cookies from 'js-cookie'
+
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 
@@ -16,25 +19,49 @@ class GuidePersonal extends Component {
   constructor(props){
     super(props)
 
-    //
-    // this.state = {
-    //   title: "",
-    //   name: "",
-    //   surname: "",
-    //   birthdate: "-",
-    //   email: "",
-    //   lineID: "-",
-    //   address: "-",
-    //   phone: "",
-    //   workplace: "Bangkok",
-    //   edit: false
-    // }
-    //this.eachGuide()
-    let guideProfile = this.props.curGuideProfile
+    this.state = {
+      id: "",
+      title: "",
+      name: "",
+      surname: "",
+      birthdate: "-",
+      email: "",
+      lineID: "-",
+      address: "-",
+      phone: "",
+      workplace: "Bangkok",
+      edit: false
+    }
+
+  }
+
+  componentDidMount(){
+      this.eachGuide(Cookies.get('guide_id'))
+  }
+
+  eachGuide(id){
+      apiAccess({
+       url: 'http://localhost:8000/staffs/id/'+id,
+       method: 'GET',
+       payload: null,
+       attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_ATTEMPT' }),
+       successAction: (json) => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_SUCCESS', json }),
+       failureAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_FAILED' })
+     })
+  }
+
+  componentWillReceiveProps(nextProps){
+
+    if(nextProps.updateStaffStatus){
+      this.setState({edit: false})
+      this.eachGuide(Cookies.get('guide_id'))
+    }
+
+    let guideProfile = nextProps.curGuideProfile
 
     try{
-      this.state = {
-        id: guideProfile._id || null,
+      this.setState({
+
         title: guideProfile.title || null,
         name: guideProfile.name || null,
         surname: guideProfile.surname || null,
@@ -44,36 +71,11 @@ class GuidePersonal extends Component {
         address: guideProfile.address || null,
         phone: guideProfile.phone || null,
         workplace: guideProfile.workplace || null,
-      }
+      })
     }catch(e){
 
     }
-  }
 
-
-  componentWillReceiveProps(nextProps){
-
-    if(nextProps.updateStaffStatus){
-      this.setState({edit: false})
-
-
-
-
-
-    }
-        // let guideProfile = nextProps.curGuideProfile
-        // this.setState({
-        //   id: guideProfile._id,
-        //   title: guideProfile.title,
-        //   name: guideProfile.name,
-        //   surname: guideProfile.surname,
-        //   birthdate: this.cleanDate(guideProfile.birthdate),
-        //   email: guideProfile.email,
-        //   lineID: guideProfile.lineID,
-        //   address: guideProfile.address,
-        //   phone: guideProfile.phone,
-        //   workplace: guideProfile.workplace,
-        // })
   }
 
   guideEdit(){
@@ -82,12 +84,11 @@ class GuidePersonal extends Component {
 
   showButtonSave(){
     return(
-      <Button className = "save-guide-edit" onClick ={()=>this.saveEdit()} >Save</Button>
+      <Button className = "save-guide-edit" onClick ={()=>this.saveEdit(Cookies.get('guide_id'))} >Save</Button>
     )
   }
 
-  saveEdit(){
-
+  saveEdit(id){
     let payload = {
                       title: this.state.title,
                       name: this.state.name,
@@ -99,7 +100,7 @@ class GuidePersonal extends Component {
                       phone: this.state.phone,
                       workplace: this.state.workplace}
     apiAccess({
-      url: 'http://localhost:8000/staffs/update/'+this.state.id,
+      url: 'http://localhost:8000/staffs/update/'+id,
       method: 'POST',
       payload: payload,
       attemptAction: () => this.props.dispatch({ type: 'UPDATE_STAFF_ATTEMPT' }),
@@ -238,6 +239,7 @@ class GuidePersonal extends Component {
 function mapStateToProps(state) {
 
     return {
+        guide_id: state.guideProfile.guide_id,
         curGuideProfile: state.guideProfile.curGuideProfile,
         updateStaffStatus: state.updateStaff.updateStaffStatus
       }

@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { Row,Col,Radio, Button } from 'antd';
+import { Row,Col,Radio, Button, Calendar } from 'antd';
 import {connect} from 'react-redux';
 
 import GuidePersonal from './GuidePersonal'
 import GuideExperience from './GuideExperience'
 import GuideRevenue from './GuideRevenue'
 import GuideTimetable from './GuideTimetable'
+import apiAccess from '../../Helpers/apiAccess'
+
+import Cookies from 'js-cookie'
 
 class GuideLayout extends Component {
 
@@ -19,13 +22,48 @@ class GuideLayout extends Component {
       btnColor1: "#C5C1C0",
       btnColor2: "#DCD5D3",
       btnColor3: "#DCD5D3",
-      btnColor4: "#DCD5D3"
+      btnColor4: "#DCD5D3",
+      title: "",
+      name: "",
+      surname: "",
+      workplace: ""
 
     }
   }
 
+  componentDidMount(){
+    this.eachGuide(Cookies.get('guide_id'))
+
+  }
+
+  componentWillReceiveProps(nextProps){
+    let guideProfile = nextProps.curGuideProfile
+
+    try{
+      this.setState({
+        title: guideProfile.title || null,
+        name: guideProfile.name || null,
+        surname: guideProfile.surname || null,
+        workplace: guideProfile.workplace || null,
+      })
+    }catch(e){
+
+    }
+  }
+
+  eachGuide(id){
+      apiAccess({
+       url: 'http://localhost:8000/staffs/id/'+id,
+       method: 'GET',
+       payload: null,
+       attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_ATTEMPT' }),
+       successAction: (json) => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_SUCCESS', json }),
+       failureAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_FAILED' })
+     })
+  }
+
   handleSizeChange = (e) => {
-    console.log(e.target.value)
+
     let guide_page = e.target.value
     // this.changeGuidePage(guide_page)
     switch (guide_page) {
@@ -46,6 +84,7 @@ class GuideLayout extends Component {
 
         break;
       case "revenue":
+      this.setState({guidePersonal:false,guideExperience: false,guideRevenue: true,guideTimetable: false})
         if(this.state.btnColor3!="#C5C1C0"){
           this.setState({btnColor3 :"#C5C1C0",btnColor1 :"#DCD5D3",btnColor2 :"#DCD5D3",btnColor4 :"#DCD5D3"})
         }else
@@ -53,6 +92,7 @@ class GuideLayout extends Component {
 
         break;
       case "timetable":
+      this.setState({guidePersonal:false,guideExperience: false,guideRevenue: false,guideTimetable: true})
         if(this.state.btnColor4!="#C5C1C0"){
           this.setState({btnColor4 :"#C5C1C0",btnColor1 :"#DCD5D3",btnColor2 :"#DCD5D3",btnColor3 :"#DCD5D3"})
         }else
@@ -78,8 +118,8 @@ class GuideLayout extends Component {
               alt="boohoo" className="img-guide"/>
             </Col>
             <Col span={10} className = "guide-name">
-              <h3> Ms. Lilly Dada </h3>
-              <h4> Expert: Midnight tour </h4>
+              <h3>{this.state.title + " " + this.state.name + " " +this.state.surname} </h3>
+              <h4> Workplace: {this.state.workplace}</h4>
             </Col>
           </Row>
         </div>

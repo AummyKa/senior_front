@@ -5,6 +5,7 @@ import { Row,Col,Table, Input, Button } from 'antd';
 import SearchAutoSuggest from '../SearchAutoSuggest'
 
 import apiAccess from '../../Helpers/apiAccess'
+import { curGuideID } from '../../actions/action-spreadGuideID'
 
 const Search = Input.Search
 
@@ -42,7 +43,7 @@ const Guide = React.createClass({
     };
   },
   handleChange(pagination, filters, sorter) {
-    console.log('Various parameters', pagination, filters, sorter);
+
     this.setState({
       filteredInfo: filters,
       sortedInfo: sorter,
@@ -58,18 +59,9 @@ const Guide = React.createClass({
     });
   },
   eachGuide(event, index){
-    let id = event._id
-
-    apiAccess({
-     url: 'http://localhost:8000/staffs/id/'+id,
-     method: 'GET',
-     payload: null,
-     attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_ATTEMPT' }),
-     successAction: (json) => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_SUCCESS', json }),
-     failureAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_FAILED' })
-   })
-
-
+    
+  let id = event._id
+  this.props.dispatch(curGuideID('EACH_GUIDE_ID',id))
 
   },
   getGuideList(){
@@ -82,6 +74,8 @@ const Guide = React.createClass({
       successAction: (json) => this.props.dispatch({ type: 'GET_GUIDE_SUCCESS', json }),
       failureAction: () => this.props.dispatch({ type: 'GET_GUIDE_FAILED' })
     })
+
+
   },
   componentWillReceiveProps(nextProps){
 

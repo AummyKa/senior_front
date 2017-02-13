@@ -38,7 +38,7 @@ class DashboardPage extends Component {
 
       let page = nextProps.pageState
       let previous = this.props.pageState
-      console.log(nextProps.curGuide)
+      console.log(nextProps.guide_id)
       if(this.props.curGuide!== nextProps.curGuide){
         this.setState({home:false,guide:false,pendinglist: false,
         tours: false, schedule:false, staff: false, guideLay: true})
@@ -130,7 +130,8 @@ class DashboardPage extends Component {
 
 const mapStateToProps = (state) => ({
   pageState: state.pageStatus.pageMove,
-  curGuide: state.guideProfile.curGuide
+  curGuide: state.guideProfile.curGuide,
+  guide_id: state.guideProfile.guide_id
 })
 
 export default connect(mapStateToProps)(DashboardPage);

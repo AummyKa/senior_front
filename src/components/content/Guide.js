@@ -10,6 +10,7 @@ import { curGuideID } from '../../actions/action-spreadGuideID'
 const Search = Input.Search
 
 const GuideUserData = (arrayJSON,resultJSON) =>{
+  console.log(arrayJSON)
 
   if(arrayJSON!=null){
     for(var i = 0; i < arrayJSON.length; i++) {
@@ -59,7 +60,7 @@ const Guide = React.createClass({
     });
   },
   eachGuide(event, index){
-    
+
   let id = event._id
   this.props.dispatch(curGuideID('EACH_GUIDE_ID',id))
 

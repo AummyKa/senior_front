@@ -24,7 +24,7 @@ if(method == "POST"){
       })
   })
   .then(response => {
-    console.log({ data: response.data })
+
       if (response.ok) {
         return response.json()
         .then(json => successAction(json))
@@ -37,8 +37,6 @@ if(method == "POST"){
 
 }else if(method == "GET") {
 
-  console.log("Helloooo")
-
   fetch(url, {
       method: method,
       headers: {
@@ -47,7 +45,6 @@ if(method == "POST"){
 
   })
   .then(response => {
-    console.log({ data: response.json })
       if (response.ok) {
         return response.json()
         .then(json => successAction(json))

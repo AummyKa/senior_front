@@ -27,7 +27,7 @@ class GuideTimetable extends Component {
     return (
 
       <div className = "guide-content" >
-        <Calendar onPanelChange={onPanelChange} />
+        
       </div>
     );
   }

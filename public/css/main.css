@@ -1,10 +1,10 @@
 .login-background {
-    background-image: url('/img/bg.jpg');
-    height: 100vh;
-    max-height: 100%;
-    text-align: left;
-    position: relative;
-
+  background-image: url(./img/bg.jpg);
+  height: 100vh;
+  max-height: 100%;
+  text-align: left;
+  position: fixed;
+  width: 70%;
 }
 
 h1{

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import { Row,Col,Button } from 'antd';
 
-// import AddTourModal from './AddTourModal'
+
 
 import Box from '../Box'
 
@@ -26,10 +26,6 @@ const TourBox = ({item}) => {
   )
 }
 
-const addTour = () => {
-
-}
-
 
 class Tours extends Component {
 
@@ -45,6 +41,7 @@ class Tours extends Component {
       data : this.props.getTours
     }
   }
+
 
   render() {
 
@@ -67,9 +64,6 @@ class Tours extends Component {
         <Row>
 
    </Row>
-
-
-
 
     </div>
 

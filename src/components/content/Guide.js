@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import { Row,Col,Table, Input, Button } from 'antd';
+import { AutoComplete, Row,Col,Table, Input, Button } from 'antd';
 
 import SearchAutoSuggest from '../SearchAutoSuggest'
 
@@ -86,6 +86,15 @@ const Guide = React.createClass({
     }
   },
 
+  Complete() {
+  return (<AutoComplete
+    style={{ width: 200 }}
+    dataSource={this.state.date}
+    placeholder="input guide name"
+    filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
+  />);
+},
+
   render() {
 
     //table
@@ -134,7 +143,7 @@ const Guide = React.createClass({
       </div>
 
       <div className = "guide-filter">
-
+        {this.Complete}
       </div>
 
       <div className = "guide-container">

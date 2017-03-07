@@ -47,6 +47,7 @@ class NavBar extends Component {
     console.log(nextProps.isLogout)
     if(this.props.isLogout !== nextProps.isLogout){
       this.context.router.replace('/')
+      window.location.replace("/home")
       // this.setState({data: GuideUserData(nextProps.guideDetail,)})
     }
   }

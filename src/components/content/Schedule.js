@@ -8,7 +8,7 @@ import events from '../Events';
 import SlotDetail from './SlotDetail'
 
 import{ Row,Col } from 'antd'
-import { Modal , Button, ButtonGroup } from 'react-bootstrap';
+import { Modal , Button, ButtonToolbar } from 'react-bootstrap';
 
 require('react-big-calendar/lib/css/react-big-calendar.css');
 
@@ -18,12 +18,16 @@ class Schedule extends Component {
   constructor(props){
     super(props)
     this.state = {
-      showSlotDetail : false
+      showSlotDetail : false,
+      selectedDate: ""
     }
   }
 
-  AddTour(slotInfo){
-    console.log(slotInfo.start)
+  showThatSlot(slotInfo){
+    let start = slotInfo.start.toString().substring(0,15)
+    console.log(start)
+    this.setState({selectedDate: start})
+    console.log(this.state.selectedDate)
     this.setState({showSlotDetail : true})
   }
 
@@ -46,27 +50,29 @@ class Schedule extends Component {
             aria-labelledby="contained-modal-title"
           >
             <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title">Tour lists</Modal.Title>
+              <Modal.Title id="contained-modal-title">Tour lists at {this.state.selectedDate} </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            <SlotDetail />
+              <SlotDetail selectedDate = {this.state.selectedDate}  dispatch = {this.props.dispatch} />
             </Modal.Body>
 
           </Modal>
         </div>
 
+        <div className = "button-filter-schedule">
+          <ButtonToolbar>
+               <Button bsSize="large">All</Button>
+               <Button bsSize="large">Guide</Button>
+               <Button bsSize="large">Tour</Button>
+               <Button bsSize="large">Transfer</Button>
+               <Button bsSize="large">Tuk-Tuk</Button>
+          </ButtonToolbar>
+         </div>
+
       <div className = "topic">
-        <Row>
-          <Col span={6}>
-            <h2>Schedule</h2>
-          </Col>
-          <Col span={8} offset={4}>
-            <ButtonGroup>
-             <Button>Summary Schedule</Button>
-             <Button>Tour Schedule</Button>
-           </ButtonGroup>
-          </Col>
-      </Row>
+
+          <h2>Schedule</h2>
+
 
       </div>
 
@@ -79,7 +85,7 @@ class Schedule extends Component {
         culture='en-GB'
         events={events}
         views={['month']}
-        onSelectSlot={(slotInfo) => this.AddTour(slotInfo)}/>
+        onSelectSlot={(slotInfo) => this.showThatSlot(slotInfo)}/>
         </div>
       </div>
 

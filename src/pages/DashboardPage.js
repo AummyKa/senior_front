@@ -47,26 +47,32 @@ class DashboardPage extends Component {
       if(page!==previous){
         switch (page) {
           case 'home': //home
+              this.context.router.replace('/home')
               this.setState({home:true,guide:false,pendinglist: false,
               tours: false, schedule:false, staff: false,  guideLay: false})
               break;
           case 'guide': //guide
+              this.context.router.replace('/guide')
               this.setState({guide:true,home:false, pendinglist: false,
               tours: false, schedule:false, staff: false,  guideLay: false})
               break;
           case 'pendinglist':
+              this.context.router.replace('/pendinglist')
               this.setState({pendinglist: true, guide:false, home:false,
               tours: false, schedule:false, staff: false,  guideLay: false})
               break;
           case 'tours':
+              this.context.router.replace('/tours')
               this.setState({tours: true,pendinglist: false, guide:false,
               home:false, schedule:false, staff: false,  guideLay: false})
               break;
           case 'schedule':
+              this.context.router.replace('/schedule')
               this.setState({tours: false,pendinglist: false, guide:false,
               home:false, schedule: true, staff: false,  guideLay: false})
               break;
           case 'staff':
+              this.context.router.replace('/staff')
               this.setState({tours: false,pendinglist: false, guide:false,
               home:false, schedule: false, staff: true,  guideLay: false})
               break;

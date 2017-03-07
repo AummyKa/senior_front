@@ -1,65 +1,90 @@
 import React, { Component } from 'react';
 
-import { Row,Col,Table, Input, Button,Icon } from 'antd';
+import { Row,Col,Table, Input, Button,Icon, Dropdown, Badge, Menu } from 'antd';
+import AddTourModal from '../AddTourModal'
 
-const columns = [{
-  title: 'Time',
-  dataIndex: 'time',
-  key: 'time',
-  render: text => <a href="#">{text}</a>,
-}, {
-  title: 'Tour name',
-  dataIndex: 'tourname',
-  key: 'tourname',
-}, {
-  title: 'Place',
-  dataIndex: 'place',
-  key: 'place',
-},
-{
-  title: 'Type',
-  dataIndex: 'type',
-  key: 'type',
-},
-{
-  title: 'Guide',
-  dataIndex: 'guide',
-  key: 'guide',
-},
- {
-  title: 'Action',
-  key: 'action',
-  render: (text, record) => (
-    <span>
-      <a href="#">Delete</a>
-      <span className="ant-divider" />
-      <a href="#">Edit</a>
-    </span>
-  ),
-}];
+const menu = (
+  <Menu>
+    <Menu.Item>
+      Action 1
+    </Menu.Item>
+    <Menu.Item>
+      Action 2
+    </Menu.Item>
+  </Menu>
+);
 
-const data = [{
-  key: '1',
-  time: '18:00',
-  tourname: 'Happy tour',
-  place: 'Bangkok',
-  type: 'Public',
-  guide: 'Ms. Misha Sawasdee'
-},{
-  key: '2',
-  time: '18:00',
-  tourname: 'Happy tour',
-  place: 'Bangkok',
-  type: 'Public',
-  guide: 'Ms. Misha Sawasdee'
-},{
-  key: '3',
-  time: '18:00',
-  tourname: 'Happy tour',
-  place: 'Bangkok',
-  type: 'Public',
-  guide: 'Ms. Misha Sawasdee'
-},];
+
+  const expandedRowRender = () => {
+    const columns = [
+      { title: 'Name', dataIndex: 'name', key: 'name' },
+      { title: 'Nation', dataIndex: 'nation', key: 'nation' },
+      { title: 'Address', dataIndex: 'address', key: 'address' },
+      { title: 'Contact', dataIndex: 'contact', key: 'contact' },
+      { title: 'Allergy', dataIndex: 'allergy', key: 'allergy' },
+      { title: 'Remark', dataIndex: 'remark', key: 'remark' },
+
+      {
+        title: 'Action',
+        dataIndex: 'operation',
+        key: 'operation',
+        render: () => (
+          <span className={'table-operation'}>
+            <a href="#">Pause</a>
+            <a href="#">Stop</a>
+            <Dropdown overlay={menu}>
+              <a href="#">
+                More <Icon type="down" />
+              </a>
+            </Dropdown>
+          </span>
+        ),
+      },
+    ];
+
+    const data = [];
+    for (let i = 0; i < 3; ++i) {
+      data.push({
+        key: i,
+        name: 'bubi',
+        nation: 'Spain',
+        address: 'ss hotel',
+        contact: '+778932233',
+        allergy: 'shrimp',
+        remark: 'nothing',
+      });
+    }
+    return (
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+      />
+    );
+  };
+
+
+  const columns = [
+
+    { title: 'Tour', dataIndex: 'tourname', key: 'tourname' },
+    { title: 'Type', dataIndex: 'tourtype', key: 'tourtype' },
+    { title: 'Guide', dataIndex: 'guide', key: 'guide' },
+    { title: 'Participant', dataIndex: 'participant', key: 'participant' },
+    { title: 'Remark', dataIndex: 'remark', key: 'remark' },
+
+  ];
+
+  const data = [];
+  for (let i = 0; i < 3; ++i) {
+    data.push({
+      key: i,
+      tourname: 'Hello Tour',
+      tourtype: 'midnight',
+      guide: 'mimi',
+      participant: 12,
+      remark: 'picked up',
+    });
+  }
 
 
 class SlotDetail extends Component {
@@ -67,13 +92,14 @@ class SlotDetail extends Component {
 
   render() {
     return (
-
       <div>
-        <Table columns={columns} dataSource={data} />
+        <AddTourModal selectedDate = {this.props.selectedDate}  dispatch = {this.props.dispatch}/>
+        <Table className="components-table-demo-nested" columns={columns} expandedRowRender={expandedRowRender} dataSource={data} />
       </div>
 
     );
   }
 }
+
 
 export default SlotDetail

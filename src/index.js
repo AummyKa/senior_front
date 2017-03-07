@@ -13,6 +13,11 @@ import App from "./pages/App";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
 import Guide from './components/content/Guide'
+import Tours from './components/content/Tours'
+import Schedule from './components/content/Schedule'
+import PendingList from './components/content/PendingList'
+
+
 
 const store = createStore(reducer);
 
@@ -34,6 +39,9 @@ ReactDOM.render(
             <Route path="/" component={LoginPage}/>
             <Route path="/home" component={DashboardPage}/>
             <Route path="/guide" component={Guide}/>
+            <Route path="/tours" component={Tours}/>
+            <Route path="/schedule" component={Schedule}/>
+            <Route path="/pending" component={PendingList}/>
 
         </Route>
     </Router>

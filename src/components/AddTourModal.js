@@ -6,21 +6,29 @@ import React, { Component } from 'react';
 
 // import style from '../../public/css/login.css';
 
-import { Modal,Button } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
+import { Button } from 'antd';
+import AddTourForm from './AddTourForm';
 
-
-const TimeSlotModal = React.createClass({
+const AddTourModal = React.createClass({
 
   getInitialState() {
-    return { show: true };
+    return { show: false };
+  },
+
+  addEvent(){
+    this.setState({show:true})
   },
 
 
   render() {
+
     let close = () => this.setState({ show: false});
     return (
 
       <div>
+
+      <Button className = 'add-tour' onClick={()=> this.addEvent()}>Add tour</Button>
 
       <div className="modal-container" >
 
@@ -31,9 +39,11 @@ const TimeSlotModal = React.createClass({
           aria-labelledby="contained-modal-title"
         >
           <Modal.Header closeButton>
-            <Modal.Title id="contained-modal-title">Add Tour and Guide</Modal.Title>
+            <Modal.Title id="contained-modal-title">Add Tour and Guide at {this.props.selectedDate}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+
+            <AddTourForm selectedDate = {this.props.selectedDate}  dispatch = {this.props.dispatch} />
 
           </Modal.Body>
 
@@ -46,4 +56,4 @@ const TimeSlotModal = React.createClass({
 
 
 
-export default TimeSlotModal;
+export default AddTourModal;

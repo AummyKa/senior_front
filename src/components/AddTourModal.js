@@ -28,7 +28,6 @@ const AddTourModal = React.createClass({
 
       <div>
 
-      <Button className = 'add-tour' onClick={()=> this.addEvent()}>Add tour</Button>
 
       <div className="modal-container" >
 

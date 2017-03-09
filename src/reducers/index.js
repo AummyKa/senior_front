@@ -13,6 +13,7 @@ import guideProfile from './guideProfile'
 import getStaffLists from './getStaffLists'
 import logout from './logout'
 import updateStaff from './updateStaff'
+import addTourForm from './addTourForm'
 
 const admin = combineReducers({
     login,
@@ -28,7 +29,8 @@ const admin = combineReducers({
     guideProfile,
     getStaffLists,
     logout,
-    updateStaff
+    updateStaff,
+    addTourForm
 })
 
 export default admin

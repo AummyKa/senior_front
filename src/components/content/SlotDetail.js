@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 
 import { Row,Col,Table, Input, Button,Icon, Dropdown, Badge, Menu } from 'antd';
-import AddTourModal from '../AddTourModal'
+import { addTour } from '../../actions/action-addTour'
+
+import { Modal } from 'react-bootstrap';
+import AddTourForm from '../AddTourForm';
 
 const menu = (
   <Menu>
@@ -89,12 +92,24 @@ const menu = (
 
 class SlotDetail extends Component {
 
+  constructor(props){
+    super(props)
+    this.state = {
+      show: false
+    }
+  }
+
+  addMoreTour(){
+    this.props.dispatch(addTour("ADD_TOUR",this.props.selectedDate))
+  }
 
   render() {
     return (
+
       <div>
-        <AddTourModal selectedDate = {this.props.selectedDate}  dispatch = {this.props.dispatch}/>
-        <Table className="components-table-demo-nested" columns={columns} expandedRowRender={expandedRowRender} dataSource={data} />
+        <Button className = 'add-tour' onClick={()=> this.addMoreTour() }>Add tour</Button>
+        <Table className="components-table-demo-nested" columns={columns}
+          expandedRowRender={expandedRowRender} dataSource={data}/>
       </div>
 
     );

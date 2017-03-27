@@ -34,7 +34,10 @@ class Schedule extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    this.setState({showAddTour:nextProps.showAddTourModal,showSlotDetail : false})
+
+    if(nextProps.showAddTourModal){
+      this.setState({showAddTour:true,showSlotDetail : false})
+    }
   }
 
   render() {
@@ -44,17 +47,16 @@ class Schedule extends Component {
     return (
 
       <div>
-
         <div className="modal-container" >
-
             <Modal
               show={this.state.showAddTour}
               onHide={closeAddTour}
+              bsSize = "large"
               container={this}
               aria-labelledby="contained-modal-title"
             >
               <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title">Add Tour and Guide at {this.props.selectedDate}</Modal.Title>
+                <Modal.Title id="contained-modal-title">Add Tour and Guide at {this.state.selectedDate}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
 

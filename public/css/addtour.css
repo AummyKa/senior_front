@@ -1,0 +1,40 @@
+.dynamic-delete-button {
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+  font-size: 24px;
+  color: #999;
+  transition: all .3s;
+}
+.dynamic-delete-button:hover {
+  color: #777;
+}
+.dynamic-delete-button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.customer-info {
+  padding: 24px;
+  background: #fbfbfb;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+}
+
+.btn-add-tour-form{
+  position: fixed;
+  bottom: 4%;
+  right: 4%;
+  width: 70px;
+  padding: 10px;
+  border-radius: 50px;
+  height: 70px;
+  color: white;
+  background-color: #EC643C;
+  font-size: 30px;
+  vertical-align: middle;
+}
+
+.submit-add-tour-form{
+  text-align: center;
+}

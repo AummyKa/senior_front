@@ -33,13 +33,7 @@ const menu = (
         key: 'operation',
         render: () => (
           <span className={'table-operation'}>
-            <a href="#">Pause</a>
-            <a href="#">Stop</a>
-            <Dropdown overlay={menu}>
-              <a href="#">
-                More <Icon type="down" />
-              </a>
-            </Dropdown>
+            <a href="#">Edit</a>
           </span>
         ),
       },
@@ -100,7 +94,7 @@ class SlotDetail extends Component {
   }
 
   addMoreTour(){
-    this.props.dispatch(addTour("ADD_TOUR",this.props.selectedDate))
+      this.props.dispatch(addTour("ADD_TOUR",this.props.selectedDate))
   }
 
   render() {

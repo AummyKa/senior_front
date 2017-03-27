@@ -5,6 +5,7 @@ import { InputNumber, Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Ch
 import moment from 'moment';
 
 import apiAccess from '../Helpers/apiAccess'
+import changeDateFormat from '../Helpers/changeDateFormat'
 
 import { error } from './Modal'
 
@@ -52,11 +53,14 @@ String.prototype.capitalize = function() {
 
 
 function getGuideName(gList,resultJSON){
-  for(var i = 0; i < gList.length; i++) {
-    var objectJSON = {
-      name: gList[i].name
+
+  if ("undefined" !== typeof gList) {
+    for(var i = 0; i < gList.length; i++) {
+      var objectJSON = {
+        name: gList[i].name
+      }
+      resultJSON[i] = objectJSON
     }
-    resultJSON[i] = objectJSON
   }
 
 }
@@ -112,26 +116,26 @@ const AddTourForm = Form.create()(React.createClass({
           const count = this.props.form.getFieldValue('keys').length
 
           let formResult = []
-          for(var i = 0; i < count; i++){
-            i = i+1
+          for(var i = 1; i <= count; i++){
+
             var customer = {
                 agency: this.props.form.getFieldValue(`agency-${i}`)[0],
                 email: this.props.form.getFieldValue(`email-${i}`),
                 name: this.props.form.getFieldValue(`name-${i}`)[0],
                 country: this.props.form.getFieldValue(`country-${i}`)[0],
-                pickup_time: this.props.form.getFieldValue(`pickup_time-${i}`),
+                pickup_time: this.props.form.getFieldValue(`pickup_time-${i}`).format('HH:mm'),
                 pickup_place: this.props.form.getFieldValue(`pickup_place-${i}`)[0],
                 participants: this.props.form.getFieldValue(`participants-${i}`),
                 remark: this.props.form.getFieldValue(`remark-${i}`)[0]
               }
 
-            formResult[i] = customer
+            formResult[i-1] = customer
           }
 
-          console.log(formResult)
+          console.log(changeDateFormat(this.props.dateTour))
 
           let payLoad = {
-            start_date : this.props.dateTour,
+            start_date : changeDateFormat(this.props.dateTour),
             tour_name: this.state.selectedTourName,
             tour_type: this.state.selectedTourType,
             tour_guide: this.state.selectedGuideName,
@@ -215,9 +219,11 @@ const AddTourForm = Form.create()(React.createClass({
   },
 
   componentWillReceiveProps(nextProps){
-    if(this.props.guideLists!=nextProps.guideLists){
+    if(this.props.guideLists !== nextProps.guideLists){
       getGuideName(nextProps.guideLists,this.state.guide_name)
+      console.log(nextProps.guideLists)
     }
+
   },
 
   showCustomerInput(){

@@ -35,8 +35,18 @@ class Schedule extends Component {
 
   componentWillReceiveProps(nextProps){
 
-    if(nextProps.showAddTourModal){
-      this.setState({showAddTour:true,showSlotDetail : false})
+    if(this.props.showAddTourModal !== nextProps.showAddTourModal){
+      if(nextProps.showAddTourModal){
+        this.setState({showAddTour:true,showSlotDetail : false})
+      }else
+        this.setState({showAddTour:false,showSlotDetail : true})
+    }
+
+    if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
+      if(nextProps.addBookerAndTour){
+        this.setState({showAddTour:false,showSlotDetail : true})
+      }else
+        this.setState({showAddTour:true,showSlotDetail : false}) 
     }
   }
 
@@ -121,7 +131,8 @@ class Schedule extends Component {
 
 const mapStateToProps = (state) => ({
   showAddTourModal: state.addTourForm.showAddTourModal,
-  dateTour:state.addTourForm.dateTour
+  dateTour:state.addTourForm.dateTour,
+  addBookerAndTour: state.postBookerAndTour.addBookerAndTour
 })
 
 export default connect(mapStateToProps)(Schedule)

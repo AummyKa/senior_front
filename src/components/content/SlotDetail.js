@@ -21,10 +21,9 @@ const menu = (
   const expandedRowRender = () => {
     const columns = [
       { title: 'Name', dataIndex: 'name', key: 'name' },
-      { title: 'Nation', dataIndex: 'nation', key: 'nation' },
+      { title: 'Country', dataIndex: 'country', key: 'country' },
       { title: 'Address', dataIndex: 'address', key: 'address' },
-      { title: 'Contact', dataIndex: 'contact', key: 'contact' },
-      { title: 'Allergy', dataIndex: 'allergy', key: 'allergy' },
+      { title: 'Email', dataIndex: 'email', key: 'email' },
       { title: 'Remark', dataIndex: 'remark', key: 'remark' },
 
       {
@@ -44,10 +43,9 @@ const menu = (
       data.push({
         key: i,
         name: 'bubi',
-        nation: 'Spain',
+        country: 'Spain',
         address: 'ss hotel',
-        contact: '+778932233',
-        allergy: 'shrimp',
+        email: '+778932233',
         remark: 'nothing',
       });
     }
@@ -66,7 +64,7 @@ const menu = (
     { title: 'Tour', dataIndex: 'tourname', key: 'tourname' },
     { title: 'Type', dataIndex: 'tourtype', key: 'tourtype' },
     { title: 'Guide', dataIndex: 'guide', key: 'guide' },
-    { title: 'Participant', dataIndex: 'participant', key: 'participant' },
+    { title: 'Participants', dataIndex: 'participants', key: 'participants' },
     { title: 'Remark', dataIndex: 'remark', key: 'remark' },
 
   ];

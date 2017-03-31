@@ -31,3 +31,15 @@
 .components-table-demo-nested .table-operation a:not(:last-child) {
   margin-right: 24px;
 }
+
+.modal-lg{
+  width: 1200px;
+}
+
+.modal-sm{
+  width: 800px
+}
+
+.btn-edit-cur-tour{
+  text-align: center;
+}

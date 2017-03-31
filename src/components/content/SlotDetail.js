@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 
 import { Row,Col,Table, Input, Button,Icon, Dropdown, Badge, Menu } from 'antd';
 import { addTour } from '../../actions/action-addTour'
+import apiAccess from '../../Helpers/apiAccess'
+import changeDateFormat from '../../Helpers/changeDateFormat'
+import { connect } from 'react-redux'
 
-import { Modal } from 'react-bootstrap';
 import AddTourForm from '../AddTourForm';
 
 const menu = (
@@ -18,95 +20,131 @@ const menu = (
 );
 
 
-  const expandedRowRender = () => {
-    const columns = [
-      { title: 'Name', dataIndex: 'name', key: 'name' },
-      { title: 'Country', dataIndex: 'country', key: 'country' },
-      { title: 'Address', dataIndex: 'address', key: 'address' },
-      { title: 'Email', dataIndex: 'email', key: 'email' },
-      { title: 'Remark', dataIndex: 'remark', key: 'remark' },
-
-      {
-        title: 'Action',
-        dataIndex: 'operation',
-        key: 'operation',
-        render: () => (
-          <span className={'table-operation'}>
-            <a href="#">Edit</a>
-          </span>
-        ),
-      },
-    ];
-
-    const data = [];
-    for (let i = 0; i < 3; ++i) {
-      data.push({
-        key: i,
-        name: 'bubi',
-        country: 'Spain',
-        address: 'ss hotel',
-        email: '+778932233',
-        remark: 'nothing',
-      });
-    }
-    return (
-      <Table
-        columns={columns}
-        dataSource={data}
-        pagination={false}
-      />
-    );
-  };
 
 
   const columns = [
 
-    { title: 'Tour', dataIndex: 'tourname', key: 'tourname' },
-    { title: 'Type', dataIndex: 'tourtype', key: 'tourtype' },
+    { title: 'Date', dataIndex: 'start_date', key: 'start_date' },
+    { title: 'Time', dataIndex: 'start_time', key: 'start_time' },
+    { title: 'Tour', dataIndex: 'tour_name', key: 'tour_name' },
+    { title: 'Type', dataIndex: 'tour_type', key: 'tour_type' },
     { title: 'Guide', dataIndex: 'guide', key: 'guide' },
     { title: 'Participants', dataIndex: 'participants', key: 'participants' },
-    { title: 'Remark', dataIndex: 'remark', key: 'remark' },
 
   ];
 
-  const data = [];
-  for (let i = 0; i < 3; ++i) {
-    data.push({
-      key: i,
-      tourname: 'Hello Tour',
-      tourtype: 'midnight',
-      guide: 'mimi',
-      participant: 12,
-      remark: 'picked up',
-    });
-  }
 
 
 class SlotDetail extends Component {
 
   constructor(props){
     super(props)
+    this.getTourAndBookerDetail()
+    this.screenTourAndBooker()
     this.state = {
-      show: false
+      show: false,
+      tourList: [],
+      customerList:[],
+      curTour: "",
+      curCustomer: [],
+      wholeBookerAndTour:[]
     }
+  }
+
+
+  getTourAndBookerDetail(){
+    console.log(this.props.selectedDate)
+    let date = changeDateFormat(this.props.selectedDate)
+    console.log(changeDateFormat(this.props.selectedDate))
+    apiAccess({
+      url: 'http://localhost:8000/bookedtours/date/'+date,
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_BOOKER_AND_TOUR_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_BOOKER_AND_TOUR_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_BOOKER_AND_TOUR_FAILED' })
+    })
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(this.props.bookerAndTourDetail !== nextProps.bookerAndTourDetail){
+      console.log(nextProps.bookerAndTourDetail)
+      this.screenTourAndBooker(nextProps.bookerAndTourDetail)
+    }
+    this.setState({wholeBookerAndTour: nextProps.bookerAndTourDetail})
   }
 
   addMoreTour(){
       this.props.dispatch(addTour("ADD_TOUR",this.props.selectedDate))
   }
 
+  screenTourAndBooker(data){
+
+    let tours = []
+    let customers = []
+
+    if(data!=null){
+      for(var i = 0; i < data.length; i++) {
+
+        let total_p = 0;
+        for(var j =0; j < data[i].customer.length; j++){
+          total_p += data[i].customer[j].participants
+          console.log(data[i].customer[j].participants)
+        }
+
+        var tourDetail = {
+          key: i,
+          id: data[i]._id,
+          start_date: data[i].start_date,
+          start_time: data[i].start_time,
+          tour_name: data[i].tour_name,
+          tour_type: data[i].tour_type,
+          guide: data[i].tour_guide,
+          participants: total_p
+        }
+        console.log(tourDetail)
+        tours[i] = tourDetail
+    }
+  }
+  this.setState({
+    tourList: tours
+  })
+}
+
+getCurTour(record, index){
+
+  let id = record.id
+
+  apiAccess({
+    url: 'http://localhost:8000/bookedtours/'+id,
+    method: 'GET',
+    payload: null,
+    attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_ATTEMPT' }),
+    successAction: (json) => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_SUCCESS', json }),
+    failureAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_FAILED' })
+  })
+
+
+}
+
   render() {
+
     return (
 
       <div>
         <Button className = 'add-tour' onClick={()=> this.addMoreTour() }>Add tour</Button>
         <Table className="components-table-demo-nested" columns={columns}
-          expandedRowRender={expandedRowRender} dataSource={data}/>
+          dataSource={this.state.tourList}
+          onRowClick = {this.getCurTour.bind(this)}
+          />
       </div>
 
     );
   }
 }
 
+const mapStateToProps = (state) => ({
+   bookerAndTourDetail: state.getBookerAndTour.bookerAndTourDetail
+})
 
-export default SlotDetail
+export default connect(mapStateToProps)(SlotDetail)

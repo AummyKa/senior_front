@@ -514,7 +514,8 @@ function mapStateToProps(state) {
 
     return {
         guideLists: state.guideDetail.guideLists,
-        dateTour: state.addTourForm.dateTour
+        dateTour: state.addTourForm.dateTour,
+        eachTour: state.editSpecificTour.eachTour
     };
 }
 

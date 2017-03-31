@@ -7,6 +7,8 @@ import moment from 'moment';
 import events from '../Events';
 import SlotDetail from './SlotDetail'
 import AddTourForm from '../AddTourForm'
+import EditTourForm from '../EditTourForm'
+
 
 import{ Row,Col } from 'antd'
 import { Modal , Button, ButtonToolbar } from 'react-bootstrap';
@@ -21,7 +23,9 @@ class Schedule extends Component {
     this.state = {
       showSlotDetail : false,
       selectedDate: "",
-      showAddTour: false
+      showAddTour: false,
+      showEachTour: false,
+      selectedTourName: ""
     }
   }
 
@@ -35,24 +39,31 @@ class Schedule extends Component {
 
   componentWillReceiveProps(nextProps){
 
-    if(this.props.showAddTourModal !== nextProps.showAddTourModal){
-      if(nextProps.showAddTourModal){
-        this.setState({showAddTour:true,showSlotDetail : false})
-      }else
-        this.setState({showAddTour:false,showSlotDetail : true})
-    }
+    if(nextProps.showAddTourModal){
+      this.setState({showEachTour: false, showAddTour:true,showSlotDetail : false})
+    }else
+      this.setState({showEachTour: false, showAddTour:false,showSlotDetail : true})
+
 
     if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
       if(nextProps.addBookerAndTour){
-        this.setState({showAddTour:false,showSlotDetail : true})
+        this.setState({showEachTour: false, showAddTour:false,showSlotDetail : true})
       }else
-        this.setState({showAddTour:true,showSlotDetail : false}) 
+        this.setState({showEachTour: false, showAddTour:true,showSlotDetail : false})
+    }
+
+    if(nextProps.eachTourState){
+      this.setState({showEachTour: true, showAddTour:false,showSlotDetail : false})
+    }
+    if(nextProps.eachTour){
+      this.setState({selectedTourName: nextProps.eachTour.tour_name})
     }
   }
 
   render() {
-    let closeSlot = () => this.setState({showSlotDetail: false});
-    let closeAddTour = () => this.setState({showAddTour: false,showSlotDetail: true});
+    let closeSlot = () => this.setState({showSlotDetail: false, showEachTour: false});
+    let closeAddTour = () => this.setState({showAddTour: false,showSlotDetail: true ,showEachTour:false});
+    let closeEachTour = () => this.setState({showEachTour: false,showSlotDetail: true, showAddTour:false});
 
     return (
 
@@ -77,9 +88,28 @@ class Schedule extends Component {
             </Modal>
           </div>
 
-        <div className="modal-container" >
+          <div className="modal-container" >
+              <Modal
+                show={this.state.showEachTour}
+                onHide={closeEachTour}
+                bsSize = "large"
+                container={this}
+                aria-labelledby="contained-modal-title"
+              >
+                <Modal.Header closeButton>
+                  <Modal.Title id="contained-modal-title">
+                    {this.state.selectedTourName} at {this.state.selectedDate}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  <EditTourForm eachTour = {this.state.eachTour} />
+                </Modal.Body>
+
+              </Modal>
+          </div>
+
+      <div className="modal-container">
           <Modal
-            bsSize = "large"
+            bsSize = "lg"
             aria-labelledby="contained-modal-title-lg"
             show={this.state.showSlotDetail}
             onHide={closeSlot}
@@ -94,7 +124,7 @@ class Schedule extends Component {
             </Modal.Body>
 
           </Modal>
-        </div>
+      </div>
 
         <div className = "button-filter-schedule">
           <ButtonToolbar>
@@ -132,7 +162,9 @@ class Schedule extends Component {
 const mapStateToProps = (state) => ({
   showAddTourModal: state.addTourForm.showAddTourModal,
   dateTour:state.addTourForm.dateTour,
-  addBookerAndTour: state.postBookerAndTour.addBookerAndTour
+  addBookerAndTour: state.postBookerAndTour.addBookerAndTour,
+  eachTourState: state.editSpecificTour.eachTourState,
+  eachTour: state.editSpecificTour.eachTour
 })
 
 export default connect(mapStateToProps)(Schedule)

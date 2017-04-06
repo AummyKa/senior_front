@@ -8,6 +8,7 @@ import apiAccess from '../Helpers/apiAccess'
 import changeDateFormat from '../Helpers/changeDateFormat'
 
 import { error } from './Modal'
+import Geosuggest from 'react-geosuggest';
 
 
 import CustomerInput from './CustomerInput'
@@ -117,7 +118,7 @@ const AddTourForm = Form.create()(React.createClass({
 
           let formResult = []
           for(var i = 1; i <= count; i++){
-
+            console.log(this.props.form.getFieldValue(`pickup_time-${i}`))
             var customer = {
                 agency: this.props.form.getFieldValue(`agency-${i}`)[0],
                 email: this.props.form.getFieldValue(`email-${i}`),
@@ -131,8 +132,6 @@ const AddTourForm = Form.create()(React.createClass({
 
             formResult[i-1] = customer
           }
-
-          console.log(changeDateFormat(this.props.dateTour))
 
           let payLoad = {
             start_date : changeDateFormat(this.props.dateTour),
@@ -223,7 +222,6 @@ const AddTourForm = Form.create()(React.createClass({
       getGuideName(nextProps.guideLists,this.state.guide_name)
       console.log(nextProps.guideLists)
     }
-
   },
 
   showCustomerInput(){

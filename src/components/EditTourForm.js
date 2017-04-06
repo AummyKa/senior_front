@@ -8,8 +8,9 @@ import apiAccess from '../Helpers/apiAccess'
 import changeDateFormat from '../Helpers/changeDateFormat'
 import EditCurCustomerModal from './EditCurCustomerModal'
 
-import { error } from './Modal'
-import { Modal } from 'react-bootstrap';
+
+import {Modal } from 'react-bootstrap';
+
 
 
 import CustomerInput from './CustomerInput'
@@ -17,9 +18,6 @@ import CustomerInput from './CustomerInput'
 const FormItem = Form.Item;
 const Option = Select.Option;
 const format = 'HH:mm';
-
-
-
 
 const tournames = [{
   value: 'zhejiang',
@@ -99,32 +97,46 @@ const EditTourForm = Form.create()(React.createClass({
 
     this.columns = [{
       title: 'Name',
-      dataIndex: 'name'
+      dataIndex: 'name',
+      width: 200
     },{
       title: 'Agency',
       dataIndex: 'agency',
+      width: 180,
       sorter: (a, b) => a.agency - b.agency,
     }, {
       title: 'Country',
       dataIndex: 'country',
+      width: 150
     }, {
       title: 'Email',
       dataIndex: 'email',
+      width: 200
     }, {
       title: 'Participant',
       dataIndex: 'participants',
+      width: 80
     }, {
       title: 'Pickup place',
       dataIndex: 'pickup_place',
+      width: 200
     }, {
       title: 'Pickup time',
       dataIndex: 'pickup_time',
+      width: 100
     }, {
       title: 'Remark',
       dataIndex: 'remark',
+      width: 220
     },
-    { title: 'Action', dataIndex: '', key: 'x',
-      render: (text, record) =>  <Button type="primary" onClick = {() => this.showEdit(record) }  >Edit</Button> }]
+    { title: 'Action', dataIndex: '', key: 'x',fixed: 'right', width: 180,
+      render: (text, record) =>
+      <span>
+        <Button type="primary" onClick = {() => this.showEdit(record)}  >Edit</Button>
+        <span className="ant-divider" />
+        <Button type="danger" onClick = {() => this.deleteEachCustomer(record)}  >Delete</Button>
+      </span>
+        }]
 
     return{
       showCusInput: false,
@@ -136,7 +148,11 @@ const EditTourForm = Form.create()(React.createClass({
       selectedGuide: '',
       eachTour: this.props.eachTour,
       showCustomerEdit: false,
-      editCurCustomer: ''
+      editCurCustomer: '',
+      showCustomerDeleteWarning: false,
+      cusWarnIdentity: "",
+      curTourID: "",
+      curCusEmail:""
     }
   },
 
@@ -147,8 +163,44 @@ const EditTourForm = Form.create()(React.createClass({
   },
 
   showEdit(record){
-    this.setState({editCurCustomer:record})
-    this.setState({showCustomerEdit:true})
+    if(this.refs.addTourForm){
+      this.setState({editCurCustomer:record})
+      this.setState({showCustomerEdit:true})
+    }
+  },
+
+  deleteEachCustomer(record){
+    //deleteEachCustomer("DELETE_EACH_CUSTOMER_WARNING",record)
+    console.log(record)
+
+    let cus_name = record.name
+    let cus_email = record.email
+
+    this.setState({curCusEmail: cus_email})
+
+    let cus_warning = "name: "+ cus_name+" " + "email: "+ cus_email
+
+    this.setState({cusWarnIdentity: cus_warning})
+    this.setState({showCustomerDeleteWarning: true})
+
+  },
+
+  deleteCustomer(){
+
+    let id = this.state.curTourID
+    let email = this.state.curCusEmail
+
+    console.log(this.state.curTourID)
+
+    // apiAccess({
+    //   url: 'http://localhost:8000/bookedtours/insert',
+    //   method: 'POST',
+    //   payload: payload,
+    //   attemptAction: () => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_ATTEMPT' }),
+    //   successAction: (json) => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_SUCCESS', json }),
+    //   failureAction: () => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_FAILED' })
+    // })
+
   },
 
   addBookerAndTour(payload){
@@ -177,7 +229,13 @@ const EditTourForm = Form.create()(React.createClass({
     if(this.props.guideLists !== nextProps.guideLists){
       getGuideName(nextProps.guideLists,this.state.guide_name)
     }
+    if(this.props.curTourID != nextProps.curTourID){
+        if(nextProps.curTourID){
+          this.setState({curTourID: nextProps.curTourID})
+        }
+    }
   },
+
 
   render(){
 
@@ -188,6 +246,9 @@ const EditTourForm = Form.create()(React.createClass({
     };
 
     let closeEachTour = () => this.setState({showCustomerEdit: false})
+    let closeCustomerDeleteWarning = () => this.setState({showCustomerDeleteWarning: false})
+    let delete_c_title = "You are going to delete the customer " + this.state.cusWarnIdentity
+    let delete_c_content = "If you delete it, the information will be permanently gone !!!"
 
    return (
 
@@ -212,7 +273,30 @@ const EditTourForm = Form.create()(React.createClass({
            </Modal>
        </div>
 
-     <Form className = "add-tour-form" horizontal onSubmit={this.handleSubmit}>
+       <div className="modal-container" >
+           <Modal
+             show={this.state.showCustomerDeleteWarning}
+             onHide={closeCustomerDeleteWarning}
+             bsSize="sm"
+             container={this}
+             aria-labelledby="contained-modal-title"
+           >
+             <Modal.Header closeButton>
+               <Modal.Title id="contained-modal-title">
+                 {delete_c_title}</Modal.Title>
+             </Modal.Header>
+             <Modal.Body>
+                {delete_c_content}
+             </Modal.Body>
+
+             <Modal.Footer>
+              <Button type="danger" onClick = {() => this.deleteCustomer()}>Delete</Button>
+            </Modal.Footer>
+
+           </Modal>
+       </div>
+
+     <Form ref= "addTourForm" className = "add-tour-form" horizontal onSubmit={this.handleSubmit}>
 
        <Row>
       <Col span={11} offset = {1}>
@@ -252,7 +336,7 @@ const EditTourForm = Form.create()(React.createClass({
          )}
        </FormItem>
 
-       </Col>
+     </Col>
 
       <Col span={11} offset = {1}>
 
@@ -282,7 +366,7 @@ const EditTourForm = Form.create()(React.createClass({
            label="Tour Time"
          >
            {getFieldDecorator('tourtime', {
-             initialValue: this.state.eachTour.tour_time
+             initialValue : moment(this.state.eachTour.start_time, format )
            })(
              <TimePicker
                style={{ width: '80%', marginRight: 11, marginLeft: 8}}
@@ -295,7 +379,7 @@ const EditTourForm = Form.create()(React.createClass({
      </Row>
      </Form>
 
-     <Table columns={this.columns} dataSource={this.state.eachTour.customer}/>
+     <Table columns={this.columns} dataSource={this.state.eachTour.customer} scroll={{ x: 1500 }}/>
 
      </div>
    );
@@ -307,7 +391,8 @@ function mapStateToProps(state) {
     return {
         guideLists: state.guideDetail.guideLists,
         dateTour: state.addTourForm.dateTour,
-        eachTour: state.editSpecificTour.eachTour
+        eachTour: state.editSpecificTour.eachTour,
+        curTourID: state.editSpecificTour.curTourID
     };
 }
 

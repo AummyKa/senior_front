@@ -13,8 +13,6 @@ const guideDetail = (state = INITIAL_STATE, action) => {
     case 'GET_GUIDE_SUCCESS':
       // action: { type: 'LOGIN_SUCCESS', json: { token: '' }}
       let data = action.json
-      console.log(data)
-
       return {
         guideLists: data
       }

@@ -1,7 +1,8 @@
 
 const INITIAL_STATE = {
   eachTour :[],
-  eachTourState: false
+  eachTourState: false,
+  curTourID: ""
 }
 // { type: 'LOGIN_SUCCESS', text }
 const editSpecificTour = (state = INITIAL_STATE, action) => {
@@ -13,7 +14,9 @@ const editSpecificTour = (state = INITIAL_STATE, action) => {
       }
     case 'GET_SPECIFIC_TOUR_SUCCESS':
       console.log(action)
+      console.log(action.json._id)
       return {
+        curTourID: action.json._id,
         eachTour : action.json,
         eachTourState: true
       }

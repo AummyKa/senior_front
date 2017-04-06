@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux'
+import moment from 'moment';
 
 import apiAccess from '../Helpers/apiAccess'
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, TimePicker, InputNumber } from 'antd';
@@ -33,7 +34,7 @@ const format = 'HH:mm';
 const EditCurCustomerModal = Form.create()(React.createClass({
 
   getInitialState() {
-    console.log(this.props.eachCurCustomer)
+
     return {
       eachCustomer: this.props.eachCurCustomer,
       selectedTourName: "",
@@ -132,6 +133,9 @@ const EditCurCustomerModal = Form.create()(React.createClass({
 
 
   render() {
+
+    console.log(this.state.eachCustomer.pickup_time.toString())
+
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
       labelCol: { span: 4 },
@@ -250,7 +254,9 @@ const EditCurCustomerModal = Form.create()(React.createClass({
             {...formItemLayout}
             label="Pickup time"
           >
-            {getFieldDecorator(`pickup_time`)(
+            {getFieldDecorator(`pickup_time`, {
+              initialValue : moment(this.state.eachCustomer.pickup_time, format )
+            })(
               <TimePicker
                 style={{ width: '30%', marginRight: 11, marginLeft: 11}}
                 format={format} placeholder = "pickup" />

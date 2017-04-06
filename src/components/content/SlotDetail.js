@@ -4,35 +4,10 @@ import { Row,Col,Table, Input, Button,Icon, Dropdown, Badge, Menu } from 'antd';
 import { addTour } from '../../actions/action-addTour'
 import apiAccess from '../../Helpers/apiAccess'
 import changeDateFormat from '../../Helpers/changeDateFormat'
+
 import { connect } from 'react-redux'
 
 import AddTourForm from '../AddTourForm';
-
-const menu = (
-  <Menu>
-    <Menu.Item>
-      Action 1
-    </Menu.Item>
-    <Menu.Item>
-      Action 2
-    </Menu.Item>
-  </Menu>
-);
-
-
-
-
-  const columns = [
-
-    { title: 'Date', dataIndex: 'start_date', key: 'start_date' },
-    { title: 'Time', dataIndex: 'start_time', key: 'start_time' },
-    { title: 'Tour', dataIndex: 'tour_name', key: 'tour_name' },
-    { title: 'Type', dataIndex: 'tour_type', key: 'tour_type' },
-    { title: 'Guide', dataIndex: 'guide', key: 'guide' },
-    { title: 'Participants', dataIndex: 'participants', key: 'participants' },
-
-  ];
-
 
 
 class SlotDetail extends Component {
@@ -41,19 +16,37 @@ class SlotDetail extends Component {
     super(props)
     this.getTourAndBookerDetail()
     this.screenTourAndBooker()
+
+    this.columns = [
+
+      { title: 'Date', dataIndex: 'start_date', key: 'start_date', width: 100 },
+      { title: 'Time', dataIndex: 'start_time', key: 'start_time', width: 70 },
+      { title: 'Tour', dataIndex: 'tour_name', key: 'tour_name' , width: 200  },
+      { title: 'Type', dataIndex: 'tour_type', key: 'tour_type', width: 80 },
+      { title: 'Guide', dataIndex: 'guide', key: 'guide', width: 179 },
+      { title: 'Participants', dataIndex: 'participants', key: 'participants', width: 100 },
+      { title: 'Action', dataIndex: '', key: 'x', width: 100,
+        render: (text, record) =>
+        <span>
+          <Button type="danger" onClick = {() => this.deleteEachTour(record)}  >Delete</Button>
+        </span>
+      }]
+
     this.state = {
       show: false,
       tourList: [],
       customerList:[],
       curTour: "",
-      curCustomer: [],
       wholeBookerAndTour:[]
     }
   }
 
+  deleteEachTour(record){
+    console.log(record)
+  }
 
   getTourAndBookerDetail(){
-    console.log(this.props.selectedDate)
+
     let date = changeDateFormat(this.props.selectedDate)
     console.log(changeDateFormat(this.props.selectedDate))
     apiAccess({
@@ -106,9 +99,13 @@ class SlotDetail extends Component {
         tours[i] = tourDetail
     }
   }
-  this.setState({
-    tourList: tours
-  })
+
+  if(this.refs.addTourTable){
+    this.setState({
+      tourList: tours
+    })
+  }
+
 }
 
 getCurTour(record, index){
@@ -131,9 +128,9 @@ getCurTour(record, index){
 
     return (
 
-      <div>
+      <div ref = "addTourTable" >
         <Button className = 'add-tour' onClick={()=> this.addMoreTour() }>Add tour</Button>
-        <Table className="components-table-demo-nested" columns={columns}
+        <Table className="components-table-demo-nested" columns={this.columns}
           dataSource={this.state.tourList}
           onRowClick = {this.getCurTour.bind(this)}
           />

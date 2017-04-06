@@ -17,6 +17,7 @@ import addTourForm from './addTourForm'
 import postBookerAndTour from './postBookerAndTour'
 import getBookerAndTour from './getBookerAndTour'
 import editSpecificTour from './editSpecificTour'
+import getEventSummary from './getEventSummary'
 
 const admin = combineReducers({
     login,
@@ -36,7 +37,8 @@ const admin = combineReducers({
     addTourForm,
     postBookerAndTour,
     getBookerAndTour,
-    editSpecificTour
+    editSpecificTour,
+    getEventSummary,
 })
 
 export default admin

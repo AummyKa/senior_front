@@ -19,7 +19,7 @@ const postBookerAndTour = (state = INITIAL_STATE, action) => {
       
     case 'POST_BOOKER_AND_TOUR_FAILURE':
       return {
-
+        addBookerAndTour: false
         //pop up
       }
 

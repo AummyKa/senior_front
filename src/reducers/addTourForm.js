@@ -1,7 +1,7 @@
 
 
 const INITIAL_STATE = {
-  showAddTourModal: '',
+  showAddTourModal: false,
   dateTour: ''
 }
 

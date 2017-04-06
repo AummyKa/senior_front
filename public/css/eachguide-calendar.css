@@ -1,0 +1,13 @@
+.DayPicker-Day--future:not(.DayPicker-Day--outside){
+  background-color:#70F070;
+  color: white;
+}
+.DayPicker-Day--today{
+  background-color: yellow;
+  color: black;
+}
+
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  background-color: red;
+  color: white;
+}

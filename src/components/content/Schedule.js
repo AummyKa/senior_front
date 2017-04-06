@@ -4,10 +4,11 @@ import { connect } from 'react-redux'
 import BigCalendar from 'react-big-calendar';
 
 import moment from 'moment';
-import events from '../Events';
+
 import SlotDetail from './SlotDetail'
 import AddTourForm from '../AddTourForm'
 import EditTourForm from '../EditTourForm'
+import apiAccess from '../../Helpers/apiAccess'
 
 
 import{ Row,Col } from 'antd'
@@ -20,12 +21,14 @@ class Schedule extends Component {
 
   constructor(props){
     super(props)
+    this.getEvent()
     this.state = {
       showSlotDetail : false,
       selectedDate: "",
       showAddTour: false,
       showEachTour: false,
-      selectedTourName: ""
+      selectedTourName: "",
+      events:[]
     }
   }
 
@@ -37,19 +40,37 @@ class Schedule extends Component {
     this.setState({showSlotDetail : true})
   }
 
+  getEvent(){
+    apiAccess({
+      url: 'http://localhost:8000/bookedtours/summary',
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_EVENT_SUMMARY_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_EVENT_SUMMARY_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_EVENT_SUMMARY_FAILED' })
+    })
+  }
+
+  eventStyleGetter(event, start, end, isSelected) {
+    var backgroundColor = '#' + event.hexColor;
+    var style = {
+        backgroundColor: backgroundColor,
+        borderRadius: '25px',
+        opacity: 0.8,
+        color: 'white',
+        border: '0px',
+        display: 'block'
+    }
+    return {
+        style: style
+    }
+}
+
+
   componentWillReceiveProps(nextProps){
 
     if(nextProps.showAddTourModal){
       this.setState({showEachTour: false, showAddTour:true,showSlotDetail : false})
-    }else
-      this.setState({showEachTour: false, showAddTour:false,showSlotDetail : true})
-
-
-    if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
-      if(nextProps.addBookerAndTour){
-        this.setState({showEachTour: false, showAddTour:false,showSlotDetail : true})
-      }else
-        this.setState({showEachTour: false, showAddTour:true,showSlotDetail : false})
     }
 
     if(nextProps.eachTourState){
@@ -57,6 +78,23 @@ class Schedule extends Component {
     }
     if(nextProps.eachTour){
       this.setState({selectedTourName: nextProps.eachTour.tour_name})
+      if(this.props.eachTour != nextProps.eachTour){
+
+      }
+    }
+    if(nextProps.events){
+      if(this.props.events !== nextProps.events){
+        this.setState({events: nextProps.events})
+      }
+    }
+      if(nextProps.addBookerAndTour){
+          this.setState({showEachTour: false, showAddTour:false,showSlotDetail : true})
+
+      }
+    if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
+      if(nextProps.addBookerAndTour){
+          this.getEvent()
+      }
     }
   }
 
@@ -147,12 +185,12 @@ class Schedule extends Component {
             selectable
         {...this.props}
         culture='en-GB'
-        events={events}
+        events={this.state.events}
+        eventPropGetter={(this.eventStyleGetter)}
         views={['month']}
         onSelectSlot={(slotInfo) => this.showThatSlot(slotInfo)}/>
         </div>
       </div>
-
 
     );
   }
@@ -164,7 +202,8 @@ const mapStateToProps = (state) => ({
   dateTour:state.addTourForm.dateTour,
   addBookerAndTour: state.postBookerAndTour.addBookerAndTour,
   eachTourState: state.editSpecificTour.eachTourState,
-  eachTour: state.editSpecificTour.eachTour
+  eachTour: state.editSpecificTour.eachTour,
+  events: state.getEventSummary.events
 })
 
 export default connect(mapStateToProps)(Schedule)

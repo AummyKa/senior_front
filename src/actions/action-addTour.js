@@ -1,14 +1,18 @@
-export const addTour = (type,date) => {
-    switch (type) {
-        case 'ADD_TOUR':
-            return {
-                type: 'ADD_TOUR',
-                showAddTourModal: true,
-                dateTour: date
-            }
 
+// { type: 'LOGIN_SUCCESS', text }
+export const addTour = (type,selectedDate) => {
+  switch (type) {
+    case 'ADD_TOUR':
 
-        default:
-            return ""
-    }
-};
+      return {
+        showAddTourModal: true,
+        dateTour: selectedDate
+      }
+
+    default:
+      return{
+        showAddTourModal: false
+      }
+
+}
+}

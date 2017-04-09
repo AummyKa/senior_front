@@ -31,16 +31,12 @@ function throwOptionAgencyObject(data){
 
 const format = 'HH:mm';
 
-const EditCurCustomerModal = Form.create()(React.createClass({
+const AddMoreCustomerModal = Form.create()(React.createClass({
 
   getInitialState() {
 
     return {
-      eachCustomer: this.props.eachCurCustomer,
-      selectedTourName: "",
-      selectedAgency: "",
-      selectedTourType: "",
-      selectedTourTime: ""
+
       }
     },
   handleSubmit(e) {
@@ -134,8 +130,6 @@ const EditCurCustomerModal = Form.create()(React.createClass({
 
   render() {
 
-    console.log(this.state.eachCustomer.pickup_time.toString())
-
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
       labelCol: { span: 4 },
@@ -149,8 +143,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
      return (
 
          <div className = "customer-info">
-
-        <Row>
+          <Row>
           <Col span={11} offset={1}>
 
             <FormItem
@@ -158,7 +151,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
               label="Agency"
             >
               {getFieldDecorator(`agency`, {
-                initialValue: this.state.eachCustomer.agency
+
               })(
                 <Select
                    showSearch
@@ -180,7 +173,6 @@ const EditCurCustomerModal = Form.create()(React.createClass({
          >
            {getFieldDecorator(`email`, {
              validateTrigger: ['onChange', 'onBlur'],
-             initialValue: this.state.eachCustomer.email,
              rules: [{
                required: true,
                whitespace: true,
@@ -199,7 +191,6 @@ const EditCurCustomerModal = Form.create()(React.createClass({
          >
            {getFieldDecorator(`name`, {
              validateTrigger: ['onChange', 'onBlur'],
-            initialValue: this.state.eachCustomer.name,
              rules: [{
                required: true,
                whitespace: true,
@@ -217,7 +208,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
            required={false}
          >
            {getFieldDecorator(`country`, {
-             validateTrigger: ['onChange', 'onBlur'], initialValue: this.state.eachCustomer.country
+             validateTrigger: ['onChange', 'onBlur']
            })(
              <Input placeholder="country"  style={{ width: '80%', marginRight: 11 }} />
            )}
@@ -237,7 +228,6 @@ const EditCurCustomerModal = Form.create()(React.createClass({
           }}
          >
            {getFieldDecorator(`pickup_place`, {
-             initialValue: this.state.eachCustomer.pickup_place,
              validateTrigger: ['onChange', 'onBlur']
            })(
              <Input placeholder="pick up place"  style={{ width: '100%'}}/>
@@ -250,7 +240,6 @@ const EditCurCustomerModal = Form.create()(React.createClass({
             label="Pickup time"
           >
             {getFieldDecorator(`pickup_time`, {
-              initialValue : moment(this.state.eachCustomer.pickup_time, format )
             })(
               <TimePicker
                 style={{ width: '30%', marginRight: 11, marginLeft: 11}}
@@ -264,7 +253,6 @@ const EditCurCustomerModal = Form.create()(React.createClass({
           >
 
           {getFieldDecorator(`participants`,{
-            initialValue: this.state.eachCustomer.participants
           })(
             <InputNumber
               style={{ width: '30%', marginRight: 11, marginLeft: 11}}
@@ -281,7 +269,6 @@ const EditCurCustomerModal = Form.create()(React.createClass({
          >
            {getFieldDecorator(`remark`, {
              validateTrigger: ['onChange', 'onBlur'],
-             initialValue: this.state.eachCustomer.remark
            })(
              <Input type="textarea" rows={2} />
            )}
@@ -292,7 +279,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
          <Row>
 
          <FormItem {...formItemLayoutWithOutLabel}>
-           <Button type="primary" htmlType="submit" size="large">Submit</Button>
+           <Button type="primary" htmlType="submit" size="large">Add Customer</Button>
          </FormItem>
 
          </Row>
@@ -307,4 +294,4 @@ const EditCurCustomerModal = Form.create()(React.createClass({
 //
 // })
 
-export default EditCurCustomerModal;
+export default AddMoreCustomerModal;

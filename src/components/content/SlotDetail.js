@@ -14,9 +14,6 @@ class SlotDetail extends Component {
 
   constructor(props){
     super(props)
-    this.getTourAndBookerDetail()
-    this.screenTourAndBooker()
-
     this.columns = [
 
       { title: 'Date', dataIndex: 'start_date', key: 'start_date', width: 100 },
@@ -39,6 +36,11 @@ class SlotDetail extends Component {
       curTour: "",
       wholeBookerAndTour:[]
     }
+  }
+
+  componentWillMount(){
+    this.getTourAndBookerDetail()
+    this.screenTourAndBooker()
   }
 
   deleteEachTour(record){
@@ -68,7 +70,7 @@ class SlotDetail extends Component {
   }
 
   addMoreTour(){
-      this.props.dispatch(addTour("ADD_TOUR",this.props.selectedDate))
+      this.props.dispatch(addTour('ADD_TOUR',this.props.selectedDate))
   }
 
   screenTourAndBooker(data){
@@ -129,7 +131,7 @@ getCurTour(record, index){
     return (
 
       <div ref = "addTourTable" >
-        <Button className = 'add-tour' onClick={()=> this.addMoreTour() }>Add tour</Button>
+        <Button type="primary" className = 'add-tour' onClick={()=> this.addMoreTour() }>Add tour</Button>
         <Table className="components-table-demo-nested" columns={this.columns}
           dataSource={this.state.tourList}
           onRowClick = {this.getCurTour.bind(this)}

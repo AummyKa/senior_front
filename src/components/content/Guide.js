@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import { AutoComplete, Row,Col,Table, Input, Button } from 'antd';
+import { AutoComplete, Row,Col,Table, Input, Button,Popover } from 'antd';
 
 import SearchAutoSuggest from '../SearchAutoSuggest'
 
@@ -8,6 +8,8 @@ import apiAccess from '../../Helpers/apiAccess'
 import { curGuideID } from '../../actions/action-spreadGuideID'
 
 const Search = Input.Search
+
+
 
 const GuideUserData = (arrayJSON,resultJSON) =>{
   console.log(arrayJSON)
@@ -31,10 +33,12 @@ const GuideUserData = (arrayJSON,resultJSON) =>{
   //return resultJSON
 }
 
+
+
 const Guide = React.createClass({
 
   getInitialState() {
-    this.getGuideList()
+
     return {
       filteredInfo: null,
       sortedInfo: null,
@@ -86,6 +90,10 @@ const Guide = React.createClass({
     }
   },
 
+  componentWillMount(){
+    this.getGuideList()
+  },
+
   Complete() {
   return (<AutoComplete
     style={{ width: 200 }}
@@ -95,7 +103,19 @@ const Guide = React.createClass({
   />);
 },
 
+getExpertList(){
+  return(
+    <div>
+      <p>Content</p>
+      <p>Content</p>
+    </div>
+  )
+},
+
+
   render() {
+
+
 
     //table
     let { sortedInfo, filteredInfo } = this.state;
@@ -134,7 +154,17 @@ const Guide = React.createClass({
       onFilter: (value, record) => record.role.includes(value),
       sorter: (a, b) => a.role.length - b.role.length,
       sortOrder: sortedInfo.columnKey === 'role' && sortedInfo.order,
-    }];
+    },{ title: 'Action', dataIndex: '', key: 'x', width: 150,
+      render: (text, record) =>
+      <span>
+      <Popover placement="rightTop" title={<span>Expert tours</span>} content={this.getExpertList()}>
+          <Button style = {{background: "#F48888", color: "white" }}>Expert tour lists</Button>
+      </Popover>
+    </span>
+
+   }]
+
+
 
     return (
       <div>

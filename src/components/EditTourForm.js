@@ -7,7 +7,7 @@ import moment from 'moment';
 import apiAccess from '../Helpers/apiAccess'
 import changeDateFormat from '../Helpers/changeDateFormat'
 import EditCurCustomerModal from './EditCurCustomerModal'
-
+import AddMoreCustomerModal from './AddMoreCustomerModal'
 
 import {Modal } from 'react-bootstrap';
 
@@ -92,9 +92,6 @@ let uuid = 0;
 const EditTourForm = Form.create()(React.createClass({
 
   getInitialState() {
-    console.log(this.props.eachTour.tour_name)
-    this.getGuideList()
-
     this.columns = [{
       title: 'Name',
       dataIndex: 'name',
@@ -152,10 +149,14 @@ const EditTourForm = Form.create()(React.createClass({
       showCustomerDeleteWarning: false,
       cusWarnIdentity: "",
       curTourID: "",
-      curCusEmail:""
+      curCusEmail:"",
+      showAddMoreCustomer: false
     }
   },
 
+  compoentWillMount(){
+    this.getGuideList()
+  },
 
 
   handleSubmit(e){
@@ -190,11 +191,14 @@ const EditTourForm = Form.create()(React.createClass({
     let id = this.state.curTourID
     let email = this.state.curCusEmail
 
-    console.log(this.state.curTourID)
+    let payload = {
+      id: id,
+      email: email
+    }
 
     // apiAccess({
-    //   url: 'http://localhost:8000/bookedtours/insert',
-    //   method: 'POST',
+    //   url: 'http://localhost:8000/bookedtours/delete',
+    //   method: 'DELETE',
     //   payload: payload,
     //   attemptAction: () => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_ATTEMPT' }),
     //   successAction: (json) => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_SUCCESS', json }),
@@ -225,6 +229,10 @@ const EditTourForm = Form.create()(React.createClass({
     })
   },
 
+  addMoreCustomer(){
+    this.setState({showAddMoreCustomer:true})
+  },
+
   componentWillReceiveProps(nextProps){
     if(this.props.guideLists !== nextProps.guideLists){
       getGuideName(nextProps.guideLists,this.state.guide_name)
@@ -247,6 +255,7 @@ const EditTourForm = Form.create()(React.createClass({
 
     let closeEachTour = () => this.setState({showCustomerEdit: false})
     let closeCustomerDeleteWarning = () => this.setState({showCustomerDeleteWarning: false})
+    let closeAddMoreCustomer = () => this.setState({showAddMoreCustomer: false})
     let delete_c_title = "You are going to delete the customer " + this.state.cusWarnIdentity
     let delete_c_content = "If you delete it, the information will be permanently gone !!!"
 
@@ -268,6 +277,25 @@ const EditTourForm = Form.create()(React.createClass({
              </Modal.Header>
              <Modal.Body>
                 <EditCurCustomerModal eachCurCustomer ={this.state.editCurCustomer}  />
+             </Modal.Body>
+
+           </Modal>
+       </div>
+
+       <div className="modal-container" >
+           <Modal
+             show={this.state.showAddMoreCustomer}
+             onHide={closeAddMoreCustomer}
+             bsSize="sm"
+             container={this}
+             aria-labelledby="contained-modal-title"
+           >
+             <Modal.Header closeButton>
+               <Modal.Title id="contained-modal-title">
+                 Add more Customer</Modal.Title>
+             </Modal.Header>
+             <Modal.Body>
+               <AddMoreCustomerModal />
              </Modal.Body>
 
            </Modal>
@@ -379,6 +407,7 @@ const EditTourForm = Form.create()(React.createClass({
      </Row>
      </Form>
 
+     <Button type="primary" className = 'add-more-customer' onClick = {() => this.addMoreCustomer()}>Add more customer</Button>
      <Table columns={this.columns} dataSource={this.state.eachTour.customer} scroll={{ x: 1500 }}/>
 
      </div>

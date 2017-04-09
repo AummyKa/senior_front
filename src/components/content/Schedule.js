@@ -21,8 +21,7 @@ class Schedule extends Component {
 
   constructor(props){
     super(props)
-    this.getEvent()
-    this.state = {
+      this.state = {
       showSlotDetail : false,
       selectedDate: "",
       showAddTour: false,
@@ -30,6 +29,10 @@ class Schedule extends Component {
       selectedTourName: "",
       events:[]
     }
+  }
+
+  componentWillMount(){
+    this.getEvent();
   }
 
   showThatSlot(slotInfo){
@@ -97,6 +100,7 @@ class Schedule extends Component {
       }
     }
   }
+
 
   render() {
     let closeSlot = () => this.setState({showSlotDetail: false, showEachTour: false});

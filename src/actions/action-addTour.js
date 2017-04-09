@@ -6,7 +6,8 @@ export const addTour = (type,selectedDate) => {
 
       return {
         showAddTourModal: true,
-        dateTour: selectedDate
+        dateTour: selectedDate,
+        type: type
       }
 
     default:

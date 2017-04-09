@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 
-import { Row,Col,Table, Input, Button,Icon, Dropdown, Badge, Menu } from 'antd';
+import { Row,Col,Table, Input, Button,Icon, Dropdown, Badge, Menu, Alert } from 'antd';
 import { addTour } from '../../actions/action-addTour'
 import apiAccess from '../../Helpers/apiAccess'
 import changeDateFormat from '../../Helpers/changeDateFormat'
+import { Modal } from 'react-bootstrap';
 
 import { connect } from 'react-redux'
 
@@ -25,30 +26,54 @@ class SlotDetail extends Component {
       { title: 'Action', dataIndex: '', key: 'x', width: 100,
         render: (text, record) =>
         <span>
-          <Button type="danger" onClick = {() => this.deleteEachTour(record)}  >Delete</Button>
+          <Button type="primary" onClick = {() => this.getCurTour(record)}  >Edit</Button>
+          <span className="ant-divider" />
+          <Button type="danger" onClick = {() => this.warningDeleteEachTour(record)}  >Delete</Button>
         </span>
       }]
 
     this.state = {
       show: false,
+      selectedDate:"",
       tourList: [],
       customerList:[],
       curTour: "",
-      wholeBookerAndTour:[]
+      wholeBookerAndTour:[],
+      showInvalidDate: false,
+      showTourDeleteWarning: false,
+      curDeletingTourID: ""
     }
   }
 
   componentWillMount(){
     this.getTourAndBookerDetail()
     this.screenTourAndBooker()
+    this.setState({selectedDate:this.props.selectedDate})
+    this.setState({valid_date_status:this.props.valid_date_status})
   }
 
-  deleteEachTour(record){
-    console.log(record)
+  warningDeleteEachTour(record){
+    let _id = record.id
+    console.log(_id)
+    this.setState({curDeletingTourID: _id})
+    this.setState({showTourDeleteWarning:true})
   }
+
+
+  deleteEachTour(_id){
+    console.log(_id)
+    apiAccess({
+      url: 'http://localhost:8000/bookedtours/delete-bookedtour/',
+      method: 'DELETE',
+      payload: _id,
+      attemptAction: () => this.props.dispatch({ type: 'DELETE_BOOKER_AND_TOUR_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'DELETE_BOOKER_AND_TOUR_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'DELETE_BOOKER_AND_TOUR_FAILED' })
+    })
+  }
+
 
   getTourAndBookerDetail(){
-
     let date = changeDateFormat(this.props.selectedDate)
     console.log(changeDateFormat(this.props.selectedDate))
     apiAccess({
@@ -70,7 +95,15 @@ class SlotDetail extends Component {
   }
 
   addMoreTour(){
+
       this.props.dispatch(addTour('ADD_TOUR',this.props.selectedDate))
+
+      // console.log(this.state.valid_date_status)
+      // if(this.state.valid_date_status){
+      //   this.props.dispatch(addTour('ADD_TOUR',this.props.selectedDate))
+      // }else{
+      //   this.setState({showInvalidDate: true})
+      // }
   }
 
   screenTourAndBooker(data){
@@ -82,9 +115,9 @@ class SlotDetail extends Component {
       for(var i = 0; i < data.length; i++) {
 
         let total_p = 0;
-        for(var j =0; j < data[i].customer.length; j++){
-          total_p += data[i].customer[j].participants
-          console.log(data[i].customer[j].participants)
+        for(var j =0; j < data[i].customers.length; j++){
+          total_p += data[i].customers[j].participants
+          console.log(data[i].customers[j].participants)
         }
 
         var tourDetail = {
@@ -110,10 +143,9 @@ class SlotDetail extends Component {
 
 }
 
-getCurTour(record, index){
-
+getCurTour(record){
   let id = record.id
-
+  console.log(id)
   apiAccess({
     url: 'http://localhost:8000/bookedtours/'+id,
     method: 'GET',
@@ -122,28 +154,65 @@ getCurTour(record, index){
     successAction: (json) => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_SUCCESS', json }),
     failureAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_FAILED' })
   })
-
-
 }
 
   render() {
 
+    let onClose = () => this.setState({showInvalidDate:false})
+    let closeTourDeleteWarning = () => this.setState({showTourDeleteWarning: false})
+
+    let delete_c_title = "You are going to delete the tour " + this.state.curTour
+    let delete_c_content = "If you delete it, the information will be permanently gone !!!"
+
     return (
 
+      <div>
+
+      <div className="modal-container" >
+          <Modal
+            show={this.state.showTourDeleteWarning}
+            onHide={closeTourDeleteWarning}
+            bsSize="sm"
+            container={this}
+            aria-labelledby="contained-modal-title"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title">
+                {delete_c_title}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+               {delete_c_content}
+            </Modal.Body>
+
+            <Modal.Footer>
+             <Button type="danger" onClick = {() => this.deleteEachTour(this.state.curDeletingTourID)}>Delete</Button>
+           </Modal.Footer>
+
+          </Modal>
+      </div>
+
       <div ref = "addTourTable" >
-        <Button type="primary" className = 'add-tour' onClick={()=> this.addMoreTour() }>Add tour</Button>
+        <span>
+          { this.state.showInvalidDate ?
+            <Alert message="Cannot add event in the past" type="error" closable onClose={onClose}/> : null }
+
+          <Button type="primary" className = 'add-tour' onClick={()=> this.addMoreTour() }>Add tour</Button>
+        </span>
         <Table className="components-table-demo-nested" columns={this.columns}
           dataSource={this.state.tourList}
-          onRowClick = {this.getCurTour.bind(this)}
           />
       </div>
+
+    </div>
 
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-   bookerAndTourDetail: state.getBookerAndTour.bookerAndTourDetail
+   bookerAndTourDetail: state.getBookerAndTour.bookerAndTourDetail,
+   selectedDate: state.spreadSelectedDate.selectedDate,
+   valid_date_status: state.spreadSelectedDate.valid_date_status
 })
 
 export default connect(mapStateToProps)(SlotDetail)

@@ -133,14 +133,21 @@ const AddTourForm = Form.create()(React.createClass({
             formResult[i-1] = customer
           }
 
-          let payLoad = {
-            start_date : changeDateFormat(this.props.dateTour),
-            tour_name: this.state.selectedTourName,
-            tour_type: this.state.selectedTourType,
-            tour_guide: this.state.selectedGuideName,
-            start_time: this.state.selectedTourTime,
-            customer: formResult
-          }
+          let dateTour = changeDateFormat(this.props.dateTour)
+
+          let payLoad =
+            {
+              customers: formResult,
+              bookedTour:
+              {
+                start_date : dateTour,
+                tour_name: this.state.selectedTourName,
+                tour_type: this.state.selectedTourType,
+                tour_guide: this.state.selectedGuideName,
+                start_time: this.state.selectedTourTime
+              },
+            }
+
           console.log(payLoad)
           this.addBookerAndTour(payLoad)
         }

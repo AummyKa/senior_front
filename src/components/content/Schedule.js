@@ -9,6 +9,7 @@ import SlotDetail from './SlotDetail'
 import AddTourForm from '../AddTourForm'
 import EditTourForm from '../EditTourForm'
 import apiAccess from '../../Helpers/apiAccess'
+import { getSelectedDate } from '../../actions/action-selectedDate'
 
 
 import{ Row,Col } from 'antd'
@@ -27,19 +28,18 @@ class Schedule extends Component {
       showAddTour: false,
       showEachTour: false,
       selectedTourName: "",
-      events:[]
+      events:[],
+      selectedDate:""
     }
   }
 
   componentWillMount(){
     this.getEvent();
+
   }
 
   showThatSlot(slotInfo){
-    let start = slotInfo.start.toString().substring(0,15)
-    console.log(start)
-    this.setState({selectedDate: start})
-    console.log(this.state.selectedDate)
+    this.props.dispatch(getSelectedDate("GET_SELECTED_DATE",slotInfo.start))
     this.setState({showSlotDetail : true})
   }
 
@@ -92,17 +92,22 @@ class Schedule extends Component {
     }
       if(nextProps.addBookerAndTour){
           this.setState({showEachTour: false, showAddTour:false,showSlotDetail : true})
-
       }
     if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
       if(nextProps.addBookerAndTour){
           this.getEvent()
       }
     }
+    if(nextProps.selectedDate){
+        this.setState({selectedDate: nextProps.selectedDate})
+    }
+
   }
 
 
   render() {
+    console.log(this.state.selectedDate)
+
     let closeSlot = () => this.setState({showSlotDetail: false, showEachTour: false});
     let closeAddTour = () => this.setState({showAddTour: false,showSlotDetail: true ,showEachTour:false});
     let closeEachTour = () => this.setState({showEachTour: false,showSlotDetail: true, showAddTour:false});
@@ -123,7 +128,7 @@ class Schedule extends Component {
               </Modal.Header>
               <Modal.Body>
 
-                <AddTourForm selectedDate = {this.props.selectedDate}  dispatch = {this.props.dispatch} />
+                <AddTourForm dispatch = {this.props.dispatch} />
 
               </Modal.Body>
 
@@ -162,7 +167,7 @@ class Schedule extends Component {
               <Modal.Title id="contained-modal-title">Tour lists at {this.state.selectedDate} </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <SlotDetail selectedDate = {this.state.selectedDate}  dispatch = {this.props.dispatch} />
+              <SlotDetail dispatch = {this.props.dispatch} />
             </Modal.Body>
 
           </Modal>
@@ -207,6 +212,7 @@ const mapStateToProps = (state) => ({
   addBookerAndTour: state.postBookerAndTour.addBookerAndTour,
   eachTourState: state.editSpecificTour.eachTourState,
   eachTour: state.editSpecificTour.eachTour,
+  selectedDate: state.spreadSelectedDate.selectedDate,
   events: state.getEventSummary.events
 })
 

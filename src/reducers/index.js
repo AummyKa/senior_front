@@ -19,6 +19,8 @@ import getBookerAndTour from './getBookerAndTour'
 import editSpecificTour from './editSpecificTour'
 import getEventSummary from './getEventSummary'
 import deleteCurCustomerInTour from './deleteCurCustomerInTour'
+import spreadSelectedDate from './spreadSelectedDate'
+import deletedTour from './deletedTour'
 
 const admin = combineReducers({
     login,
@@ -40,7 +42,9 @@ const admin = combineReducers({
     getBookerAndTour,
     editSpecificTour,
     getEventSummary,
-    deleteCurCustomerInTour
+    deleteCurCustomerInTour,
+    spreadSelectedDate,
+    deletedTour
 })
 
 export default admin

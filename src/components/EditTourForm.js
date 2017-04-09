@@ -87,6 +87,27 @@ function throwOptionTourNameObject(data){
   return temp
 }
 
+function formatData(data){
+  let temp = []
+
+  for(var i = 0; i < data.length; i++){
+    var obj = {
+      key: data[i].key,
+      name: data[i].booked_by.name,
+      agency: data[i].agency,
+      country: data[i].booked_by.country,
+      email: data[i].booked_by.email,
+      participants: data[i].participants,
+      pickup_place: data[i].pickup_place,
+      pickup_time: data[i].pickup_time,
+      remark: data[i].remark
+    }
+    temp[i] = obj
+  }
+  return temp
+}
+
+
 let uuid = 0;
 
 const EditTourForm = Form.create()(React.createClass({
@@ -246,6 +267,7 @@ const EditTourForm = Form.create()(React.createClass({
 
 
   render(){
+    console.log(this.state.eachTour)
 
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
@@ -408,7 +430,7 @@ const EditTourForm = Form.create()(React.createClass({
      </Form>
 
      <Button type="primary" className = 'add-more-customer' onClick = {() => this.addMoreCustomer()}>Add more customer</Button>
-     <Table columns={this.columns} dataSource={this.state.eachTour.customer} scroll={{ x: 1500 }}/>
+     <Table columns={this.columns} dataSource={formatData(this.state.eachTour.customers)} scroll={{ x: 1500 }}/>
 
      </div>
    );

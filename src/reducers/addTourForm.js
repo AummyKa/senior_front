@@ -10,7 +10,10 @@ const addTourForm = (state = INITIAL_STATE, action) => {
   switch (action.type) {
 
     case 'ADD_TOUR':
-    console.log(action)
+    console.log(action.dateTour)
+    let today = new Date()
+    console.log("today  "+today)
+    
       return {
         showAddTourModal: true,
         dateTour: action.dateTour

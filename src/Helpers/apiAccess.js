@@ -12,7 +12,7 @@ failureAction
 attemptAction()
 
 
-if(method == "POST"){
+if(method == "POST" || method == "DELETE"){
 
   fetch(url, {
       method: method,

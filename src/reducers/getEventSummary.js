@@ -11,7 +11,7 @@ const getEventSummary = (state = INITIAL_STATE, action) => {
       }
     case 'GET_EVENT_SUMMARY_SUCCESS':
       // action: { type: 'LOGIN_SUCCESS', json: { token: '' }
-      console.log(action.json)
+
           return {
           events: action.json.payload
         }

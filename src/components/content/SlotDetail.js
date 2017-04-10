@@ -21,9 +21,9 @@ class SlotDetail extends Component {
       { title: 'Time', dataIndex: 'start_time', key: 'start_time', width: 70 },
       { title: 'Tour', dataIndex: 'tour_name', key: 'tour_name' , width: 200  },
       { title: 'Type', dataIndex: 'tour_type', key: 'tour_type', width: 80 },
-      { title: 'Guide', dataIndex: 'guide', key: 'guide', width: 179 },
+      { title: 'Guide', dataIndex: 'guide', key: 'guide', width: 160 },
       { title: 'Participants', dataIndex: 'participants', key: 'participants', width: 100 },
-      { title: 'Action', dataIndex: '', key: 'x', width: 100,
+      { title: 'Action', dataIndex: '', key: 'x', width: 120,
         render: (text, record) =>
         <span>
           <Button type="primary" onClick = {() => this.getCurTour(record)}  >Edit</Button>
@@ -41,7 +41,9 @@ class SlotDetail extends Component {
       wholeBookerAndTour:[],
       showInvalidDate: false,
       showTourDeleteWarning: false,
-      curDeletingTourID: ""
+      curDeletingTourID: "",
+      delete_status: false,
+      control_addTour:false
     }
   }
 
@@ -50,22 +52,23 @@ class SlotDetail extends Component {
     this.screenTourAndBooker()
     this.setState({selectedDate:this.props.selectedDate})
     this.setState({valid_date_status:this.props.valid_date_status})
+    this.setState({delete_status:this.props.delete_status})
   }
 
   warningDeleteEachTour(record){
     let _id = record.id
-    console.log(_id)
     this.setState({curDeletingTourID: _id})
     this.setState({showTourDeleteWarning:true})
   }
 
 
   deleteEachTour(_id){
-    console.log(_id)
     apiAccess({
       url: 'http://localhost:8000/bookedtours/delete-bookedtour/',
       method: 'DELETE',
-      payload: _id,
+      payload: {
+        _id: _id
+      },
       attemptAction: () => this.props.dispatch({ type: 'DELETE_BOOKER_AND_TOUR_ATTEMPT' }),
       successAction: (json) => this.props.dispatch({ type: 'DELETE_BOOKER_AND_TOUR_SUCCESS', json }),
       failureAction: () => this.props.dispatch({ type: 'DELETE_BOOKER_AND_TOUR_FAILED' })
@@ -75,7 +78,6 @@ class SlotDetail extends Component {
 
   getTourAndBookerDetail(){
     let date = changeDateFormat(this.props.selectedDate)
-    console.log(changeDateFormat(this.props.selectedDate))
     apiAccess({
       url: 'http://localhost:8000/bookedtours/date/'+date,
       method: 'GET',
@@ -87,17 +89,29 @@ class SlotDetail extends Component {
   }
 
   componentWillReceiveProps(nextProps){
+
+    console.log(this.props.showAddTourModal)
+    console.log(nextProps.showAddTourModal)
+
+    if(this.props.showAddTourModal == nextProps.showAddTourModal){
+      this.setState({control_addTour:true})
+    }
+
     if(this.props.bookerAndTourDetail !== nextProps.bookerAndTourDetail){
-      console.log(nextProps.bookerAndTourDetail)
       this.screenTourAndBooker(nextProps.bookerAndTourDetail)
     }
     this.setState({wholeBookerAndTour: nextProps.bookerAndTourDetail})
+
+    if(nextProps.delete_status){
+      this.setState({showTourDeleteWarning: false})
+    }
   }
 
   addMoreTour(){
-
-      this.props.dispatch(addTour('ADD_TOUR',this.props.selectedDate))
-
+    console.log(this.state.control_addTour)
+      // if(this.state.control_addTour){
+        this.props.dispatch(addTour('ADD_TOUR',this.props.selectedDate))
+      // }
       // console.log(this.state.valid_date_status)
       // if(this.state.valid_date_status){
       //   this.props.dispatch(addTour('ADD_TOUR',this.props.selectedDate))
@@ -117,7 +131,6 @@ class SlotDetail extends Component {
         let total_p = 0;
         for(var j =0; j < data[i].customers.length; j++){
           total_p += data[i].customers[j].participants
-          console.log(data[i].customers[j].participants)
         }
 
         var tourDetail = {
@@ -130,7 +143,6 @@ class SlotDetail extends Component {
           guide: data[i].tour_guide,
           participants: total_p
         }
-        console.log(tourDetail)
         tours[i] = tourDetail
     }
   }
@@ -145,7 +157,6 @@ class SlotDetail extends Component {
 
 getCurTour(record){
   let id = record.id
-  console.log(id)
   apiAccess({
     url: 'http://localhost:8000/bookedtours/'+id,
     method: 'GET',
@@ -157,7 +168,7 @@ getCurTour(record){
 }
 
   render() {
-
+    
     let onClose = () => this.setState({showInvalidDate:false})
     let closeTourDeleteWarning = () => this.setState({showTourDeleteWarning: false})
 
@@ -212,7 +223,9 @@ getCurTour(record){
 const mapStateToProps = (state) => ({
    bookerAndTourDetail: state.getBookerAndTour.bookerAndTourDetail,
    selectedDate: state.spreadSelectedDate.selectedDate,
-   valid_date_status: state.spreadSelectedDate.valid_date_status
+   valid_date_status: state.spreadSelectedDate.valid_date_status,
+   delete_status: state.deletedTour.delete_status,
+   showAddTourModal: state.addTourForm.showAddTourModal
 })
 
 export default connect(mapStateToProps)(SlotDetail)

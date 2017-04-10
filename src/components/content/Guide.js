@@ -12,7 +12,6 @@ const Search = Input.Search
 
 
 const GuideUserData = (arrayJSON,resultJSON) =>{
-  console.log(arrayJSON)
 
   if(arrayJSON!=null){
     for(var i = 0; i < arrayJSON.length; i++) {

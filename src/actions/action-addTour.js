@@ -10,6 +10,13 @@ export const addTour = (type,selectedDate) => {
         type: type
       }
 
+      case 'CLOSE_ADD_TOUR':
+
+      return{
+        showAddTourModal: false,
+        type: type
+      }
+
     default:
       return{
         showAddTourModal: false

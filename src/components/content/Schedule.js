@@ -10,7 +10,7 @@ import AddTourForm from '../AddTourForm'
 import EditTourForm from '../EditTourForm'
 import apiAccess from '../../Helpers/apiAccess'
 import { getSelectedDate } from '../../actions/action-selectedDate'
-
+import { addTour } from '../../actions/action-addTour'
 
 import{ Row,Col } from 'antd'
 import { Modal , Button, ButtonToolbar } from 'react-bootstrap';
@@ -29,13 +29,13 @@ class Schedule extends Component {
       showEachTour: false,
       selectedTourName: "",
       events:[],
-      selectedDate:""
+      selectedDate:"",
+      receiveShowAddStatus:false
     }
   }
 
   componentWillMount(){
     this.getEvent();
-
   }
 
   showThatSlot(slotInfo){
@@ -76,13 +76,14 @@ class Schedule extends Component {
       this.setState({showEachTour: false, showAddTour:true,showSlotDetail : false})
     }
 
-    if(nextProps.eachTourState){
-      this.setState({showEachTour: true, showAddTour:false,showSlotDetail : false})
+    if(this.props.eachTourState !== nextProps.eachTourState){
+      if(nextProps.eachTourState){
+        this.setState({showEachTour: true, showAddTour:false,showSlotDetail : false})
+      }
     }
-    if(nextProps.eachTour){
-      this.setState({selectedTourName: nextProps.eachTour.tour_name})
-      if(this.props.eachTour != nextProps.eachTour){
-
+    if(this.props.eachTour !== nextProps.eachTour){
+      if(nextProps.eachTour){
+          this.setState({selectedTourName: nextProps.eachTour.tour_name})
       }
     }
     if(nextProps.events){
@@ -106,10 +107,15 @@ class Schedule extends Component {
 
 
   render() {
-    console.log(this.state.selectedDate)
 
-    let closeSlot = () => this.setState({showSlotDetail: false, showEachTour: false});
-    let closeAddTour = () => this.setState({showAddTour: false,showSlotDetail: true ,showEachTour:false});
+    let closeSlot = () => {
+      this.setState({showSlotDetail: false, showEachTour: false})
+    }
+
+    let closeAddTour = () =>{
+      this.setState({showAddTour: false,showSlotDetail: true ,showEachTour:false});
+      this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
+    }
     let closeEachTour = () => this.setState({showEachTour: false,showSlotDetail: true, showAddTour:false});
 
     return (

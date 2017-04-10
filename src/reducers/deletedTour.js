@@ -7,7 +7,7 @@ const deletedTour = (state = INITIAL_STATE, action) => {
   switch (action.type) {
 
     case 'DELETE_BOOKER_AND_TOUR_ATTEMPT':
-    console.log()
+    console.log("deleting")
       return {
 
       }
@@ -17,9 +17,9 @@ const deletedTour = (state = INITIAL_STATE, action) => {
         delete_status: true
       }
     case 'DELETE_BOOKER_AND_TOUR_FAILED':
-
+      console.log("fail deleting")
       return {
-
+        delete_status: false
       }
       default:
         return state

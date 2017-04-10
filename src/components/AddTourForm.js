@@ -95,7 +95,6 @@ let uuid = 0;
 const AddTourForm = Form.create()(React.createClass({
 
   getInitialState() {
-    this.getGuideList()
     return{
       showCusInput: false,
       cusLen: 0,
@@ -229,6 +228,10 @@ const AddTourForm = Form.create()(React.createClass({
       getGuideName(nextProps.guideLists,this.state.guide_name)
       console.log(nextProps.guideLists)
     }
+  },
+
+  componentWillMount(){
+    this.getGuideList()
   },
 
   showCustomerInput(){

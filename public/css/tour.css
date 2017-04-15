@@ -2,7 +2,8 @@
   background-color: #F3C9BB;
   width: 280px;
   height: 280px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin-bottom: 30px
 
 }
 
@@ -31,7 +32,7 @@
 
 .add-event{
   position: fixed;
-  bottom: 10%;
+  bottom: 20px;
   right: 5%;
   width: 70px;
   padding: 10px;
@@ -47,4 +48,10 @@
   margin-bottom: 10px;
   margin-right: 2px;
   margin-left: 91%;
+}
+
+.add-more-customer{
+  margin-bottom: 10px;
+  margin-right: 2px;
+  margin-left: 85%;
 }

@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux'
 
 import apiAccess from '../Helpers/apiAccess'
@@ -50,6 +50,14 @@ const title = [{
   label: 'Mr.',
 }]
 
+const contract = [{
+  value: 'Full Time.',
+  label: 'Full Time.',
+}, {
+  value: 'Part Time',
+  label: 'Part Time',
+}]
+
 const RegistForm = Form.create()(React.createClass({
 
   getInitialState() {
@@ -74,12 +82,13 @@ const RegistForm = Form.create()(React.createClass({
         let payload = {email: this.props.form.getFieldValue('email'),
                       password: this.props.form.getFieldValue('password'),
                       confirm: this.props.form.getFieldValue('confirm'),
-                      title: this.props.form.getFieldValue('title'),
+                      title: this.props.form.getFieldValue('title')[0],
                       name:this.props.form.getFieldValue('name'),
                       surname:this.props.form.getFieldValue('surname'),
-                      role:this.props.form.getFieldValue('role'),
-                      workplace:this.props.form.getFieldValue('workplace'),
-                      phone:"0"+ this.props.form.getFieldValue('phone')}
+                      role:this.props.form.getFieldValue('role')[0],
+                      workplace:this.props.form.getFieldValue('workplace')[0],
+                      phone:"0"+ this.props.form.getFieldValue('phone'),
+                      contract:this.props.form.getFieldValue('contract')[0]}
 
           apiAccess({
             url: 'http://localhost:8000/register',
@@ -148,6 +157,12 @@ const RegistForm = Form.create()(React.createClass({
      callback()
    }
  },
+
+ // isTourGuide(value, selectedOptions){
+ //   let selected = value[0]
+ //   if(selected == "Tour Guide"){
+ //   }
+ // },
 
 
   render() {
@@ -268,7 +283,6 @@ const RegistForm = Form.create()(React.createClass({
           label="Role"
         >
           {getFieldDecorator('role', {
-            initialValue: ['Customer Service'],
             rules: [{ type: 'array', required: true, message: 'Please select your role!' }],
           })(
             <Cascader options={role} />
@@ -276,7 +290,17 @@ const RegistForm = Form.create()(React.createClass({
         </FormItem>
         <FormItem
           {...formItemLayout}
-          label="workplace"
+          label="Contract"
+        >
+          {getFieldDecorator('contract', {
+            rules: [{ type: 'array', required: true, message: 'Please select your type of contract!' }],
+          })(
+            <Cascader options={contract}/>
+          )}
+        </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="Workplace"
         >
           {getFieldDecorator('workplace', {
             initialValue: ['Bangkok'],

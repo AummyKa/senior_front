@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
 import { Table, InputNumber, Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, TimePicker } from 'antd';
@@ -413,7 +413,7 @@ const EditTourForm = Form.create()(React.createClass({
 
          <FormItem
            {...formItemLayout}
-           label="Tour Time"
+           label="Start Time"
          >
            {getFieldDecorator('tourtime', {
              initialValue : moment(this.state.eachTour.start_time, format )

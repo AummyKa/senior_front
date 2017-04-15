@@ -7,7 +7,8 @@ import {Provider} from 'react-redux'
 
 import {Router, IndexRoute, Route, browserHistory} from 'react-router';
 import reducer from './reducers'
-
+import enUS from 'antd/lib/locale-provider/en_US';
+import { LocaleProvider } from 'antd';
 //Pages
 import App from "./pages/App";
 import DashboardPage from "./pages/DashboardPage";
@@ -16,7 +17,6 @@ import Guide from './components/content/Guide'
 import Tours from './components/content/Tours'
 import Schedule from './components/content/Schedule'
 import PendingList from './components/content/PendingList'
-
 
 
 const store = createStore(reducer);
@@ -32,17 +32,19 @@ const store = createStore(reducer);
 
 ReactDOM.render(
 
-    <Provider store={store}>
-    <Router history={browserHistory}>
-        <Route component={App}>
-            <IndexRoute component={LoginPage}/>
-            <Route path="/" component={LoginPage}/>
-            <Route path="/home" component={DashboardPage}/>
-            <Route path="/guide" component={Guide}/>
-            <Route path="/tours" component={Tours}/>
-            <Route path="/schedule" component={Schedule}/>
-            <Route path="/pending" component={PendingList}/>
-
-        </Route>
-    </Router>
-</Provider>, document.getElementById('root'));
+    <LocaleProvider locale={enUS}>
+        <Provider store={store}>
+        <Router history={browserHistory}>
+            <Route component={App}>
+                <IndexRoute component={LoginPage}/>
+                <Route path="/" component={LoginPage}/>
+                <Route path="/home" component={DashboardPage}/>
+                <Route path="/guide" component={Guide}/>
+                <Route path="/tours" component={Tours}/>
+                <Route path="/schedule" component={Schedule}/>
+                <Route path="/pending" component={PendingList}/>
+            </Route>
+        </Router>
+    </Provider>
+</LocaleProvider>
+, document.getElementById('root'));

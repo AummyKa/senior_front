@@ -15,7 +15,7 @@
 .layout-aside .layout-sider {
   width: 224px;
   background: #404040;
-  position: absolute;
+  position: fixed;
   overflow: auto;
   padding-bottom: 24px;
   height: 100%;

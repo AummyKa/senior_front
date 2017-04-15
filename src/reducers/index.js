@@ -21,6 +21,8 @@ import getEventSummary from './getEventSummary'
 import deleteCurCustomerInTour from './deleteCurCustomerInTour'
 import spreadSelectedDate from './spreadSelectedDate'
 import deletedTour from './deletedTour'
+import addNewTour from './addNewTour'
+import tourAction from './tourAction'
 
 const admin = combineReducers({
     login,
@@ -44,7 +46,9 @@ const admin = combineReducers({
     getEventSummary,
     deleteCurCustomerInTour,
     spreadSelectedDate,
-    deletedTour
+    deletedTour,
+    addNewTour,
+    tourAction
 })
 
 export default admin

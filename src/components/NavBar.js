@@ -1,5 +1,6 @@
 import { Menu, Icon } from 'antd';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import {changePage} from '../actions/action-changePage'
 import apiAccess from '../Helpers/apiAccess'
 import { connect } from 'react-redux'

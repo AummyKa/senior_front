@@ -12,11 +12,10 @@ const postBookerAndTour = (state = INITIAL_STATE, action) => {
       }
     case 'POST_BOOKER_AND_TOUR_SUCCESS':
       // action: { type: 'LOGIN_SUCCESS', json: { token: '' }
-        console.log("haha you can do it")
         return {
           addBookerAndTour: true
         }
-      
+
     case 'POST_BOOKER_AND_TOUR_FAILURE':
       return {
         addBookerAndTour: false

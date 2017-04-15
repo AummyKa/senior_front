@@ -38,14 +38,14 @@ class Schedule extends Component {
     this.getEvent();
   }
 
-  showThatSlot(slotInfo){
-    this.props.dispatch(getSelectedDate("GET_SELECTED_DATE",slotInfo.start))
+  showThatSlot(start){
+    this.props.dispatch(getSelectedDate("GET_SELECTED_DATE",start))
     this.setState({showSlotDetail : true})
   }
 
   getEvent(){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary',
+      url: 'http://localhost:8000/bookedtours/summary/public-private',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_EVENT_SUMMARY_ATTEMPT' }),
@@ -71,7 +71,7 @@ class Schedule extends Component {
 
 
   componentWillReceiveProps(nextProps){
-
+    console.log(nextProps.showAddTourModal)
     if(nextProps.showAddTourModal){
       this.setState({showEachTour: false, showAddTour:true,showSlotDetail : false})
     }
@@ -93,6 +93,8 @@ class Schedule extends Component {
     }
       if(nextProps.addBookerAndTour){
           this.setState({showEachTour: false, showAddTour:false,showSlotDetail : true})
+          this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
+          this.props.dispacth(addTour("STOP_COUNT_ADD_TOUR"))
       }
     if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
       if(nextProps.addBookerAndTour){
@@ -104,7 +106,6 @@ class Schedule extends Component {
     }
 
   }
-
 
   render() {
 
@@ -181,11 +182,9 @@ class Schedule extends Component {
 
         <div className = "button-filter-schedule">
           <ButtonToolbar>
-               <Button bsSize="large">All</Button>
-               <Button bsSize="large">Guide</Button>
-               <Button bsSize="large">Tour</Button>
-               <Button bsSize="large">Transfer</Button>
-               <Button bsSize="large">Tuk-Tuk</Button>
+               <Button bsStyle="info">All</Button>
+               <Button bsStyle="info">Guide</Button>
+               <Button bsStyle="info">Tour</Button>
           </ButtonToolbar>
         </div>
 
@@ -203,7 +202,7 @@ class Schedule extends Component {
         events={this.state.events}
         eventPropGetter={(this.eventStyleGetter)}
         views={['month']}
-        onSelectSlot={(slotInfo) => this.showThatSlot(slotInfo)}/>
+        onSelectSlot={(slotInfo) => this.showThatSlot(slotInfo.start)}/>
         </div>
       </div>
 

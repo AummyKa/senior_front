@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
 import { Row,Col,Table, Input, Button,Icon, Dropdown, Badge, Menu, Alert } from 'antd';
+
+
 import { addTour } from '../../actions/action-addTour'
 import apiAccess from '../../Helpers/apiAccess'
 import changeDateFormat from '../../Helpers/changeDateFormat'
@@ -15,22 +17,6 @@ class SlotDetail extends Component {
 
   constructor(props){
     super(props)
-    this.columns = [
-
-      { title: 'Date', dataIndex: 'start_date', key: 'start_date', width: 100 },
-      { title: 'Time', dataIndex: 'start_time', key: 'start_time', width: 70 },
-      { title: 'Tour', dataIndex: 'tour_name', key: 'tour_name' , width: 200  },
-      { title: 'Type', dataIndex: 'tour_type', key: 'tour_type', width: 80 },
-      { title: 'Guide', dataIndex: 'guide', key: 'guide', width: 160 },
-      { title: 'Participants', dataIndex: 'participants', key: 'participants', width: 100 },
-      { title: 'Action', dataIndex: '', key: 'x', width: 120,
-        render: (text, record) =>
-        <span>
-          <Button type="primary" onClick = {() => this.getCurTour(record)}  >Edit</Button>
-          <span className="ant-divider" />
-          <Button type="danger" onClick = {() => this.warningDeleteEachTour(record)}  >Delete</Button>
-        </span>
-      }]
 
     this.state = {
       show: false,
@@ -43,8 +29,36 @@ class SlotDetail extends Component {
       showTourDeleteWarning: false,
       curDeletingTourID: "",
       delete_status: false,
-      control_addTour:false
+      control_addTour:false,
+      filteredInfo: null,
+      sortedInfo: null
     }
+  }
+
+  handleChange = (pagination, filters, sorter) => {
+    console.log('Various parameters', pagination, filters, sorter);
+    this.setState({
+      filteredInfo: filters,
+      sortedInfo: sorter,
+    });
+  }
+
+  clearFilters = () => {
+    this.setState({ filteredInfo: null });
+  }
+  clearAll = () => {
+    this.setState({
+      filteredInfo: null,
+      sortedInfo: null,
+    });
+  }
+  setParticipantSort = () => {
+    this.setState({
+      sortedInfo: {
+        order: 'descend',
+        columnKey: 'participants',
+      },
+    });
   }
 
   componentWillMount(){
@@ -90,9 +104,6 @@ class SlotDetail extends Component {
 
   componentWillReceiveProps(nextProps){
 
-    console.log(this.props.showAddTourModal)
-    console.log(nextProps.showAddTourModal)
-
     if(this.props.showAddTourModal == nextProps.showAddTourModal){
       this.setState({control_addTour:true})
     }
@@ -109,9 +120,9 @@ class SlotDetail extends Component {
 
   addMoreTour(){
     console.log(this.state.control_addTour)
-      // if(this.state.control_addTour){
+      if(this.state.control_addTour){
         this.props.dispatch(addTour('ADD_TOUR',this.props.selectedDate))
-      // }
+      }
       // console.log(this.state.valid_date_status)
       // if(this.state.valid_date_status){
       //   this.props.dispatch(addTour('ADD_TOUR',this.props.selectedDate))
@@ -168,12 +179,60 @@ getCurTour(record){
 }
 
   render() {
-    
+    let { sortedInfo, filteredInfo } = this.state;
+    sortedInfo = sortedInfo || {};
+    filteredInfo = filteredInfo || {};
+
     let onClose = () => this.setState({showInvalidDate:false})
-    let closeTourDeleteWarning = () => this.setState({showTourDeleteWarning: false})
+    let closeTourDeleteWarning = () => {
+      this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
+      this.setState({showTourDeleteWarning: false})
+    }
+
 
     let delete_c_title = "You are going to delete the tour " + this.state.curTour
     let delete_c_content = "If you delete it, the information will be permanently gone !!!"
+
+    const columns = [
+
+      { title: 'Date', dataIndex: 'start_date', key: 'start_date', width: 100 },
+      { title: 'Time', dataIndex: 'start_time', key: 'start_time', width: 70 },
+      { title: 'Tour', dataIndex: 'tour_name', key: 'tour_name' , width: 200,
+        filters: [
+         { text: 'zhejiang', value: 'zhejiang' },
+         { text: 'jiangsu', value: 'jiangsu' }
+        ],
+         filteredValue: filteredInfo.tour_name || null,
+         onFilter: (value, record) => record.tour_name.includes(value)
+      },
+      { title: 'Type', dataIndex: 'tour_type', key: 'tour_type', width: 80,
+        filters: [
+         { text: 'public', value: 'public' },
+         { text: 'private', value: 'private' }
+        ],
+         filteredValue: filteredInfo.tour_type || null,
+         onFilter: (value, record) => record.tour_type.includes(value)
+
+      },
+      { title: 'Guide', dataIndex: 'guide', key: 'guide', width: 160,
+        filters: [
+         { text: 'public', value: 'public' },
+         { text: 'private', value: 'private' }
+        ],
+         filteredValue: filteredInfo.guide || null,
+         onFilter: (value, record) => record.guide.includes(value)
+       },
+      { title: 'Participants', dataIndex: 'participants', key: 'participants', width: 100,
+        sorter: (a, b) => a.participants - b.participants,
+        sortOrder: sortedInfo.columnKey === 'participants' && sortedInfo.order, },
+      { title: 'Action', dataIndex: '', key: 'x', width: 120,
+        render: (text, record) =>
+        <span>
+          <Button type="primary" onClick = {() => this.getCurTour(record)}  >Edit</Button>
+          <span className="ant-divider" />
+          <Button type="danger" onClick = {() => this.warningDeleteEachTour(record)}  >Delete</Button>
+        </span>
+      }]
 
     return (
 
@@ -203,14 +262,19 @@ getCurTour(record){
       </div>
 
       <div ref = "addTourTable" >
+        <div className="table-operations">
+          <Button onClick ={this.setParticipantSort}>Sort Participants</Button>
+          <Button onClick={this.clearFilters}>Clear filters</Button>
+          <Button onClick={this.clearAll}>Clear filters and sorters</Button>
+        </div>
         <span>
           { this.state.showInvalidDate ?
             <Alert message="Cannot add event in the past" type="error" closable onClose={onClose}/> : null }
 
-          <Button type="primary" className = 'add-tour' onClick={()=> this.addMoreTour() }>Add tour</Button>
+        <Button type="primary" className = 'add-tour' onClick={()=> this.addMoreTour() }>Add tour</Button>
         </span>
-        <Table className="components-table-demo-nested" columns={this.columns}
-          dataSource={this.state.tourList}
+        <Table className="components-table-demo-nested" columns={columns}
+          dataSource={this.state.tourList} onChange={this.handleChange}
           />
       </div>
 

@@ -11,7 +11,6 @@ const getBookerAndTour = (state = INITIAL_STATE, action) => {
       }
     case 'GET_BOOKER_AND_TOUR_SUCCESS':
       // action: { type: 'LOGIN_SUCCESS', json: { token: '' }
-      console.log(action.json)
         return {
           bookerAndTourDetail: action.json
         }

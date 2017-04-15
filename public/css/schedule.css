@@ -43,3 +43,11 @@
 .btn-edit-cur-tour{
   text-align: center;
 }
+
+..table-operations {
+  margin-bottom: 16px;
+}
+
+.table-operations > button {
+  margin-right: 8px;
+}

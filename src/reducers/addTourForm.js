@@ -11,17 +11,23 @@ const addTourForm = (state = INITIAL_STATE, action) => {
 
     case 'ADD_TOUR':
       return {
-        showAddTourModal: action.showAddTourModal,
+        showAddTourModal: true,
         dateTour: action.dateTour
       }
 
     case 'CLOSE_ADD_TOUR':
         return{
-          showAddTourModal: action.showAddTourModal
+          showAddTourModal: false
         }
+
+    case 'STOP_COUNT_ADD_TOUR':
+        return{
+          isStoppedCountingAddTour: action.isStoppedCountingAddTour
+        }
+
     default:
       return state
-}
+    }
 }
 
 export default addTourForm

@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
 import { InputNumber, Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, TimePicker } from 'antd';
@@ -6,6 +6,7 @@ import moment from 'moment';
 
 import apiAccess from '../Helpers/apiAccess'
 import changeDateFormat from '../Helpers/changeDateFormat'
+import { addTour } from '../actions/action-addTour'
 
 import { error } from './Modal'
 import Geosuggest from 'react-geosuggest';
@@ -16,8 +17,6 @@ import CustomerInput from './CustomerInput'
 const FormItem = Form.Item;
 const Option = Select.Option;
 const format = 'HH:mm';
-
-
 
 
 const tournames = [{
@@ -102,7 +101,8 @@ const AddTourForm = Form.create()(React.createClass({
       selectedTourName: "",
       selectedAgency: "",
       selectedTourType: "",
-      selectedTourTime: ""
+      selectedTourTime: "",
+      bookingNumber:0,
     }
   },
 
@@ -228,6 +228,9 @@ const AddTourForm = Form.create()(React.createClass({
       getGuideName(nextProps.guideLists,this.state.guide_name)
       console.log(nextProps.guideLists)
     }
+    if(nextProps.isStoppedCountingAddTour){
+      this.setState({bookingNumber: 0})
+    }
   },
 
   componentWillMount(){
@@ -259,8 +262,8 @@ const AddTourForm = Form.create()(React.createClass({
    getFieldDecorator('keys', { initialValue: [] });
    const keys = getFieldValue('keys');
 
-   const formItems = keys.map((k, index) => {
-
+   let k = this.state.bookingNumber //still can't not fix
+   this.state.formItems = keys.map((k, index) => {
      return (
 
          <div className = "customer-info" key={k}>
@@ -503,17 +506,17 @@ const AddTourForm = Form.create()(React.createClass({
        </Col>
      </Row>
 
-         {formItems}
-         <FormItem {...formItemLayoutWithOutLabel}>
-          <Button type = "dash" className = "btn-add-tour-form" onClick={this.add}>
-            +
-          </Button>
-        </FormItem>
+         {this.state.formItems}
+
+
         <FormItem {...formItemLayoutWithOutLabel}>
           <Button type="primary" htmlType="submit" size="large">Submit</Button>
         </FormItem>
-
+        <Button type = "dash" className = "btn-add-tour-form" onClick={this.add}>
+          +
+        </Button>
      </Form>
+
    );
  },
 }));
@@ -523,7 +526,8 @@ function mapStateToProps(state) {
     return {
         guideLists: state.guideDetail.guideLists,
         dateTour: state.addTourForm.dateTour,
-        eachTour: state.editSpecificTour.eachTour
+        eachTour: state.editSpecificTour.eachTour,
+        isStoppedCountingAddTour: state.addTourForm.isStoppedCountingAddTour
     };
 }
 

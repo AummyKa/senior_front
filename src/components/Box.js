@@ -14,6 +14,7 @@ class Box extends Component {
 
   constructor(props){
     super(props)
+    console.log(this.props.show)
     this.state = {
       content: this.props.data,
       hover: false,
@@ -29,10 +30,17 @@ class Box extends Component {
     this.setState({hover: false})
   }
 
-
+  componentWillReceiveProps(nextProps){
+    console.log(nextProps.inVisible)
+    if(this.props.inVisible !== nextProps.inVisible){
+      if(nextProps.inVisible){
+        this.setState({show: false})
+      }
+    }
+  }
 
   render() {
-    console.log(this.props.dispatch)
+    console.log(this.state.show)
     let inner = normal
     if(this.state.hover){
       inner = hover
@@ -44,7 +52,7 @@ class Box extends Component {
             <div className = "box-inside" style={inner}
               onMouseEnter = {() => this.handleHover()}
               onMouseLeave={() => this.handleLeaveHover()}
-              onClick = {() => this.props.handleClickBox}>
+              onClick = {this.props.handleClickBox}>
               <div className = "box-image">
                 <img src={this.state.content.image}
                   alt="boohoo" className="img-box"/>
@@ -70,4 +78,10 @@ class Box extends Component {
 
 }
 
-export default Box
+function mapStateToProps(state){
+  return {
+    inVisible: state.tourAction.inVisible
+  }
+}
+
+export default connect(mapStateToProps)(Box)

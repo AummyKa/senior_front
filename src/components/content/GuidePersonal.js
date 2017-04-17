@@ -40,6 +40,7 @@ class GuidePersonal extends Component {
   }
 
   eachGuide(id){
+    console.log(id)
       apiAccess({
        url: 'http://localhost:8000/staffs/id/'+id,
        method: 'GET',
@@ -57,25 +58,27 @@ class GuidePersonal extends Component {
       this.eachGuide(Cookies.get('guide_id'))
     }
 
-    let guideProfile = nextProps.curGuideProfile
+    if(this.props.curGuideProfile !== nextProps.curGuideProfile){
+      let guideProfile = nextProps.curGuideProfile
+      console.log(guideProfile)
+      console.log(guideProfile.title)
 
-    try{
-      this.setState({
-
-        title: guideProfile.title || null,
-        name: guideProfile.name || null,
-        surname: guideProfile.surname || null,
-        birthdate: this.cleanDate(guideProfile.birthdate) || null,
-        email: guideProfile.email || null,
-        lineID: guideProfile.lineID || null,
-        address: guideProfile.address || null,
-        phone: guideProfile.phone || null,
-        workplace: guideProfile.workplace || null,
-      })
-    }catch(e){
-
+      try{
+        this.setState({
+          title: guideProfile.title || null,
+          name: guideProfile.name || null,
+          surname: guideProfile.surname || null,
+          birthdate: this.cleanDate(guideProfile.birthdate) || null,
+          email: guideProfile.email || null,
+          lineID: guideProfile.lineID || null,
+          address: guideProfile.address || null,
+          phone: guideProfile.phone || null,
+          workplace: guideProfile.workplace || null,
+          contract: guideProfile.contract || null
+        })
+      }catch(e){
+      }
     }
-
   }
 
   guideEdit(){
@@ -98,7 +101,8 @@ class GuidePersonal extends Component {
                       lineID: this.state.lineID,
                       address: this.state.address,
                       phone: this.state.phone,
-                      workplace: this.state.workplace}
+                      workplace: this.state.workplace,
+                      contract: this.state.contract}
     apiAccess({
       url: 'http://localhost:8000/staffs/update/'+id,
       method: 'POST',
@@ -183,7 +187,6 @@ class GuidePersonal extends Component {
 
 
   render() {
-
     return (
 
       <div className = "guide-content" >

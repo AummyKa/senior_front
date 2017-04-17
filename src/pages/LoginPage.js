@@ -67,15 +67,18 @@ class LoginPage extends Component {
         this.context.router.replace('/home')
       }
 
-      if(nextProps.registed){
-        let title = 'Register successful'
-        let content = 'You can login when your registration is approved'
+      if(this.props.registed !== nextProps.registed){
 
-        return(
-          <div>
-            {info(title,content)}
-          </div>
-        )
+        if(nextProps.registed){
+          let title = 'Register successful'
+          let content = 'You can login when your registration is approved'
+
+          return(
+            <div>
+              {info(title,content)}
+            </div>
+          )
+        }
       }
 
 

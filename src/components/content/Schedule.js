@@ -94,7 +94,7 @@ class Schedule extends Component {
       if(nextProps.addBookerAndTour){
           this.setState({showEachTour: false, showAddTour:false,showSlotDetail : true})
           this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
-          this.props.dispacth(addTour("STOP_COUNT_ADD_TOUR"))
+          // this.props.dispacth(addTour("STOP_COUNT_ADD_TOUR"))
       }
     if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
       if(nextProps.addBookerAndTour){

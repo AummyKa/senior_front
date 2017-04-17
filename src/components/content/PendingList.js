@@ -67,8 +67,6 @@ const PendingList = React.createClass({
 
 
   getInitialState() {
-    this.getPendingList()
-
     return {
       filteredInfo: null,
       sortedInfo: null,
@@ -131,15 +129,24 @@ const PendingList = React.createClass({
 
   },
 
-
+  componentWillMount(){
+    this.getPendingList()
+  },
 
   componentWillReceiveProps(nextProps){
 
     if(this.props.pendingUsers !== nextProps.pendingUsers){
       pendingUserData(nextProps.pendingUsers)
       this.setState({data: pendingUserData(nextProps.pendingUsers)})
+
     }
-  
+
+    if(this.props.approvedUser !== nextProps.approvedUser){
+      if(nextProps.approvedUser){
+        this.getPendingList()
+      }
+    }
+
   },
 
 

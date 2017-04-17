@@ -1,17 +1,14 @@
+import { Button, Col, Row } from 'antd';
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
-
-import { Row,Col,Button } from 'antd';
-import { Modal } from 'react-bootstrap';
 
 import AddNewTourModal from '../AddNewTourModal';
+import Box from '../Box'
+import TourDetail from './TourDetail'
+
+import { Modal } from 'react-bootstrap';
 import apiAccess from '../../Helpers/apiAccess'
 import {closeAllTourBox} from '../../actions/action-closeAllTourBox'
-
-import Box from '../Box'
-
-
-
+import {connect} from 'react-redux';
 
 class Tours extends Component {
 
@@ -29,42 +26,40 @@ class Tours extends Component {
   }
 
   componentWillMount(){
+    this.props.handleAfterClickBox()
     this.getTours()
+
   }
 
   componentWillReceiveProps(nextProps){
+    console.log(nextProps.inVisible)
     if(this.props.tours_data !== nextProps.tours_data){
       this.setState({tours_data: nextProps.tours_data})
     }
     if(nextProps.add_newTour_success_status){
       this.setState({showAddNewTour:false})
     }
-    if(nextProps.inVisible){
-      this.setState({showTourBox: false})
-    }else{
-      this.setState({showTourBox: true})
-    }
   }
+
 
   getTours(){
     apiAccess({
       url: 'http://localhost:8000/tours',
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOURS_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_ALL_TOURS_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_ALL_TOURS_FAILED' })
+      attemptAction: this.props.getAllTourAttempt,
+      successAction: this.props.getAllTourSuccess,
+      failureAction: this.props.getAllTourFailed
     })
   }
 
   renderTour(data){
-
+    console.log(this.state.showTourBox)
     if (data !== undefined) {
       const TourBox = this.TourBox
-
       return data.map((item,index) => (
             <TourBox
-              show = {this.state.show}
+              show = {this.state.showTourBox}
               handleClickBox = {this.props.handleClickBox}
               key = {index}
               item = {item}  />
@@ -75,14 +70,14 @@ class Tours extends Component {
 
   }
 
-  TourBox({item},show,handleClickBox){
-    console.log(show)
+  TourBox({item, show, handleClickBox}){
     return (
       <Col className="gutter-row" span={8}>
         <Box
           show = {show}
           handleClickBox = {handleClickBox}
-          data = {item}/>
+          data = {item}
+        />
       </Col>
     )
   }
@@ -117,6 +112,10 @@ class Tours extends Component {
           <h2>Tours</h2>
         </div>
 
+        <div className = "tour-detail">
+          { this.props.inVisible ? <TourDetail /> : null  }
+        </div>
+
         <div className = "tour-table">
             <div className="gutter-example">
               <Row gutter={16}>
@@ -144,7 +143,11 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    handleAfterClickBox: () => dispatch(closeAllTourBox('FINISH_CLOSE_ALL_TOURS')),
     handleClickBox: () => dispatch(closeAllTourBox('CLOSE_ALL_TOURS')),
+    getAllTourAttempt: () => dispatch({ type: 'GET_ALL_TOURS_ATTEMPT' }),
+    getAllTourSuccess: (json) => dispatch({ type: 'GET_ALL_TOURS_SUCCESS', json }),
+    getAllTourFailed: () => dispatch({ type: 'GET_ALL_TOURS_FAILED' })
   };
 };
 

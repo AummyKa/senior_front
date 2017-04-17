@@ -113,8 +113,11 @@ class SlotDetail extends Component {
     }
     this.setState({wholeBookerAndTour: nextProps.bookerAndTourDetail})
 
-    if(nextProps.delete_status){
-      this.setState({showTourDeleteWarning: false})
+    if(this.props.delete_status !== nextProps.delete_status){
+      if(nextProps.delete_status){
+        this.getTourAndBookerDetail()
+        this.setState({showTourDeleteWarning: false})
+      }      
     }
   }
 

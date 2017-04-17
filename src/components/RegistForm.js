@@ -52,7 +52,7 @@ const title = [{
 
 const contract = [{
   value: 'Full Time.',
-  label: 'Full Time.',
+  label: 'Full Time',
 }, {
   value: 'Part Time',
   label: 'Part Time',
@@ -89,6 +89,8 @@ const RegistForm = Form.create()(React.createClass({
                       workplace:this.props.form.getFieldValue('workplace')[0],
                       phone:"0"+ this.props.form.getFieldValue('phone'),
                       contract:this.props.form.getFieldValue('contract')[0]}
+
+          console.log(payload)
 
           apiAccess({
             url: 'http://localhost:8000/register',

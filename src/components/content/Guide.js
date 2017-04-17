@@ -12,7 +12,7 @@ const Search = Input.Search
 
 
 const GuideUserData = (arrayJSON,resultJSON) =>{
-
+  console.log(arrayJSON)
   if(arrayJSON!=null){
     for(var i = 0; i < arrayJSON.length; i++) {
 
@@ -21,7 +21,7 @@ const GuideUserData = (arrayJSON,resultJSON) =>{
         _id: arrayJSON[i]._id,
         name: arrayJSON[i].name,
         email: arrayJSON[i].email,
-        role: arrayJSON[i].role
+        contract: arrayJSON[i].contract
       }
 
       resultJSON[i] = objectJSON
@@ -29,10 +29,8 @@ const GuideUserData = (arrayJSON,resultJSON) =>{
 }else {
   return resultJSON
 }
-  //return resultJSON
+
 }
-
-
 
 const Guide = React.createClass({
 
@@ -141,18 +139,17 @@ getExpertList(){
       sortOrder: sortedInfo.columnKey === 'email' && sortedInfo.order,
     },
     {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'role',
+      title: 'Contract',
+      dataIndex: 'contract',
+      key: 'contract',
       filters: [
-        { text: 'Customer Service', value: 'Customer Service' },
-        { text: 'Operation', value: 'Operation' },
-        { text: 'Finance', value: 'Finance' }
+        { text: 'Full Time', value: 'Full Time' },
+        { text: 'Part Time', value: 'Part Time' }
       ],
-      filteredValue: filteredInfo.role|| null,
-      onFilter: (value, record) => record.role.includes(value),
-      sorter: (a, b) => a.role.length - b.role.length,
-      sortOrder: sortedInfo.columnKey === 'role' && sortedInfo.order,
+      filteredValue: filteredInfo.contract|| null,
+      onFilter: (value, record) => record.contract.includes(value),
+      sorter: (a, b) => a.contract.length - b.contract.length,
+      sortOrder: sortedInfo.columnKey === 'contract' && sortedInfo.order,
     },{ title: 'Action', dataIndex: '', key: 'x', width: 150,
       render: (text, record) =>
       <span>

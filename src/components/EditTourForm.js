@@ -169,8 +169,8 @@ const EditTourForm = Form.create()(React.createClass({
       editCurCustomer: '',
       showCustomerDeleteWarning: false,
       cusWarnIdentity: "",
-      curTourID: "",
-      cus_ID:"",
+      curTourID: this.props.eachTour._id,
+      cusTourDelete:"",
       showAddMoreCustomer: false
     }
   },
@@ -191,30 +191,42 @@ const EditTourForm = Form.create()(React.createClass({
     }
   },
 
+  getCurTour(id){
+    apiAccess({
+      url: 'http://localhost:8000/bookedtours/'+id,
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_FAILED' })
+    })
+  },
+
   deleteEachCustomer(record){
     //deleteEachCustomer("DELETE_EACH_CUSTOMER_WARNING",record)
     let _id = record.id
-    this.setState({cus_ID: _id})
+    this.setState({cusTourDelete: _id})
     this.setState({showCustomerDeleteWarning: true})
   },
 
   deleteCustomer(tourID,cusID){
-
-    apiAccess({
-      url: 'http://localhost:8000/bookedtours/delete-customer',
-      method: 'DELETE',
-      payload:{
-          bookedTour: {
-            _id: tourID
-          },
-          customer: {
-            _id: cusID
-          }
-      },
-      attemptAction: () => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_FAILED' })
-    })
+    console.log(tourID)
+    console.log(cusID)
+    // apiAccess({
+    //   url: 'http://localhost:8000/bookedtours/delete-customer',
+    //   method: 'DELETE',
+    //   payload:{
+    //       bookedTour: {
+    //         _id: tourID
+    //       },
+    //       customer: {
+    //         _id: cusID
+    //       }
+    //   },
+    //   attemptAction: () => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_ATTEMPT' }),
+    //   successAction: (json) => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_SUCCESS', json }),
+    //   failureAction: () => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_FAILED' })
+    // })
 
   },
 
@@ -249,13 +261,23 @@ const EditTourForm = Form.create()(React.createClass({
     if(this.props.guideLists !== nextProps.guideLists){
       getGuideName(nextProps.guideLists,this.state.guide_name)
     }
-    if(this.props.curTourID !== nextProps.curTourID){
-        if(nextProps.curTourID){
-          this.setState({curTourID: nextProps.curTourID})
-        }
+
+    if(this.props.addCustomerSuccess !== nextProps.addCustomerSuccess){
+      if(nextProps.addCustomerSuccess){
+        this.setState({showAddMoreCustomer: false})
+        this.getCurTour(this.state.curTourID)
+      }
     }
+
+    if(this.props.eachTour !== nextProps.eachTour){
+      if(nextProps.eachTour){
+        this.setState({eachTour: nextProps.eachTour})
+      }
+    }
+
     if(nextProps.delete_cus_status){
       this.setState({showCustomerDeleteWarning: false})
+
     }
   },
 
@@ -265,8 +287,9 @@ const EditTourForm = Form.create()(React.createClass({
 
 
   render(){
-    console.log(this.state.eachTour)
-    console.log(this.state.guide_name)
+
+    console.log(this.state.curTourID)
+    console.log(this.state.cusTourDelete)
 
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
@@ -316,7 +339,7 @@ const EditTourForm = Form.create()(React.createClass({
                  Add more Customer</Modal.Title>
              </Modal.Header>
              <Modal.Body>
-               <AddMoreCustomerModal />
+               <AddMoreCustomerModal dispatch = {this.props.dispatch} tourID = {this.state.curTourID} />
              </Modal.Body>
 
            </Modal>
@@ -339,7 +362,7 @@ const EditTourForm = Form.create()(React.createClass({
              </Modal.Body>
 
              <Modal.Footer>
-              <Button type="danger" onClick = {() => this.deleteCustomer(this.state.curTourID,this.state.cus_ID)}>
+              <Button type="danger" onClick = {() => this.deleteCustomer(this.state.curTourID,this.state.cusTourDelete)}>
                 Delete</Button>
             </Modal.Footer>
 
@@ -442,9 +465,10 @@ function mapStateToProps(state) {
     return {
         guideLists: state.guideDetail.guideLists,
         dateTour: state.addTourForm.dateTour,
-        eachTour: state.editSpecificTour.eachTour,
-        curTourID: state.editSpecificTour.curTourID,
-        delete_cus_status: state.deleteCurCustomerInTour.delete_cus_status
+        eachTour: state.getSpecificTour.eachTour,
+        curTourID: state.getSpecificTour.curTourID,
+        delete_cus_status: state.deleteCurCustomerInTour.delete_cus_status,
+        addCustomerSuccess: state.addNewCustomerInTour.addCustomerSuccess
     };
 }
 

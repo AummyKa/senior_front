@@ -45,32 +45,30 @@ const EditCurCustomerModal = Form.create()(React.createClass({
     },
   handleSubmit(e) {
     e.preventDefault();
-    // this.props.form.validateFieldsAndScroll((err, values) => {
-    //   if (!err) {
-    //
-    //     let payload = {email: this.props.form.getFieldValue('email'),
-    //                   password: this.props.form.getFieldValue('password'),
-    //                   confirm: this.props.form.getFieldValue('confirm'),
-    //                   title: this.props.form.getFieldValue('title'),
-    //                   name:this.props.form.getFieldValue('name'),
-    //                   surname:this.props.form.getFieldValue('surname'),
-    //                   role:this.props.form.getFieldValue('role'),
-    //                   workplace:this.props.form.getFieldValue('workplace'),
-    //                   phone:"0"+ this.props.form.getFieldValue('phone')}
-    //
-    //       apiAccess({
-    //         url: 'http://localhost:8000/register',
-    //         method: 'POST',
-    //         payload: payload,
-    //         attemptAction: () => this.props.dispatch({ type: 'REGIST_ATTEMPT' }),
-    //         successAction: (json) => this.props.dispatch({ type: 'REGIST_SUCCESS', json }),
-    //         failureAction: () => this.props.dispatch({ type: 'REGIST_FAILED' })
-    //       })
-    //     }else
-    //         console.log("error")
-    //   });
-    //
-    //   this.checkDuplicate
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      // if (!err) {
+      //
+      //   let payload = {
+      //     agency: this.props.form.getFieldValue(`agency`)[0],
+      //     email: this.props.form.getFieldValue(`email`),
+      //     name: this.props.form.getFieldValue(`name`)[0],
+      //     country: this.props.form.getFieldValue(`country`)[0],
+      //     pickup_time: this.props.form.getFieldValue(`pickup_time`).format('HH:mm'),
+      //     pickup_place: this.props.form.getFieldValue(`pickup_place`)[0],
+      //     participants: this.props.form.getFieldValue(`participants`),
+      //     remark: this.props.form.getFieldValue(`remark`)[0]
+      //
+      //     apiAccess({
+      //       url: 'http://localhost:8000/register',
+      //       method: 'POST',
+      //       payload: payload,
+      //       attemptAction: () => this.props.dispatch({ type: 'EDIT_CUSTOMER_IN_TOUR_ATTEMPT' }),
+      //       successAction: (json) => this.props.dispatch({ type: 'EDIT_CUSTOMER_IN_TOUR_SUCCESS', json }),
+      //       failureAction: () => this.props.dispatch({ type: 'EDIT_CUSTOMER_IN_TOUR_FAILED' })
+      //     })
+      //   }else
+      //       console.log("error")
+      });
   },
 
   handlePasswordBlur(e) {
@@ -96,17 +94,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
     }
     callback();
   },
-  checkDuplicate() {
-    if (!this.props.duplicated) {
-      let title = "Email is already used, please try another email"
-      return(
-        <div>
-          {error(title,"")}
-        </div>
-      )
-    }
 
-  },
   //name, surname
   checkString(rule, value, callback){
     if(!value.match(/^[a-zA-Z]/)){

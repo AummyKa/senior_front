@@ -33,40 +33,34 @@ const format = 'HH:mm';
 
 const AddMoreCustomerModal = Form.create()(React.createClass({
 
-  getInitialState() {
 
-    return {
-
-      }
-    },
   handleSubmit(e) {
     e.preventDefault();
-    // this.props.form.validateFieldsAndScroll((err, values) => {
-    //   if (!err) {
-    //
-    //     let payload = {email: this.props.form.getFieldValue('email'),
-    //                   password: this.props.form.getFieldValue('password'),
-    //                   confirm: this.props.form.getFieldValue('confirm'),
-    //                   title: this.props.form.getFieldValue('title'),
-    //                   name:this.props.form.getFieldValue('name'),
-    //                   surname:this.props.form.getFieldValue('surname'),
-    //                   role:this.props.form.getFieldValue('role'),
-    //                   workplace:this.props.form.getFieldValue('workplace'),
-    //                   phone:"0"+ this.props.form.getFieldValue('phone')}
-    //
-    //       apiAccess({
-    //         url: 'http://localhost:8000/register',
-    //         method: 'POST',
-    //         payload: payload,
-    //         attemptAction: () => this.props.dispatch({ type: 'REGIST_ATTEMPT' }),
-    //         successAction: (json) => this.props.dispatch({ type: 'REGIST_SUCCESS', json }),
-    //         failureAction: () => this.props.dispatch({ type: 'REGIST_FAILED' })
-    //       })
-    //     }else
-    //         console.log("error")
-    //   });
-    //
-    //   this.checkDuplicate
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        let payload = {
+          agency: this.state.selectedAgency,
+          email: this.props.form.getFieldValue(`email`),
+          name: this.props.form.getFieldValue(`name`),
+          country: this.props.form.getFieldValue(`country`),
+          pickup_time: this.props.form.getFieldValue(`pickup_time`).format('HH:mm'),
+          pickup_place: this.props.form.getFieldValue(`pickup_place`),
+          participants: this.props.form.getFieldValue(`participants`),
+          remark: this.props.form.getFieldValue(`remark`)
+        }
+
+          apiAccess({
+            url: 'http://localhost:8000/bookedtours/insert-customer/'+this.props.tourID,
+            method: 'POST',
+            payload: payload,
+            attemptAction: () => this.props.dispatch({ type: 'ADD_MORE_CUSTOMER_IN_TOUR_ATTEMPT' }),
+            successAction: (json) => this.props.dispatch({ type: 'ADD_MORE_CUSTOMER_IN_TOUR_SUCCESS', json }),
+            failureAction: () => this.props.dispatch({ type: 'ADD_MORE_CUSTOMER_IN_TOUR_FAILED' })
+          })
+        }else
+            console.log("error")
+      });
+    
   },
 
   handlePasswordBlur(e) {
@@ -92,17 +86,7 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
     }
     callback();
   },
-  checkDuplicate() {
-    if (!this.props.duplicated) {
-      let title = "Email is already used, please try another email"
-      return(
-        <div>
-          {error(title,"")}
-        </div>
-      )
-    }
 
-  },
   //name, surname
   checkString(rule, value, callback){
     if(!value.match(/^[a-zA-Z]/)){
@@ -143,6 +127,7 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
      return (
 
          <div className = "customer-info">
+          <Form horizontal onSubmit={this.handleSubmit}>
           <Row>
           <Col span={11} offset={1}>
 
@@ -283,6 +268,7 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
          </FormItem>
 
          </Row>
+       </Form>
        </div>
 
      );
@@ -290,8 +276,9 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
   },
 }));
 
-// const mapStateToProps = (state) => ({
-//
-// })
+const mapStateToProps = (state) => ({
+    curTourID: state.editSpecificTour.curTourID
+
+})
 
 export default AddMoreCustomerModal;

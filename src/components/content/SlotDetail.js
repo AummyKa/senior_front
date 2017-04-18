@@ -4,6 +4,8 @@ import { Row,Col,Table, Input, Button,Icon, Dropdown, Badge, Menu, Alert } from 
 
 
 import { addTour } from '../../actions/action-addTour'
+import { selectTourID } from '../../actions/action-selectTourID'
+
 import apiAccess from '../../Helpers/apiAccess'
 import changeDateFormat from '../../Helpers/changeDateFormat'
 import { Modal } from 'react-bootstrap';
@@ -117,7 +119,7 @@ class SlotDetail extends Component {
       if(nextProps.delete_status){
         this.getTourAndBookerDetail()
         this.setState({showTourDeleteWarning: false})
-      }      
+      }
     }
   }
 

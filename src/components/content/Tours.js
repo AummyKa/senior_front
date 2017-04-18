@@ -17,7 +17,8 @@ class Tours extends Component {
     this.state = {
       tours_data: [],
       showAddNewTour: false,
-      showTourBox: true
+      showTourBox: true,
+      tour_id:''
     }
   }
 
@@ -38,6 +39,9 @@ class Tours extends Component {
     }
     if(nextProps.add_newTour_success_status){
       this.setState({showAddNewTour:false})
+    }
+    if(this.props.tour_cur_id !== nextProps.tour_cur_id){
+      this.setState({tour_id: nextProps.tour_cur_id})
     }
   }
 
@@ -112,19 +116,17 @@ class Tours extends Component {
           <h2>Tours</h2>
         </div>
 
-        <div className = "tour-detail">
-          { this.props.inVisible ? <TourDetail /> : null  }
-        </div>
-
         <div className = "tour-table">
             <div className="gutter-example">
               <Row gutter={16}>
-                {this.renderTour(this.state.tours_data)}
+                { this.props.inVisible ? <TourDetail tour_id = {this.state.tour_id}/> : this.renderTour(this.state.tours_data)}
               </Row>
             </div>
         </div>
 
-        <Button type = "dash" className = "btn-add-tour-form" onClick = {() => this.addNewTour()}> + </Button>
+          { this.props.inVisible ? null :
+            <Button type = "dash" className = "btn-add-tour-form" onClick = {() => this.addNewTour()}> + </Button>
+          }
 
     </div>
 
@@ -137,14 +139,15 @@ function mapStateToProps(state) {
     return{
         tours_data: state.getTours.tours_data,
         add_newTour_success_status: state.addNewTour.add_newTour_success_status,
-        inVisible: state.tourAction.inVisible
+        inVisible: state.tourAction.inVisible,
+        tour_cur_id: state.tourAction.tour_cur_id
     };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     handleAfterClickBox: () => dispatch(closeAllTourBox('FINISH_CLOSE_ALL_TOURS')),
-    handleClickBox: () => dispatch(closeAllTourBox('CLOSE_ALL_TOURS')),
+    handleClickBox: (id) => (e) => dispatch(closeAllTourBox('CLOSE_ALL_TOURS',id)),
     getAllTourAttempt: () => dispatch({ type: 'GET_ALL_TOURS_ATTEMPT' }),
     getAllTourSuccess: (json) => dispatch({ type: 'GET_ALL_TOURS_SUCCESS', json }),
     getAllTourFailed: () => dispatch({ type: 'GET_ALL_TOURS_FAILED' })

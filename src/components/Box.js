@@ -40,7 +40,7 @@ class Box extends Component {
   }
 
   render() {
-    console.log(this.state.show)
+    console.log(this.state.content._id)
     let inner = normal
     if(this.state.hover){
       inner = hover
@@ -52,7 +52,7 @@ class Box extends Component {
             <div className = "box-inside" style={inner}
               onMouseEnter = {() => this.handleHover()}
               onMouseLeave={() => this.handleLeaveHover()}
-              onClick = {this.props.handleClickBox}>
+              onClick = {this.props.handleClickBox(this.state.content._id)}>
               <div className = "box-image">
                 <img src={this.state.content.image}
                   alt="boohoo" className="img-box"/>

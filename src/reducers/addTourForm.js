@@ -16,6 +16,7 @@ const addTourForm = (state = INITIAL_STATE, action) => {
       }
 
     case 'CLOSE_ADD_TOUR':
+      console.log("close add tour")
         return{
           showAddTourModal: false
         }

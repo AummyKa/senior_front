@@ -47,55 +47,11 @@ class TourDetail extends Component {
     return (
 
       <div className = "tour_content">
-        <Row>
-          <Col span={8}>
 
-            <div className = "tour-picture">
+        <h6>{this.state.tour_id}</h6>
+        <h3>{this.tour_data.tour_name}</h3>
 
-            </div>
 
-            <div className = "tour-title">
-              <div className = "tour-title-name">
-                <h4>{this.state.tour_data.tour_name}</h4>
-              </div>
-            </div>
-
-            <div className = "tour-description">
-                <h5>{this.state.tour_data.description}</h5>
-            </div>
-
-            <div className = "tour-type">
-                <h5>{this.state.tour_data.type}</h5>
-            </div>
-
-            <div className = "tour-guide-expert">
-
-            </div>
-
-          </Col>
-          <Col span={16}>
-
-            <div className = "tour-summary">
-
-            </div>
-
-            <div className = "tour-anecdote">
-              <Row>
-                <Col span={12}>
-                  <div className = "tour-top-nation">
-
-                  </div>
-                </Col>
-                <Col span={12}>
-                  <div className = "tour-others">
-
-                  </div>
-                </Col>
-              </Row>
-            </div>
-
-          </Col>
-        </Row>
       </div>
 
     );

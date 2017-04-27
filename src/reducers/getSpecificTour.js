@@ -25,6 +25,13 @@ const editSpecificTour = (state = INITIAL_STATE, action) => {
       return {
 
       }
+
+    case 'FINISH_GET_SPECIFIC_TOUR':
+      console.log("finish get tour")
+      return {
+          eachTourState: false
+      }
+
       default:
         return state
 

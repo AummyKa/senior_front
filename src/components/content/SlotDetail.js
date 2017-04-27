@@ -119,6 +119,8 @@ class SlotDetail extends Component {
       if(nextProps.delete_status){
         this.getTourAndBookerDetail()
         this.setState({showTourDeleteWarning: false})
+        this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
+        
       }
     }
   }
@@ -190,7 +192,6 @@ getCurTour(record){
 
     let onClose = () => this.setState({showInvalidDate:false})
     let closeTourDeleteWarning = () => {
-      this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
       this.setState({showTourDeleteWarning: false})
     }
 

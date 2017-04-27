@@ -72,15 +72,18 @@ class Schedule extends Component {
 
   componentWillReceiveProps(nextProps){
 
-    if(nextProps.showAddTourModal){
-      this.setState({showEachTour: false, showAddTour:true,showSlotDetail : false})
+    if(this.props.showAddTourModal !== nextProps.showAddTourModal){
+      if(nextProps.showAddTourModal){
+        this.setState({showEachTour: false, showAddTour:true,showSlotDetail : false})
+      }
     }
 
     if(this.props.eachTourState !== nextProps.eachTourState){
       if(nextProps.eachTourState){
         this.setState({showEachTour: true, showAddTour:false,showSlotDetail : false})
-      }
+      }    
     }
+
     if(this.props.eachTour !== nextProps.eachTour){
       if(nextProps.eachTour){
           this.setState({selectedTourName: nextProps.eachTour.tour_name})
@@ -91,11 +94,14 @@ class Schedule extends Component {
         this.setState({events: nextProps.events})
       }
     }
+    if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
       if(nextProps.addBookerAndTour){
           this.setState({showEachTour: false, showAddTour:false,showSlotDetail : true})
           this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
           // this.props.dispacth(addTour("STOP_COUNT_ADD_TOUR"))
       }
+    }
+
     if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
       if(nextProps.addBookerAndTour){
           this.getEvent()
@@ -110,14 +116,16 @@ class Schedule extends Component {
   render() {
 
     let closeSlot = () => {
-      this.setState({showSlotDetail: false, showEachTour: false})
+      this.setState({showSlotDetail: false, showEachTour: false, showAddTour: false})
     }
 
     let closeAddTour = () =>{
       this.setState({showAddTour: false,showSlotDetail: true ,showEachTour:false});
       this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
     }
-    let closeEachTour = () => this.setState({showEachTour: false,showSlotDetail: true, showAddTour:false});
+    let closeEachTour = () =>{
+      this.setState({showEachTour: false,showSlotDetail: true, showAddTour:false});
+    }
 
     return (
 

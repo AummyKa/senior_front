@@ -124,9 +124,9 @@ class Tours extends Component {
             </div>
         </div>
 
-          { this.props.inVisible ? null :
+          { this.props.inVisible ? 
             <Button type = "dash" className = "btn-add-tour-form" onClick = {() => this.addNewTour()}> + </Button>
-          }
+              : null }
 
     </div>
 

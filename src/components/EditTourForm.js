@@ -288,16 +288,13 @@ const EditTourForm = Form.create()(React.createClass({
 
   render(){
 
-    console.log(this.state.curTourID)
-    console.log(this.state.cusTourDelete)
-
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
       labelCol: { span: 4 },
       wrapperCol: { span: 20 },
     };
 
-    let closeEachTour = () => this.setState({showCustomerEdit: false})
+    let closeEachTour = () => { this.setState({showCustomerEdit: false})}
     let closeCustomerDeleteWarning = () => this.setState({showCustomerDeleteWarning: false})
     let closeAddMoreCustomer = () => this.setState({showAddMoreCustomer: false})
     let delete_c_title = "You are going to delete the customer " + this.state.cusWarnIdentity

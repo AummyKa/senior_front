@@ -27,9 +27,9 @@ const guideProfile = (state = INITIAL_STATE, action) => {
         curGuideProfile : action.json
       }
     case 'GET_GUIDE_PROFILE_FAILED':
-
+      console.log(action)
       return {
-
+          curGuideProfile : ''
       }
       default:
         return state

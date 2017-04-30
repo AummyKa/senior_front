@@ -1,7 +1,9 @@
-import { Button, Col, Row } from 'antd';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 
 import AddNewTourModal from '../AddNewTourModal';
+import { Button, Col, Row } from 'antd';
+
 import Box from '../Box'
 import TourDetail from './TourDetail'
 
@@ -9,6 +11,8 @@ import { Modal } from 'react-bootstrap';
 import apiAccess from '../../Helpers/apiAccess'
 import {closeAllTourBox} from '../../actions/action-closeAllTourBox'
 import {connect} from 'react-redux';
+import Cookies from 'js-cookie'
+
 
 class Tours extends Component {
 
@@ -26,14 +30,15 @@ class Tours extends Component {
     this.setState({showAddNewTour: true})
   }
 
-  componentWillMount(){
-    this.props.handleAfterClickBox()
-    this.getTours()
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
 
+  componentWillMount(){
+    this.getTours()
   }
 
   componentWillReceiveProps(nextProps){
-    console.log(nextProps.inVisible)
     if(this.props.tours_data !== nextProps.tours_data){
       this.setState({tours_data: nextProps.tours_data})
     }
@@ -42,6 +47,8 @@ class Tours extends Component {
     }
     if(this.props.tour_cur_id !== nextProps.tour_cur_id){
       this.setState({tour_id: nextProps.tour_cur_id})
+      Cookies.set('tour_id', nextProps.tour_cur_id)
+
     }
   }
 
@@ -57,14 +64,13 @@ class Tours extends Component {
     })
   }
 
+
   renderTour(data){
     console.log(this.state.showTourBox)
     if (data !== undefined) {
       const TourBox = this.TourBox
       return data.map((item,index) => (
             <TourBox
-              show = {this.state.showTourBox}
-              handleClickBox = {this.props.handleClickBox}
               key = {index}
               item = {item}  />
         ));
@@ -78,8 +84,6 @@ class Tours extends Component {
     return (
       <Col className="gutter-row" span={8}>
         <Box
-          show = {show}
-          handleClickBox = {handleClickBox}
           data = {item}
         />
       </Col>
@@ -119,14 +123,12 @@ class Tours extends Component {
         <div className = "tour-table">
             <div className="gutter-example">
               <Row gutter={16}>
-                { this.props.inVisible ? <TourDetail tour_id = {this.state.tour_id}/> : this.renderTour(this.state.tours_data)}
+                {this.renderTour(this.state.tours_data)}
               </Row>
             </div>
         </div>
+          <Button type = "dash" className = "btn-add-tour-form" onClick = {() => this.addNewTour()}> + </Button>
 
-          { this.props.inVisible ? 
-            <Button type = "dash" className = "btn-add-tour-form" onClick = {() => this.addNewTour()}> + </Button>
-              : null }
 
     </div>
 
@@ -139,15 +141,12 @@ function mapStateToProps(state) {
     return{
         tours_data: state.getTours.tours_data,
         add_newTour_success_status: state.addNewTour.add_newTour_success_status,
-        inVisible: state.tourAction.inVisible,
         tour_cur_id: state.tourAction.tour_cur_id
     };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    handleAfterClickBox: () => dispatch(closeAllTourBox('FINISH_CLOSE_ALL_TOURS')),
-    handleClickBox: (id) => (e) => dispatch(closeAllTourBox('CLOSE_ALL_TOURS',id)),
     getAllTourAttempt: () => dispatch({ type: 'GET_ALL_TOURS_ATTEMPT' }),
     getAllTourSuccess: (json) => dispatch({ type: 'GET_ALL_TOURS_SUCCESS', json }),
     getAllTourFailed: () => dispatch({ type: 'GET_ALL_TOURS_FAILED' })

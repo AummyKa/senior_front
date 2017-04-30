@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Menu, Icon } from 'antd';
 import {changePage} from '../actions/action-changePage'
 import { connect } from 'react-redux'
-
+import { Link } from 'react-router';
 import apiAccess from '../Helpers/apiAccess'
 
 
@@ -41,18 +41,12 @@ class SideBar extends Component {
             {this.getName()}
           </div>
           <Menu mode="inline" theme="dark">
-            <SubMenu key="Home" title={<span><Icon type="user" />Home</span>}
-              onTitleClick={()=> this.clickPage("Home")} />
-            <SubMenu key="GuideProfile" title={<span><Icon type="laptop" />Guide Profile</span>}
-              onTitleClick ={()=>this.clickPage("GuideProfile")} />
-            <SubMenu key="Schedule" title={<span><Icon type="notification" />Schedule</span>}
-              onTitleClick ={()=>this.clickPage("Schedule")} />
-            <SubMenu key="Tours" title={<span><Icon type="notification" />Tours</span>}
-              onTitleClick ={()=>this.clickPage("Tours")} />
-            <SubMenu key="Staff" title={<span><Icon type="notification" />Staff</span>}
-              onTitleClick ={()=>this.clickPage("Staff")} />
-            <SubMenu key="Finance" title={<span><Icon type="notification" />Finance</span>}
-              onTitleClick ={()=>this.clickPage("Home")} />
+            <SubMenu key="Home" title={<span><Icon type="user" /><Link to={`/home`}>Home</Link></span>}/>
+            <SubMenu key="GuideProfile" title={<span><Icon type="laptop" /><Link to={`/guide`}>Guide Profile</Link></span>}/>
+            <SubMenu key="Schedule" title={<span><Icon type="notification" /><Link to={`/schedule`}>Schedule</Link></span>}/>
+            <SubMenu key="Tours" title={<span><Icon type="notification" /><Link to={`/tours`}>Tours</Link></span>}/>
+            <SubMenu key="Staff" title={<span><Icon type="notification" /><Link to={`/staff`}>Staff</Link></span>}/>
+            <SubMenu key="Agency" title={<span><Icon type="notification" /><Link to={`/agency`}>Agency</Link></span>}/>
           </Menu>
 
       </aside>

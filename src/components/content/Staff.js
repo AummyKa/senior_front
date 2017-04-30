@@ -3,11 +3,6 @@ import {connect} from 'react-redux';
 import { Row,Col,Table, Input, Button } from 'antd';
 import apiAccess from '../../Helpers/apiAccess'
 
-import SearchAutoSuggest from '../SearchAutoSuggest'
-
-
-
-const Search = Input.Search
 
 
 const StaffUserData = (arrayJSON,resultJSON) =>{
@@ -31,36 +26,42 @@ const StaffUserData = (arrayJSON,resultJSON) =>{
   //return resultJSON
 }
 
-const Staff = React.createClass({
+class Staff extends Component{
 
-  getInitialState() {
-    this.queryStaffs()
-    return {
+  constructor(props){
+    super(props)
+    this.state = {
       filteredInfo: null,
       sortedInfo: null,
       value: '',
       data: []
-    };
-  },
+    }
+  }
+  
+
   handleChange(pagination, filters, sorter) {
     console.log('Various parameters', pagination, filters, sorter);
     this.setState({
       filteredInfo: filters,
       sortedInfo: sorter,
     });
-  },
+  }
+
   clearFilters() {
     this.setState({ filteredInfo: null });
-  },
+  }
+
   clearAll() {
     this.setState({
       filteredInfo: null,
       sortedInfo: null,
     });
-  },
+  }
+
   eachGuide(key){
     console.log(key)
-  },
+  }
+
   queryStaffs(){
     console.log("hello")
     apiAccess({
@@ -71,7 +72,8 @@ const Staff = React.createClass({
       successAction: (json) => this.props.dispatch({ type: 'GET_STAFF_SUCCESS', json }),
       failureAction: () => this.props.dispatch({ type: 'GET_STAFF_FAILED' })
     })
-  },
+  }
+
   componentWillReceiveProps(nextProps){
 
     if(this.props.staffLists !== nextProps.staffLists){
@@ -79,7 +81,7 @@ const Staff = React.createClass({
         StaffUserData(nextProps.staffLists,this.state.data)
         console.log(this.state.data)
     }
-  },
+  }
 
 
   render() {
@@ -141,14 +143,13 @@ const Staff = React.createClass({
       </div>
     </div>
     );
-  },
-});
+  }
+}
 
 const mapStateToProps = (state) => {
 
     return {
-        staffLists: state.getStaffLists.staffLists,
-        input: state.search.search_input
+        staffLists: state.getStaffLists.staffLists
     };
 }
 

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import { Row,Col,Table, Input, Button, Modal, Form } from 'antd';
 
-import SearchAutoSuggest from '../SearchAutoSuggest'
 import apiAccess from '../../Helpers/apiAccess'
 import { showConfirm } from '../Modal'
 
@@ -28,7 +27,7 @@ const columns = [
 const pendingUserData = (arrayJSON) =>{
 
   let resultJSON = []
-
+    console.log(arrayJSON)
     try{
       for(var i = 0; i < arrayJSON.length; i++) {
 
@@ -59,6 +58,7 @@ const getUserId = (arrayJSON) =>{
     }
     resultJSON[i] = objectJSON
 }
+  console.log(arrayJSON)
   return resultJSON
 
 }
@@ -112,7 +112,7 @@ const PendingList = React.createClass({
           console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!")
           console.log(result_id)
           apiAccess({
-            url: 'http://localhost:8000/staffs/activate-pending-staffs',
+            url: 'http://localhost:8000/activate-pending-users',
             method: 'POST',
             payload: result_id,
             attemptAction: () => props.dispatch({ type: 'APPROVE_PENDING_USER_ATTEMPT' }),
@@ -179,7 +179,6 @@ const PendingList = React.createClass({
       <div className = "guide-filter">
 
         <Row>
-          <SearchAutoSuggest data = {this.state.data} value = {this.state.value}/>
           <Col span = {22} offset={22} >
             <Button type="primary" onClick ={()=>this.approvedUser(this.state.selected,this.props)}>Approve</Button>
         </Col>
@@ -201,7 +200,6 @@ function mapStateToProps(state) {
 
     return {
         guideDetail: state.guideDetail,
-        input: state.search.search_input,
         pendingUsers: state.pendingUser.pendingUsers,
         approvedUser: state.pendingApproved.approvedUser,
         session: state.login.session

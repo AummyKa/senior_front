@@ -196,10 +196,8 @@ const RegistForm = Form.create()(React.createClass({
         >
           {getFieldDecorator('email', {
             rules: [{
-              type: 'email', message: 'The input is not valid E-mail!'},{
-              required: true, message: 'Please input your E-mail!'
-            }],
-          })(
+              type: 'email', message: 'The input is not valid E-mail!'}]
+            })(
             <Input />
           )}
         </FormItem>

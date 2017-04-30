@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 import { AutoComplete, Row,Col,Table, Input, Button,Popover } from 'antd';
 
-import SearchAutoSuggest from '../SearchAutoSuggest'
 
 import apiAccess from '../../Helpers/apiAccess'
 import { curGuideID } from '../../actions/action-spreadGuideID'
+
+import Cookies from 'js-cookie'
 
 const Search = Input.Search
 
@@ -32,42 +34,47 @@ const GuideUserData = (arrayJSON,resultJSON) =>{
 
 }
 
-const Guide = React.createClass({
+class Guide extends Component{
 
-  getInitialState() {
+  constructor(props) {
+    super(props)
 
-    return {
+    this.state = {
       filteredInfo: null,
       sortedInfo: null,
       value: '',
       data: [],
       cur_id: ''
-    };
-  },
+    }
+  }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
   handleChange(pagination, filters, sorter) {
 
     this.setState({
       filteredInfo: filters,
       sortedInfo: sorter,
     });
-  },
+  }
   clearFilters() {
     this.setState({ filteredInfo: null });
-  },
+  }
   clearAll() {
     this.setState({
       filteredInfo: null,
       sortedInfo: null,
     });
-  },
+  }
   eachGuide(event, index){
+    let id = event._id
+    Cookies.set('guide_id',id)
+    this.context.router.push('/guide/'+id);
+  }
 
-  let id = event._id
-  this.props.dispatch(curGuideID('EACH_GUIDE_ID',id))
-
-  },
   getGuideList(){
-
     apiAccess({
       url: 'http://localhost:8000/staffs/tour-guides',
       method: 'GET',
@@ -78,18 +85,18 @@ const Guide = React.createClass({
     })
 
 
-  },
+  }
   componentWillReceiveProps(nextProps){
 
     if(this.props.guideLists !== nextProps.guideLists){
       GuideUserData(nextProps.guideLists,this.state.data)
       // this.setState({data: GuideUserData(nextProps.guideDetail,)})
     }
-  },
+  }
 
   componentWillMount(){
     this.getGuideList()
-  },
+  }
 
   Complete() {
   return (<AutoComplete
@@ -98,7 +105,7 @@ const Guide = React.createClass({
     placeholder="input guide name"
     filterOption={(inputValue, option) => option.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1}
   />);
-},
+}
 
 getExpertList(){
   return(
@@ -107,12 +114,10 @@ getExpertList(){
       <p>Content</p>
     </div>
   )
-},
+}
 
 
   render() {
-
-
 
     //table
     let { sortedInfo, filteredInfo } = this.state;
@@ -178,22 +183,18 @@ getExpertList(){
         <Table columns={columns}
           dataSource={this.state.data}
           onChange={this.handleChange}
-          onRowClick = {this.eachGuide}/>
+          onRowClick = {this.eachGuide.bind(this)}/>
       </div>
     </div>
     );
-  },
-});
+  }
+}
 
 function mapStateToProps(state) {
 
     return {
         guideLists: state.guideDetail.guideLists,
-        input: state.search.search_input
     };
 }
 
 export default connect(mapStateToProps)(Guide)
-//
-// <SearchAutoSuggest dispatch={this.props.dispatch} data = {this.props.guideDetail}
-//   value = {this.state.value}/>

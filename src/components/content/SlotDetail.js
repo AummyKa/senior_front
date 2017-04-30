@@ -80,11 +80,9 @@ class SlotDetail extends Component {
 
   deleteEachTour(_id){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/delete-bookedtour/',
+      url: 'http://localhost:8000/bookedtours/delete-bookedtour/'+_id,
       method: 'DELETE',
-      payload: {
-        _id: _id
-      },
+      payload: null,
       attemptAction: () => this.props.dispatch({ type: 'DELETE_BOOKER_AND_TOUR_ATTEMPT' }),
       successAction: (json) => this.props.dispatch({ type: 'DELETE_BOOKER_AND_TOUR_SUCCESS', json }),
       failureAction: () => this.props.dispatch({ type: 'DELETE_BOOKER_AND_TOUR_FAILED' })
@@ -120,7 +118,7 @@ class SlotDetail extends Component {
         this.getTourAndBookerDetail()
         this.setState({showTourDeleteWarning: false})
         this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
-        
+
       }
     }
   }
@@ -201,7 +199,6 @@ getCurTour(record){
 
     const columns = [
 
-      { title: 'Date', dataIndex: 'start_date', key: 'start_date', width: 100 },
       { title: 'Time', dataIndex: 'start_time', key: 'start_time', width: 70 },
       { title: 'Tour', dataIndex: 'tour_name', key: 'tour_name' , width: 200,
         filters: [
@@ -213,8 +210,8 @@ getCurTour(record){
       },
       { title: 'Type', dataIndex: 'tour_type', key: 'tour_type', width: 80,
         filters: [
-         { text: 'public', value: 'public' },
-         { text: 'private', value: 'private' }
+         { text: 'Public', value: 'Public' },
+         { text: 'Private', value: 'Private' }
         ],
          filteredValue: filteredInfo.tour_type || null,
          onFilter: (value, record) => record.tour_type.includes(value)

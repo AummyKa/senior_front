@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
+import PropTypes from 'prop-types'
+import Cookies from 'js-cookie'
+
 
 const normal = {
 
@@ -17,10 +20,14 @@ class Box extends Component {
     console.log(this.props.show)
     this.state = {
       content: this.props.data,
-      hover: false,
-      show: this.props.show
+      hover: false
     }
   }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
 
   handleHover(){
       this.setState({hover: true})
@@ -30,13 +37,13 @@ class Box extends Component {
     this.setState({hover: false})
   }
 
+  handleClickBox(content){
+    console.log(content)
+    this.context.router.push('/tours/'+ content._id);
+  }
+
   componentWillReceiveProps(nextProps){
-    console.log(nextProps.inVisible)
-    if(this.props.inVisible !== nextProps.inVisible){
-      if(nextProps.inVisible){
-        this.setState({show: false})
-      }
-    }
+
   }
 
   render() {
@@ -46,13 +53,13 @@ class Box extends Component {
       inner = hover
     }
 
-    if(this.state.show){
+
       return (
           <div className = "box">
             <div className = "box-inside" style={inner}
               onMouseEnter = {() => this.handleHover()}
               onMouseLeave={() => this.handleLeaveHover()}
-              onClick = {this.props.handleClickBox(this.state.content._id)}>
+              onClick = {() => this.handleClickBox(this.state.content)}>
               <div className = "box-image">
                 <img src={this.state.content.image}
                   alt="boohoo" className="img-box"/>
@@ -67,12 +74,7 @@ class Box extends Component {
         </div>
 
         );
-    }else{
-      return (
-        <div>
-        </div>
-      )
-    }
+
 
   }
 
@@ -80,7 +82,7 @@ class Box extends Component {
 
 function mapStateToProps(state){
   return {
-    inVisible: state.tourAction.inVisible
+
   }
 }
 

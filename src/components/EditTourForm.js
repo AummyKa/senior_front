@@ -6,8 +6,9 @@ import moment from 'moment';
 
 import apiAccess from '../Helpers/apiAccess'
 import changeDateFormat from '../Helpers/changeDateFormat'
-import EditCurCustomerModal from './EditCurCustomerModal'
-import AddMoreCustomerModal from './AddMoreCustomerModal'
+
+import {editCustomerModal} from '../actions/action-editCustomerModal'
+import {addCustomerModal} from '../actions/action-addCustomerModal'
 
 import {Modal } from 'react-bootstrap';
 
@@ -19,29 +20,14 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const format = 'HH:mm';
 
-const tournames = [{
-  value: 'zhejiang',
-}, {
-  value: 'jiangsu',
-}];
 
-const agencies = [{
-  value: 'N/A',
-  label: 'N/A',
-}, {
-  value: 'Happy',
-  label: 'Happy',
-},{
-  value: 'Hula hula',
-  label: 'Hula hula',
-}];
 
 const tourtypes = [{
-  value: 'public',
-  label: 'public',
+  value: 'Public',
+  label: 'Public',
 }, {
-  value: 'private',
-  label: 'private',
+  value: 'Private',
+  label: 'Private',
 }]
 
 
@@ -60,7 +46,6 @@ function getGuideName(gList,resultJSON){
       resultJSON[i] = objectJSON
     }
   }
-
 }
 
 function throwOptionGuideObject(data){
@@ -71,7 +56,7 @@ function throwOptionGuideObject(data){
   return temp
 }
 
-function throwOptionAgencyObject(data){
+function throwOptionTourTypeObject(data){
   let temp = []
   for (let i = 0; i < data.length; i++) {
     temp.push(<Option key= {i}>{data[i].value}</Option>);
@@ -80,19 +65,21 @@ function throwOptionAgencyObject(data){
 }
 
 function throwOptionTourNameObject(data){
-  let temp = []
-  for (let i = 0; i < data.length; i++) {
-    temp.push(<Option key= {i}>{data[i].value}</Option>);
+  if(data){
+    let temp = []
+    for (let i = 0; i < data.length; i++) {
+      temp.push(<Option key= {i}>{data[i].name}</Option>);
+    }
+    return temp
   }
-  return temp
 }
 
 function formatData(data){
   let temp = []
-
   for(var i = 0; i < data.length; i++){
     var obj = {
       key: data[i].key,
+      _id: data[i].booked_by._id,
       name: data[i].booked_by.name,
       agency: data[i].agency,
       country: data[i].booked_by.country,
@@ -100,12 +87,14 @@ function formatData(data){
       participants: data[i].participants,
       pickup_place: data[i].pickup_place,
       pickup_time: data[i].pickup_time,
+      price: data[i].price,
       remark: data[i].remark
     }
     temp[i] = obj
   }
   return temp
 }
+
 
 
 let uuid = 0;
@@ -142,6 +131,10 @@ const EditTourForm = Form.create()(React.createClass({
       title: 'Pickup time',
       dataIndex: 'pickup_time',
       width: 100
+    },{
+      title: 'Price',
+      dataIndex: 'price',
+      width: 100
     }, {
       title: 'Remark',
       dataIndex: 'remark',
@@ -171,7 +164,8 @@ const EditTourForm = Form.create()(React.createClass({
       cusWarnIdentity: "",
       curTourID: this.props.eachTour._id,
       cusTourDelete:"",
-      showAddMoreCustomer: false
+      showAddMoreCustomer: false,
+      tours_name: [],
     }
   },
 
@@ -186,8 +180,7 @@ const EditTourForm = Form.create()(React.createClass({
 
   showEdit(record){
     if(this.refs.addTourForm){
-      this.setState({editCurCustomer:record})
-      this.setState({showCustomerEdit:true})
+      this.props.dispatch(editCustomerModal("SHOW_EDIT_CUSTOMER",record))
     }
   },
 
@@ -204,29 +197,29 @@ const EditTourForm = Form.create()(React.createClass({
 
   deleteEachCustomer(record){
     //deleteEachCustomer("DELETE_EACH_CUSTOMER_WARNING",record)
-    let _id = record.id
-    this.setState({cusTourDelete: _id})
+    let email = record.email
+    this.setState({cusTourDelete: email})
     this.setState({showCustomerDeleteWarning: true})
   },
 
-  deleteCustomer(tourID,cusID){
+  deleteCustomer(tourID,cusEmail){
     console.log(tourID)
-    console.log(cusID)
-    // apiAccess({
-    //   url: 'http://localhost:8000/bookedtours/delete-customer',
-    //   method: 'DELETE',
-    //   payload:{
-    //       bookedTour: {
-    //         _id: tourID
-    //       },
-    //       customer: {
-    //         _id: cusID
-    //       }
-    //   },
-    //   attemptAction: () => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_ATTEMPT' }),
-    //   successAction: (json) => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_SUCCESS', json }),
-    //   failureAction: () => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_FAILED' })
-    // })
+    console.log(cusEmail)
+    apiAccess({
+      url: 'http://localhost:8000/bookedtours/delete-customer',
+      method: 'DELETE',
+      payload:{
+          bookedTour: {
+            _id: tourID
+          },
+          customer: {
+            email: cusEmail
+          }
+      },
+      attemptAction: () => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_FAILED' })
+    })
 
   },
 
@@ -252,22 +245,19 @@ const EditTourForm = Form.create()(React.createClass({
     })
   },
 
+
+
   addMoreCustomer(){
-    this.setState({showAddMoreCustomer:true})
+    this.props.dispatch(addCustomerModal("SHOW_ADD_CUSTOMER",this.state.curTourID))
   },
 
   componentWillReceiveProps(nextProps){
 
     if(this.props.guideLists !== nextProps.guideLists){
+      console.log(nextProps.guideLists)
       getGuideName(nextProps.guideLists,this.state.guide_name)
     }
 
-    if(this.props.addCustomerSuccess !== nextProps.addCustomerSuccess){
-      if(nextProps.addCustomerSuccess){
-        this.setState({showAddMoreCustomer: false})
-        this.getCurTour(this.state.curTourID)
-      }
-    }
 
     if(this.props.eachTour !== nextProps.eachTour){
       if(nextProps.eachTour){
@@ -275,14 +265,54 @@ const EditTourForm = Form.create()(React.createClass({
       }
     }
 
-    if(nextProps.delete_cus_status){
-      this.setState({showCustomerDeleteWarning: false})
-
+    if(this.props.delete_cus_status !== nextProps.delete_cus_status){
+      if(nextProps.delete_cus_status){
+        this.setState({showCustomerDeleteWarning: false})
+        this.getCurTour(this.state.curTourID)
+        this.getGuideList()
+        this.getAllTourName()
+      }
     }
+
+    if(this.props.editCustomerInTourStatus !== nextProps.editCustomerInTourStatus){
+      if(nextProps.editCustomerInTourStatus){
+        this.getCurTour(this.state.curTourID)
+        this.getGuideList()
+        this.getAllTourName()
+      }
+    }
+
+    if(this.props.addCustomerSuccess !== nextProps.addCustomerSuccess){
+      if(nextProps.addCustomerSuccess){
+        this.getCurTour(this.state.curTourID)
+        this.getGuideList()
+        this.getAllTourName()
+      }
+    }
+
+    if(this.props.tours_data !== nextProps.tours_data){
+      if(nextProps.tours_data){
+        console.log(nextProps.tours_data)
+        this.setState({tours_name: nextProps.tours_data})
+      }
+    }
+  },
+
+  getAllTourName(){
+    apiAccess({
+      url: 'http://localhost:8000/tours/name',
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOURS_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_ALL_TOURS_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_ALL_TOURS_FAILED' })
+    })
   },
 
   componentWillMount(){
     this.getGuideList()
+    this.getCurTour(this.state.curTourID)
+    this.getAllTourName()
   },
 
 
@@ -303,44 +333,6 @@ const EditTourForm = Form.create()(React.createClass({
    return (
 
      <div>
-
-       <div className="modal-container" >
-           <Modal
-             show={this.state.showCustomerEdit}
-             onHide={closeEachTour}
-             bsSize="sm"
-             container={this}
-             aria-labelledby="contained-modal-title"
-           >
-             <Modal.Header closeButton>
-               <Modal.Title id="contained-modal-title">
-                 Edit Customer</Modal.Title>
-             </Modal.Header>
-             <Modal.Body>
-                <EditCurCustomerModal eachCurCustomer ={this.state.editCurCustomer}  />
-             </Modal.Body>
-
-           </Modal>
-       </div>
-
-       <div className="modal-container" >
-           <Modal
-             show={this.state.showAddMoreCustomer}
-             onHide={closeAddMoreCustomer}
-             bsSize="sm"
-             container={this}
-             aria-labelledby="contained-modal-title"
-           >
-             <Modal.Header closeButton>
-               <Modal.Title id="contained-modal-title">
-                 Add more Customer</Modal.Title>
-             </Modal.Header>
-             <Modal.Body>
-               <AddMoreCustomerModal dispatch = {this.props.dispatch} tourID = {this.state.curTourID} />
-             </Modal.Body>
-
-           </Modal>
-       </div>
 
        <div className="modal-container" >
            <Modal
@@ -383,7 +375,7 @@ const EditTourForm = Form.create()(React.createClass({
               onSelect = {this.handleTourNameSelect}
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
-             {throwOptionTourNameObject(tournames)}
+             {throwOptionTourNameObject(this.state.tours_name)}
             </Select>
          )}
        </FormItem>
@@ -401,7 +393,7 @@ const EditTourForm = Form.create()(React.createClass({
               onSelect={this.handleTourTypeSelect}
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
-             {throwOptionAgencyObject(tourtypes)}
+             {throwOptionTourTypeObject(tourtypes)}
             </Select>
          )}
        </FormItem>
@@ -460,12 +452,15 @@ const EditTourForm = Form.create()(React.createClass({
 function mapStateToProps(state) {
 
     return {
+        tours_data: state.getTours.tours_data,
         guideLists: state.guideDetail.guideLists,
         dateTour: state.addTourForm.dateTour,
         eachTour: state.getSpecificTour.eachTour,
         curTourID: state.getSpecificTour.curTourID,
         delete_cus_status: state.deleteCurCustomerInTour.delete_cus_status,
-        addCustomerSuccess: state.addNewCustomerInTour.addCustomerSuccess
+        editCustomerInTourStatus: state.editCustomerInTour.editCustomerInTourStatus,
+        addCustomerSuccess: state.addNewCustomerInTour.addCustomerSuccess,
+
     };
 }
 

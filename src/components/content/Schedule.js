@@ -8,9 +8,14 @@ import moment from 'moment';
 import SlotDetail from './SlotDetail'
 import AddTourForm from '../AddTourForm'
 import EditTourForm from '../EditTourForm'
+import EditCurCustomerModal from '../EditCurCustomerModal'
+import AddMoreCustomerModal from '../AddMoreCustomerModal'
+
 import apiAccess from '../../Helpers/apiAccess'
 import { getSelectedDate } from '../../actions/action-selectedDate'
+import {editCustomerModal} from '../../actions/action-editCustomerModal'
 import { addTour } from '../../actions/action-addTour'
+import {addCustomerModal} from '../../actions/action-addCustomerModal'
 
 import{ Row,Col } from 'antd'
 import { Modal , Button, ButtonToolbar } from 'react-bootstrap';
@@ -30,7 +35,12 @@ class Schedule extends Component {
       selectedTourName: "",
       events:[],
       selectedDate:"",
-      receiveShowAddStatus:false
+      receiveShowAddStatus:false,
+      showCustomerEdit: false,
+      editCurCustomer: [],
+      showAddMoreCustomer: false,
+      curTourID: '',
+      addTourID: ''
     }
   }
 
@@ -74,19 +84,20 @@ class Schedule extends Component {
 
     if(this.props.showAddTourModal !== nextProps.showAddTourModal){
       if(nextProps.showAddTourModal){
-        this.setState({showEachTour: false, showAddTour:true,showSlotDetail : false})
+        this.setState({showEachTour: false, showAddTour:true,showSlotDetail : false, showCustomerEdit:false, showAddMoreCustomer: false})
       }
     }
 
     if(this.props.eachTourState !== nextProps.eachTourState){
       if(nextProps.eachTourState){
-        this.setState({showEachTour: true, showAddTour:false,showSlotDetail : false})
-      }    
+        this.setState({showEachTour: true, showAddTour:false,showSlotDetail : false, showCustomerEdit:false, showAddMoreCustomer: false})
+      }
     }
 
     if(this.props.eachTour !== nextProps.eachTour){
       if(nextProps.eachTour){
           this.setState({selectedTourName: nextProps.eachTour.tour_name})
+          this.setState({curTourID: nextProps.eachTour._id})
       }
     }
     if(nextProps.events){
@@ -96,19 +107,56 @@ class Schedule extends Component {
     }
     if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
       if(nextProps.addBookerAndTour){
-          this.setState({showEachTour: false, showAddTour:false,showSlotDetail : true})
+          this.getEvent()
+          this.setState({showEachTour: false, showAddTour:false,showSlotDetail : true, showCustomerEdit:false,showAddMoreCustomer: false})
           this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
           // this.props.dispacth(addTour("STOP_COUNT_ADD_TOUR"))
       }
     }
 
-    if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
-      if(nextProps.addBookerAndTour){
-          this.getEvent()
-      }
-    }
     if(nextProps.selectedDate){
         this.setState({selectedDate: nextProps.selectedDate})
+    }
+    if(this.props.showEditCustomer !== nextProps.showEditCustomer){
+      console.log(nextProps.showEditCustomer)
+      if(nextProps.showEditCustomer){
+        this.setState({showEachTour: false, showAddTour:false, showSlotDetail: false,showCustomerEdit: true,showAddMoreCustomer: false})
+      }
+    }
+
+    if(this.props.customerData !== nextProps.customerData){
+      if(nextProps.customerData){
+        this.setState({editCurCustomer: nextProps.customerData})
+      }
+    }
+
+    if(this.props.showAddCustomer !== nextProps.showAddCustomer){
+      if(nextProps.showAddCustomer){
+        this.setState({showEachTour: false, showAddTour:false, showSlotDetail: false,showCustomerEdit: false,showAddMoreCustomer: true})
+      }
+    }
+
+    console.log(nextProps.addTourID)
+    if(this.props.addTourID !== nextProps.addTourID){
+      if(nextProps.addTourID){
+        this.setState({addTourID: nextProps.addTourID})
+      }
+    }
+
+    if(this.props.addCustomerSuccess !== nextProps.addCustomerSuccess){
+      if(nextProps.addCustomerSuccess){
+        this.getEvent()
+        this.setState({showEachTour: true, showAddTour:false,showSlotDetail: false, showCustomerEdit:false,showAddMoreCustomer: false})
+        this.props.dispatch(addCustomerModal("CLOSE_ADD_CUSTOMER"))
+      }
+    }
+
+
+    if(this.props.editCustomerInTourStatus !== nextProps.editCustomerInTourStatus){
+      if(nextProps.editCustomerInTourStatus){
+        this.setState({showEachTour: true, showAddTour:false,showSlotDetail: false, showCustomerEdit:false,showAddMoreCustomer: false})
+        this.props.dispatch(editCustomerModal("CLOSE_EDIT_CUSTOMER"))
+      }
     }
 
   }
@@ -116,20 +164,69 @@ class Schedule extends Component {
   render() {
 
     let closeSlot = () => {
-      this.setState({showSlotDetail: false, showEachTour: false, showAddTour: false})
+      this.setState({showSlotDetail: false, showEachTour: false, showAddTour: false, showCustomerEdit:false,showAddMoreCustomer: false})
     }
 
     let closeAddTour = () =>{
-      this.setState({showAddTour: false,showSlotDetail: true ,showEachTour:false});
+      this.setState({showAddTour: false,showSlotDetail: true ,showEachTour:false, showCustomerEdit:false, showAddMoreCustomer: false});
       this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
     }
     let closeEachTour = () =>{
-      this.setState({showEachTour: false,showSlotDetail: true, showAddTour:false});
+      this.setState({showEachTour: false,showSlotDetail: true, showAddTour:false, showCustomerEdit:false, showAddMoreCustomer: false});
+    }
+
+    let closeCustomerEdit = () => {
+      this.setState({showEachTour: true,showSlotDetail: false, showAddTour:false, showCustomerEdit:false, showAddMoreCustomer: false});
+      this.props.dispatch(editCustomerModal("CLOSE_EDIT_CUSTOMER"))
+    }
+
+    let closeAddMoreCustomer = () => {
+      this.setState({showEachTour: true,showSlotDetail: false, showAddTour:false, showCustomerEdit:false, showAddMoreCustomer: false});
+      this.props.dispatch(addCustomerModal("CLOSE_ADD_CUSTOMER"))
     }
 
     return (
 
       <div>
+
+        <div className="modal-container" >
+            <Modal
+              show={this.state.showAddMoreCustomer}
+              onHide={closeAddMoreCustomer}
+              bsSize="lg"
+              container={this}
+              aria-labelledby="contained-modal-title"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title">
+                  Add more Customer</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <AddMoreCustomerModal dispatch = {this.props.dispatch} addTourID = {this.state.addTourID} />
+              </Modal.Body>
+
+            </Modal>
+        </div>
+
+        <div className="modal-container" >
+            <Modal
+              show={this.state.showCustomerEdit}
+              onHide={closeCustomerEdit}
+              bsSize="lg"
+              container={this}
+              aria-labelledby="contained-modal-title"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title">
+                  Edit Customer</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                 <EditCurCustomerModal eachCurCustomer ={this.state.editCurCustomer} curTourID = {this.state.curTourID}  />
+              </Modal.Body>
+
+            </Modal>
+        </div>
+
         <div className="modal-container" >
             <Modal
               show={this.state.showAddTour}
@@ -220,6 +317,12 @@ class Schedule extends Component {
 
 
 const mapStateToProps = (state) => ({
+  editCustomerInTourStatus: state.editCustomerInTour.editCustomerInTourStatus,
+  addCustomerSuccess: state.addNewCustomerInTour.addCustomerSuccess,
+  addTourID: state.addCustomerModal.addTourID,
+  showAddCustomer: state.addCustomerModal.showAddCustomer,
+  showEditCustomer: state.editCustomerModal.showEditCustomer,
+  customerData: state.editCustomerModal.customerData,
   showAddTourModal: state.addTourForm.showAddTourModal,
   dateTour:state.addTourForm.dateTour,
   addBookerAndTour: state.postBookerAndTour.addBookerAndTour,

@@ -10,21 +10,11 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 
-const agencies = [{
-  value: 'N/A',
-  label: 'N/A',
-}, {
-  value: 'Happy',
-  label: 'Happy',
-},{
-  value: 'Hula hula',
-  label: 'Hula hula',
-}];
 
 function throwOptionAgencyObject(data){
   let temp = []
   for (let i = 0; i < data.length; i++) {
-    temp.push(<Option key= {i}>{data[i].value}</Option>);
+    temp.push(<Option key= {i}>{data[i].agency_name}</Option>);
   }
   return temp
 }
@@ -40,34 +30,83 @@ const EditCurCustomerModal = Form.create()(React.createClass({
       selectedTourName: "",
       selectedAgency: "",
       selectedTourType: "",
-      selectedTourTime: ""
+      selectedTourTime: "",
+      agencyData:[],
+      curTourID: this.props.curTourID,
+      selectedAgency: this.props.eachCurCustomer.agency
       }
     },
+
+
+  componentWillMount(){
+    this.getAgencyList()
+  },
+
+  componentWillReceiveProps(nextProps){
+    if(this.props.agencyData !== nextProps.agencyData){
+      if(nextProps.agencyData){
+        console.log(nextProps.agencyData)
+        this.setState({agencyData: nextProps.agencyData})
+      }
+    }
+  },
+
+  getAgencyList(){
+    apiAccess({
+      url: 'http://localhost:8000/agencies',
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_AGENCY_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_AGENCY_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_AGENCY_FAILED' })
+    })
+
+  },
+
+  handleAgencySelect(value,option){
+    this.setState({ selectedAgency: this.state.agencyData[value].agency_name });
+  },
+
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      // if (!err) {
-      //
-      //   let payload = {
-      //     agency: this.props.form.getFieldValue(`agency`)[0],
-      //     email: this.props.form.getFieldValue(`email`),
-      //     name: this.props.form.getFieldValue(`name`)[0],
-      //     country: this.props.form.getFieldValue(`country`)[0],
-      //     pickup_time: this.props.form.getFieldValue(`pickup_time`).format('HH:mm'),
-      //     pickup_place: this.props.form.getFieldValue(`pickup_place`)[0],
-      //     participants: this.props.form.getFieldValue(`participants`),
-      //     remark: this.props.form.getFieldValue(`remark`)[0]
-      //
-      //     apiAccess({
-      //       url: 'http://localhost:8000/register',
-      //       method: 'POST',
-      //       payload: payload,
-      //       attemptAction: () => this.props.dispatch({ type: 'EDIT_CUSTOMER_IN_TOUR_ATTEMPT' }),
-      //       successAction: (json) => this.props.dispatch({ type: 'EDIT_CUSTOMER_IN_TOUR_SUCCESS', json }),
-      //       failureAction: () => this.props.dispatch({ type: 'EDIT_CUSTOMER_IN_TOUR_FAILED' })
-      //     })
-      //   }else
-      //       console.log("error")
+      if (!err) {
+
+        console.log(values)
+
+        let payload = {
+
+          customer: {
+            _id: this.state.eachCustomer._id,
+            agency: this.state.selectedAgency,
+            email: this.props.form.getFieldValue(`email`),
+            name: this.props.form.getFieldValue(`name`),
+            country: this.props.form.getFieldValue(`country`),
+            pickup_time: this.props.form.getFieldValue(`pickup_time`).format('HH:mm'),
+            pickup_place: this.props.form.getFieldValue(`pickup_place`),
+            participants: this.props.form.getFieldValue(`participants`),
+            price: this.props.form.getFieldValue('price'),
+            remark: this.props.form.getFieldValue(`remark`)
+          },
+
+          bookedTour: {
+            _id: this.state.curTourID
+          }
+
+        }
+
+        console.log(payload)
+
+          apiAccess({
+            url: 'http://localhost:8000/bookedtours/update-customer',
+            method: 'POST',
+            payload: payload,
+            attemptAction: () => this.props.dispatch({ type: 'EDIT_CUSTOMER_IN_TOUR_ATTEMPT' }),
+            successAction: (json) => this.props.dispatch({ type: 'EDIT_CUSTOMER_IN_TOUR_SUCCESS', json }),
+            failureAction: () => this.props.dispatch({ type: 'EDIT_CUSTOMER_IN_TOUR_FAILED' })
+          })
+      }else
+            console.log("error")
       });
   },
 
@@ -115,14 +154,12 @@ const EditCurCustomerModal = Form.create()(React.createClass({
  },
 
  handleAgencySelect(value,option){
-   this.setState({ selectedAgency: agencies[value].value });
+   this.setState({ selectedAgency: this.state.agencyData[value].agency_name });
  },
 
 
 
   render() {
-
-    console.log(this.state.eachCustomer.pickup_time.toString())
 
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
@@ -136,154 +173,170 @@ const EditCurCustomerModal = Form.create()(React.createClass({
 
      return (
 
-         <div className = "customer-info">
+    <div className = "customer-info">
+      <Form className = "add-tour-form" horizontal onSubmit={this.handleSubmit}>
+        <Row>
+          <Col span={8} offset={1}>
+              <FormItem
+                {...formItemLayout}
+                label="Agency"
+              >
+                {getFieldDecorator(`agency`, {
+                  initialValue: this.state.eachCustomer.agency
+                })(
+                  <Select
+                     showSearch
+                     style={{ width: '80%', marginRight: 11 }}
+                     placeholder="Select an agency"
+                     optionFilterProp="children"
+                     onSelect={this.handleAgencySelect}
+                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                   >
+                    {throwOptionAgencyObject(this.state.agencyData)}
+                   </Select>
+                )}
+              </FormItem>
+
+             <FormItem
+               {...formItemLayout}
+               label= {'Email : '}
+               required={false}
+             >
+               {getFieldDecorator(`email`, {
+                 initialValue: this.state.eachCustomer.email,
+                 validateTrigger: ['onChange', 'onBlur'],
+                 rules: [{
+                   required: true,
+                   whitespace: true,
+                   message: "Please input customer's email.",
+                 }],
+               })(
+                 <Input placeholder="email" style={{ width: '80%', marginRight: 11 }} />
+               )}
+
+             </FormItem>
+
+             <FormItem
+               {...formItemLayout}
+               label={'Name : '}
+               required={false}
+             >
+               {getFieldDecorator(`name`, {
+                 initialValue: this.state.eachCustomer.name,
+                 validateTrigger: ['onChange', 'onBlur'],
+                 rules: [{
+                   required: true,
+                   whitespace: true,
+                   message: "Please input customer's name.",
+                 }],
+               })(
+                 <Input placeholder="name"  style={{ width: '80%', marginRight: 11 }} />
+               )}
+
+             </FormItem>
+
+             <FormItem
+               {...formItemLayout}
+               label={'Country : '}
+               required={false}
+             >
+               {getFieldDecorator(`country`, {
+                 initialValue: this.state.eachCustomer.country,
+                 validateTrigger: ['onChange', 'onBlur'],
+
+               })(
+                 <Input placeholder="country"  style={{ width: '80%', marginRight: 11 }} />
+               )}
+
+             </FormItem>
+
+             <FormItem
+               {...formItemLayout}
+               label={'Price : '}
+               required={false}
+             >
+               {getFieldDecorator(`price`, {
+                 initialValue: this.state.eachCustomer.price,
+                 validateTrigger: ['onChange', 'onBlur'],
+
+               })(
+                 <Input placeholder="price"  style={{ width: '80%', marginRight: 11 }} />
+               )}
+
+             </FormItem>
+           </Col>
+
+           <Col span={14} offset = {1}>
+
+             <FormItem
+               {...formItemLayout}
+               label={'Pickup Place : '}
+               required={false}
+             >
+               {getFieldDecorator(`pickup_place`, {
+                 initialValue: this.state.eachCustomer.pickup_place,
+                 validateTrigger: ['onChange', 'onBlur'],
+
+               })(
+                 <Input placeholder="choose a location"  style={{ width: '70%', marginRight: 11 }} />
+               )}
+
+             </FormItem>
+
+
+           <FormItem
+              {...formItemLayout}
+              label="Pickup time"
+            >
+              {getFieldDecorator(`pickup_time`, {
+                initialValue : moment(this.state.eachCustomer.pickup_time, format )
+              })(
+                <TimePicker
+                  style={{ width: '30%', marginRight: 11}}
+                  format={format} placeholder = "pickup" />
+              )}
+          </FormItem>
+
+           <FormItem
+              {...formItemLayout}
+              label={'Participant : '}
+            >
+
+            {getFieldDecorator(`participants`, {
+              initialValue: this.state.eachCustomer.participants
+            })(
+              <InputNumber
+                style={{ width: '30%', marginRight: 11}}
+                min={1}
+                max={60}
+              />
+            )}
+
+            </FormItem>
+           <FormItem
+             {...formItemLayout}
+             label={'Remark : '}
+             required={false}
+           >
+             {getFieldDecorator(`remark`, {
+               initialValue: this.state.eachCustomer.remark,
+               validateTrigger: ['onChange', 'onBlur'],
+             })(
+               <Input type="textarea" rows={3} style={{ width: '70%' }} />
+             )}
+
+           </FormItem>
+         </Col>
+        </Row>
+
 
         <Row>
-          <Col span={11} offset={1}>
-
-            <FormItem
-              {...formItemLayout}
-              label="Agency"
-            >
-              {getFieldDecorator(`agency`, {
-                initialValue: this.state.eachCustomer.agency
-              })(
-                <Select
-                   showSearch
-                   style={{ width: '80%', marginRight: 11 }}
-                   placeholder="Select a person"
-                   optionFilterProp="children"
-                   onSelect={this.handleAgencySelect}
-                   filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                 >
-                  {throwOptionAgencyObject(agencies)}
-                 </Select>
-              )}
-            </FormItem>
-
-         <FormItem
-           {...formItemLayout}
-           label= {'Email : '}
-           required={false}
-         >
-           {getFieldDecorator(`email`, {
-             validateTrigger: ['onChange', 'onBlur'],
-             initialValue: this.state.eachCustomer.email,
-             rules: [{
-               required: true,
-               whitespace: true,
-               message: "Please input customer's email.",
-             }],
-           })(
-             <Input placeholder="email" style={{ width: '80%', marginRight: 11 }} />
-           )}
-
-         </FormItem>
-
-         <FormItem
-           {...formItemLayout}
-           label={'Name : '}
-           required={false}
-         >
-           {getFieldDecorator(`name`, {
-             validateTrigger: ['onChange', 'onBlur'],
-            initialValue: this.state.eachCustomer.name,
-             rules: [{
-               required: true,
-               whitespace: true,
-               message: "Please input customer's name.",
-             }],
-           })(
-             <Input placeholder="name"  style={{ width: '80%', marginRight: 11 }} />
-           )}
-
-         </FormItem>
-
-         <FormItem
-           {...formItemLayout}
-           label={'Country : '}
-           required={false}
-         >
-           {getFieldDecorator(`country`, {
-             validateTrigger: ['onChange', 'onBlur'], initialValue: this.state.eachCustomer.country
-           })(
-             <Input placeholder="country"  style={{ width: '80%', marginRight: 11 }} />
-           )}
-
-         </FormItem>
-
-
-       </Col>
-         <Col span={11} offset = {1}>
-
-         <FormItem
-           {...formItemLayout}
-           label={'Pickup Place : '}
-           required={false}
-           labelCol={{
-            sm: { span: 5 },
-          }}
-         >
-           {getFieldDecorator(`pickup_place`, {
-             initialValue: this.state.eachCustomer.pickup_place,
-             validateTrigger: ['onChange', 'onBlur']
-           })(
-             <Input placeholder="pick up place"  style={{ width: '100%'}}/>
-           )}
-         </FormItem>
-
-
-         <FormItem
-            {...formItemLayout}
-            label="Pickup time"
-          >
-            {getFieldDecorator(`pickup_time`, {
-              initialValue : moment(this.state.eachCustomer.pickup_time, format )
-            })(
-              <TimePicker
-                style={{ width: '30%', marginRight: 11, marginLeft: 11}}
-                format={format} placeholder = "pickup" />
-            )}
-          </FormItem>
-
-         <FormItem
-            {...formItemLayout}
-            label={'Participant : '}
-          >
-
-          {getFieldDecorator(`participants`,{
-            initialValue: this.state.eachCustomer.participants
-          })(
-            <InputNumber
-              style={{ width: '30%', marginRight: 11, marginLeft: 11}}
-              min={1}
-              max={60}
-            />
-          )}
-
-          </FormItem>
-         <FormItem
-           {...formItemLayout}
-           label={'Remark : '}
-           required={false}
-         >
-           {getFieldDecorator(`remark`, {
-             validateTrigger: ['onChange', 'onBlur'],
-             initialValue: this.state.eachCustomer.remark
-           })(
-             <Input type="textarea" rows={2} />
-           )}
-
-         </FormItem>
-       </Col>
+           <FormItem {...formItemLayoutWithOutLabel}>
+             <Button type="primary" htmlType="submit" size="large">Submit</Button>
+           </FormItem>
          </Row>
-         <Row>
 
-         <FormItem {...formItemLayoutWithOutLabel}>
-           <Button type="primary" htmlType="submit" size="large">Submit</Button>
-         </FormItem>
-
-         </Row>
+       </Form>
        </div>
 
      );
@@ -291,8 +344,10 @@ const EditCurCustomerModal = Form.create()(React.createClass({
   },
 }));
 
-// const mapStateToProps = (state) => ({
-//
-// })
+function mapStateToProps(state){
+  return{
+    agencyData: state.getAgency.agencyData
+  }
+}
 
-export default EditCurCustomerModal;
+export default connect(mapStateToProps)(EditCurCustomerModal);

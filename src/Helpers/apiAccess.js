@@ -1,4 +1,4 @@
-
+import Cookies from 'js-cookie'
 
 const apiAccess = ({
 url,
@@ -11,13 +11,16 @@ failureAction
 
 attemptAction()
 
+console.log(method)
+console.log(url)
 
 if(method == "POST" || method == "DELETE"){
 
   fetch(url, {
       method: method,
       headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'SessionToken': Cookies.get('token')
       },
       body: JSON.stringify({
           payload
@@ -40,7 +43,8 @@ if(method == "POST" || method == "DELETE"){
   fetch(url, {
       method: method,
       headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'SessionToken': Cookies.get('token')
       }
 
   })

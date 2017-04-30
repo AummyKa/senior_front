@@ -24,7 +24,7 @@ class GuidePersonal extends Component {
       title: "",
       name: "",
       surname: "",
-      birthdate: "-",
+      // birthdate: "-",
       email: "",
       lineID: "-",
       address: "-",
@@ -42,7 +42,7 @@ class GuidePersonal extends Component {
   eachGuide(id){
     console.log(id)
       apiAccess({
-       url: 'http://localhost:8000/staffs/id/'+id,
+       url: 'http://localhost:8000/staffs/'+id,
        method: 'GET',
        payload: null,
        attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_ATTEMPT' }),
@@ -53,30 +53,30 @@ class GuidePersonal extends Component {
 
   componentWillReceiveProps(nextProps){
 
-    if(nextProps.updateStaffStatus){
-      this.setState({edit: false})
-      this.eachGuide(Cookies.get('guide_id'))
+    if(this.props.updateStaffStatus !== nextProps.updateStaffStatus){
+      if(nextProps.updateStaffStatus){
+        this.setState({edit: false})
+        this.eachGuide(Cookies.get('guide_id'))
+      }
     }
 
-    if(this.props.curGuideProfile !== nextProps.curGuideProfile){
-      let guideProfile = nextProps.curGuideProfile
-      console.log(guideProfile)
-      console.log(guideProfile.title)
+    console.log(this.props.curGuideProfile)
+    console.log(nextProps.curGuideProfile)
 
-      try{
+    if(this.props.curGuideProfile !== nextProps.curGuideProfile){
+      if(nextProps.curGuideProfile){
         this.setState({
-          title: guideProfile.title || null,
-          name: guideProfile.name || null,
-          surname: guideProfile.surname || null,
-          birthdate: this.cleanDate(guideProfile.birthdate) || null,
-          email: guideProfile.email || null,
-          lineID: guideProfile.lineID || null,
-          address: guideProfile.address || null,
-          phone: guideProfile.phone || null,
-          workplace: guideProfile.workplace || null,
-          contract: guideProfile.contract || null
+          title:nextProps.curGuideProfile.title,
+          name: nextProps.curGuideProfile.name,
+          surname: nextProps.curGuideProfile.surname,
+          // birthdate: this.cleanDate(nextProps.curGuideProfile.birthdate),
+          email: nextProps.curGuideProfile.email,
+          lineID: nextProps.curGuideProfile.lineID || "-",
+          address: nextProps.curGuideProfile.address || "-",
+          phone: nextProps.curGuideProfile.phone,
+          workplace: nextProps.curGuideProfile.workplace || "-",
+          contract: nextProps.curGuideProfile.contract
         })
-      }catch(e){
       }
     }
   }
@@ -92,19 +92,23 @@ class GuidePersonal extends Component {
   }
 
   saveEdit(id){
+    console.log(id)
     let payload = {
                       title: this.state.title,
                       name: this.state.name,
                       surname: this.state.surname,
-                      birthdate: this.state.birthdate,
+                      // birthdate: this.state.birthdate,
                       email: this.state.email,
                       lineID: this.state.lineID,
                       address: this.state.address,
                       phone: this.state.phone,
                       workplace: this.state.workplace,
                       contract: this.state.contract}
+
+                      console.log(payload)
+
     apiAccess({
-      url: 'http://localhost:8000/staffs/update/'+id,
+      url: 'http://localhost:8000/staffs/update-info/'+id,
       method: 'POST',
       payload: payload,
       attemptAction: () => this.props.dispatch({ type: 'UPDATE_STAFF_ATTEMPT' }),
@@ -197,7 +201,6 @@ class GuidePersonal extends Component {
               <li>Title</li><br/>
               <li>Name</li><br/>
               <li>Surname</li><br/>
-              <li>Birthdate</li><br/>
               <li>Email</li><br/>
             </ul>
 
@@ -207,25 +210,24 @@ class GuidePersonal extends Component {
                <li>{this.state.title}</li><br/>
                <li>{this.state.name}</li><br/>
                <li>{this.state.surname}</li><br/>
-               <li>{this.state.edit ? this.guideShowEdit(this.state.birthdate,"birthdate") :this.state.birthdate}</li><br/>
                <li>{this.state.email}</li><br/>
             </ul>
            </Col>
            <Col span={4}>
              <ul>
               <li>LineID</li><br/>
-              <li>Address</li><br/>
               <li>Phone</li><br/>
               <li>Workplace</li><br/>
+              <li>Address</li><br/>
             </ul>
            </Col>
            <Col span={8}>
              <ul>
 
                <li>{this.state.edit ? this.guideShowEdit(this.state.lineID,"lineID") :this.state.lineID}</li><br/>
-               <li>{this.state.edit ? this.guideShowEdit(this.state.address,"address") :this.state.address}</li><br/>
                <li>{this.state.edit ? this.guideShowEdit(this.state.phone,"phone") :this.state.phone}</li><br/>
                <li>{this.state.workplace}</li><br/>
+               <li>{this.state.edit ? this.guideShowEdit(this.state.address,"address") :this.state.address}</li><br/>
 
              </ul>
            </Col>

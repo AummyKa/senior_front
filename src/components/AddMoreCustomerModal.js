@@ -10,21 +10,11 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 
-const agencies = [{
-  value: 'N/A',
-  label: 'N/A',
-}, {
-  value: 'Happy',
-  label: 'Happy',
-},{
-  value: 'Hula hula',
-  label: 'Hula hula',
-}];
 
 function throwOptionAgencyObject(data){
   let temp = []
   for (let i = 0; i < data.length; i++) {
-    temp.push(<Option key= {i}>{data[i].value}</Option>);
+    temp.push(<Option key= {i}>{data[i].agency_name}</Option>);
   }
   return temp
 }
@@ -33,6 +23,13 @@ const format = 'HH:mm';
 
 const AddMoreCustomerModal = Form.create()(React.createClass({
 
+  getInitialState(){
+    return{
+      agencyData: [],
+      tourID: this.props.addTourID,
+      selectedAgency: ''
+    }
+  },
 
   handleSubmit(e) {
     e.preventDefault();
@@ -46,11 +43,12 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
           pickup_time: this.props.form.getFieldValue(`pickup_time`).format('HH:mm'),
           pickup_place: this.props.form.getFieldValue(`pickup_place`),
           participants: this.props.form.getFieldValue(`participants`),
+          price: this.props.form.getFieldValue('price'),
           remark: this.props.form.getFieldValue(`remark`)
         }
 
           apiAccess({
-            url: 'http://localhost:8000/bookedtours/insert-customer/'+this.props.tourID,
+            url: 'http://localhost:8000/bookedtours/insert-customer/'+this.state.tourID,
             method: 'POST',
             payload: payload,
             attemptAction: () => this.props.dispatch({ type: 'ADD_MORE_CUSTOMER_IN_TOUR_ATTEMPT' }),
@@ -60,7 +58,31 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
         }else
             console.log("error")
       });
-    
+
+  },
+
+  componentWillMount(){
+    this.getAgencyList()
+  },
+
+  componentWillReceiveProps(nextProps){
+    if(this.props.agencyData !== nextProps.agencyData){
+      if(nextProps.agencyData){
+        this.setState({agencyData: nextProps.agencyData})
+      }
+    }
+  },
+
+  getAgencyList(){
+    apiAccess({
+      url: 'http://localhost:8000/agencies',
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_AGENCY_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_AGENCY_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_AGENCY_FAILED' })
+    })
+
   },
 
   handlePasswordBlur(e) {
@@ -107,7 +129,7 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
  },
 
  handleAgencySelect(value,option){
-   this.setState({ selectedAgency: agencies[value].value });
+   this.setState({ selectedAgency: this.state.agencyData[value].agency_name });
  },
 
 
@@ -129,143 +151,157 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
          <div className = "customer-info">
           <Form horizontal onSubmit={this.handleSubmit}>
           <Row>
-          <Col span={11} offset={1}>
 
-            <FormItem
+            <Col span={8} offset={1}>
+
+              <FormItem
+                {...formItemLayout}
+                label="Agency"
+              >
+                {getFieldDecorator(`agency`, {
+                  initialValue: ['N/A'],
+
+                })(
+                  <Select
+                     showSearch
+                     style={{ width: '80%', marginRight: 11 }}
+                     placeholder="Select a person"
+                     optionFilterProp="children"
+                     onSelect={this.handleAgencySelect}
+                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                   >
+                    {throwOptionAgencyObject(this.state.agencyData)}
+                   </Select>
+                )}
+              </FormItem>
+
+           <FormItem
+             {...formItemLayout}
+             label= {'Email : '}
+             required={false}
+           >
+             {getFieldDecorator(`email`, {
+               validateTrigger: ['onChange', 'onBlur'],
+               rules: [{
+                 required: true,
+                 whitespace: true,
+                 message: "Please input customer's email.",
+               }],
+             })(
+               <Input placeholder="email" style={{ width: '80%', marginRight: 11 }} />
+             )}
+
+           </FormItem>
+
+           <FormItem
+             {...formItemLayout}
+             label={'Name : '}
+             required={false}
+           >
+             {getFieldDecorator(`name`, {
+               validateTrigger: ['onChange', 'onBlur'],
+               rules: [{
+                 required: true,
+                 whitespace: true,
+                 message: "Please input customer's name.",
+               }],
+             })(
+               <Input placeholder="name"  style={{ width: '80%', marginRight: 11 }} />
+             )}
+
+           </FormItem>
+
+           <FormItem
+             {...formItemLayout}
+             label={'Country : '}
+             required={false}
+           >
+             {getFieldDecorator(`country`, {
+               validateTrigger: ['onChange', 'onBlur'],
+
+             })(
+               <Input placeholder="country"  style={{ width: '80%', marginRight: 11 }} />
+             )}
+
+           </FormItem>
+
+           <FormItem
+             {...formItemLayout}
+             label={'Price : '}
+             required={false}
+           >
+             {getFieldDecorator(`price`, {
+               validateTrigger: ['onChange', 'onBlur'],
+
+             })(
+               <Input placeholder="price"  style={{ width: '80%', marginRight: 11 }} />
+             )}
+
+           </FormItem>
+
+
+         </Col>
+           <Col span={14} offset = {1}>
+
+             <FormItem
+               {...formItemLayout}
+               label={'Pickup Place : '}
+               required={false}
+             >
+               {getFieldDecorator(`pickup_place`, {
+                 validateTrigger: ['onChange', 'onBlur'],
+
+               })(
+                 <Input placeholder="choose a location"  style={{ width: '70%', marginRight: 11 }} />
+               )}
+
+             </FormItem>
+
+
+           <FormItem
               {...formItemLayout}
-              label="Agency"
+              label="Pickup time"
             >
-              {getFieldDecorator(`agency`, {
-
-              })(
-                <Select
-                   showSearch
-                   style={{ width: '80%', marginRight: 11 }}
-                   placeholder="Select a person"
-                   optionFilterProp="children"
-                   onSelect={this.handleAgencySelect}
-                   filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                 >
-                  {throwOptionAgencyObject(agencies)}
-                 </Select>
+              {getFieldDecorator(`pickup_time`)(
+                <TimePicker
+                  style={{ width: '30%', marginRight: 11}}
+                  format={format} placeholder = "pickup" />
               )}
             </FormItem>
 
-         <FormItem
-           {...formItemLayout}
-           label= {'Email : '}
-           required={false}
-         >
-           {getFieldDecorator(`email`, {
-             validateTrigger: ['onChange', 'onBlur'],
-             rules: [{
-               required: true,
-               whitespace: true,
-               message: "Please input customer's email.",
-             }],
-           })(
-             <Input placeholder="email" style={{ width: '80%', marginRight: 11 }} />
-           )}
+           <FormItem
+              {...formItemLayout}
+              label={'Participant : '}
+            >
 
-         </FormItem>
-
-         <FormItem
-           {...formItemLayout}
-           label={'Name : '}
-           required={false}
-         >
-           {getFieldDecorator(`name`, {
-             validateTrigger: ['onChange', 'onBlur'],
-             rules: [{
-               required: true,
-               whitespace: true,
-               message: "Please input customer's name.",
-             }],
-           })(
-             <Input placeholder="name"  style={{ width: '80%', marginRight: 11 }} />
-           )}
-
-         </FormItem>
-
-         <FormItem
-           {...formItemLayout}
-           label={'Country : '}
-           required={false}
-         >
-           {getFieldDecorator(`country`, {
-             validateTrigger: ['onChange', 'onBlur']
-           })(
-             <Input placeholder="country"  style={{ width: '80%', marginRight: 11 }} />
-           )}
-
-         </FormItem>
-
-
-       </Col>
-         <Col span={11} offset = {1}>
-
-         <FormItem
-           {...formItemLayout}
-           label={'Pickup Place : '}
-           required={false}
-           labelCol={{
-            sm: { span: 5 },
-          }}
-         >
-           {getFieldDecorator(`pickup_place`, {
-             validateTrigger: ['onChange', 'onBlur']
-           })(
-             <Input placeholder="pick up place"  style={{ width: '100%'}}/>
-           )}
-         </FormItem>
-
-
-         <FormItem
-            {...formItemLayout}
-            label="Pickup time"
-          >
-            {getFieldDecorator(`pickup_time`, {
-            })(
-              <TimePicker
-                style={{ width: '30%', marginRight: 11, marginLeft: 11}}
-                format={format} placeholder = "pickup" />
+            {getFieldDecorator(`participants`)(
+              <InputNumber
+                style={{ width: '30%', marginRight: 11}}
+                min={1}
+                max={60}
+              />
             )}
-          </FormItem>
 
-         <FormItem
-            {...formItemLayout}
-            label={'Participant : '}
-          >
+            </FormItem>
+           <FormItem
+             {...formItemLayout}
+             label={'Remark : '}
+             required={false}
+           >
+             {getFieldDecorator(`remark`, {
+               validateTrigger: ['onChange', 'onBlur'],
+             })(
+               <Input type="textarea" rows={3} style={{ width: '70%' }} />
+             )}
 
-          {getFieldDecorator(`participants`,{
-          })(
-            <InputNumber
-              style={{ width: '30%', marginRight: 11, marginLeft: 11}}
-              min={1}
-              max={60}
-            />
-          )}
-
-          </FormItem>
-         <FormItem
-           {...formItemLayout}
-           label={'Remark : '}
-           required={false}
-         >
-           {getFieldDecorator(`remark`, {
-             validateTrigger: ['onChange', 'onBlur'],
-           })(
-             <Input type="textarea" rows={2} />
-           )}
-
-         </FormItem>
-       </Col>
+           </FormItem>
+         </Col>
          </Row>
          <Row>
 
-         <FormItem {...formItemLayoutWithOutLabel}>
-           <Button type="primary" htmlType="submit" size="large">Add Customer</Button>
-         </FormItem>
+           <FormItem {...formItemLayoutWithOutLabel}>
+             <Button type="primary" htmlType="submit" size="large">Submit</Button>
+           </FormItem>
 
          </Row>
        </Form>
@@ -277,8 +313,8 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
 }));
 
 const mapStateToProps = (state) => ({
-    curTourID: state.editSpecificTour.curTourID
+    agencyData: state.getAgency.agencyData
 
 })
 
-export default AddMoreCustomerModal;
+export default connect(mapStateToProps)(AddMoreCustomerModal);

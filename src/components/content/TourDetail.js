@@ -1,20 +1,26 @@
 import { Button, Col, Row } from 'antd';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 
 import AddNewTourModal from '../AddNewTourModal';
 
 import { Modal } from 'react-bootstrap';
 import apiAccess from '../../Helpers/apiAccess'
 import {connect} from 'react-redux';
+import Cookies from 'js-cookie'
 
 class TourDetail extends Component {
 
   constructor(props){
     super(props)
     this.state = {
-      tour_id: this.props.tour_cur_id,
+      tour_id: Cookies.get('tour_id'),
       tour_data: []
     }
+  }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
   }
 
 
@@ -48,8 +54,6 @@ class TourDetail extends Component {
 
       <div className = "tour_content">
 
-        <h6>{this.state.tour_id}</h6>
-        <h3>{this.tour_data.tour_name}</h3>
 
 
       </div>

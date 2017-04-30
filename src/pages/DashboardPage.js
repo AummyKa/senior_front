@@ -35,75 +35,6 @@ class DashboardPage extends Component {
     router: PropTypes.object.isRequired
   }
 
-  componentWillReceiveProps (nextProps) {
-
-      let page = nextProps.pageState
-      let previous = this.props.pageState
-      if(this.props.curGuide!== nextProps.curGuide){
-        this.setState({home:false,guide:false,pendinglist: false,
-        tours: false, schedule:false, staff: false, guideLay: true})
-      }
-
-      if(page!==previous){
-        switch (page) {
-          case 'home': //home
-              this.context.router.replace('/home')
-              this.setState({home:true,guide:false,pendinglist: false,
-              tours: false, schedule:false, staff: false,  guideLay: false})
-              break;
-          case 'guide': //guide
-              this.context.router.replace('/guide')
-              this.setState({guide:true,home:false, pendinglist: false,
-              tours: false, schedule:false, staff: false,  guideLay: false})
-              break;
-          case 'pendinglist':
-              this.context.router.replace('/pendinglist')
-              this.setState({pendinglist: true, guide:false, home:false,
-              tours: false, schedule:false, staff: false,  guideLay: false})
-              break;
-          case 'tours':
-              this.context.router.replace('/tours')
-              this.setState({tours: true,pendinglist: false, guide:false,
-              home:false, schedule:false, staff: false,  guideLay: false})
-              break;
-          case 'schedule':
-              this.context.router.replace('/schedule')
-              this.setState({tours: false,pendinglist: false, guide:false,
-              home:false, schedule: true, staff: false,  guideLay: false})
-              break;
-          case 'staff':
-              this.context.router.replace('/staff')
-              this.setState({tours: false,pendinglist: false, guide:false,
-              home:false, schedule: false, staff: true,  guideLay: false})
-              break;
-
-          default:
-            return ""
-        }
-      }
-      // if(page = "home"){
-      //   this.setState({home: true, guide: false})
-      //   this.context.router.replace('/home')
-      // }
-      // if(page = "guide"){
-      //   this.setState({guide: true, home: false })
-      //   this.context.router.replace('/guide')
-      // }
-
-  //   if(page = "schedule"){
-  //     this.setState({schedule: true})
-  //     this.context.router.replace('/schedule')
-  //  }
-  //   if(page = "tour"){
-  //     this.setState({tour: true})
-  //     this.context.router.replace('/tour')
-  //   }
-  //   if(page = "finance"){
-  //     this.setState({finance: true})
-  //     this.context.router.replace('/tour')
-  //   }
-
-  }
 
   render(){
           return(
@@ -118,13 +49,8 @@ class DashboardPage extends Component {
                   <Col span={18} >
                     <NavBar dispatch={this.props.dispatch} />
                       <div style={{ padding: 60, minHeight: 360  }}>
-                        { this.state.home ? <Home /> : null }
-                        { this.state.guide ? <Guide dispatch={this.props.dispatch} /> : null }
-                        { this.state.pendinglist ? <PendingList dispatch={this.props.dispatch} /> : null }
-                        { this.state.tours ? <Tours /> : null }
-                        { this.state.schedule ? <Schedule dispatch = {this.props.dispatch} /> : null }
-                        { this.state.staff ? <Staff dispatch = {this.props.dispatch} /> : null }
-                        { this.state.guideLay ? <GuideLayout dispatch = {this.props.dispatch} /> : null }
+                        {this.props.children}
+
                       </div>
                   </Col>
               </Row>
@@ -134,10 +60,5 @@ class DashboardPage extends Component {
 
 }
 
-const mapStateToProps = (state) => ({
-  pageState: state.pageStatus.pageMove,
-  curGuide: state.guideProfile.curGuide,
-  guide_id: state.guideProfile.guide_id
-})
 
-export default connect(mapStateToProps)(DashboardPage);
+export default (DashboardPage);

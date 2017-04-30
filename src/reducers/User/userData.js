@@ -7,7 +7,8 @@ const INITIAL_STATE = {
 // { type: 'LOGIN_SUCCESS', text }
 const userData = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'GET_NAME_OF_USER_ATTEMPT':    
+    case 'GET_NAME_OF_USER_ATTEMPT':
+      console.log("hi")
       return {
         //loading sign
       }
@@ -18,6 +19,7 @@ const userData = (state = INITIAL_STATE, action) => {
 
       }
     case 'GET_NAME_OF_USER_FAILED':
+        console.log("fail")
       return {
         //pop up
       }

@@ -1,38 +1,59 @@
 import { combineReducers } from 'redux'
-import login from './login'
-import regist from './regist'
-import pageStatus from './pageStatus'
-import guideDetail from './guideDetail'
-import search from './search'
-import userData from './userData'
-import pendingUser from './pendingUser'
-import pendingApproved from './pendingApproved'
-import calendar from './calendar'
-import getTours from './getTours'
-import guideProfile from './guideProfile'
-import getStaffLists from './getStaffLists'
-import logout from './logout'
-import updateStaff from './updateStaff'
-import addTourForm from './addTourForm'
-import postBookerAndTour from './postBookerAndTour'
-import getBookerAndTour from './getBookerAndTour'
-import getSpecificTour from './getSpecificTour'
-import getEventSummary from './getEventSummary'
-import deleteCurCustomerInTour from './deleteCurCustomerInTour'
-import spreadSelectedDate from './spreadSelectedDate'
-import deletedTour from './deletedTour'
-import addNewTour from './addNewTour'
-import tourAction from './tourAction'
-import addNewCustomerInTour from './addNewCustomerInTour'
-import selectTourID from './selectTourID'
-import getTourData from './getTourData'
+
+//user
+import login from './User/login'
+import regist from './User/regist'
+import userData from './User/userData'
+import pendingUser from './User/pendingUser'
+import pendingApproved from './User/pendingApproved'
+import logout from './User/logout'
+
+//guide
+import guideDetail from './Guide/guideDetail'
+import guideProfile from './Guide/guideProfile'
+import getEachGuideName from './Guide/getEachGuideName'
+import addGuideExpertField from './Guide/addGuideExpertField'
+import getSuggestGuide from './Guide/getSuggestGuide'
+import deleteEachGuideExpert from './Guide/deleteEachGuideExpert'
+
+//staff
+import getStaffLists from './Staff/getStaffLists'
+import updateStaff from './Staff/updateStaff'
+
+//Tours
+import getTours from './Tour/getTours'
+import addTourForm from './Tour/addTourForm'
+import postBookerAndTour from './Tour/postBookerAndTour'
+import getBookerAndTour from './Tour/getBookerAndTour'
+import getSpecificTour from './Tour/getSpecificTour'
+import deleteCurCustomerInTour from './Tour/deleteCurCustomerInTour'
+import deletedTour from './Tour/deletedTour'
+import addNewTour from './Tour/addNewTour'
+import tourAction from './Tour/tourAction'
+import addNewCustomerInTour from './Tour/addNewCustomerInTour'
+import selectTourID from './Tour/selectTourID'
+import getTourData from './Tour/getTourData'
+import editCustomerInTour from './Tour/editCustomerInTour'
+
+//schedule
+import calendar from './Schedule/calendar'
+import getEventSummary from './Schedule/getEventSummary'
+import spreadSelectedDate from './Schedule/spreadSelectedDate'
+import editCustomerModal from './Schedule/editCustomerModal'
+import addCustomerModal from './Schedule/addCustomerModal'
+
+//Agency
+import getAgency from './Agency/getAgency'
+import addAgency from './Agency/addAgency'
+import updateAgency from './Agency/updateAgency'
+import deleteAgency from './Agency/deleteAgency'
+
+
 
 const admin = combineReducers({
     login,
     regist,
-    pageStatus,
     guideDetail,
-    search,
     userData,
     pendingUser,
     pendingApproved,
@@ -54,7 +75,18 @@ const admin = combineReducers({
     tourAction,
     addNewCustomerInTour,
     selectTourID,
-    getTourData
+    getTourData,
+    getEachGuideName,
+    addGuideExpertField,
+    getSuggestGuide,
+    getAgency,
+    addAgency,
+    updateAgency,
+    deleteAgency,
+    editCustomerModal,
+    addCustomerModal,
+    editCustomerInTour,
+    deleteEachGuideExpert
 })
 
 export default admin

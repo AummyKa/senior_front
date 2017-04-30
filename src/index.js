@@ -13,10 +13,24 @@ import { LocaleProvider } from 'antd';
 import App from "./pages/App";
 import DashboardPage from "./pages/DashboardPage";
 import LoginPage from "./pages/LoginPage";
-import Guide from './components/content/Guide'
-import Tours from './components/content/Tours'
 import Schedule from './components/content/Schedule'
 import PendingList from './components/content/PendingList'
+import Staff from './components/content/Staff'
+
+//Guide
+import Guide from './components/content/Guide'
+import GuideLayout from './components/content/GuideLayout'
+import GuidePersonal from './components/content/GuidePersonal'
+import GuideHistory from './components/content/GuideHistory'
+import GuideTimetable from './components/content/GuideTimetable'
+import GuideExperience from './components/content/GuideExperience'
+
+//Tours
+import Tours from './components/content/Tours'
+import TourDetail from './components/content/TourDetail'
+
+//Agency
+import Agency from './components/content/Agency'
 
 
 const store = createStore(reducer);
@@ -35,15 +49,35 @@ ReactDOM.render(
     <LocaleProvider locale={enUS}>
         <Provider store={store}>
         <Router history={browserHistory}>
-            <Route component={App}>
-                <IndexRoute component={LoginPage}/>
-                <Route path="/" component={LoginPage}/>
-                <Route path="/home" component={DashboardPage}/>
-                <Route path="/guide" component={Guide}/>
-                <Route path="/tours" component={Tours}/>
+          <Route path="/" component={App}>
+            <IndexRoute component={LoginPage}/>
+            <Route path="/home" component={DashboardPage}>
+                {/*
+                  <Route path="/" component={LoginPage}/>
+                  <Route path="/home" component={DashboardPage}/>
+                */}
+
+              <Route path="/guide">
+                <IndexRoute  component={Guide}/>
+                <Route path=":guideId"component={GuideLayout}> //tab
+                  <IndexRoute component={GuidePersonal} />
+                  <Route path="experience" component={GuideExperience} />
+                  <Route path="history" component={GuideHistory} />
+                  <Route path="timetable" component={GuideTimetable} />
+                </Route>
+              </Route>
+
+                <Route path="/tours" >
+                  <IndexRoute component={Tours}/>
+                  <Route path=":tourId"component={TourDetail} />
+                </Route>
+
                 <Route path="/schedule" component={Schedule}/>
                 <Route path="/pending" component={PendingList}/>
-            </Route>
+                <Route path="/staff" component={Staff}/>
+                <Route path="/agency" component={Agency}/>
+              </Route>
+          </Route>
         </Router>
     </Provider>
 </LocaleProvider>

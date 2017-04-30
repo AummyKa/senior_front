@@ -14,7 +14,7 @@ const regist = (state = INITIAL_STATE, action) => {
     case 'REGIST_SUCCESS':
     console.log(action.json)
       let register_s = action.json.register_success
-      let dup = action.json.duplicated
+      let dup = action.json.duplicate
 
     if(register_s && !dup){
       return {
@@ -30,8 +30,18 @@ const regist = (state = INITIAL_STATE, action) => {
     }
 
     case 'REGIST_FAILURE':
-      return {
+    console.log("fail")
+    let duplicate = action.json.duplicate
 
+    if(duplicate){
+      return {
+        registed: false,
+        duplicated: true
+      }
+    }
+
+      return {
+        registed: false
       }
 
     default:

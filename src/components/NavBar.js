@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import {changePage} from '../actions/action-changePage'
 import apiAccess from '../Helpers/apiAccess'
 import { connect } from 'react-redux'
+import { Link } from 'react-router'
+
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -36,11 +38,7 @@ class NavBar extends Component {
         failureAction: () => this.props.dispatch({ type: 'LOGOUT_FAILED' })
       })
     }else{
-      console.log('click ', e.key);
-        this.props.dispatch(changePage(e.key))
-      this.setState({
-        current: e.key,
-      });
+
     }
   }
 
@@ -61,15 +59,13 @@ class NavBar extends Component {
           selectedKeys={[this.state.current]}
           mode="horizontal">
 
-          <Menu.Item key="Mail">
-            <Icon type="mail" />Mail
-          </Menu.Item>
           <Menu.Item key="PendingList">
-            <Icon type="user" />Pending List
+            <Link to ={`/pending`}>Pending List</Link>
           </Menu.Item>
           <Menu.Item key="Logout">
             <Icon type="loggedIn" /> Log out
           </Menu.Item>
+
 
       </Menu>
       </div>

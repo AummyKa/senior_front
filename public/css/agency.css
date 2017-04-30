@@ -1,0 +1,13 @@
+.btn-add-agency-form{
+  position: fixed;
+  bottom: 20px;
+  right: 5%;
+  width: 70px;
+  padding: 10px;
+  border-radius: 50px;
+  height: 70px;
+  color: white;
+  background-color: #EC643C;
+  font-size: 30px;
+  vertical-align: middle;
+}

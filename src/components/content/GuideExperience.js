@@ -1,63 +1,21 @@
 import React, { Component } from 'react';
-import { Row,Col,Radio,Button,Input, DatePicker, Table, Icon } from 'antd';
-
+import { Row,Col,Radio,Button,Input, DatePicker, Table, Icon, Popconfirm } from 'antd';
 // import StarRating from 'react-star-rating';
 import {connect} from 'react-redux';
 import moment from 'moment';
+import Cookies from 'js-cookie'
+
+import { Modal } from 'react-bootstrap';
+
 import StarRatingComponent from 'react-star-rating-component';
 
-//import apiAccess from '../../Helpers/apiAccess'
+import apiAccess from '../../Helpers/apiAccess'
+import AddGuideTourRatingModal from '../AddGuideTourRatingModal'
 
 const { MonthPicker, RangePicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
 
 
-
-const data = [{
-  key: '1',
-  date: '2016-02-04',
-  start: '20:30',
-  end: '23:30',
-  hours: '3',
-  type: 'Public',
-  tourname: 'Eat at night',
-  tourist: '12/12'
-}, {
-  key: '2',
-  date: '2016-02-04',
-  start: '20:30',
-  end: '23:30',
-  hours: '3',
-  type: 'Private',
-  tourname: 'Eat at night',
-  tourist: '12/12'
-}, {
-  key: '3',
-  date: '2016-02-04',
-  start: '20:30',
-  end: '23:30',
-  hours: '3',
-  type: 'Public',
-  tourname: 'Eat at night',
-  tourist: '12/12'
-}];
-
-const expertData = [{
-  key: '1',
-  tourname: "Offbeat Floating Markets Food Tour",
-  numberOfTours: 3,
-  rating:4
-}, {
-  key: '2',
-  tourname: "Historic Bangrak Food Tasting and Culture Tour",
-  numberOfTours: 5,
-  rating: 3
-}, {
-  key: '3',
-  tourname: "Eating Adventure at Chatuchak Market",
-  numberOfTours: 11,
-  rating: 5
-}];
 
 class GuideExperience extends Component {
 
@@ -69,11 +27,79 @@ class GuideExperience extends Component {
       endMonthInput:"2000-03",
       amount_of_workTours: "200",
       filterDropdownVisible: false,
-      data,
       searchText: '',
       filtered: false,
-      searchInput: ""
+      searchInput: "",
+      guideProfile: [],
+      guideRatingData: [],
+      favEditable: false,
+      favSelected: 0,
+      showAddRatingModal: false
     }
+  }
+
+  componentWillMount(){
+    this.eachGuide(Cookies.get('guide_id'))
+  }
+
+  componentWillReceiveProps(nextProps){
+    console.log(this.state.favEditable)
+    if(this.props.curGuideProfile !== nextProps.curGuideProfile){
+      if(nextProps.curGuideProfile){
+        console.log(nextProps.curGuideProfile)
+        this.setState({guideProfile: nextProps.curGuideProfile})
+        // this.setState({guideRatingData: this.createGuideRatingData(nextProps.curGuideProfile)})
+      }
+    }
+    if(this.props.updateStaffStatus !== nextProps.updateStaffStatus){
+      if(nextProps.updateStaffStatus){
+        this.eachGuide(Cookies.get('guide_id'))
+      }
+    }
+    console.log(nextProps.addGuideExpertStatus)
+    if(this.props.addGuideExpertStatus !== nextProps.addGuideExpertStatus){
+      if(nextProps.addGuideExpertStatus){
+        this.setState({showAddRatingModal: false})
+        this.eachGuide(Cookies.get('guide_id'))
+      }
+    }
+
+    if(this.props.deleteEachGuideExpertStatus !== nextProps.deleteEachGuideExpertStatus){
+      if(nextProps.deleteEachGuideExpertStatus){
+        this.eachGuide(Cookies.get('guide_id'))
+      }
+    }
+
+  }
+
+  eachGuide(id){
+      apiAccess({
+       url: 'http://localhost:8000/staffs/'+id,
+       method: 'GET',
+       payload: null,
+       attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_ATTEMPT' }),
+       successAction: (json) => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_SUCCESS', json }),
+       failureAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_FAILED' })
+     })
+  }
+
+
+  createGuideRatingData(arrayJSON){
+    let resultJSON = []
+
+    if(arrayJSON!=null){
+      for(var i = 0; i < arrayJSON.length; i++) {
+
+        var objectJSON = {
+          key: i,
+          tour: arrayJSON[i].tour,
+          rate: arrayJSON[i].rate
+        }
+
+        resultJSON[i] = objectJSON
+    }
+  }
+    return resultJSON
   }
 
   startDateInput(date,dateString){
@@ -92,7 +118,7 @@ class GuideExperience extends Component {
     this.setState({
       sortedInfo: {
         order: 'descend',
-        columnKey: 'rating',
+        columnKey: 'rate',
       },
     });
   }
@@ -114,8 +140,8 @@ class GuideExperience extends Component {
     this.setState({
       filterDropdownVisible: false,
       filtered: !!searchText,
-      data: expertData.map((record) => {
-        const match = record.tourname.match(reg);
+      data: this.state.guideRatingData.map((record) => {
+        const match = record.tour.match(reg);
         if (!match) {
           return null;
         }
@@ -123,7 +149,7 @@ class GuideExperience extends Component {
           ...record,
           name: (
             <span>
-              {record.tourname.split(reg).map((text, i) => (
+              {record.tour.split(reg).map((text, i) => (
                 i > 0 ? [<span className="highlight">{match[0]}</span>, text] : text
               ))}
             </span>
@@ -133,6 +159,63 @@ class GuideExperience extends Component {
     });
   }
 
+  countingFavStar(nextValue, prevValue, name){
+    this.setState({favSelected:nextValue})
+  }
+
+  editfavorable(){
+    this.setState({favEditable:true})
+  }
+
+  savefavorable(){
+    this.setState({favEditable:false})
+
+    let id = Cookies.get('guide_id')
+    let favSelected = this.state.favSelected
+
+
+    let payload = {
+      favorable: favSelected
+    }
+
+    apiAccess({
+      url: 'http://localhost:8000/staffs/update-favorable/'+id,
+      method: 'POST',
+      payload: payload,
+      attemptAction: () => this.props.dispatch({ type: 'UPDATE_STAFF_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'UPDATE_STAFF_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'UPDATE_STAFF_FAILED' })
+    })
+
+  }
+
+  addTourRating(){
+    this.setState({showAddRatingModal:true})
+  }
+
+  editRating(record){
+    console.log(record)
+  }
+
+  deleteEachExpert(record){
+    let tour = record.tour
+    let rate = record.rate
+    let id = Cookies.get('guide_id')
+
+    let payload = {
+      tour: tour,
+      rate: rate
+    }
+
+    apiAccess({
+      url: 'http://localhost:8000/staffs/remove-expert/'+ id,
+      method: 'POST',
+      payload: payload,
+      attemptAction: () => this.props.dispatch({ type: 'DELETE_EACH_GUID_EXPERT_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'DELETE_EACH_GUID_EXPERT_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'DELETE_EACH_GUID_EXPERT_FAILED' })
+    })
+  }
 
   render() {
 
@@ -141,49 +224,56 @@ class GuideExperience extends Component {
   filteredInfo = filteredInfo || {};
 
   const expertColumns = [{
-      title: 'Tourname',
-      dataIndex: 'tourname',
-      key: 'tourname',
-      width: 350,
-      filterDropdown: (
-        <div className="custom-filter-dropdown">
-          <Input.Search
-            ref={ele => this.searchInput = ele}
-            placeholder="Search name"
-            value={this.state.searchText}
-            onChange={this.onInputChange}
-            onPressEnter={this.onSearch}
-          />
-          <Button type="primary" onClick={this.onSearch}>Search</Button>
-        </div>
-      ),
-      filterIcon: <Icon type="search" style={{ color: this.state.filtered ? '#108ee9' : '#aaa' }} />,
-      filterDropdownVisible: this.state.filterDropdownVisible,
-      onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible })
+      title: 'Tour name',
+      dataIndex: 'tour',
+      key: 'tour',
+      width: 300
+      // filterDropdown: (
+      //   <div className="custom-filter-dropdown">
+      //     <Input.Search
+      //       ref={ele => this.searchInput = ele}
+      //       placeholder="Search name"
+      //       value={this.state.searchText}
+      //       onChange={this.onInputChange}
+      //       onPressEnter={this.onSearch}
+      //     />
+      //     <Button type="primary" onClick={this.onSearch}>Search</Button>
+      //   </div>
+      // ),
+      // filterIcon: <Icon type="search" style={{ color: this.state.filtered ? '#108ee9' : '#aaa' }} />,
+      // filterDropdownVisible: this.state.filterDropdownVisible,
+      // onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible })
     },
     {
-      title: 'Number of tours',
-      dataIndex: 'numberOfTours',
-      key: 'numberOfTours',
-      width: 70
-      },
-    {
-      title: 'Rating', dataIndex: 'rating', key: 'x', width: 300,
-      sorter: (a, b) => a.rating - b.rating,
-      sortOrder: sortedInfo.columnKey === 'rating' && sortedInfo.order,
+      title: 'Rating', dataIndex: 'rate', key: 'key', width: 200,
+      sorter: (a, b) => a.rate - b.rate,
+      sortOrder: sortedInfo.columnKey === 'rate' && sortedInfo.order,
       render: (text, record) =>
       <span>
         <StarRatingComponent
-          name="rating"
+          name="rate"
           starCount={5}
-          value={record.rating}
+          value={record.rate}
           editing={false}
           starColor= "#FDDC02"
           emptyStarColor= "#000000"
           renderStarIcon={() => <span><Icon type="star" /></span>}
         />
       </span>
-      }]
+    },
+    { title: 'Action', dataIndex: '', key: 'x', width: 180,
+      render: (text, record) =>
+      <span>
+        <Button type="primary" onClick = {() => this.editRating(record)}>Edit Rating</Button>
+        <span className="ant-divider" />
+          <Popconfirm title="Are you sure？" okText="Yes" cancelText="No"
+            onConfirm = {() =>  this.deleteEachExpert(record)}>
+              <Button type="danger">Delete</Button>
+          </Popconfirm>
+      </span>
+
+    }]
+
 
     const columns = [
     {
@@ -221,16 +311,38 @@ class GuideExperience extends Component {
     {
       title: 'Tourists',
       dataIndex: 'tourist'
-    }
-    ];
+    }];
+
+    let closeRatingModal = () => {this.setState({showAddRatingModal: false})}
 
     return (
+
+      <div>
+
+      <div className="modal-container" >
+          <Modal
+            show={this.state.showAddRatingModal}
+            onHide={closeRatingModal}
+            container={this}
+            aria-labelledby="contained-modal-title"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title">Add Rating</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <AddGuideTourRatingModal dispatch = {this.props.dispatch} />
+            </Modal.Body>
+
+          </Modal>
+        </div>
+
       <div className = "guide-content" >
         <Row>
            <Col span={12}>
            <ul>
             <li>StartDate</li><br/>
             <li>Amount of working tours</li><br/>
+            <li>favorable point</li><br/>
 
           </ul>
            </Col>
@@ -239,6 +351,22 @@ class GuideExperience extends Component {
              <ul>
               <li>{this.state.startdate}</li><br/>
               <li>{this.state.amount_of_workTours}  tours</li><br/>
+              <li><span>
+                <StarRatingComponent
+                  name="favorable"
+                  starCount={5}
+                  onStarClick = {this.countingFavStar.bind(this)}
+                  value={this.state.guideProfile.favorable}
+                  editing={this.state.favEditable}
+                  starColor= "#FDDC02"
+                  emptyStarColor= "#000000"
+                  renderStarIcon={() => <span><Icon type="star" /></span>}
+                />
+              { this.state.favEditable ?
+                <Button style = {{marginLeft: 50}} onClick = {()=> this.savefavorable() }>Save!</Button>
+              : <Button style = {{marginLeft: 50}} onClick = {()=> this.editfavorable() }>Edit !</Button>
+              }
+              </span></li><br/>
             </ul>
            </Col>
         </Row>
@@ -248,29 +376,25 @@ class GuideExperience extends Component {
           <div className="table-operations" style = {{marginButtom: 10}}>
             <Button onClick={this.sortRateUp}>Rating Max to Min</Button>
             <Button onClick={this.clearSort}>Clear all sorting</Button>
+            <Button style = {{ left: "48.5%" }} type="primary" onClick={this.addTourRating.bind(this)}>Add more Rating</Button>
           </div>
-          <Table columns={expertColumns} dataSource={expertData}  size="middle" />
+          <Table columns={expertColumns} dataSource={this.createGuideRatingData(this.state.guideProfile.expert)}  size="middle" />
         </div>
 
-        <div className = "guide-tourlist">
-            <h4>List of responsible tour Start {<MonthPicker style={{ width: 80 }} size={"default"}
-            defaultValue ={moment(this.state.startMonthInput, monthFormat)} onChange={this.startDateInput.bind(this)} />}
-            End {<MonthPicker style={{ width: 80 }} size={"default"}
-            defaultValue ={moment(this.state.endMonthInput, monthFormat)} onChange={this.endDateInput.bind(this)}/>}
-            </h4>
-           <Table columns={columns} dataSource={data} size="middle" />
-        </div>
-
+      </div>
       </div>
     );
   }
 }
 
-function mapStateToProps(state) {
-
-    return {
-
-      }
+function mapStateToProps(state){
+  return {
+      deleteEachGuideExpertStatus: state.deleteEachGuideExpert.deleteEachGuideExpertStatus,
+      guide_id: state.guideProfile.guide_id,
+      curGuideProfile: state.guideProfile.curGuideProfile,
+      updateStaffStatus: state.updateStaff.updateStaffStatus,
+      addGuideExpertStatus: state.addGuideExpertField.addGuideExpertStatus
+  }
 }
 
 

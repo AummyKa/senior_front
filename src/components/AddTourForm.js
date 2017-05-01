@@ -234,6 +234,7 @@ const AddTourForm = Form.create()(React.createClass({
 
   handleGuideSelect(value,option){
     this.setState({ selectedGuideName: this.state.guide_name[value].name});
+    // this.setState({ selectedGuideID: this.state.guide_name[value]._id})
   },
 
   handleAgencySelect(value,option){

@@ -31,10 +31,13 @@ class GuideExperience extends Component {
       filtered: false,
       searchInput: "",
       guideProfile: [],
+      guideProfileExpert: [],
       guideRatingData: [],
       favEditable: false,
       favSelected: 0,
-      showAddRatingModal: false
+      showAddRatingModal: false,
+      newExpertRating: 0,
+      starFavColor:"#FDDC02"
     }
   }
 
@@ -48,12 +51,14 @@ class GuideExperience extends Component {
       if(nextProps.curGuideProfile){
         console.log(nextProps.curGuideProfile)
         this.setState({guideProfile: nextProps.curGuideProfile})
+        this.setState({guideProfileExpert: this.createGuideRatingData(nextProps.curGuideProfile.expert)})
         // this.setState({guideRatingData: this.createGuideRatingData(nextProps.curGuideProfile)})
       }
     }
     if(this.props.updateStaffStatus !== nextProps.updateStaffStatus){
       if(nextProps.updateStaffStatus){
         this.eachGuide(Cookies.get('guide_id'))
+        this.setState({starFavColor:"#FDDC02"})
       }
     }
     console.log(nextProps.addGuideExpertStatus)
@@ -66,6 +71,12 @@ class GuideExperience extends Component {
 
     if(this.props.deleteEachGuideExpertStatus !== nextProps.deleteEachGuideExpertStatus){
       if(nextProps.deleteEachGuideExpertStatus){
+        this.eachGuide(Cookies.get('guide_id'))
+      }
+    }
+
+    if(this.props.updateEachGuideExpertStatus !== nextProps.updateEachGuideExpertStatus){
+      if(nextProps.updateEachGuideExpertStatus){
         this.eachGuide(Cookies.get('guide_id'))
       }
     }
@@ -93,12 +104,15 @@ class GuideExperience extends Component {
         var objectJSON = {
           key: i,
           tour: arrayJSON[i].tour,
-          rate: arrayJSON[i].rate
+          rate: arrayJSON[i].rate,
+          editable: false,
+          starColor:"#FDDC02"
         }
 
         resultJSON[i] = objectJSON
     }
   }
+    console.log(resultJSON)
     return resultJSON
   }
 
@@ -165,10 +179,12 @@ class GuideExperience extends Component {
 
   editfavorable(){
     this.setState({favEditable:true})
+    this.setState({starFavColor:"#F92525"})
   }
 
   savefavorable(){
     this.setState({favEditable:false})
+
 
     let id = Cookies.get('guide_id')
     let favSelected = this.state.favSelected
@@ -193,8 +209,42 @@ class GuideExperience extends Component {
     this.setState({showAddRatingModal:true})
   }
 
-  editRating(record){
+  handleExpertChange(nextValue, prevValue, name){
+    if(nextValue){
+      console.log(nextValue)
+      this.setState({newExpertRating:nextValue})
+    }
+  }
+
+  editRating(record,index){
     console.log(record)
+    console.log(record.key)
+    const dataSource = [...this.state.guideProfileExpert];
+    console.log(dataSource)
+    dataSource[record.key].starColor = "#F92525"
+    dataSource[record.key].editable = true
+
+    this.setState({guideProfileExpert: dataSource})
+  }
+
+  updateRating(record,index){
+    let id = Cookies.get('guide_id')
+    console.log(this.state.newExpertRating)
+    let newRating = this.state.newExpertRating
+
+    let payload = {
+          tour: record.tour,
+          rate: newRating
+        }
+
+    apiAccess({
+      url: 'http://localhost:8000/staffs/update-expert/'+id,
+      method: 'POST',
+      payload: payload,
+      attemptAction: () => this.props.dispatch({ type: 'UPDATE_EXPERT_EACH_GUIDE_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'UPDATE_EXPERT_EACH_GUIDE_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'UPDATE_EXPERT_EACH_GUIDE_FAILED' })
+    })
   }
 
   deleteEachExpert(record){
@@ -202,10 +252,10 @@ class GuideExperience extends Component {
     let rate = record.rate
     let id = Cookies.get('guide_id')
 
-    let payload = {
+    let payload = [{
       tour: tour,
       rate: rate
-    }
+    }]
 
     apiAccess({
       url: 'http://localhost:8000/staffs/remove-expert/'+ id,
@@ -251,20 +301,24 @@ class GuideExperience extends Component {
       render: (text, record) =>
       <span>
         <StarRatingComponent
-          name="rate"
+          name= "rating"
           starCount={5}
           value={record.rate}
-          editing={false}
-          starColor= "#FDDC02"
+          onStarClick= {this.handleExpertChange.bind(this)}
+          editing={record.editable}
+          starColor= {record.starColor}
           emptyStarColor= "#000000"
           renderStarIcon={() => <span><Icon type="star" /></span>}
         />
       </span>
     },
     { title: 'Action', dataIndex: '', key: 'x', width: 180,
-      render: (text, record) =>
+      render: (record,index) =>
       <span>
-        <Button type="primary" onClick = {() => this.editRating(record)}>Edit Rating</Button>
+        { record.editable ?
+          <Button type="primary" onClick = {() => this.updateRating(record,index)}>Save Rating</Button>
+        : <Button type="primary" onClick = {() => this.editRating(record,index)}>Edit Rating</Button>
+        }
         <span className="ant-divider" />
           <Popconfirm title="Are you sure？" okText="Yes" cancelText="No"
             onConfirm = {() =>  this.deleteEachExpert(record)}>
@@ -274,44 +328,6 @@ class GuideExperience extends Component {
 
     }]
 
-
-    const columns = [
-    {
-      title: 'Date',
-      dataIndex: 'date'
-    },
-    {
-      title: 'Start',
-      dataIndex: 'start'
-    }, {
-      title: 'End',
-      dataIndex: 'end',
-    }, {
-      title: 'Total Hours',
-      dataIndex: 'hours',
-    },
-     {
-      title: 'Type',
-      dataIndex: 'type',
-      filters: [
-        { text: 'Public', value: 'Public' },
-        { text: 'Private', value: 'Private' }
-      ],
-      filteredValue: filteredInfo.type|| null,
-      onFilter: (value, record) => record.type.includes(value)
-    }, {
-        title: 'Tour name',
-        dataIndex: 'tourname',
-        key: 'tourname',
-        filteredValue: filteredInfo.tourname|| null,
-        onFilter: (value, record) => record.tourname.includes(value),
-        sorter: (a, b) => a.tourname.length - b.tourname.length,
-        sortOrder: sortedInfo.columnKey === 'tourname' && sortedInfo.order,
-      },
-    {
-      title: 'Tourists',
-      dataIndex: 'tourist'
-    }];
 
     let closeRatingModal = () => {this.setState({showAddRatingModal: false})}
 
@@ -358,7 +374,7 @@ class GuideExperience extends Component {
                   onStarClick = {this.countingFavStar.bind(this)}
                   value={this.state.guideProfile.favorable}
                   editing={this.state.favEditable}
-                  starColor= "#FDDC02"
+                  starColor= {this.state.starFavColor}
                   emptyStarColor= "#000000"
                   renderStarIcon={() => <span><Icon type="star" /></span>}
                 />
@@ -378,7 +394,7 @@ class GuideExperience extends Component {
             <Button onClick={this.clearSort}>Clear all sorting</Button>
             <Button style = {{ left: "48.5%" }} type="primary" onClick={this.addTourRating.bind(this)}>Add more Rating</Button>
           </div>
-          <Table columns={expertColumns} dataSource={this.createGuideRatingData(this.state.guideProfile.expert)}  size="middle" />
+          <Table columns={expertColumns} dataSource={this.state.guideProfileExpert}  size="middle" />
         </div>
 
       </div>
@@ -393,7 +409,8 @@ function mapStateToProps(state){
       guide_id: state.guideProfile.guide_id,
       curGuideProfile: state.guideProfile.curGuideProfile,
       updateStaffStatus: state.updateStaff.updateStaffStatus,
-      addGuideExpertStatus: state.addGuideExpertField.addGuideExpertStatus
+      addGuideExpertStatus: state.addGuideExpertField.addGuideExpertStatus,
+      updateEachGuideExpertStatus: state.updateEachGuideExpert.updateEachGuideExpertStatus
   }
 }
 

@@ -1,0 +1,132 @@
+.total-revenue, .each-tour-total-revenue, .popular-nation{
+  background-color: #F0EAE6;
+  font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}
+
+.total-revenue{
+  width: 650px;
+  height: 520px;
+}
+
+.table-month-rev-summary{
+  margin-top: 10px;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.total-revenue-label, .each-tour-total-revenue-label, .popular-nation-label{
+    background-color: #FAE9DD;
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    height: 50px;
+    padding: 5px;
+    margin-top: 20px;
+    color: #494848;
+}
+
+.total-revenue-label{
+  width: 650px;
+  margin-bottom: 30px;
+}
+
+.each-tour-total-revenue{
+  width: 300px;
+  height: 350px;
+  margin-left: 60px;
+}
+
+.each-tour-total-revenue-label{
+  width: 300px;
+  margin-bottom: 30px;
+}
+
+.popular-nation{
+  width: 300px;
+  height: 450px;
+  margin-left: 60px;
+  margin-top: 20px;
+}
+
+.popular-nation-label{
+  width: 300px;
+  margin-bottom: 10px;
+}
+
+.popular-color-label{
+  background-color: #FFF8F8;
+  padding: 5px;
+}
+
+.little-box-label{
+  width: 10px;
+  height: 10px;
+}
+
+.piechart-container{
+  -webkit-box-sizing: border-box;
+ -moz-box-sizing: border-box;
+ box-sizing: border-box;
+ padding: 10px;
+ width: 300px;
+ height: 300px;
+
+}
+
+.fav-nation{
+  background-color: #F4F1EE;
+  width: 300px;
+  height: 400px;
+  margin-top: 20px;
+}
+
+.guide-rev{
+  background-color: #F4F1EE;
+  width: 300px;
+  height: 400px;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.guide-rev-graph{
+  background-color: #F4F1EE;
+  width: 300px;
+  height: 400px;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+
+.gutter-example .ant-row > div {
+  background: transparent;
+  border: 0;
+}
+
+.total-customer, .unassigned-guide, .public-tour, .private-tour{
+  height: 90px;
+  width: 230px;
+  padding: 10px 10px;
+  text-align: center;
+  color: #FBAF9F;
+}
+
+.text-box{
+  font-size: 30px;
+  margin: 0;
+}
+
+.total-customer {
+  background: #900C3F;
+}
+
+.unassigned-guide {
+  background: #C70039;
+}
+
+.public-tour {
+  background: #FF5733;
+}
+
+.private-tour {
+  background: #D65D09;
+}

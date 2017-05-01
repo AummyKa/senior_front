@@ -15,6 +15,7 @@ import getEachGuideName from './Guide/getEachGuideName'
 import addGuideExpertField from './Guide/addGuideExpertField'
 import getSuggestGuide from './Guide/getSuggestGuide'
 import deleteEachGuideExpert from './Guide/deleteEachGuideExpert'
+import updateEachGuideExpert from './Guide/updateEachGuideExpert'
 
 //staff
 import getStaffLists from './Staff/getStaffLists'
@@ -86,7 +87,8 @@ const admin = combineReducers({
     editCustomerModal,
     addCustomerModal,
     editCustomerInTour,
-    deleteEachGuideExpert
+    deleteEachGuideExpert,
+    updateEachGuideExpert
 })
 
 export default admin

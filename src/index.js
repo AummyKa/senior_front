@@ -32,6 +32,7 @@ import TourDetail from './components/content/TourDetail'
 //Agency
 import Agency from './components/content/Agency'
 
+import Home from './components/content/Home'
 
 const store = createStore(reducer);
 
@@ -52,6 +53,7 @@ ReactDOM.render(
           <Route path="/" component={App}>
             <IndexRoute component={LoginPage}/>
             <Route path="/home" component={DashboardPage}>
+              <IndexRoute component= {Home}/>
                 {/*
                   <Route path="/" component={LoginPage}/>
                   <Route path="/home" component={DashboardPage}/>

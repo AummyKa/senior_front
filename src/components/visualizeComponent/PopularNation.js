@@ -22,6 +22,36 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
   );
 }
 
+const columns = [{
+  title: 'Nation',
+  dataIndex: 'nation',
+}, {
+  title: 'Amount',
+  dataIndex: 'amount',
+}]
+
+const data5 = [{
+  key: '1',
+  nation: 'USA',
+  amount: 2560
+}, {
+  key: '2',
+  nation: 'English',
+  amount: 2220
+}, {
+  key: '3',
+  nation: 'Chinese',
+  amount: 1340
+},{
+  key: '4',
+  nation: 'Protugese',
+  amount: 1230
+},{
+  key: '5',
+  nation: 'Russian',
+  amount: 1008
+}];
+
 class PopularNation extends Component {
 
   constructor(props){
@@ -66,7 +96,9 @@ class PopularNation extends Component {
                   </Row>
                 </div>
 
-                
+                <div className = "pop-nation-table">
+                  <Table columns={columns} dataSource={data5} size="small" pagination={false} />
+                </div>
 
             </div>
 

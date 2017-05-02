@@ -32,6 +32,7 @@
   margin-left: 30px;
   margin-right: 30px;
   height: 30%;
+  width: 950px;
 
 }
 
@@ -42,6 +43,63 @@
   padding-bottom: 30px;
   font-size: 18px;
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+}
+
+
+.guide-calendar{
+  background-color: #E9E8E8;
+  border-radius: 10px;
+  height: 420px;
+  font-family: "Helvetica Neue",Helvetica;
+  margin-bottom: -50px;
+}
+
+
+.edit-calendar{
+  background-color: #E9E8E8;
+  border-radius: 10px;
+  font-family: "Helvetica Neue",Helvetica;
+  margin-left: 10px;
+  height: 420px;
+}
+
+.selectedDay, .unavail-time, .combo-button, .submit-avail-btn{
+  padding:10px;
+  text-align: center;
+}
+
+.unavail-time{
+  width: 80%;
+  height: 110px;
+  background-color: #F7F5F3;
+  border-radius: 10px;
+  margin-left: 28px;
+}
+
+.Morning-btn, .Afternoon-btn, .Evening-btn, .Fullday-btn{
+  width: 100px;
+  height: 60px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  color: #ffffff;
+  top: 50%;
+  align-items: center; /* align vertical */
+}
+
+.Morning-btn{
+  background-color: #FFC300;
+}
+
+.Afternoon-btn{
+  background-color: #FF5733;
+}
+
+.Evening-btn{
+  background-color: #3B9DF9;
+}
+
+.Fullday-btn{
+  background-color: #581845;
 }
 
 .edit-guide-profile{

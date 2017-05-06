@@ -80,6 +80,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
             _id: this.state.eachCustomer._id,
             agency: this.state.selectedAgency,
             email: this.props.form.getFieldValue(`email`),
+            phone: this.props.form.getFieldValue(`phone`),
             name: this.props.form.getFieldValue(`name`),
             country: this.props.form.getFieldValue(`country`),
             pickup_time: this.props.form.getFieldValue(`pickup_time`).format('HH:mm'),
@@ -252,21 +253,35 @@ const EditCurCustomerModal = Form.create()(React.createClass({
 
              <FormItem
                {...formItemLayout}
+               label={'Phone : '}
+               required={false}
+             >
+               {getFieldDecorator(`phone`, {
+                 validateTrigger: ['onChange', 'onBlur'],
+
+               })(
+                 <Input placeholder="phone"  style={{ width: '80%', marginRight: 11 }} />
+               )}
+
+             </FormItem>
+
+           </Col>
+
+           <Col span={14} offset = {1}>
+
+             <FormItem
+               {...formItemLayout}
                label={'Price : '}
                required={false}
              >
                {getFieldDecorator(`price`, {
-                 initialValue: this.state.eachCustomer.price,
                  validateTrigger: ['onChange', 'onBlur'],
 
                })(
-                 <Input placeholder="price"  style={{ width: '80%', marginRight: 11 }} />
+                 <InputNumber min={0} max={100000} placeholder="price"  style={{ width: '30%', marginRight: 11 }} />
                )}
 
              </FormItem>
-           </Col>
-
-           <Col span={14} offset = {1}>
 
              <FormItem
                {...formItemLayout}

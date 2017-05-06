@@ -20,6 +20,8 @@ import {addCustomerModal} from '../../actions/action-addCustomerModal'
 import{ Row,Col } from 'antd'
 import { Modal , Button, ButtonToolbar } from 'react-bootstrap';
 
+import Cookies from 'js-cookie'
+
 require('react-big-calendar/lib/css/react-big-calendar.css');
 
 BigCalendar.momentLocalizer(moment);
@@ -65,18 +67,26 @@ class Schedule extends Component {
   }
 
   eventStyleGetter(event, start, end, isSelected) {
-    var backgroundColor = '#' + event.hexColor;
-    var style = {
+
+  let backgroundColor = event.hexColor
+  let title = event.title
+
+  if(title.match('Public')){
+    backgroundColor = '#' + '27c518';
+  }else if(title.match('Private')){
+    backgroundColor = '#' + 'fe4f1b';
+  }
+    let style = {
         backgroundColor: backgroundColor,
-        borderRadius: '25px',
+        borderRadius: '0px',
         opacity: 0.8,
         color: 'white',
         border: '0px',
         display: 'block'
-    }
+    };
     return {
         style: style
-    }
+    };
 }
 
 
@@ -98,6 +108,7 @@ class Schedule extends Component {
       if(nextProps.eachTour){
           this.setState({selectedTourName: nextProps.eachTour.tour_name})
           this.setState({curTourID: nextProps.eachTour._id})
+          Cookies.set('cur_tour_id',nextProps.eachTour._id)
       }
     }
     if(nextProps.events){

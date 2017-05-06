@@ -10,7 +10,8 @@ const normal = {
 
 const hover = {
   backgroundColor: '#B0AAA8',
-  opacity: 1
+  opacity: 1,
+  height: '100%'
 }
 
 class Box extends Component {
@@ -39,6 +40,7 @@ class Box extends Component {
 
   handleClickBox(content){
     console.log(content)
+    Cookies.set('tour_id',content._id)
     this.context.router.push('/tours/'+ content._id);
   }
 
@@ -47,7 +49,6 @@ class Box extends Component {
   }
 
   render() {
-    console.log(this.state.content._id)
     let inner = normal
     if(this.state.hover){
       inner = hover

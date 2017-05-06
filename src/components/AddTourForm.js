@@ -197,6 +197,7 @@ const AddTourForm = Form.create()(React.createClass({
             var customer = {
                 agency: this.state.selectedAgency,
                 email: this.props.form.getFieldValue(`email-${i}`),
+                phone: this.props.form.getFieldValue(`phone-${i}`),
                 name: this.props.form.getFieldValue(`name-${i}`),
                 country: this.props.form.getFieldValue(`country-${i}`),
                 pickup_time: this.props.form.getFieldValue(`pickup_time-${i}`).format('HH:mm'),
@@ -410,14 +411,13 @@ const AddTourForm = Form.create()(React.createClass({
 
          <FormItem
            {...formItemLayout}
-           label={'Price : '}
+           label={'Phone : '}
            required={false}
          >
-           {getFieldDecorator(`price-${k}`, {
-             validateTrigger: ['onChange', 'onBlur'],
-
-           })(
-             <Input placeholder="price"  style={{ width: '80%', marginRight: 11 }} />
+           {getFieldDecorator(`phone-${k}`, {
+             validateTrigger: ['onChange', 'onBlur']
+           },{ validator: this.checkTel})(
+             <Input placeholder="phone"  style={{ width: '80%', marginRight: 11 }} />
            )}
 
          </FormItem>
@@ -425,6 +425,20 @@ const AddTourForm = Form.create()(React.createClass({
 
        </Col>
          <Col span={14} offset = {1}>
+
+           <FormItem
+             {...formItemLayout}
+             label={'Price : '}
+             required={false}
+           >
+             {getFieldDecorator(`price-${k}`, {
+               validateTrigger: ['onChange', 'onBlur'],
+
+             })(
+               <InputNumber min={0} max={100000} placeholder="price"  style={{ width: '30%', marginRight: 11 }} />
+             )}
+
+           </FormItem>
 
            <FormItem
              {...formItemLayout}

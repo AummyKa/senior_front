@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import createFragment from 'react-addons-create-fragment';
+
 import {connect} from 'react-redux';
 
 import { Table, InputNumber, Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, TimePicker } from 'antd';
@@ -12,7 +14,7 @@ import {addCustomerModal} from '../actions/action-addCustomerModal'
 
 import {Modal } from 'react-bootstrap';
 
-
+import Cookies from 'js-cookie'
 
 import CustomerInput from './CustomerInput'
 
@@ -36,12 +38,12 @@ String.prototype.capitalize = function() {
 }
 
 
-function getGuideName(gList,resultJSON){
+function getGuideName(list,resultJSON){
 
-  if ("undefined" !== typeof gList) {
-    for(var i = 0; i < gList.length; i++) {
+  if (list) {
+    for(var i = 0; i < list.length; i++) {
       var objectJSON = {
-        name: gList[i].name
+        name: list[i].fullname
       }
       resultJSON[i] = objectJSON
     }
@@ -49,9 +51,13 @@ function getGuideName(gList,resultJSON){
 }
 
 function throwOptionGuideObject(data){
+  console.log(data)
   let temp = []
-  for (let i = 0; i < data.length; i++) {
-    temp.push(<Option key= {i}>{data[i].name}</Option>);
+  if(data){
+    for (let i = 0; i < data.length; i++) {
+      temp.push(<Option key= {i}><div>{data[i].fullname}</div></Option>);
+    }
+
   }
   return temp
 }
@@ -75,22 +81,26 @@ function throwOptionTourNameObject(data){
 }
 
 function formatData(data){
+  console.log(data)
   let temp = []
-  for(var i = 0; i < data.length; i++){
-    var obj = {
-      key: data[i].key,
-      _id: data[i].booked_by._id,
-      name: data[i].booked_by.name,
-      agency: data[i].agency,
-      country: data[i].booked_by.country,
-      email: data[i].booked_by.email,
-      participants: data[i].participants,
-      pickup_place: data[i].pickup_place,
-      pickup_time: data[i].pickup_time,
-      price: data[i].price,
-      remark: data[i].remark
+  if(data){
+    for(var i = 0; i < data.length; i++){
+      var obj = {
+        key: data[i].key,
+        _id: data[i].booked_by._id,
+        name: data[i].booked_by.name,
+        agency: data[i].agency,
+        country: data[i].booked_by.country,
+        email: data[i].booked_by.email,
+        participants: data[i].participants,
+        pickup_place: data[i].pickup_place,
+        pickup_time: data[i].pickup_time,
+        price: data[i].price,
+        phone: data[i].booked_by.phone,
+        remark: data[i].remark
+      }
+      temp[i] = obj
     }
-    temp[i] = obj
   }
   return temp
 }
@@ -118,6 +128,10 @@ const EditTourForm = Form.create()(React.createClass({
     }, {
       title: 'Email',
       dataIndex: 'email',
+      width: 200
+    }, {
+      title: 'Phone',
+      dataIndex: 'phone',
       width: 200
     }, {
       title: 'Participant',
@@ -157,22 +171,18 @@ const EditTourForm = Form.create()(React.createClass({
       selectedTourType: '',
       selectedTourTime: '',
       selectedGuide: '',
-      eachTour: this.props.eachTour,
+      eachTour: [],
+      eachCurGuideTour:[],
       showCustomerEdit: false,
       editCurCustomer: '',
       showCustomerDeleteWarning: false,
       cusWarnIdentity: "",
-      curTourID: this.props.eachTour._id,
+      curTourID: Cookies.get('cur_tour_id'),
       cusTourDelete:"",
       showAddMoreCustomer: false,
       tours_name: [],
     }
   },
-
-  compoentWillMount(){
-    this.getGuideList()
-  },
-
 
   handleSubmit(e){
       e.preventDefault();
@@ -223,25 +233,14 @@ const EditTourForm = Form.create()(React.createClass({
 
   },
 
-  addBookerAndTour(payload){
+  getGuideNameList(){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/insert',
-      method: 'POST',
-      payload: payload,
-      attemptAction: () => this.props.dispatch({ type: 'POST_BOOKER_AND_TOUR_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'POST_BOOKER_AND_TOUR_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'POST_BOOKER_AND_TOUR_FAILED' })
-    })
-  },
-
-  getGuideList(){
-    apiAccess({
-      url: 'http://localhost:8000/staffs/tour-guides',
+      url: 'http://localhost:8000/staffs/tour-guides/name',
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_GUIDE_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_GUIDE_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_NAME_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_GUIDE_NAME_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_GUIDE_NAME_FAILED' })
     })
   },
 
@@ -253,15 +252,18 @@ const EditTourForm = Form.create()(React.createClass({
 
   componentWillReceiveProps(nextProps){
 
-    if(this.props.guideLists !== nextProps.guideLists){
-      console.log(nextProps.guideLists)
-      getGuideName(nextProps.guideLists,this.state.guide_name)
+    if(this.props.eachGuideName !== nextProps.eachGuideName){
+      this.setState({guide_name:nextProps.eachGuideName})
     }
 
 
     if(this.props.eachTour !== nextProps.eachTour){
+
       if(nextProps.eachTour){
-        this.setState({eachTour: nextProps.eachTour})
+        console.log(<div>{nextProps.eachTour.tour_guide}</div>.props.children)
+        console.log(nextProps.eachTour)
+        this.setState({eachCurGuideTour: <div>{nextProps.eachTour.tour_guide}</div>.props.children})
+        this.setState({eachTour:nextProps.eachTour})
       }
     }
 
@@ -269,7 +271,7 @@ const EditTourForm = Form.create()(React.createClass({
       if(nextProps.delete_cus_status){
         this.setState({showCustomerDeleteWarning: false})
         this.getCurTour(this.state.curTourID)
-        this.getGuideList()
+        this.getGuideNameList()
         this.getAllTourName()
       }
     }
@@ -277,7 +279,7 @@ const EditTourForm = Form.create()(React.createClass({
     if(this.props.editCustomerInTourStatus !== nextProps.editCustomerInTourStatus){
       if(nextProps.editCustomerInTourStatus){
         this.getCurTour(this.state.curTourID)
-        this.getGuideList()
+        this.getGuideNameList()
         this.getAllTourName()
       }
     }
@@ -285,7 +287,7 @@ const EditTourForm = Form.create()(React.createClass({
     if(this.props.addCustomerSuccess !== nextProps.addCustomerSuccess){
       if(nextProps.addCustomerSuccess){
         this.getCurTour(this.state.curTourID)
-        this.getGuideList()
+        this.getGuideNameList()
         this.getAllTourName()
       }
     }
@@ -310,7 +312,7 @@ const EditTourForm = Form.create()(React.createClass({
   },
 
   componentWillMount(){
-    this.getGuideList()
+    this.getGuideNameList()
     this.getCurTour(this.state.curTourID)
     this.getAllTourName()
   },
@@ -366,7 +368,9 @@ const EditTourForm = Form.create()(React.createClass({
          {...formItemLayout}
          label="Tour name"
        >
-         {getFieldDecorator('tourname', { initialValue: this.state.eachTour.tour_name })(
+         {getFieldDecorator('tourname',
+           { initialValue: this.state.eachTour.tour_name  }
+         )(
            <Select
               showSearch
               style={{ width: '80%', marginRight: 11 }}
@@ -384,7 +388,9 @@ const EditTourForm = Form.create()(React.createClass({
          {...formItemLayout}
          label="Tour Type"
        >
-         {getFieldDecorator('tourtype', { initialValue: this.state.eachTour.tour_type })(
+         {getFieldDecorator('tourtype',
+           { initialValue: this.state.eachTour.tour_type }
+         )(
            <Select
               showSearch
               style={{ width: '80%', marginRight: 11 }}
@@ -408,7 +414,7 @@ const EditTourForm = Form.create()(React.createClass({
            label="Tour Guide"
          >
            {getFieldDecorator('tourguide', {
-             initialValue: this.state.eachTour.tour_guide
+             initialValue: this.state.eachCurGuideTour.fullname
            })(
              <Select
                 showSearch
@@ -442,7 +448,7 @@ const EditTourForm = Form.create()(React.createClass({
      </Form>
 
      <Button type="primary" className = 'add-more-customer' onClick = {() => this.addMoreCustomer()}>Add more customer</Button>
-     <Table columns={this.columns} dataSource={formatData(this.state.eachTour.customers)} scroll={{ x: 1500 }}/>
+     <Table columns={this.columns} dataSource={formatData(this.state.eachTour.customers)} scroll={{ x: 1700 }}/>
 
      </div>
    );
@@ -453,7 +459,7 @@ function mapStateToProps(state) {
 
     return {
         tours_data: state.getTours.tours_data,
-        guideLists: state.guideDetail.guideLists,
+        eachGuideName: state.getEachGuideName.eachGuideName,
         dateTour: state.addTourForm.dateTour,
         eachTour: state.getSpecificTour.eachTour,
         curTourID: state.getSpecificTour.curTourID,

@@ -6,8 +6,10 @@ import { Row,Col,Button, Input, Tag } from 'antd';
 import moment from 'moment';
 
 import BigCalendar from 'react-big-calendar';
-import DayPicker, { DateUtils } from 'react-day-picker';
 import changeDateFormat from '../../Helpers/changeDateFormat'
+
+import Cookies from 'js-cookie'
+import apiAccess from '../../Helpers/apiAccess'
 
 import 'react-day-picker/lib/style.css';
 import '../../../public/css/eachguide-calendar.css'
@@ -19,77 +21,73 @@ const today = new Date()
 
 const events = [
   {
-    'title': 'All Day Event',
-    'allDay': true,
-    'start': new Date(2015, 3, 0),
-    'end': new Date(2015, 3, 1)
+    'title': 'MOR',
+    'start': new Date(2015, 3, 10),
+    'end': new Date(2015, 3, 10)
   },
   {
-    'title': 'Long Event',
+    'title': 'AFT',
     'start': new Date(2015, 3, 7),
     'end': new Date(2015, 3, 10)
   },
 
   {
-    'title': 'DTS STARTS',
+    'title': 'EVE',
     'start': new Date(2016, 2, 13, 0, 0, 0),
     'end': new Date(2016, 2, 20, 0, 0, 0)
   },
 
   {
-    'title': 'DTS ENDS',
+    'title': 'FULL',
     'start': new Date(2016, 10, 6, 0, 0, 0),
     'end': new Date(2016, 10, 13, 0, 0, 0)
   },
 
   {
-    'title': 'Some Event',
+    'title': 'MOR',
     'start': new Date(2015, 3, 9, 0, 0, 0),
     'end': new Date(2015, 3, 9, 0, 0, 0)
   },
   {
-    'title': 'Conference',
+    'title': 'EVE',
     'start': new Date(2015, 3, 11),
     'end': new Date(2015, 3, 13),
     desc: 'Big conference for important people'
   },
   {
-    'title': 'Meeting',
+    'title': 'MOR',
     'start': new Date(2015, 3, 12, 10, 30, 0, 0),
     'end': new Date(2015, 3, 12, 12, 30, 0, 0),
     desc: 'Pre-meeting meeting, to prepare for the meeting'
   },
   {
-    'title': 'Lunch',
+    'title': 'AFT',
     'start':new Date(2015, 3, 12, 12, 0, 0, 0),
     'end': new Date(2015, 3, 12, 13, 0, 0, 0),
     desc: 'Power lunch'
   },
   {
-    'title': 'Meeting',
+    'title': 'AFT',
     'start':new Date(2015, 3, 12,14, 0, 0, 0),
     'end': new Date(2015, 3, 12,15, 0, 0, 0)
   },
   {
-    'title': 'Happy Hour',
+    'title': 'MOR',
     'start':new Date(2015, 3, 12, 17, 0, 0, 0),
     'end': new Date(2015, 3, 12, 17, 30, 0, 0),
     desc: 'Most important meal of the day'
   },
   {
-    'title': 'Dinner',
+    'title': 'EVE',
     'start':new Date(2015, 3, 12, 20, 0, 0, 0),
     'end': new Date(2015, 3, 12, 21, 0, 0, 0)
   },
   {
-    'title': 'Birthday Party',
+    'title': 'FULL',
     'start':new Date(2015, 3, 13, 7, 0, 0),
     'end': new Date(2015, 3, 13, 10, 30, 0)
   }
 ]
-
-
-const range = DateUtils.addDayToRange(today,);
 
 
 class GuideTimetable extends Component {
@@ -109,7 +107,6 @@ class GuideTimetable extends Component {
   }
 
   choosingDate(start){
-
     let strDate = start.toString().substring(0,15)
     let date = changeDateFormat(strDate)
     this.setState({selectedDate:date})
@@ -130,28 +127,89 @@ class GuideTimetable extends Component {
     }
 }
 
-
   handleUnavailClicked(type){
-    switch (type) {
-      case 'morning':
-      this.setState({morningClicked:true,fullDayClicked:false})
-      break;
 
-      case 'afternoon':
-      this.setState({afternoonClicked:true,fullDayClicked:false})
-      break;
-
-      case 'evening':
-      this.setState({eveningClicked:true,fullDayClicked:false})
-      break;
-
-      case 'full-day':
+    if(this.state.morningClicked && this.state.afternoonClicked && type == "evening"){
       this.setState({fullDayClicked:true,eveningClicked:false,afternoonClicked:false,morningClicked:false})
-      break;
 
-      default:
-        return ''
+    }else if(this.state.eveningClicked && this.state.afternoonClicked && type == "morning"){
+      this.setState({fullDayClicked:true,eveningClicked:false,afternoonClicked:false,morningClicked:false})
+
+    }else if(this.state.eveningClicked && this.state.morningClicked && type == "afternoon"){
+      this.setState({fullDayClicked:true,eveningClicked:false,afternoonClicked:false,morningClicked:false})
+
+    }else{
+      switch (type) {
+        case 'morning':
+        this.setState({morningClicked:true,fullDayClicked:false})
+        break;
+
+        case 'afternoon':
+        this.setState({afternoonClicked:true,fullDayClicked:false})
+        break;
+
+        case 'evening':
+        this.setState({eveningClicked:true,fullDayClicked:false})
+        break;
+
+        case 'full-day':
+        this.setState({fullDayClicked:true,eveningClicked:false,afternoonClicked:false,morningClicked:false})
+        break;
+
+        default:
+          return ''
+        }
+    }
+  }
+
+  getAllUnAvailability(selectedDated){
+
+    let arr = []
+
+    if(this.state.morningClicked){
+      arr.push("Morning")
+    }
+    if(this.state.afternoonClicked){
+      arr.push("Afternoon")
+    }
+    if(this.state.eveningClicked){
+      arr.push("Evening")
+    }
+
+    if(arr.length == 3){
+      arr.splice(0,arr.length)
+      arr.push("Full-Day")
+    }
+
+
+    var unAvailObj = {};
+      for (var x = 0; x < arr.length; x++) {
+        unAvailObj[x] =
+            {
+              date: selectedDated,
+              time_period: arr[x]
+            };
       }
+
+    return unAvailObj
+  }
+
+  submitUnAvailability(){
+
+    let id = Cookies.get('guide_id')
+    let unAvailList = this.getAllUnAvailability(this.state.selectedDate)
+
+    console.log(unAvailList)
+
+    apiAccess({
+      url: 'http://localhost:8000/staffs/add-unavailability/'+id,
+      method: 'POST',
+      payload: unAvailList,
+      attemptAction: () => this.props.dispatch({ type: 'ADD_UNAVAIL_DATE_EACH_GUIDE_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'ADD_UNAVAIL_DATE_EACH_GUIDE_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'ADD_UNAVAIL_DATE_EACH_GUIDE_FAILED' })
+    })
+
   }
 
   handleTagClose(tag){
@@ -177,6 +235,42 @@ class GuideTimetable extends Component {
       }
   }
 
+  componentWillReceiveProps(nextProps){
+    console.log(nextProps.addUnAvailDateEachGuideStatus)
+    if(this.props.addUnAvailDateEachGuideStatus !== nextProps.addUnAvailDateEachGuideStatus){
+      if(nextProps.addUnAvailDateEachGuideStatus){
+
+      }
+    }
+  }
+
+  eventStyleGetter(event, start, end, isSelected){
+    console.log(event);
+
+    let backgroundColor = '#' + event.hexColor;
+
+    if(event.title == "MOR"){
+      backgroundColor = '#' + 'ffc300';
+    }else if(event.title == "AFT"){
+      backgroundColor = '#' + 'ff5733';
+    }else if(event.title == "EVE"){
+      backgroundColor = '#' + '3b9df9'
+    }else if(event.title == "FULL"){
+      backgroundColor = '#' + '581845';
+    }
+
+    let style = {
+        backgroundColor: backgroundColor,
+        borderRadius: '0px',
+        opacity: 0.8,
+        color: 'white',
+        border: '0px',
+        display: 'block'
+    };
+    return {
+        style: style
+    };
+  }
 
   render() {
 
@@ -190,14 +284,6 @@ class GuideTimetable extends Component {
           <Row justify="space-between">
               <Col span={16}>
                 <div className = "guide-calendar">
-                { /*  <DayPicker
-                    modifiers={ modifiers }
-                    numberOfMonths={ 2 }
-                    selectedDays={ this.state.selectedDays }
-                    onDayClick={ this.handleDayClick }
-                    enableOutsideDays ={true}
-                    disabledDays={{ before: today, not: today }}
-                  />*/}
 
                   <BigCalendar
                     selectable
@@ -206,7 +292,8 @@ class GuideTimetable extends Component {
                 culture='en-GB'
                 eventPropGetter={(this.eventStyleGetter)}
                 views={['month']}
-                onSelectSlot={(slotInfo) => this.choosingDate(slotInfo.start)}/>
+                onSelectSlot={(slotInfo) => this.choosingDate(slotInfo.start)}
+              />
 
               </div>
               </Col>
@@ -229,7 +316,9 @@ class GuideTimetable extends Component {
                 <div className = "unavail-time">
                   <h4>Unavailable time</h4>
 
-                  
+                  { !this.state.morningClicked && !this.state.afternoonClicked && !this.state.eveningClicked && !this.state.fullDayClicked
+                    ? <Tag color="#68EA22">Available All Day</Tag> : null
+                  }
 
                   { this.state.morningClicked ?
                     <Tag closable={true} color="#FFC300" afterClose={() => this.handleTagClose("morning")}>Morning</Tag> : null
@@ -257,8 +346,8 @@ class GuideTimetable extends Component {
                       <h4>Fullday</h4></Button></Col>
                   </Row>
                 </div>
-                <div className = "submit-avail-btn">
-                  <Button style = {{backgroundColor: '#051E37' ,color: '#ffffff'}}>Submit</Button>
+                <div className = "submit-avail-button">
+                  <Button className = "submit-avail-btn" type = "primary" onClick = {() => this.submitUnAvailability()}> Submit</Button>
                 </div>
               </div>
             </Col>
@@ -274,7 +363,7 @@ class GuideTimetable extends Component {
 function mapStateToProps(state) {
 
     return {
-
+        addUnAvailDateEachGuideStatus: state.addUnAvailDateEachGuide.addUnAvailDateEachGuideStatus
       }
 }
 

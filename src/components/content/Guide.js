@@ -21,7 +21,7 @@ const GuideUserData = (arrayJSON,resultJSON) =>{
       var objectJSON = {
         key: i,
         _id: arrayJSON[i]._id,
-        name: arrayJSON[i].name,
+        fullname: arrayJSON[i].fullname,
         email: arrayJSON[i].email,
         contract: arrayJSON[i].contract
       }
@@ -125,13 +125,13 @@ getExpertList(){
     filteredInfo = filteredInfo || {};
     const columns = [{
       title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'fullname',
+      key: 'fullname',
 
-      filteredValue: filteredInfo.name || null,
-      onFilter: (value, record) => record.name.includes(value),
-      sorter: (a, b) => a.name.length - b.name.length,
-      sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
+      filteredValue: filteredInfo.fullname || null,
+      onFilter: (value, record) => record.fullname.includes(value),
+      sorter: (a, b) => a.fullname.length - b.fullname.length,
+      sortOrder: sortedInfo.columnKey === 'fullname' && sortedInfo.order,
     },
     {
       title: 'Email',

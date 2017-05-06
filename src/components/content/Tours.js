@@ -11,7 +11,6 @@ import { Modal } from 'react-bootstrap';
 import apiAccess from '../../Helpers/apiAccess'
 import {closeAllTourBox} from '../../actions/action-closeAllTourBox'
 import {connect} from 'react-redux';
-import Cookies from 'js-cookie'
 
 
 class Tours extends Component {
@@ -47,7 +46,6 @@ class Tours extends Component {
     }
     if(this.props.tour_cur_id !== nextProps.tour_cur_id){
       this.setState({tour_id: nextProps.tour_cur_id})
-      Cookies.set('tour_id', nextProps.tour_cur_id)
 
     }
   }

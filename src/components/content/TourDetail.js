@@ -14,7 +14,6 @@ class TourDetail extends Component {
   constructor(props){
     super(props)
     this.state = {
-      tour_id: Cookies.get('tour_id'),
       tour_data: []
     }
   }
@@ -25,7 +24,7 @@ class TourDetail extends Component {
 
 
   getTourData(){
-    let id = this.state.tour_id
+    let id = Cookies.get('tour_id')
     apiAccess({
       url: 'http://localhost:8000/tours/'+id,
       method: 'GET',
@@ -53,9 +52,51 @@ class TourDetail extends Component {
     return (
 
       <div className = "tour_content">
+        <Row>
+          <Col span ={7}>
 
+            <div className = "tour-picture">
+            </div>
 
+            <div className = "tour-title" style = {{  fontSize: 20 }}>
+              {this.state.tour_data.tour_name}
+            </div>
 
+            <div className = "tour-description">
+              {this.state.tour_data.description}
+            </div>
+
+            <div className = "cost-model">
+              <div className = "cost-model-title"></div>
+            </div>
+
+            <div className = "edit-tour-data">
+            </div>
+
+            <div className = "expert-list">
+            </div>
+
+          </Col>
+          <Col span ={16} offset = {1}>
+            <div className = "tour-graph">
+            </div>
+
+            <div className = "tour-schedule">
+            </div>
+
+            <Row>
+              <Col span = {14}>
+                <div className = "each-tour-popular-nation">
+                </div>
+              </Col>
+              <Col span = {9} offset = {1}>
+                <div className = "each-tour-unassigned-guide">
+                </div>
+              </Col>
+            </Row>
+
+          </Col>
+        </Row>
       </div>
 
     );

@@ -16,7 +16,7 @@ class BoxAbove extends Component {
     return (
 
       <div>
-         <Row style = {{marginRight: -90}}>
+         <Row>
            <Col className="gutter-row" span={6} >
              <div className="total-customer" >
                <h4>Total customers</h4>

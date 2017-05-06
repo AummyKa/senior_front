@@ -56,38 +56,77 @@
   margin-left: 85%;
 }
 
+.tour-picture, .tour-graph, .tour-schedule, .each-tour-popular-nation, .each-tour-unassigned-,
+.tour-description, .cost-model, .edit-tour-data, .expert-list{
+  background-color: #EEEBEE;
+}
+
+
 .tour-picture{
-  background-color: #F3C9BB;
-  width: 280px;
-  height: 180px;
+  width: 100%;
+  height: 200px;
+  margin-bottom: 5px;
+}
+
+.tour-graph{
+  width: 100%;
+  height: 260px;
+  margin-bottom: 10px;
+}
+
+.tour-schedule{
+  width: 100%;
+  height: 400px;
+  margin-bottom: 10px;
+}
+
+.each-tour-popular-nation{
+  width: 100%;
+  height: 250px;
+  margin-bottom: 5px;
+}
+
+.each-tour-unassigned-guide{
+  width: 100%;
+  height: 250px;
   margin-bottom: 5px;
 }
 
 .tour-title{
-  background-color: #D0CCCC;
-  width: 280px;
-  height: 50px;
+  background-color: #F84C38;
+  width: 100%;
+  height: 55px;
   margin-top: 5px;
-}
-
-.tour-title-name{
-  color: #4B4A4A;
+  color: white;
   text-align: center;
-  padding: 0.5px;
+  padding: 10px;
 }
 
 .tour-description{
-  background-color: #F3C9BB;
-  width: 280px;
-  height: 80px;
+  width: 100%;
+  height: 100px;
+  margin-top: 10px;
+  border-radius: 10px;
+  padding: 6px 6px 6px 6px;
+  font-size: 14px;
+}
+
+.cost-model{
+  width: 100%;
+  height: 100px;
   margin-top: 5px;
 }
 
-.tour-type{
-  background-color: #F3C9BB;
-  width: 280px;
-  height: 50px;
-  margin-top: 5px;
+.edit-tour-data{
+  width: 100%;
+  height: 85px;
+  margin-top: 10px;
+}
+
+.expert-list{
+  width: 100%;
+  height: 350px;
+  margin-top: 10px;
 }
 
 .tour-summary{

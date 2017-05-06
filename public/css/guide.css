@@ -49,9 +49,11 @@
 .guide-calendar{
   background-color: #E9E8E8;
   border-radius: 10px;
-  height: 420px;
+  height: 480px;
   font-family: "Helvetica Neue",Helvetica;
   margin-bottom: -50px;
+  font-size: 15px;
+  margin-top: -15px;
 }
 
 
@@ -60,12 +62,22 @@
   border-radius: 10px;
   font-family: "Helvetica Neue",Helvetica;
   margin-left: 10px;
-  height: 420px;
+  height: 480px;
+  margin-top: -15px;
 }
 
-.selectedDay, .unavail-time, .combo-button, .submit-avail-btn{
+.selectedDay, .unavail-time, .combo-button, .submit-avail-button{
   padding:10px;
   text-align: center;
+}
+
+.submit-avail-btn{
+  border-radius: 100px;
+  height: 50px;
+  color: white;
+  background-color: #175EC4;
+  font-size: 20px;
+  vertical-align: middle;
 }
 
 .unavail-time{

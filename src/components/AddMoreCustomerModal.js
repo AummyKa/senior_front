@@ -43,6 +43,7 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
           pickup_time: this.props.form.getFieldValue(`pickup_time`).format('HH:mm'),
           pickup_place: this.props.form.getFieldValue(`pickup_place`),
           participants: this.props.form.getFieldValue(`participants`),
+          phone: this.props.form.getFieldValue('phone'),
           price: this.props.form.getFieldValue('price'),
           remark: this.props.form.getFieldValue(`remark`)
         }
@@ -227,14 +228,13 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
 
            <FormItem
              {...formItemLayout}
-             label={'Price : '}
+             label={'Phone : '}
              required={false}
            >
-             {getFieldDecorator(`price`, {
+             {getFieldDecorator(`phone`, {
                validateTrigger: ['onChange', 'onBlur'],
-
-             })(
-               <Input placeholder="price"  style={{ width: '80%', marginRight: 11 }} />
+             },{ validator: this.checkTel})(
+               <Input placeholder="phone"  style={{ width: '80%', marginRight: 11 }} />
              )}
 
            </FormItem>
@@ -242,6 +242,20 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
 
          </Col>
            <Col span={14} offset = {1}>
+
+             <FormItem
+               {...formItemLayout}
+               label={'Price : '}
+               required={false}
+             >
+               {getFieldDecorator(`price`, {
+                 validateTrigger: ['onChange', 'onBlur'],
+
+               })(
+                 <InputNumber min={0} max={100000} placeholder="price"  style={{ width: '30%', marginRight: 11 }} />
+               )}
+
+             </FormItem>
 
              <FormItem
                {...formItemLayout}

@@ -156,7 +156,7 @@ class SlotDetail extends Component {
           start_time: data[i].start_time,
           tour_name: data[i].tour_name,
           tour_type: data[i].tour_type,
-          guide: data[i].tour_guide,
+          guide: data[i].tour_guide.fullname,
           participants: total_p
         }
         tours[i] = tourDetail
@@ -172,6 +172,7 @@ class SlotDetail extends Component {
 }
 
 getCurTour(record){
+  console.log(record)
   let id = record.id
   apiAccess({
     url: 'http://localhost:8000/bookedtours/'+id,

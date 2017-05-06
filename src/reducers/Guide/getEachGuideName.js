@@ -14,7 +14,7 @@ const getEachGuideName = (state = INITIAL_STATE, action) => {
       }
 
     case 'GET_GUIDE_NAME_SUCCESS':
-      console.log("close add tour")
+      console.log(action.json)
         return{
           eachGuideName: action.json
         }

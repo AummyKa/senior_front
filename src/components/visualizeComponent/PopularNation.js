@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import { BarChart, AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
          Bar, ComposedChart, PieChart, Pie, Sector, Cell  } from 'recharts';
 import { Col, Row, Table } from 'antd'
 
-
+import Cookies from 'js-cookie'
+import apiAccess from '../../Helpers/apiAccess'
 
 //Pie Chart
 const data4 = [{name: 'Group A', value: 400}, {name: 'Group B', value: 300},
@@ -23,44 +25,90 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
 }
 
 const columns = [{
-  title: 'Nation',
-  dataIndex: 'nation',
+  title: 'Country',
+  dataIndex: 'country',
 }, {
-  title: 'Amount',
-  dataIndex: 'amount',
+  title: 'Participants',
+  dataIndex: 'participants',
 }]
 
-const data5 = [{
-  key: '1',
-  nation: 'USA',
-  amount: 2560
-}, {
-  key: '2',
-  nation: 'English',
-  amount: 2220
-}, {
-  key: '3',
-  nation: 'Chinese',
-  amount: 1340
-},{
-  key: '4',
-  nation: 'Protugese',
-  amount: 1230
-},{
-  key: '5',
-  nation: 'Russian',
-  amount: 1008
-}];
+
+const AddKeyPopNationTable = (arrayJSON) =>{
+  console.log(arrayJSON)
+  if(arrayJSON!=null){
+    for(var i = 0; i < arrayJSON.length; i++) {
+      arrayJSON[i]["key"] = i;
+  }
+}
+  return arrayJSON
+}
+
+
+
+let today = new Date();
+let curYear = today.getFullYear();
 
 class PopularNation extends Component {
 
   constructor(props){
     super(props)
+    this.state = {
+      selectedYear: curYear,
+      amountNationsSummary: []
+    }
   }
 
+  getPopularNation(year){
+    apiAccess({
+      url: 'http://localhost:8000/bookedtours/summary/participants/country/'+year,
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_SUMMARY_AMOUNT_NATIONS_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_SUMMARY_AMOUNT_NATIONS_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_SUMMARY_AMOUNT_NATIONS_FAILED' })
+    })
+  }
+
+  componentWillMount(){
+    this.getPopularNation(this.state.selectedYear)
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(this.props.amountNationsSummary !== nextProps.amountNationsSummary){
+      if(nextProps.amountNationsSummary){
+        console.log(nextProps.amountNationsSummary)
+        this.setState({amountNationsSummary:nextProps.amountNationsSummary})
+      }
+    }
+    if(this.props.selectedYear !== nextProps.selectedYear){
+      if(nextProps.selectedYear){
+        this.setState({selectedYear:nextProps.selectedYear})
+        this.getPopularNation(nextProps.selectedYear)
+      }
+    }
+  }
+
+listNations(data) {
+  console.log(data)
+    if(data.length !== 0){
+      console.log(data)
+
+      const list = data.map((key,index) =>
+        <div>
+          <Col span = {3} ><div className = "little-box-label" style = {{backgroundColor: COLORS[index]}}/></Col>
+          <Col span = {9} ><div>{key.country}</div></Col>
+        </div>
+      );
+
+      return (
+        <Row>
+          {list}
+        </Row>
+      );
+    }
+  }
 
   render() {
-
 
     return (
 
@@ -68,36 +116,32 @@ class PopularNation extends Component {
           <div className= "piechart-container">
                 <PieChart width={300} height={170} onMouseEnter={this.onPieEnter}>
                     <Pie
-                      data={data4}
+                      data={this.state.amountNationsSummary}
                       cx={140}
                       cy={80}
                       labelLine={false}
                       label={renderCustomizedLabel}
                       outerRadius={80}
                       fill="#8884d8"
+                      nameKey={'country'}
+                      valueKey={'participants'}
                     >
 
                     {
-                    	data4.map((entry, index) => <Cell  fill={COLORS[index % COLORS.length]}/>)
+                    	this.state.amountNationsSummary.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
                     }
                   </Pie>
                 </PieChart>
 
+
                 <div className= "popular-color-label">
-                  <Row>
-                    <Col span = {3} ><div className = "little-box-label" style = {{backgroundColor: COLORS[0]}}/></Col>
-                    <Col span = {9} >{data4[0].name}</Col>
-                    <Col span = {3} ><div className = "little-box-label" style = {{backgroundColor: COLORS[1]}}/></Col>
-                    <Col span = {9} >{data4[1].name}</Col>
-                    <Col span = {3} ><div className = "little-box-label" style = {{backgroundColor: COLORS[2]}}/></Col>
-                    <Col span = {9} >{data4[2].name}</Col>
-                    <Col span = {3} ><div className = "little-box-label" style = {{backgroundColor: COLORS[3]}}/></Col>
-                    <Col span = {9} >{data4[3].name}</Col>
-                  </Row>
+
+                    {this.listNations(this.state.amountNationsSummary)}
+
                 </div>
 
                 <div className = "pop-nation-table">
-                  <Table columns={columns} dataSource={data5} size="small" pagination={false} />
+                  <Table columns={columns} dataSource={AddKeyPopNationTable(this.state.amountNationsSummary)} size="small" pagination={false} />
                 </div>
 
             </div>
@@ -110,4 +154,11 @@ class PopularNation extends Component {
   }
 }
 
-export default PopularNation
+function mapStateToProps(state){
+  return{
+    amountNationsSummary: state.getAmountNationsSummary.amountNationsSummary,
+    selectedYear: state.updateYearDashBoard.selectedYear
+  }
+}
+
+export default connect(mapStateToProps)(PopularNation)

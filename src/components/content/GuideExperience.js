@@ -308,7 +308,7 @@ class GuideExperience extends Component {
           editing={record.editable}
           starColor= {record.starColor}
           emptyStarColor= "#000000"
-          renderStarIcon={() => <span><Icon type="star" /></span>}
+          renderStarIcon={() => <span><Icon className = "star-rate" type="star" /></span>}
         />
       </span>
     },
@@ -376,7 +376,7 @@ class GuideExperience extends Component {
                   editing={this.state.favEditable}
                   starColor= {this.state.starFavColor}
                   emptyStarColor= "#000000"
-                  renderStarIcon={() => <span><Icon type="star" /></span>}
+                  renderStarIcon={() => <span><Icon className = "star-rate" type="star" /></span>}
                 />
               { this.state.favEditable ?
                 <Button style = {{marginLeft: 50}} onClick = {()=> this.savefavorable() }>Save!</Button>

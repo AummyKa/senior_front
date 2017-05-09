@@ -30,7 +30,7 @@ import Tours from './components/content/Tours'
 import TourDetail from './components/content/TourDetail'
 
 //Agency
-import Agency from './components/content/Agency'
+import BookingMethod from './components/content/BookingMethod'
 
 import Home from './components/content/Home'
 
@@ -77,7 +77,7 @@ ReactDOM.render(
                 <Route path="/schedule" component={Schedule}/>
                 <Route path="/pending" component={PendingList}/>
                 <Route path="/staff" component={Staff}/>
-                <Route path="/agency" component={Agency}/>
+                <Route path="/bookingMethod" component={BookingMethod}/>
               </Route>
           </Route>
         </Router>

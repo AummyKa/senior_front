@@ -124,6 +124,12 @@ class Schedule extends Component {
           // this.props.dispacth(addTour("STOP_COUNT_ADD_TOUR"))
       }
     }
+    console.log(nextProps.delete_cus_status)
+    if(this.props.delete_cus_status !== nextProps.delete_cus_status){
+      if(nextProps.delete_cus_status){
+        this.getEvent()
+      }
+    }
 
     if(nextProps.selectedDate){
         this.setState({selectedDate: nextProps.selectedDate})
@@ -296,30 +302,50 @@ class Schedule extends Component {
           </Modal>
       </div>
 
-        <div className = "button-filter-schedule">
-          <ButtonToolbar>
-               <Button bsStyle="info">All</Button>
-               <Button bsStyle="info">Guide</Button>
-               <Button bsStyle="info">Tour</Button>
-          </ButtonToolbar>
+      <div className = "schedule-container">
+        <Row style = {{width: '100%'}}>
+          <Row >
+
+            <Col span = {6}>
+              <div className = "topic">
+                  <h2>Schedule</h2>
+              </div>
+            </Col>
+            <Col span = {6} offset = {12}>
+              <div className = "button-filter-schedule">
+                <ButtonToolbar>
+                     <Button bsStyle="info">All</Button>
+                     <Button bsStyle="info">Guide</Button>
+                     <Button bsStyle="info">Tour</Button>
+                </ButtonToolbar>
+              </div>
+            </Col>
+         </Row>
+
+         <div className = "schedule-filter">
+
+         </div>
+
+          <Row>
+            <Col span = {24} style = {{height: 500}}>
+              <div className = "big-table">
+                  <h3 className='callout'>
+                  </h3>
+                  <BigCalendar
+                    selectable
+                {...this.props}
+                culture='en-GB'
+                events={this.state.events}
+                eventPropGetter={(this.eventStyleGetter)}
+                views={['month']}
+                onSelectSlot={(slotInfo) => this.showThatSlot(slotInfo.start)}/>
+                </div>
+            </Col>
+            </Row>
+          </Row>
         </div>
 
-      <div className = "topic">
-          <h2>Schedule</h2>
-      </div>
 
-      <div className = "big-table">
-          <h3 className='callout'>
-          </h3>
-          <BigCalendar
-            selectable
-        {...this.props}
-        culture='en-GB'
-        events={this.state.events}
-        eventPropGetter={(this.eventStyleGetter)}
-        views={['month']}
-        onSelectSlot={(slotInfo) => this.showThatSlot(slotInfo.start)}/>
-        </div>
       </div>
 
     );
@@ -340,7 +366,8 @@ const mapStateToProps = (state) => ({
   eachTourState: state.getSpecificTour.eachTourState,
   eachTour: state.getSpecificTour.eachTour,
   selectedDate: state.spreadSelectedDate.selectedDate,
-  events: state.getEventSummary.events
+  events: state.getEventSummary.events,
+  delete_cus_status: state.deleteCurCustomerInTour.delete_cus_status
 })
 
 export default connect(mapStateToProps)(Schedule)

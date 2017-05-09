@@ -7,31 +7,14 @@ import apiAccess from '../Helpers/apiAccess'
 
 
 
-const data = [{
-  key: '1',
-  guidename: 'John Brown',
-  rating: 5,
-  favorite: 5,
-}, {
-  key: '2',
-  guidename: 'Jim Green',
-  rating: 4,
-  favorite: 3,
-}, {
-  key: '3',
-  guidename: 'Joe Black',
-  rating: 4,
-  favorite: 2,
-}];
-
-
-
 const GuideSuggestion = React.createClass({
 
   getInitialState() {
     return {
       show: false,
       selectedTourName: this.props.selectedTourName,
+      selectedStartDate: this.props.selectedStartDate,
+      selectedTourPeriod: this.props.selectedTourPeriod,
       selectedGuide: "",
       guideList: []
     };
@@ -46,9 +29,9 @@ const GuideSuggestion = React.createClass({
 
         var objectJSON = {
           key: i,
-          guidename: arrayJSON[i].fullname,
-          rating: arrayJSON[i].expert.rate,
-          favorite: arrayJSON[i].favorable
+          guidename: arrayJSON[i].fullname || '',
+          rating: arrayJSON[i].expert.rate || 0,
+          favorite: arrayJSON[i].favorable || 0
         }
 
         resultJSON[i] = objectJSON
@@ -59,7 +42,7 @@ const GuideSuggestion = React.createClass({
   },
 
   selectSuggestedGuide(record){
-    let selectedGuide = record.guidename
+    this.setState({selectedGuide:record.guidename})
 
   },
 
@@ -82,7 +65,9 @@ const GuideSuggestion = React.createClass({
       url: 'http://localhost:8000/bookedtours/guide-suggestion/',
       method: 'POST',
       payload: {
-        tour_name: this.state.selectedTourName
+        tour_name: this.state.selectedTourName,
+        start_date: this.state.selectedStartDate,
+        tour_period: this.state.selectedTourPeriod,
       },
       attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_SUGGESTION_ATTEMPT' }),
       successAction: (json) => this.props.dispatch({ type: 'GET_GUIDE_SUGGESTION_SUCCESS', json }),
@@ -102,7 +87,7 @@ const GuideSuggestion = React.createClass({
         <StarRatingComponent
           name="rating"
           starCount={5}
-          value={record.rating}
+          value={record.rating || 0}
           editing={false}
           starColor= "#FDDC02"
           emptyStarColor= "#000000"
@@ -116,7 +101,7 @@ const GuideSuggestion = React.createClass({
         <StarRatingComponent
           name="favorite"
           starCount={5}
-          value={record.favorite}
+          value={record.favorite || 0}
           editing={false}
           starColor= "#FDDC02"
           emptyStarColor= "#000000"

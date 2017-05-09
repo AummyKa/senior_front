@@ -4,18 +4,37 @@
   font-size: 13px;
 }
 
+
 .total-revenue{
   width: 650px;
-  height: 520px;
+  height: 30%;
+  padding-bottom: 3%;
 }
 
 .table-month-rev-summary{
-  margin-top: 10px;
-  padding: 20px;
-  margin-bottom: 10px;
+  padding-left: 3%;
+  padding-right: 3%;
 }
 
-.total-revenue-label, .each-tour-total-revenue-label, .popular-nation-label{
+.read-more-button {
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+  right: 4px;
+  font-size: 24px;
+  color: #900C3F;
+  transition: all .3s;
+}
+.read-more-button:hover {
+  color: #FF5733;
+}
+
+.total-rev-area-chart{
+  top: 50%;
+  transform: translate(-6%,20%);
+}
+
+.total-revenue-label, .each-tour-total-revenue-label, .popular-nation-label, .year-selection{
     background-color: #FAE9DD;
     font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
@@ -25,9 +44,18 @@
     color: #494848;
 }
 
+.year-selection{
+  width: 650px;
+  padding: 10px;
+}
+
 .total-revenue-label{
   width: 650px;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
+}
+
+.select-total-rev-year{
+  margin-bottom: 10px
 }
 
 .each-tour-total-revenue{
@@ -38,6 +66,11 @@
 .each-tour-total-revenue-label{
   width: 300px;
   margin-bottom: 30px;
+}
+
+.tour-ranking-chart-summary{
+  top: 50%;
+  transform: translate(-6%,5%);
 }
 
 .popular-nation{

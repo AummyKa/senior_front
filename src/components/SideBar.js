@@ -46,7 +46,7 @@ class SideBar extends Component {
             <SubMenu key="Schedule" title={<span><Icon type="notification" /><Link to={`/schedule`}>Schedule</Link></span>}/>
             <SubMenu key="Tours" title={<span><Icon type="notification" /><Link to={`/tours`}>Tours</Link></span>}/>
             <SubMenu key="Staff" title={<span><Icon type="notification" /><Link to={`/staff`}>Staff</Link></span>}/>
-            <SubMenu key="Agency" title={<span><Icon type="notification" /><Link to={`/agency`}>Agency</Link></span>}/>
+            <SubMenu key="BookingMethod" title={<span><Icon type="notification" /><Link to={`/bookingMethod`}>Booking Method</Link></span>}/>
           </Menu>
 
       </aside>

@@ -258,6 +258,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
              >
                {getFieldDecorator(`phone`, {
                  validateTrigger: ['onChange', 'onBlur'],
+                initialValue: this.state.eachCustomer.phone,
 
                })(
                  <Input placeholder="phone"  style={{ width: '80%', marginRight: 11 }} />
@@ -276,7 +277,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
              >
                {getFieldDecorator(`price`, {
                  validateTrigger: ['onChange', 'onBlur'],
-
+                  initialValue: this.state.eachCustomer.price,
                })(
                  <InputNumber min={0} max={100000} placeholder="price"  style={{ width: '30%', marginRight: 11 }} />
                )}

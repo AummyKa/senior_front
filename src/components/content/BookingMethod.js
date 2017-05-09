@@ -8,34 +8,39 @@ import apiAccess from '../../Helpers/apiAccess'
 
 import AddAgencyModal from '../AddAgencyModal'
 import EditAgencyModal from '../EditAgencyModal'
+import AddBookingMethodsModal from '../AddBookingMethodsModal'
 
 import Cookies from 'js-cookie'
 
 
-
-const clearAgencyData = (arrayJSON) =>{
+const agencyData = (arrayJSON) =>{
   let resultJSON = []
-  if(arrayJSON!=null){
-    for(var i = 0; i < arrayJSON.length; i++) {
-
-      var objectJSON = {
-        key: i,
-        _id: arrayJSON[i]._id,
-        agencyName: arrayJSON[i].agency_name,
-        email: arrayJSON[i].email,
-        phone: arrayJSON[i].phone
+  if(arrayJSON && arrayJSON.length > 0){
+    for(let i =0;i<arrayJSON.length;i++){
+      if(arrayJSON[i].type == "Agency"){
+        arrayJSON[i]["key"] = i;
+        resultJSON[i] = arrayJSON[i]
       }
-
-      resultJSON[i] = objectJSON
+    }
   }
-    return resultJSON
-}else {
   return resultJSON
 }
 
+const bookingMethodData = (arrayJSON) =>{
+  let resultJSON = []
+  if(arrayJSON && arrayJSON.length > 0){
+    for(let i =0;i<arrayJSON.length;i++){
+      if(arrayJSON[i].type == "Individual"){
+        arrayJSON[i]["key"] = i;
+        resultJSON[i] = arrayJSON[i]
+      }
+    }
+  }
+  return resultJSON
 }
 
-class Agency extends Component{
+
+class BookingMethod extends Component{
 
   constructor(props) {
     super(props)
@@ -48,6 +53,10 @@ class Agency extends Component{
       showAddAgencyMadal: false,
       showEditAgencyMadal: false,
       selectedAgency:'',
+      bookingMethodLists:[],
+      agencyLists:[],
+      showAddBookedMethodsModal: false,
+      showAddAgencyModal:false
     }
   }
 
@@ -70,50 +79,53 @@ class Agency extends Component{
     // this.context.router.push('/guide/'+id);
   }
 
-  getAgencyList(){
+  getBookingMethods(){
     apiAccess({
-      url: 'http://localhost:8000/agencies',
+      url: 'http://localhost:8000/bookingmethods/',
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_AGENCY_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_AGENCY_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_AGENCY_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_BOOKING_METHODS_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_FAILED' })
     })
-
   }
-  componentWillReceiveProps(nextProps){
-  
-    if(this.props.agencyData !== nextProps.agencyData){
-      if(nextProps.agencyData){
-        console.log(nextProps.agencyData)
-        this.setState({agencyData: nextProps.agencyData})
-      }
-    }
 
-    if(this.props.addAgencyDataStatus !== nextProps.addAgencyDataStatus){
-      if(nextProps.addAgencyDataStatus){
-        this.setState({showAddAgencyMadal: false})
-        this.getAgencyList()
+  componentWillReceiveProps(nextProps){
+
+    if(this.props.bookingMethodLists !== nextProps.bookingMethodLists){
+      if(nextProps.bookingMethodLists){
+        console.log(nextProps.bookingMethodLists)
+        let agencyLists = agencyData(nextProps.bookingMethodLists)
+        this.setState({agencyLists:agencyLists})
+        let bookingMethodLists = bookingMethodData(nextProps.bookingMethodLists)
+        this.setState({bookingMethodLists:bookingMethodLists})
       }
     }
 
     if(this.props.updateAgencyDataStatus !== nextProps.updateAgencyDataStatus){
       if(nextProps.updateAgencyDataStatus){
         this.setState({showEditAgencyMadal: false})
-        this.getAgencyList()
+
       }
     }
 
     if(this.props.deleteAgencyDataStatus !== nextProps.deleteAgencyDataStatus){
       if(nextProps.deleteAgencyDataStatus){
-        this.getAgencyList()
+
+      }
+    }
+
+    if(this.props.addBookingMethodStatus !== nextProps.addBookingMethodStatus){
+      if(nextProps.addBookingMethodStatus){
+        this.setState({showAddAgencyModal:false})
+        this.getBookingMethods()
       }
     }
   }
 
 
   componentWillMount(){
-    this.getAgencyList()
+    this.getBookingMethods()
   }
 
   addAgency(){
@@ -138,21 +150,27 @@ class Agency extends Component{
     })
   }
 
-  render() {
+  showAddAgencyModal(){
+    this.setState({showAddAgencyModal:true})
+  }
 
-    console.log(this.state.selectedAgency)
+  showAddBookedMethods(){
+    this.setState({showAddBookedMethodsModal:true})
+  }
+
+  render() {
 
     let { sortedInfo, filteredInfo } = this.state;
     sortedInfo = sortedInfo || {};
     filteredInfo = filteredInfo || {};
     const columns = [{
       title: 'Agency Name',
-      dataIndex: 'agencyName',
-      key: 'agencyName',
-      filteredValue: filteredInfo.agencyName || null,
-      onFilter: (value, record) => record.agencyName.includes(value),
-      sorter: (a, b) => a.agencyName.length - b.agencyName.length,
-      sortOrder: sortedInfo.columnKey === 'agencyName' && sortedInfo.order,
+      dataIndex: 'name',
+      key: 'name',
+      filteredValue: filteredInfo.name || null,
+      onFilter: (value, record) => record.name.includes(value),
+      sorter: (a, b) => a.name.length - b.name.length,
+      sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
     },
 
     {
@@ -187,8 +205,31 @@ class Agency extends Component{
       </span>
     }]
 
-    let closeAddAgencyModal = () => { this.setState({showAddAgencyMadal: false}) }
+    const generalColumns = [{
+      title: 'Title',
+      dataIndex: 'name',
+      key: 'name'
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+    },
+    { title: 'Action', dataIndex: '', key: 'x', width: 150,
+      render: (text, record) =>
+      <span>
+          <Button type = "primary" onClick = {() => this.editAgency(record)} >Edit</Button>
+          <span className="ant-divider" />
+          <Popconfirm title="Are you sure？" okText="Yes" cancelText="No"
+            onConfirm = {() => this.deleteAgency(record)}>
+            <Button type="danger">Delete</Button>
+          </Popconfirm>
+      </span>
+    }]
+
+    let closeAddAgencyModal = () => { this.setState({showAddAgencyModal: false}) }
     let closeEditAgencyModal = () => { this.setState({showEditAgencyMadal: false}) }
+    let closeAddBookedMethodsModal = () => { this.setState({showAddBookedMethodsModal: false}) }
 
     let title = "Add New Agency"
     let edit_title = "Edit Agency"
@@ -199,7 +240,24 @@ class Agency extends Component{
 
         <div className="modal-container" >
           <Modal
-            show={this.state.showAddAgencyMadal}
+            show={this.state.showAddBookedMethodsModal}
+            onHide={closeAddBookedMethodsModal}
+            container={this}
+            aria-labelledby="contained-modal-title"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title">{title}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <AddBookingMethodsModal dispatch = {this.props.dispatch} />
+            </Modal.Body>
+
+          </Modal>
+        </div>
+
+        <div className="modal-container" >
+          <Modal
+            show={this.state.showAddAgencyModal}
             onHide={closeAddAgencyModal}
             container={this}
             aria-labelledby="contained-modal-title"
@@ -216,7 +274,7 @@ class Agency extends Component{
 
         <div className="modal-container" >
           <Modal
-            show={this.state.showEditAgencyMadal}
+            show={this.state.showEditAgencyModal}
             onHide={closeEditAgencyModal}
             container={this}
             aria-labelledby="contained-modal-title"
@@ -233,19 +291,41 @@ class Agency extends Component{
 
 
         <div className = "topic">
-          <h2>Agency</h2>
+            <h2>Booking Methods</h2>
         </div>
 
-        <div className = "guide-container">
+        <div className="booking-method-table" style ={{marginTop: '5%'}} >
+          <Row>
+            <Col span = {5}>
+              <h4><b>Booking Individually</b></h4>
+            </Col>
+            <Col span = {8}>
+              <Button type = "primary" onClick = {() => this.showAddBookedMethods()} >Add More Methods</Button>
+            </Col>
+          </Row>
+          <Table columns={generalColumns}
+            dataSource={this.state.bookingMethodLists}
+            onChange={this.handleChange}
+            />
+        </div>
+
+        <div className = "agency-table" style ={{marginTop: '5%'}} >
+          <Row>
+            <Col span = {4} >
+              <h4><b>Agency</b></h4>
+            </Col>
+            <Col span = {8} offset={1}>
+              <Button type = "primary" onClick = {() => this.showAddAgencyModal()}>Add More Agency</Button>
+            </Col>
+          </Row>
+
           <div className="table-operations">
             <Table columns={columns}
-              dataSource={clearAgencyData(this.state.agencyData)}
+              dataSource={this.state.agencyLists}
               onChange={this.handleChange}
               />
           </div>
         </div>
-
-        <Button type = "dash" className = "btn-add-agency-form" onClick = {() => this.addAgency()}> + </Button>
 
   </div>
     );
@@ -255,11 +335,11 @@ class Agency extends Component{
 function mapStateToProps(state) {
 
     return {
-      agencyData: state.getAgency.agencyData,
-      addAgencyDataStatus: state.addAgency.addAgencyDataStatus,
       updateAgencyDataStatus: state.updateAgency.updateAgencyDataStatus,
-      deleteAgencyDataStatus: state.deleteAgency.deleteAgencyDataStatus
+      deleteAgencyDataStatus: state.deleteAgency.deleteAgencyDataStatus,
+      bookingMethodLists: state.getBookingMethods.bookingMethodLists,
+      addBookingMethodStatus: state.addBookingMethods.addBookingMethodStatus
     };
 }
 
-export default connect(mapStateToProps)(Agency)
+export default connect(mapStateToProps)(BookingMethod)

@@ -8,7 +8,7 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 
-class AddAgencyModal extends Component{
+class AddBookingMethodsModal extends Component{
 
   constructor(props){
     super(props)
@@ -21,9 +21,8 @@ class AddAgencyModal extends Component{
       if (!err) {
 
           let payload = {name: this.props.form.getFieldValue('agencyName'),
-                         phone: this.props.form.getFieldValue('phone'),
-                         email: this.props.form.getFieldValue('email'),
-                         type: 'Agency'}
+                         description: this.props.form.getFieldValue('description'),
+                         type: 'Individual'}
 
             console.log(payload)
 
@@ -65,7 +64,7 @@ class AddAgencyModal extends Component{
    }
  }
 
- checkAgencyName(rule, value, callback){
+ checkBookingMethodName(rule, value, callback){
    if(value.length > 50 ){
      callback('Agency name should not exceed 50 characters');
    }else {
@@ -94,14 +93,14 @@ class AddAgencyModal extends Component{
       <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
         <FormItem
           {...formItemLayout}
-          label="Agency Name"
+          label="Booking Method Name"
           hasFeedback
         >
-          {getFieldDecorator('agencyName', {
+          {getFieldDecorator('bookingMethodName', {
             rules: [{
               required: true, message: 'Please input your agency name!'
             }, {
-              validator: this.checkAgencyName,
+              validator: this.checkBookingMethodName,
             }],
           })(
             <Input />
@@ -110,33 +109,19 @@ class AddAgencyModal extends Component{
 
         <FormItem
           {...formItemLayout}
-          label="Email"
+          label="Description"
           hasFeedback
         >
-          {getFieldDecorator('email', {
-            rules: [{
-              type: 'email', message: 'The input is not valid E-mail!'
-            }],
+          {getFieldDecorator('description', {
+
           })(
-            <Input />
+            <Input type="textarea" rows={4} />
           )}
         </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="Phone"
-          hasFeedback
-        >
-          {getFieldDecorator('phone', {
-            rules: [{
-              validator: this.checkTel
-            }],
-          })(
-            <Input />
-          )}
-        </FormItem>
+
 
         <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit" size="large">Add Agency</Button>
+          <Button type="primary" htmlType="submit" size="large">Add Booking Methods</Button>
         </FormItem>
       </Form>
       </div>
@@ -146,8 +131,8 @@ class AddAgencyModal extends Component{
 
 function mapStateToProps(state){
   return{
-    
+
   }
 }
 
-export default Form.create({})(AddAgencyModal)
+export default Form.create({})(AddBookingMethodsModal)

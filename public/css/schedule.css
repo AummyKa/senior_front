@@ -1,9 +1,14 @@
 .button-filter-schedule{
-    position: absolute;
-    right: 0px;
+
 
 }
 
+.schedule-filter{
+  background-color: #FEEC66;
+  height: 100px;
+  border-radius: 20px;
+  /*border: #FEEC66 3px solid;*/
+}
 .components-table-demo-nested .ant-table-expanded-row > td:last-child {
   padding: 0 48px 0 8px;
 }
@@ -50,4 +55,8 @@
 
 .table-operations > button {
   margin-right: 8px;
+}
+
+.schedule-container{
+  width: 100%
 }

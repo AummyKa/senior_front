@@ -46,9 +46,9 @@ class DashboardPage extends Component {
                               {/*return <div key={_id}>#{_id} Name: {name}, Age: {age}</div>*/}
                           {/*})}*/}
                   </Col>
-                  <Col span={20} >
+                  <Col span={20} style = {{height:'100%'}} >
                     <NavBar dispatch={this.props.dispatch} />
-                      <div style={{ padding: 60, minHeight: 360  }}>
+                      <div style={{ padding: 60 }}>
                         {this.props.children}
 
                       </div>

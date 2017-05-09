@@ -32,6 +32,20 @@ const tourtypes = [{
   label: 'Private',
 }]
 
+const tour_period = [{
+  value: 'Full-day',
+  label: 'Full-day',
+}, {
+  value: 'Morning',
+  label: 'Morning',
+}, {
+  value: 'Afternoon',
+  label: 'Afternoon',
+}, {
+  value: 'Evening',
+  label: 'Evening',
+}]
+
 
 
 String.prototype.capitalize = function() {
@@ -51,10 +65,15 @@ function getGuideName(gList,resultJSON){
 
 }
 
+
 function throwOptionGuideObject(data){
+  console.log(data)
   let temp = []
-  for (let i = 0; i < data.length; i++) {
-    temp.push(<Option key= {i}>{data[i].name}</Option>);
+  if(data){
+    for (let i = 0; i < data.length; i++) {
+      temp.push(<Option key= {i}><div>{data[i].fullname}</div></Option>);
+    }
+
   }
   return temp
 }
@@ -69,6 +88,14 @@ function throwOptionAgencyObject(data){
 }
 
 function throwOptionTourTypeObject(data){
+  let temp = []
+  for (let i = 0; i < data.length; i++) {
+    temp.push(<Option key= {i}>{data[i].value}</Option>);
+  }
+  return temp
+}
+
+function throwOptionTourPeriodObject(data){
   let temp = []
   for (let i = 0; i < data.length; i++) {
     temp.push(<Option key= {i}>{data[i].value}</Option>);
@@ -93,6 +120,7 @@ const AddTourForm = Form.create()(React.createClass({
   getInitialState() {
     return{
       showCusInput: false,
+      uuid: 0,
       cusLen: 0,
       guide_name: [],
       selectedTourName: "",
@@ -108,12 +136,12 @@ const AddTourForm = Form.create()(React.createClass({
 
   getGuideList(){
     apiAccess({
-      url: 'http://localhost:8000/staffs/tour-guides',
+      url: 'http://localhost:8000/staffs/tour-guides/name',
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_GUIDE_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_GUIDE_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_NAME_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_GUIDE_NAME_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_GUIDE_NAME_FAILED' })
     })
   },
 
@@ -152,10 +180,10 @@ const AddTourForm = Form.create()(React.createClass({
   },
 
   componentWillReceiveProps(nextProps){
-    if(this.props.guideLists !== nextProps.guideLists){
-      // getGuideName(nextProps.guideLists,this.state.guide_name)
-      if(nextProps.guideLists){
-        this.setState({guide_name: nextProps.guideLists})
+    if(this.props.eachGuideName !== nextProps.eachGuideName){
+      console.log(nextProps.eachGuideName)
+      if(nextProps.eachGuideName){
+        this.setState({guide_name: nextProps.eachGuideName})
       }
     }
 
@@ -210,6 +238,8 @@ const AddTourForm = Form.create()(React.createClass({
             formResult[i-1] = customer
           }
 
+          console.log(this.state.selectedGuideName)
+
           let dateTour = changeDateFormat(this.props.dateTour)
 
           let payLoad =
@@ -221,7 +251,8 @@ const AddTourForm = Form.create()(React.createClass({
                 tour_name: this.state.selectedTourName,
                 tour_type: this.state.selectedTourType,
                 tour_guide: this.state.selectedGuideName,
-                start_time: this.state.selectedTourTime
+                start_time: this.state.selectedTourTime,
+                tour_period: this.state.selectedTourPeriod
               },
             }
 
@@ -231,10 +262,13 @@ const AddTourForm = Form.create()(React.createClass({
       });
     },
 
-
+  handleTourPeriodSelect(value,option){
+    console.log(value)
+    this.setState({ selectedTourPeriod: tour_period[value].value});
+  },
 
   handleGuideSelect(value,option){
-    this.setState({ selectedGuideName: this.state.guide_name[value].name});
+    this.setState({ selectedGuideName: this.state.guide_name[value]._id});
     // this.setState({ selectedGuideID: this.state.guide_name[value]._id})
   },
 
@@ -257,25 +291,29 @@ const AddTourForm = Form.create()(React.createClass({
   },
 
   remove(k){
-   const { form } = this.props;
-   // can use data-binding to get
-   const keys = form.getFieldValue('keys');
-   // We need at least one passenger
-   if (keys.length === 1) {
-     return;
-   }
-   // can use data-binding to set
-   form.setFieldsValue({
-     keys: keys.filter(key => key !== k),
-   });
+    const { form } = this.props;
+    // can use data-binding to get
+    const keys = form.getFieldValue('keys');
+    // We need at least one passenger
+    if (keys.length === 1) {
+      return;
+    }
+    // can use data-binding to set
+    form.setFieldsValue({
+      keys: keys.filter(key => key !== keys.slice(-1).pop()),
+    });
  },
 
  add(){
-   uuid++;
+   let num = this.state.uuid
+   num++
+   this.setState({uuid:num})
+   console.log(num)
+
    const { form } = this.props;
    // can use data-binding to get
    const keys = form.getFieldValue('keys');
-   const nextKeys = keys.concat(uuid);
+   const nextKeys = keys.concat(num);
    // can use data-binding to set
    // important! notify form to detect changes
    form.setFieldsValue({
@@ -515,7 +553,11 @@ const AddTourForm = Form.create()(React.createClass({
          aria-labelledby="contained-modal-title"
        >
          <Modal.Body>
-           <GuideSuggestionModal dispatch = {this.props.dispatch} selectedTourName = {this.state.selectedTourName} />
+           <GuideSuggestionModal dispatch = {this.props.dispatch}
+             selectedTourName = {this.state.selectedTourName}
+             selectedTourPeriod = {this.state.selectedTourPeriod}
+             selectedStartDate = {changeDateFormat(this.props.dateTour)}
+             />
          </Modal.Body>
 
        </Modal>
@@ -556,6 +598,24 @@ const AddTourForm = Form.create()(React.createClass({
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
              {throwOptionTourTypeObject(tourtypes)}
+            </Select>
+         )}
+       </FormItem>
+
+       <FormItem
+         {...formItemLayout}
+         label="Tour period"
+       >
+         {getFieldDecorator('tour_period')(
+           <Select
+              showSearch
+              style={{ width: '80%', marginRight: 11, marginLeft: 8 }}
+              placeholder="Select a tour period"
+              optionFilterProp="children"
+              onSelect = {this.handleTourPeriodSelect}
+              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            >
+             {throwOptionTourPeriodObject(tour_period)}
             </Select>
          )}
        </FormItem>
@@ -631,7 +691,7 @@ function mapStateToProps(state) {
     return {
         agencyData: state.getAgency.agencyData,
         tours_data: state.getTours.tours_data,
-        guideLists: state.guideDetail.guideLists,
+        eachGuideName: state.getEachGuideName.eachGuideName,
         dateTour: state.addTourForm.dateTour,
         eachTour: state.getSpecificTour.eachTour,
         isStoppedCountingAddTour: state.addTourForm.isStoppedCountingAddTour

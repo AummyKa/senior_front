@@ -108,6 +108,12 @@ class SlotDetail extends Component {
       this.setState({control_addTour:true})
     }
 
+    if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
+      if(nextProps.addBookerAndTour){
+        this.getTourAndBookerDetail()
+      }
+    }
+
     if(this.props.bookerAndTourDetail !== nextProps.bookerAndTourDetail){
       this.screenTourAndBooker(nextProps.bookerAndTourDetail)
     }
@@ -118,9 +124,9 @@ class SlotDetail extends Component {
         this.getTourAndBookerDetail()
         this.setState({showTourDeleteWarning: false})
         this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
-
       }
     }
+
   }
 
   addMoreTour(){
@@ -137,7 +143,7 @@ class SlotDetail extends Component {
   }
 
   screenTourAndBooker(data){
-
+    console.log(data)
     let tours = []
     let customers = []
 
@@ -156,6 +162,7 @@ class SlotDetail extends Component {
           start_time: data[i].start_time,
           tour_name: data[i].tour_name,
           tour_type: data[i].tour_type,
+          tour_period: data[i].tour_period,
           guide: data[i].tour_guide.fullname,
           participants: total_p
         }
@@ -211,12 +218,21 @@ getCurTour(record){
       },
       { title: 'Type', dataIndex: 'tour_type', key: 'tour_type', width: 80,
         filters: [
-         { text: 'Public', value: 'Public' },
-         { text: 'Private', value: 'Private' }
+          { text: 'Public', value: 'Public' },
+          { text: 'Private', value: 'Private' }
         ],
          filteredValue: filteredInfo.tour_type || null,
          onFilter: (value, record) => record.tour_type.includes(value)
-
+      },
+      { title: 'Period', dataIndex: 'tour_period', key: 'tour_period', width: 80,
+        filters: [
+          { text: 'Full-day', value: 'Full-day' },
+          { text: 'Morning', value: 'Morning' },
+          { text: 'Afternoon', value: 'Afternoon' },
+          { text: 'Evening', value: 'Evening' }
+        ],
+         filteredValue: filteredInfo.tour_period || null,
+         onFilter: (value, record) => record.tour_period.includes(value)
       },
       { title: 'Guide', dataIndex: 'guide', key: 'guide', width: 160,
         filters: [
@@ -289,6 +305,7 @@ getCurTour(record){
 }
 
 const mapStateToProps = (state) => ({
+   addBookerAndTour: state.postBookerAndTour.addBookerAndTour,
    bookerAndTourDetail: state.getBookerAndTour.bookerAndTourDetail,
    selectedDate: state.spreadSelectedDate.selectedDate,
    valid_date_status: state.spreadSelectedDate.valid_date_status,

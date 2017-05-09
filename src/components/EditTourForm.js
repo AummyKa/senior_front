@@ -32,6 +32,20 @@ const tourtypes = [{
   label: 'Private',
 }]
 
+const tour_period = [{
+  value: 'Full-day',
+  label: 'Full-day',
+}, {
+  value: 'Morning',
+  label: 'Morning',
+}, {
+  value: 'Afternoon',
+  label: 'Afternoon',
+}, {
+  value: 'Evening',
+  label: 'Evening',
+}]
+
 
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
@@ -105,7 +119,13 @@ function formatData(data){
   return temp
 }
 
-
+function throwOptionTourPeriodObject(data){
+  let temp = []
+  for (let i = 0; i < data.length; i++) {
+    temp.push(<Option key= {i}>{data[i].value}</Option>);
+  }
+  return temp
+}
 
 let uuid = 0;
 
@@ -181,11 +201,17 @@ const EditTourForm = Form.create()(React.createClass({
       cusTourDelete:"",
       showAddMoreCustomer: false,
       tours_name: [],
+      selectedTourPeriod: ''
     }
   },
 
   handleSubmit(e){
       e.preventDefault();
+  },
+
+  handleTourPeriodSelect(value,option){
+    console.log(value)
+    this.setState({ selectedTourPeriod: tour_period[value].value});
   },
 
   showEdit(record){
@@ -400,6 +426,24 @@ const EditTourForm = Form.create()(React.createClass({
               filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
              {throwOptionTourTypeObject(tourtypes)}
+            </Select>
+         )}
+       </FormItem>
+
+       <FormItem
+         {...formItemLayout}
+         label="Tour period"
+       >
+         {getFieldDecorator('tour_period',{ initialValue: this.state.eachTour.tour_period})(
+           <Select
+              showSearch
+              style={{ width: '80%', marginRight: 11}}
+              placeholder="Select a tour period"
+              optionFilterProp="children"
+              onSelect = {this.handleTourPeriodSelect}
+              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            >
+             {throwOptionTourPeriodObject(tour_period)}
             </Select>
          )}
        </FormItem>

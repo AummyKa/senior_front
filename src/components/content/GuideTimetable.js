@@ -112,21 +112,6 @@ class GuideTimetable extends Component {
     this.setState({selectedDate:date})
   }
 
-  eventStyleGetter(event, start, end, isSelected) {
-    var backgroundColor = '#' + event.hexColor;
-    var style = {
-        backgroundColor: backgroundColor,
-        borderRadius: '25px',
-        opacity: 0.8,
-        color: 'white',
-        border: '0px',
-        display: 'block'
-    }
-    return {
-        style: style
-    }
-}
-
   handleUnavailClicked(type){
 
     if(this.state.morningClicked && this.state.afternoonClicked && type == "evening"){

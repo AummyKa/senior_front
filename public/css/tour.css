@@ -56,7 +56,7 @@
   margin-left: 85%;
 }
 
-.tour-picture, .tour-graph, .tour-schedule, .each-tour-popular-nation, .each-tour-unassigned-,
+.tour-picture, .tour-graph, .tour-schedule, .each-tour-popular-nation, .each-tour-unassigned-guide,
 .tour-description, .cost-model, .edit-tour-data, .expert-list{
   background-color: #EEEBEE;
 }
@@ -70,7 +70,17 @@
 
 .tour-graph{
   width: 100%;
-  height: 260px;
+  height: 530px;
+  margin-bottom: 10px;
+}
+
+.tour-rev-chart{
+  margin-top: 30px;
+}
+
+.each-tour-month-rev-summary{
+  margin-top: 5px;
+  padding: 20px;
   margin-bottom: 10px;
 }
 
@@ -78,6 +88,14 @@
   width: 100%;
   height: 400px;
   margin-bottom: 10px;
+}
+
+.tour-schedule-wrapper{
+  height: 480px;
+  font-family: "Helvetica Neue",Helvetica;
+  margin-bottom: -50px;
+  font-size: 15px;
+  margin-top: -15px;
 }
 
 .each-tour-popular-nation{
@@ -117,6 +135,19 @@
   margin-top: 5px;
 }
 
+.cost-model-title, .edit-tour-title, .expert-guide-list-title, .each-tour-schedule-title,
+.each-tour-popular-nation-title, .each-tour-unassigned-guide-title, .tour-graph-title{
+  width: 100%;
+  height: 30px;
+  font-size: 16px;
+  text-align: center;
+  padding: 5px;
+  border: 0;
+  background-color: white;
+  border-bottom: 2px solid #F84C38;
+  box-shadow: none;
+}
+
 .edit-tour-data{
   width: 100%;
   height: 85px;
@@ -126,6 +157,10 @@
 .expert-list{
   width: 100%;
   height: 350px;
+  margin-top: 10px;
+}
+
+.expert-list-table{
   margin-top: 10px;
 }
 

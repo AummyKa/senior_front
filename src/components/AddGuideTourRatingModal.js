@@ -30,7 +30,7 @@ function throwOptionTourNameObject(data){
   }
 }
 
-let uuid = 0
+
 
 const AddGuideTourRatingModal = Form.create()(React.createClass({
 

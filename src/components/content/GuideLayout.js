@@ -44,8 +44,8 @@ class GuideLayout extends Component {
 
     if(this.props.eachGuideName !== nextProps.eachGuideName){
       if(nextProps.eachGuideName){
-        console.log(nextProps.eachGuideName.name)
-        this.setState({name: nextProps.eachGuideName.name})
+        console.log(nextProps.eachGuideName.fullname)
+        this.setState({name: nextProps.eachGuideName.fullname})
       }
     }
   }

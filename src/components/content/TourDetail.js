@@ -1,11 +1,16 @@
-import { Button, Col, Row } from 'antd';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 
 import AddNewTourModal from '../AddNewTourModal';
 
+import { Button, Col, Row} from 'antd';
 import { Modal } from 'react-bootstrap';
 import apiAccess from '../../Helpers/apiAccess'
+
+import EachTourRevChart from '../EachTourRevChart'
+import EachTourExpertGuide from '../EachTourExpertGuide'
+import EachTourSchedule from '../EachTourSchedule'
+
 import {connect} from 'react-redux';
 import Cookies from 'js-cookie'
 
@@ -67,30 +72,47 @@ class TourDetail extends Component {
             </div>
 
             <div className = "cost-model">
-              <div className = "cost-model-title"></div>
+              <div className = "cost-model-title"><b>Cost Model</b></div>
             </div>
 
             <div className = "edit-tour-data">
+              <div className = "edit-tour-title"><b>Edit Tour</b></div>
             </div>
 
             <div className = "expert-list">
+              <div className = "expert-guide-list-title"><b>Expert Guide</b></div>
+              <div className = "expert-list-table">
+                <EachTourExpertGuide/>
+              </div>
             </div>
 
           </Col>
           <Col span ={16} offset = {1}>
             <div className = "tour-graph">
-            </div>
+              <div className = "tour-graph-title"><b>Tour Revenue</b></div>
 
+              <div className = "tour-rev-chart">
+                <EachTourRevChart />
+              </div>
+
+            </div>
+            {/*
             <div className = "tour-schedule">
-            </div>
+              <div className = "each-tour-schedule-title"><b>Tour Schedule</b></div>
+              <div className = "tour-schedule-wrapper">
 
+              </div>
+            </div>
+            */}
             <Row>
               <Col span = {14}>
                 <div className = "each-tour-popular-nation">
+                  <div className = "each-tour-popular-nation-title"><b>Popular Nation</b></div>
                 </div>
               </Col>
               <Col span = {9} offset = {1}>
                 <div className = "each-tour-unassigned-guide">
+                  <div className = "each-tour-unassigned-guide-title"><b>Unassigned Guide</b></div>
                 </div>
               </Col>
             </Row>

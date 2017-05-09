@@ -42,7 +42,7 @@ function getTotalMonthlyRev(pub,pri){
 }
 
 
-class TotalRev extends Component {
+class EachTourRevChart extends Component {
 
   constructor(props){
     super(props)
@@ -60,16 +60,16 @@ class TotalRev extends Component {
     return (
 
       <div>
-          <AreaChart width={600} height={200} data={data}
+          <AreaChart width={650} height={230} data={data}
                  margin={{top: 10, right: 30, left: 0, bottom: 0}}>
              <XAxis dataKey="name"/>
              <YAxis/>
              <CartesianGrid strokeDasharray="3 3"/>
              <Tooltip/>
-             <Area type='monotone' dataKey='uv' stroke='#F81919' fill='#C70039' />
+             <Area type='monotone' dataKey='uv' stroke='#FF5733' fill='#FFC300' />
            </AreaChart>
 
-             <div className = "table-month-rev-summary">
+             <div className = "each-tour-month-rev-summary">
               <Row>
                 <Col span = {10}><h5><b>Monthly revenue summary</b></h5></Col>
                 <Col span = {6} offset = {8}><h5>Year</h5></Col>
@@ -83,4 +83,4 @@ class TotalRev extends Component {
   }
 }
 
-export default TotalRev
+export default EachTourRevChart

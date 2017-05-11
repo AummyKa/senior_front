@@ -23,6 +23,7 @@ class AddAgencyModal extends Component{
           let payload = {name: this.props.form.getFieldValue('agencyName'),
                          phone: this.props.form.getFieldValue('phone'),
                          email: this.props.form.getFieldValue('email'),
+                         description: this.props.form.getFieldValue('description'),
                          type: 'Agency'}
 
             console.log(payload)
@@ -135,6 +136,18 @@ class AddAgencyModal extends Component{
           )}
         </FormItem>
 
+        <FormItem
+          {...formItemLayout}
+          label="Description"
+          hasFeedback
+        >
+          {getFieldDecorator('description', {
+
+          })(
+            <Input type="textarea" rows={4} />
+          )}
+        </FormItem>
+
         <FormItem {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit" size="large">Add Agency</Button>
         </FormItem>
@@ -146,7 +159,7 @@ class AddAgencyModal extends Component{
 
 function mapStateToProps(state){
   return{
-    
+
   }
 }
 

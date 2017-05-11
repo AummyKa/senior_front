@@ -8,8 +8,7 @@ import Cookies from 'js-cookie'
 import apiAccess from '../../Helpers/apiAccess'
 
 //Pie Chart
-const data4 = [{name: 'Group A', value: 400}, {name: 'Group B', value: 300},
-                  {name: 'Group C', value: 300}, {name: 'Group D', value: 200}];
+
 const COLORS = ['#900C3F', '#C70039', '#FF5733', '#FFC300'];
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
@@ -34,13 +33,22 @@ const columns = [{
 
 
 const AddKeyPopNationTable = (arrayJSON) =>{
-  console.log(arrayJSON)
+  let resultJSON = []
   if(arrayJSON!=null){
-    for(var i = 0; i < arrayJSON.length; i++) {
-      arrayJSON[i]["key"] = i;
+    if(arrayJSON.length > 4){
+      for(var i = 0; i < 4; i++) {
+        resultJSON[i] = arrayJSON[i]
+        resultJSON[i]["key"] = i
+      }
+    }else{
+      for(var i = 0; i < arrayJSON.length; i++) {
+        resultJSON[i] = arrayJSON[i]
+        resultJSON[i]["key"] = i
+    }
+
   }
 }
-  return arrayJSON
+  return resultJSON
 }
 
 
@@ -60,7 +68,7 @@ class PopularNation extends Component {
 
   getPopularNation(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/participants/country/'+year,
+      url: 'http://localhost:8000/bookedtours/total-participants/country/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_SUMMARY_AMOUNT_NATIONS_ATTEMPT' }),
@@ -74,9 +82,9 @@ class PopularNation extends Component {
   }
 
   componentWillReceiveProps(nextProps){
+    console.log(nextProps.amountNationsSummary)
     if(this.props.amountNationsSummary !== nextProps.amountNationsSummary){
       if(nextProps.amountNationsSummary){
-        console.log(nextProps.amountNationsSummary)
         this.setState({amountNationsSummary:nextProps.amountNationsSummary})
       }
     }
@@ -89,9 +97,7 @@ class PopularNation extends Component {
   }
 
 listNations(data) {
-  console.log(data)
     if(data.length !== 0){
-      console.log(data)
 
       const list = data.map((key,index) =>
         <div>
@@ -116,7 +122,7 @@ listNations(data) {
           <div className= "piechart-container">
                 <PieChart width={300} height={170} onMouseEnter={this.onPieEnter}>
                     <Pie
-                      data={this.state.amountNationsSummary}
+                      data={AddKeyPopNationTable(this.state.amountNationsSummary)}
                       cx={140}
                       cy={80}
                       labelLine={false}
@@ -136,7 +142,7 @@ listNations(data) {
 
                 <div className= "popular-color-label">
 
-                    {this.listNations(this.state.amountNationsSummary)}
+                    {this.listNations(AddKeyPopNationTable(this.state.amountNationsSummary))}
 
                 </div>
 

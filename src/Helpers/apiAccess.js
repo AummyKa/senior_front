@@ -11,8 +11,6 @@ failureAction
 
 attemptAction()
 
-console.log(method)
-console.log(url)
 
 if(method == "POST" || method == "DELETE"){
 

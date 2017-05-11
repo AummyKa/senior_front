@@ -78,11 +78,11 @@ function throwOptionGuideObject(data){
   return temp
 }
 
-function throwOptionAgencyObject(data){
+function throwOptionBookingMethodObject(data){
   console.log(data)
   let temp = []
   for (let i = 0; i < data.length; i++) {
-    temp.push(<Option key= {i}>{data[i].agency_name}</Option>);
+    temp.push(<Option key= {i}>{data[i].name}</Option>);
   }
   return temp
 }
@@ -113,8 +113,6 @@ function throwOptionTourNameObject(data){
   }
 }
 
-let uuid = 0;
-
 const AddTourForm = Form.create()(React.createClass({
 
   getInitialState() {
@@ -124,13 +122,12 @@ const AddTourForm = Form.create()(React.createClass({
       cusLen: 0,
       guide_name: [],
       selectedTourName: "",
-      selectedAgency: "",
+      selectedBookingMethod: 'Walk-in',
       selectedTourType: "",
       selectedTourTime: "",
-      bookingNumber:0,
       showSuggest: false,
       tours_name: [],
-      agencyData: []
+      bookingMethods: []
     }
   },
 
@@ -156,16 +153,15 @@ const AddTourForm = Form.create()(React.createClass({
     })
   },
 
-  getAgencyList(){
+  getBookingMethods(){
     apiAccess({
-      url: 'http://localhost:8000/agencies',
+      url: 'http://localhost:8000/bookingmethods/',
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_AGENCY_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_AGENCY_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_AGENCY_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_BOOKING_METHODS_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_FAILED' })
     })
-
   },
 
   addBookerAndTour(payload){
@@ -196,10 +192,10 @@ const AddTourForm = Form.create()(React.createClass({
       this.setState({bookingNumber: 0})
     }
 
-    if(this.props.agencyData !== nextProps.agencyData){
-      if(nextProps.agencyData){
-        console.log(nextProps.agencyData)
-        this.setState({agencyData: nextProps.agencyData})
+    if(this.props.bookingMethodLists !== nextProps.bookingMethodLists){
+      if(nextProps.bookingMethodLists){
+
+        this.setState({bookingMethods: nextProps.bookingMethodLists})
       }
     }
   },
@@ -207,7 +203,7 @@ const AddTourForm = Form.create()(React.createClass({
   componentWillMount(){
     this.getAllTourName()
     this.getGuideList()
-    this.getAgencyList()
+    this.getBookingMethods()
   },
 
   handleSubmit(e){
@@ -223,7 +219,7 @@ const AddTourForm = Form.create()(React.createClass({
           for(var i = 1; i <= count; i++){
             console.log(this.props.form.getFieldValue(`pickup_time-${i}`))
             var customer = {
-                agency: this.state.selectedAgency,
+                booking_method: this.state.selectedbookingMethod,
                 email: this.props.form.getFieldValue(`email-${i}`),
                 phone: this.props.form.getFieldValue(`phone-${i}`),
                 name: this.props.form.getFieldValue(`name-${i}`),
@@ -237,8 +233,6 @@ const AddTourForm = Form.create()(React.createClass({
 
             formResult[i-1] = customer
           }
-
-          console.log(this.state.selectedGuideName)
 
           let dateTour = changeDateFormat(this.props.dateTour)
 
@@ -272,8 +266,8 @@ const AddTourForm = Form.create()(React.createClass({
     // this.setState({ selectedGuideID: this.state.guide_name[value]._id})
   },
 
-  handleAgencySelect(value,option){
-    this.setState({ selectedAgency: this.state.agencyData[value].agency_name });
+  handleBookingMethodSelect(value,option){
+    this.setState({ selectedBookingMethod: this.state.bookingMethods[value].name });
   },
 
   handleTourNameSelect(value,option){
@@ -344,8 +338,8 @@ const AddTourForm = Form.create()(React.createClass({
   render(){
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
-      labelCol: { span: 4 },
-      wrapperCol: { span: 20 },
+      labelCol: { span: 6 },
+      wrapperCol: { span: 18 },
     };
     //customer input form
   const formItemLayoutWithOutLabel = {
@@ -354,7 +348,6 @@ const AddTourForm = Form.create()(React.createClass({
    getFieldDecorator('keys', { initialValue: [] });
    const keys = getFieldValue('keys');
 
-   let k = this.state.bookingNumber //still can't not fix
    this.state.formItems = keys.map((k, index) => {
      return (
 
@@ -374,25 +367,25 @@ const AddTourForm = Form.create()(React.createClass({
           </Row>
 
         <Row>
-          <Col span={8} offset={1}>
+          <Col span={10} >
 
             <FormItem
               {...formItemLayout}
-              label="Agency"
+              label="Booking Methods"
             >
-              {getFieldDecorator(`agency-${k}`, {
-                initialValue: ['N/A'],
+              {getFieldDecorator(`bookingMethods-${k}`, {
+                initialValue: ['Walk-in'],
 
               })(
                 <Select
                    showSearch
-                   style={{ width: '80%', marginRight: 11 }}
-                   placeholder="Select a person"
+                   style={{ width: '80%', marginRight: 5 }}
+                   placeholder="Select a booking method"
                    optionFilterProp="children"
-                   onSelect={this.handleAgencySelect}
+                   onSelect={this.handleBookingMethodSelect}
                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                  >
-                  {throwOptionAgencyObject(this.state.agencyData)}
+                  {throwOptionBookingMethodObject(this.state.bookingMethods)}
                  </Select>
               )}
             </FormItem>
@@ -410,7 +403,7 @@ const AddTourForm = Form.create()(React.createClass({
                message: "Please input customer's email.",
              }],
            })(
-             <Input placeholder="email" style={{ width: '80%', marginRight: 11 }} />
+             <Input placeholder="email" style={{ width: '80%', marginRight: 5 }} />
            )}
 
          </FormItem>
@@ -428,7 +421,7 @@ const AddTourForm = Form.create()(React.createClass({
                message: "Please input customer's name.",
              }],
            })(
-             <Input placeholder="name"  style={{ width: '80%', marginRight: 11 }} />
+             <Input placeholder="name"  style={{ width: '80%', marginRight: 5 }} />
            )}
 
          </FormItem>
@@ -442,7 +435,7 @@ const AddTourForm = Form.create()(React.createClass({
              validateTrigger: ['onChange', 'onBlur'],
 
            })(
-             <Input placeholder="country"  style={{ width: '80%', marginRight: 11 }} />
+             <Input placeholder="country"  style={{ width: '80%', marginRight: 5 }} />
            )}
 
          </FormItem>
@@ -455,14 +448,14 @@ const AddTourForm = Form.create()(React.createClass({
            {getFieldDecorator(`phone-${k}`, {
              validateTrigger: ['onChange', 'onBlur']
            },{ validator: this.checkTel})(
-             <Input placeholder="phone"  style={{ width: '80%', marginRight: 11 }} />
+             <Input placeholder="phone"  style={{ width: '80%', marginRight: 5 }} />
            )}
 
          </FormItem>
 
 
        </Col>
-         <Col span={14} offset = {1}>
+         <Col span={14}>
 
            <FormItem
              {...formItemLayout}
@@ -565,7 +558,7 @@ const AddTourForm = Form.create()(React.createClass({
      <Form className = "add-tour-form" horizontal onSubmit={this.handleSubmit}>
 
        <Row>
-      <Col span={11} offset = {1}>
+      <Col span={11}>
        <FormItem
          {...formItemLayout}
          label="Tour name"
@@ -689,7 +682,7 @@ const AddTourForm = Form.create()(React.createClass({
 function mapStateToProps(state) {
 
     return {
-        agencyData: state.getAgency.agencyData,
+        bookingMethodLists: state.getBookingMethods.bookingMethodLists,
         tours_data: state.getTours.tours_data,
         eachGuideName: state.getEachGuideName.eachGuideName,
         dateTour: state.addTourForm.dateTour,

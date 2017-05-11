@@ -37,7 +37,7 @@ class EachTourExpertGuide extends Component {
                         starCount={5}
                         value={record.rating}
                         editing={false}
-                        starColor= "#FDDC02"
+                        starColor= "#FFC300"
                         emptyStarColor= "#000000"
                         renderStarIcon={() => <span><Icon type="star" /></span>}
                       />

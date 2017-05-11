@@ -13,7 +13,6 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 
-
 String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
@@ -37,7 +36,7 @@ const AddGuideTourRatingModal = Form.create()(React.createClass({
   getInitialState() {
     return{
       listAllTourName: [],
-      uuid: 0
+      uuid: 1
     }
   },
 
@@ -69,7 +68,6 @@ const AddGuideTourRatingModal = Form.create()(React.createClass({
 
   componentWillMount(){
     this.getAllTour()
-
   },
 
   handleSubmit(e){
@@ -162,9 +160,9 @@ const AddGuideTourRatingModal = Form.create()(React.createClass({
   const formItemLayoutWithOutLabel = {
      wrapperCol: { span: 12, offset: 10 },
    };
-   getFieldDecorator('keys', { initialValue: [] });
+   getFieldDecorator('keys', { initialValue: [1] });
    const keys = getFieldValue('keys');
-   console.log(keys)
+
 
    this.state.formItems = keys.map((k, index) => {
      console.log(k)

@@ -131,9 +131,9 @@ class SlotDetail extends Component {
 
   addMoreTour(){
     console.log(this.state.control_addTour)
-      if(this.state.control_addTour){
+
         this.props.dispatch(addTour('ADD_TOUR',this.props.selectedDate))
-      }
+      // }
       // console.log(this.state.valid_date_status)
       // if(this.state.valid_date_status){
       //   this.props.dispatch(addTour('ADD_TOUR',this.props.selectedDate))

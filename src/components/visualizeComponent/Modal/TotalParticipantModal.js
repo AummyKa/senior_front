@@ -7,9 +7,10 @@ import { Col, Row, Table, Icon, Button,Popover, Select } from 'antd'
 import { Modal ,ButtonToolbar } from 'react-bootstrap';
 
 import apiAccess from '../../../Helpers/apiAccess'
+import Cookies from 'js-cookie'
 
 
-const revTableData = (arrayJSON) =>{
+const participantTableData = (arrayJSON) =>{
   console.log(arrayJSON)
   if(arrayJSON!=null){
     for(var i = 0; i < arrayJSON.length; i++) {
@@ -19,6 +20,26 @@ const revTableData = (arrayJSON) =>{
   return arrayJSON
 }
 
+// function getTotalMonthlyRev(pub,pri){
+//   let intPub = 0
+//   let intPri = 0
+//   let total = 0
+//
+//   if(pub.includes(",")){
+//     intPub = parseInt(pub.replace(',',''))
+//     total = total + intPub
+//   }else if(pri.includes(",")){
+//     intPri = parseInt(pri.replace(',',''))
+//     total = total + intPri
+//   }else{
+//     let total = pub + pri
+//   }
+//
+//   console.log(total)
+//   return(
+//     <span>{total}</span>
+//   )
+// }
 
 function throwOptionYearObject(){
   let today = new Date();
@@ -37,60 +58,62 @@ const Option = Select.Option;
 let today = new Date();
 let curYear = today.getFullYear();
 
-class TotalRevModal extends Component {
+class TotalParticipantModal extends Component {
 
   constructor(props){
     super(props)
     this.state = {
       selectedYear: curYear,
-      totalRevData: [],
-      totalRevTable:[]
+      totalParticipantData: [],
+      totalParticipantTable:[]
     }
   }
 
-  getRevTableData(year){
+  getParticipantTableData(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/revenue/tour-type/'+year,
+      url: 'http://localhost:8000/bookedtours/summary/participants/tour-type/'+year,
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_TOTAL_REV_TABLE_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_TOTAL_REV_TABLE_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_TOTAL_REV_TABLE_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'GET_TOTAL_PARTICIPANT_TABLE_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_TOTAL_PARTICIPANT_TABLE_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_TOTAL_PARTICIPANT_TABLE_FAILED' })
     })
   }
 
-  getRevData(year){
+  getParticipantData(year){
+    console.log(year)
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/revenue/'+year,
+      url: 'http://localhost:8000/bookedtours/summary/participants/'+year,
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_TOTAL_REV_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_TOTAL_REV_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_TOTAL_REV_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'GET_TOTAL_PARTICIPANT_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_TOTAL_PARTICIPANT_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_TOTAL_PARTICIPANT_FAILED' })
     })
   }
 
   componentWillMount(){
-    this.getRevData(this.state.selectedYear)
-    this.getRevTableData(this.state.selectedYear)
+    this.getParticipantData(this.state.selectedYear)
+    this.getParticipantTableData(this.state.selectedYear)
   }
 
   componentWillReceiveProps(nextProps){
-    if(this.props.totalRevTable !== nextProps.totalRevTable){
-      if(nextProps.totalRevTable){
-        this.setState({totalRevTable:revTableData(nextProps.totalRevTable)})
+    if(this.props.totalParticipantTable !== nextProps.totalParticipantTable){
+      if(nextProps.totalParticipantTable){
+        this.setState({totalParticipantTable:participantTableData(nextProps.totalParticipantTable)})
       }
     }
-    if(this.props.totalRevData !== nextProps.totalRevData){
-      if(nextProps.totalRevData){
-        this.setState({totalRevData:nextProps.totalRevData})
+
+    if(this.props.totalParticipantData !== nextProps.totalParticipantData){
+      if(nextProps.totalParticipantData){
+        this.setState({totalParticipantData:nextProps.totalParticipantData})
       }
     }
+
     if(this.props.selectedYear !== nextProps.selectedYear){
       if(nextProps.selectedYear){
         this.setState({selectedYear:nextProps.selectedYear})
-        this.getRevTableData(nextProps.selectedYear)
-        this.getRevData(nextProps.selectedYear)
+        this.getParticipantData(nextProps.selectedYear)
       }
     }
   }
@@ -103,7 +126,6 @@ class TotalRevModal extends Component {
   setYearRev(){
     this.getRevTableData(this.state.selectedYear)
   }
-
 
   render() {
 
@@ -121,12 +143,13 @@ class TotalRevModal extends Component {
           <Col span={14}>
 
             <div className = "total-rev-area-chart">
-              <AreaChart width={650} height={300} data={this.state.totalRevData}>
+              <AreaChart width={600} height={200} data={this.state.totalParticipantData}
+                     margin={{top: 10, right: 30, left: 0, bottom: 0}}>
                  <XAxis dataKey="month"/>
-                 <YAxis dataKey='revenue'/>
+                 <YAxis dataKey='participants'/>
                  <CartesianGrid strokeDasharray="3 3"/>
                  <Tooltip/>
-                 <Area type='monotone' dataKey='revenue' stroke='#F81919' fill='#C70039' />
+                 <Area type='monotone' dataKey='participants' stroke='#F81919' fill='#FF5733' />
                </AreaChart>
             </div>
 
@@ -154,7 +177,7 @@ class TotalRevModal extends Component {
                     <Button type = "primary" onClick = {() => this.setYearRev()}>GO!</Button>
                 </Col>
             </Row>
-             <Table columns={columns} dataSource={this.state.totalRevTable} size="small" pagination={false} />
+             <Table columns={columns} dataSource={this.state.totalParticipantTable} size="small" pagination={false} />
           </Col>
         </Row>
 
@@ -168,10 +191,10 @@ class TotalRevModal extends Component {
 
 function mapStateToProps(state){
   return{
-    totalRevTable: state.getTotalRevTable.totalRevTable,
-    totalRevData: state.getTotalRev.totalRevData,
+    totalParticipantTable: state.getTotalParticipantTable.totalParticipantTable,
+    totalParticipantData: state.getTotalParticipant.totalParticipantData,
     selectedYear: state.updateYearDashBoard.selectedYear
   }
 }
 
-export default connect(mapStateToProps)(TotalRevModal)
+export default connect(mapStateToProps)(TotalParticipantModal)

@@ -9,17 +9,22 @@ import apiAccess from '../../Helpers/apiAccess'
 import AddAgencyModal from '../AddAgencyModal'
 import EditAgencyModal from '../EditAgencyModal'
 import AddBookingMethodsModal from '../AddBookingMethodsModal'
+import EditBookingMethodsModal from '../EditBookingMethodsModal'
 
 import Cookies from 'js-cookie'
 
 
 const agencyData = (arrayJSON) =>{
+  console.log(arrayJSON)
   let resultJSON = []
+  let count = 0
   if(arrayJSON && arrayJSON.length > 0){
+    console.log(arrayJSON)
     for(let i =0;i<arrayJSON.length;i++){
       if(arrayJSON[i].type == "Agency"){
-        arrayJSON[i]["key"] = i;
-        resultJSON[i] = arrayJSON[i]
+        arrayJSON[i]["key"] = count;
+        resultJSON[count] = arrayJSON[i]
+        count++
       }
     }
   }
@@ -27,18 +32,22 @@ const agencyData = (arrayJSON) =>{
 }
 
 const bookingMethodData = (arrayJSON) =>{
+
   let resultJSON = []
+  let count = 0
   if(arrayJSON && arrayJSON.length > 0){
     for(let i =0;i<arrayJSON.length;i++){
       if(arrayJSON[i].type == "Individual"){
-        arrayJSON[i]["key"] = i;
-        resultJSON[i] = arrayJSON[i]
+        console.log(arrayJSON[i])
+        arrayJSON[count]["key"] = count;
+        resultJSON[count] = arrayJSON[i]
+        count++
       }
     }
   }
+
   return resultJSON
 }
-
 
 class BookingMethod extends Component{
 
@@ -52,11 +61,12 @@ class BookingMethod extends Component{
       agencyData:[],
       showAddAgencyMadal: false,
       showEditAgencyMadal: false,
-      selectedAgency:'',
-      bookingMethodLists:[],
+      selectedBookingMethod:'',
       agencyLists:[],
+      bookingMethodLists:[],
       showAddBookedMethodsModal: false,
-      showAddAgencyModal:false
+      showAddAgencyModal:false,
+      showEditBookingMethodsModal:false
     }
   }
 
@@ -96,28 +106,30 @@ class BookingMethod extends Component{
       if(nextProps.bookingMethodLists){
         console.log(nextProps.bookingMethodLists)
         let agencyLists = agencyData(nextProps.bookingMethodLists)
-        this.setState({agencyLists:agencyLists})
         let bookingMethodLists = bookingMethodData(nextProps.bookingMethodLists)
+        this.setState({agencyLists:agencyLists})
         this.setState({bookingMethodLists:bookingMethodLists})
       }
     }
 
-    if(this.props.updateAgencyDataStatus !== nextProps.updateAgencyDataStatus){
-      if(nextProps.updateAgencyDataStatus){
-        this.setState({showEditAgencyMadal: false})
-
+    if(this.props.updateBookingMethodsStatus !== nextProps.updateBookingMethodsStatus){
+      if(nextProps.updateBookingMethodsStatus){
+        this.setState({showEditAgencyModal: false})
+        this.setState({showEditBookingMethodsModal:false})
+        this.getBookingMethods()
       }
     }
 
-    if(this.props.deleteAgencyDataStatus !== nextProps.deleteAgencyDataStatus){
-      if(nextProps.deleteAgencyDataStatus){
-
+    if(this.props.deleteBookingMethodsStatus !== nextProps.deleteBookingMethodsStatus){
+      if(nextProps.deleteBookingMethodsStatus){
+        this.getBookingMethods()
       }
     }
 
     if(this.props.addBookingMethodStatus !== nextProps.addBookingMethodStatus){
       if(nextProps.addBookingMethodStatus){
         this.setState({showAddAgencyModal:false})
+        this.setState({showAddBookingMethodsModal:false})
         this.getBookingMethods()
       }
     }
@@ -134,19 +146,24 @@ class BookingMethod extends Component{
 
   editAgency(record){
     console.log(record)
-    this.setState({selectedAgency: record})
-    this.setState({showEditAgencyMadal: true})
-
+    this.setState({selectedBookingMethod: record})
+    this.setState({showEditAgencyModal: true})
   }
 
-  deleteAgency(record){
+  editBookingMethod(record){
+    console.log(record)
+    this.setState({selectedBookingMethod: record})
+    this.setState({showEditBookingMethodsModal: true})
+  }
+
+  deleteBookingMethod(record){
     apiAccess({
-      url: 'http://localhost:8000/agencies/delete/'+record._id,
+      url: 'http://localhost:8000/bookingmethods/delete/'+record._id,
       method: 'DELETE',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'DELETE_AGENCY_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'DELETE_AGENCY_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'DELETE_AGENCY_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'DELETE_BOOKING_METHOD_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'DELETE_BOOKING_METHOD_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'DELETE_BOOKING_METHOD_FAILED' })
     })
   }
 
@@ -154,8 +171,8 @@ class BookingMethod extends Component{
     this.setState({showAddAgencyModal:true})
   }
 
-  showAddBookedMethods(){
-    this.setState({showAddBookedMethodsModal:true})
+  showAddBookingMethods(){
+    this.setState({showAddBookingMethodsModal:true})
   }
 
   render() {
@@ -192,14 +209,18 @@ class BookingMethod extends Component{
       sorter: (a, b) => a.phone.length - b.phone.length,
       sortOrder: sortedInfo.columnKey === 'phone' && sortedInfo.order,
     },
-
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description'
+    },
     { title: 'Action', dataIndex: '', key: 'x', width: 150,
       render: (text, record) =>
       <span>
           <Button type = "primary" onClick = {() => this.editAgency(record)} >Edit</Button>
           <span className="ant-divider" />
           <Popconfirm title="Are you sure？" okText="Yes" cancelText="No"
-            onConfirm = {() => this.deleteAgency(record)}>
+            onConfirm = {() => this.deleteBookingMethod(record)}>
             <Button type="danger">Delete</Button>
           </Popconfirm>
       </span>
@@ -218,20 +239,22 @@ class BookingMethod extends Component{
     { title: 'Action', dataIndex: '', key: 'x', width: 150,
       render: (text, record) =>
       <span>
-          <Button type = "primary" onClick = {() => this.editAgency(record)} >Edit</Button>
+          <Button type = "primary" onClick = {() => this.editBookingMethod(record)} >Edit</Button>
           <span className="ant-divider" />
           <Popconfirm title="Are you sure？" okText="Yes" cancelText="No"
-            onConfirm = {() => this.deleteAgency(record)}>
+            onConfirm = {() => this.deleteBookingMethod(record)}>
             <Button type="danger">Delete</Button>
           </Popconfirm>
       </span>
     }]
 
     let closeAddAgencyModal = () => { this.setState({showAddAgencyModal: false}) }
-    let closeEditAgencyModal = () => { this.setState({showEditAgencyMadal: false}) }
-    let closeAddBookedMethodsModal = () => { this.setState({showAddBookedMethodsModal: false}) }
+    let closeEditAgencyModal = () => { this.setState({showEditAgencyModal: false}) }
+    let closeAddBookingMethodsModal = () => { this.setState({showAddBookingMethodsModal: false}) }
+    let closeEditBookingMethodsModal = () => { this.setState({showEditBookingMethodsModal:false }) }
 
-    let title = "Add New Agency"
+    let agency_title = "Add New Agency"
+    let bookingMethod_title = "Add New Booking Method"
     let edit_title = "Edit Agency"
 
     return (
@@ -240,13 +263,13 @@ class BookingMethod extends Component{
 
         <div className="modal-container" >
           <Modal
-            show={this.state.showAddBookedMethodsModal}
-            onHide={closeAddBookedMethodsModal}
+            show={this.state.showAddBookingMethodsModal}
+            onHide={closeAddBookingMethodsModal}
             container={this}
             aria-labelledby="contained-modal-title"
           >
             <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title">{title}</Modal.Title>
+              <Modal.Title id="contained-modal-title">{bookingMethod_title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <AddBookingMethodsModal dispatch = {this.props.dispatch} />
@@ -263,7 +286,7 @@ class BookingMethod extends Component{
             aria-labelledby="contained-modal-title"
           >
             <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title">{title}</Modal.Title>
+              <Modal.Title id="contained-modal-title">{agency_title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <AddAgencyModal dispatch = {this.props.dispatch} />
@@ -283,7 +306,24 @@ class BookingMethod extends Component{
               <Modal.Title id="contained-modal-title">{edit_title}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <EditAgencyModal dispatch = {this.props.dispatch} selectedAgency = {this.state.selectedAgency}  />
+              <EditAgencyModal dispatch = {this.props.dispatch} selectedBookingMethod = {this.state.selectedBookingMethod}  />
+            </Modal.Body>
+
+          </Modal>
+        </div>
+
+        <div className="modal-container" >
+          <Modal
+            show={this.state.showEditBookingMethodsModal}
+            onHide={closeEditBookingMethodsModal}
+            container={this}
+            aria-labelledby="contained-modal-title"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title">{edit_title}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <EditBookingMethodsModal dispatch = {this.props.dispatch} selectedBookingMethod = {this.state.selectedBookingMethod}  />
             </Modal.Body>
 
           </Modal>
@@ -294,13 +334,13 @@ class BookingMethod extends Component{
             <h2>Booking Methods</h2>
         </div>
 
-        <div className="booking-method-table" style ={{marginTop: '5%'}} >
+        <div className="booking-method-table" style ={{marginTop: '3%'}} >
           <Row>
             <Col span = {5}>
               <h4><b>Booking Individually</b></h4>
             </Col>
             <Col span = {8}>
-              <Button type = "primary" onClick = {() => this.showAddBookedMethods()} >Add More Methods</Button>
+              <Button type = "primary" onClick = {() => this.showAddBookingMethods()} >Add More Methods</Button>
             </Col>
           </Row>
           <Table columns={generalColumns}
@@ -309,7 +349,7 @@ class BookingMethod extends Component{
             />
         </div>
 
-        <div className = "agency-table" style ={{marginTop: '5%'}} >
+        <div className = "agency-table" style = {{marginTop: '5%'}}>
           <Row>
             <Col span = {4} >
               <h4><b>Agency</b></h4>
@@ -335,8 +375,8 @@ class BookingMethod extends Component{
 function mapStateToProps(state) {
 
     return {
-      updateAgencyDataStatus: state.updateAgency.updateAgencyDataStatus,
-      deleteAgencyDataStatus: state.deleteAgency.deleteAgencyDataStatus,
+      updateBookingMethodsStatus: state.updateBookingMethods.updateBookingMethodsStatus,
+      deleteBookingMethodsStatus: state.deleteBookingMethods.deleteBookingMethodsStatus,
       bookingMethodLists: state.getBookingMethods.bookingMethodLists,
       addBookingMethodStatus: state.addBookingMethods.addBookingMethodStatus
     };

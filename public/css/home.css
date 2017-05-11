@@ -1,4 +1,5 @@
-.total-revenue, .each-tour-total-revenue, .popular-nation{
+.total-revenue, .each-tour-total-revenue, .popular-nation, .total-participant,
+.each-tour-total-customers, .total-cost-from-guide{
   background-color: #F0EAE6;
   font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
@@ -6,6 +7,18 @@
 
 
 .total-revenue{
+  width: 650px;
+  height: 30%;
+  padding-bottom: 3%;
+}
+
+.total-participant{
+  width: 650px;
+  height: 30%;
+  padding-bottom: 3%;
+}
+
+.total-cost-from-guide{
   width: 650px;
   height: 30%;
   padding-bottom: 3%;
@@ -34,7 +47,8 @@
   transform: translate(-6%,20%);
 }
 
-.total-revenue-label, .each-tour-total-revenue-label, .popular-nation-label, .year-selection{
+.total-revenue-label, .each-tour-total-revenue-label, .popular-nation-label, .year-selection, .total-participant-label
+,.each-tour-total-customers-label, .total-cost-from-guide-label{
     background-color: #FAE9DD;
     font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
@@ -45,11 +59,19 @@
 }
 
 .year-selection{
-  width: 650px;
-  padding: 10px;
+ width: 100%;
+ padding: 10px;
+ margin-bottom: 1%;
+ margin-top: -3%;
+
 }
 
 .total-revenue-label{
+  width: 650px;
+  margin-bottom: 15px;
+}
+
+.total-cost-from-guide-label{
   width: 650px;
   margin-bottom: 15px;
 }
@@ -64,6 +86,16 @@
 }
 
 .each-tour-total-revenue-label{
+  width: 300px;
+  margin-bottom: 30px;
+}
+
+.each-tour-total-customers{
+  width: 300px;
+  height: 350px;
+}
+
+.each-tour-total-customers-label{
   width: 300px;
   margin-bottom: 30px;
 }
@@ -136,9 +168,8 @@
   border: 0;
 }
 
-.total-customer, .unassigned-guide, .public-tour, .private-tour{
-  height: 90px;
-  width: 230px;
+.total-customer, .individual-customer, .agency-customer, .public-tour, .private-tour
+,.popular-tour{
   padding: 10px 10px;
   text-align: center;
   color: #FBAF9F;
@@ -147,20 +178,50 @@
 .text-box{
   font-size: 30px;
   margin: 0;
+  margin-top: -5px;
 }
 
 .total-customer {
   background: #900C3F;
+  height: 160px;
 }
 
-.unassigned-guide {
+.individual-customer {
   background: #C70039;
+  height: 80px;
+  width: 99%;
+  padding:2%;
+  margin-left: 1%;
+}
+
+.agency-customer {
+  background: #FF5733;
+  height: 80px;
+  width: 99%;
+  padding:2%;
+  margin-left: 1%;
 }
 
 .public-tour {
   background: #FF5733;
+  height: 80px;
+  width: 99%;
+  padding:2%;
+  margin-left: 1%;
 }
 
 .private-tour {
-  background: #D65D09;
+  background: #C70039;
+  height: 80px;
+  width: 99%;
+  padding:2%;
+  margin-left: 1%;
+}
+
+.popular-tour{
+  background: #900C3F;
+  height: 160px;
+  width: 90%;
+  margin-left:5%;
+  margin-right:5%;
 }

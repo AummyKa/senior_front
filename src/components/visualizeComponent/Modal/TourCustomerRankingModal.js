@@ -7,10 +7,9 @@ import { Col, Row, Table, Icon, Button,Popover, Select } from 'antd'
 import { Modal ,ButtonToolbar } from 'react-bootstrap';
 
 import apiAccess from '../../../Helpers/apiAccess'
-import Cookies from 'js-cookie'
 
 
-const revTableData = (arrayJSON) =>{
+const revTourCustomerTableData = (arrayJSON) =>{
   console.log(arrayJSON)
   if(arrayJSON!=null){
     for(var i = 0; i < arrayJSON.length; i++) {
@@ -20,15 +19,6 @@ const revTableData = (arrayJSON) =>{
   return arrayJSON
 }
 
-function getTotalMonthlyRev(pub,pri){
-
-  let intPub = parseInt(pub.replace(',',''))
-  let intPri = parseInt(pri.replace(',',''))
-  let total = intPub + intPri
-  return(
-    <span>{total}</span>
-  )
-}
 
 function throwOptionYearObject(){
   let today = new Date();
@@ -47,39 +37,64 @@ const Option = Select.Option;
 let today = new Date();
 let curYear = today.getFullYear();
 
-class TourRankingModal extends Component {
+class TourCustomerRankingModal extends Component {
 
   constructor(props){
     super(props)
     this.state = {
-      selectedYear: Cookies.get('selectedYearInDashBoard'),
-      tourRankingData: []
+      selectedYear: curYear,
+      tourCustomerRankingData: [],
+      tourCustomerRankingTableData: []
     }
   }
 
 
-  getAllTourRevRanking(year){
+  getAllTourCustomerRanking(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/revenue/bookedtour/'+year,
+      url: 'http://localhost:8000/bookedtours/summary/participants/tour-name/'+year,
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOUR_REV_RANKING_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_ALL_TOUR_REV_RANKING_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_ALL_TOUR_REV_RANKING_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOUR_CUSTOMERS_RANKING_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_ALL_TOUR_CUSTOMERS_RANKING_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_ALL_TOUR_CUSTOMERS_RANKING_FAILURE' })
     })
   }
+
+  limitedShowCustomerRankingData(data){
+    let result = []
+    if(data){
+      if(data.length >=10){
+        for(let i=0;i<10;i++){
+          result[i]=data[i]
+        }
+      }else{
+        for(let i=0;i<data.length;i++){
+          result[i]=data[i]
+        }
+      }
+  }
+  return result
+}
+
   componentWillMount(){
-    this.getAllTourRevRanking(this.state.selectedYear)
+    this.getAllTourCustomerRanking(this.state.selectedYear)
   }
 
   componentWillReceiveProps(nextProps){
-    if(this.props.revTourRanking !== nextProps.revTourRanking){
-      console.log(nextProps.revTourRanking)
-      if(nextProps.revTourRanking){
-        this.setState({tourRankingData: nextProps.revTourRanking})
+    if(this.props.totalCustomerTourRanking !== nextProps.totalCustomerTourRanking){
+      if(nextProps.totalCustomerTourRanking){
+        this.setState({tourCustomerRankingData: this.limitedShowCustomerRankingData(nextProps.totalCustomerTourRanking)})
+        this.setState({tourCustomerRankingTableData: revTourCustomerTableData(nextProps.totalCustomerTourRanking)})
+      }
+    }
+    if(this.props.selectedYear !== nextProps.selectedYear){
+      if(nextProps.selectedYear){
+        this.setState({selectedYear:nextProps.selectedYear})
+        this.getAllTourCustomerRanking(nextProps.selectedYear)
       }
     }
   }
+
 
   handleYearSelect(value,option){
     console.log(value)
@@ -90,14 +105,12 @@ class TourRankingModal extends Component {
     this.getRevTableData(this.state.selectedYear)
   }
 
-
   render() {
 
-    const columns = [{ title: 'Month', dataIndex: 'month'},
+    const columns = [{ title: 'Tour name', dataIndex: 'tour_name'},
                     {  title: 'Public',dataIndex: 'public'},
                     {  title: 'Private',dataIndex: 'private'},
-                    {  title: 'Total', dataIndex: 'total', render: (text, record) =>
-                      getTotalMonthlyRev(record.public,record.private) }];
+                    {  title: 'Total Participants', dataIndex: 'participants'}];
 
     return (
 
@@ -108,14 +121,14 @@ class TourRankingModal extends Component {
           <Col span={14}>
 
             <div className = "tour-ranking-chart-summary">
-              <ComposedChart layout="vertical" width={300} height={250} data={this.state.tourRankingData}
+              <ComposedChart layout="vertical" width={300} height={250} data={this.state.tourCustomerRankingData}
                   margin={{top: 10, right: 10, bottom: 20, left: 2}}>
                 <XAxis type="number"/>
-                <YAxis dataKey="tour_name" type="category"/>
+                <YAxis dataKey="tour_abbreviation" type="category"/>
                 <Tooltip/>
                 <Legend/>
                 <CartesianGrid stroke='#f5f5f5'/>
-                <Bar dataKey='revenue' barSize={15} fill='#FFC300'/>
+                <Bar dataKey='participants' barSize={15} fill='#B85D02'/>
 
              </ComposedChart>
             </div>
@@ -144,7 +157,7 @@ class TourRankingModal extends Component {
                     <Button type = "primary" onClick = {() => this.setYearRev()}>GO!</Button>
                 </Col>
             </Row>
-             {/*<Table columns={columns} dataSource={this.state.totalRevTable} size="small" pagination={false} />*/}
+             <Table columns={columns} dataSource={this.state.tourCustomerRankingTableData} size="small" pagination={false} />
           </Col>
         </Row>
 
@@ -158,8 +171,9 @@ class TourRankingModal extends Component {
 
 function mapStateToProps(state){
   return{
-      revTourRanking: state.getTourRevRanking.revTourRanking
+    totalCustomerTourRanking: state.getTourCustomerRanking.totalCustomerTourRanking,
+    selectedYear: state.updateYearDashBoard.selectedYear
   }
 }
 
-export default connect(mapStateToProps)(TourRankingModal)
+export default connect(mapStateToProps)(TourCustomerRankingModal)

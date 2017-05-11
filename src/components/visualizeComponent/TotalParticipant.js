@@ -7,41 +7,27 @@ import { Col, Row, Table, Select, Button } from 'antd'
 import apiAccess from '../../Helpers/apiAccess'
 
 
-function throwOptionYearObject(){
-  let today = new Date();
-  let curYear = today.getFullYear();
-  let startYear = 2000
-
-  let temp = []
-  for (let i = startYear; i <= curYear; i++) {
-    temp.push(<Option key= {i}>{i}</Option>);
-  }
-  return temp
-}
-
-
 
 const Option = Select.Option;
 let today = new Date();
 let curYear = today.getFullYear();
 
-class TotalRev extends Component {
+class TotalParticipant extends Component {
 
   constructor(props){
     super(props)
 
     this.state = {
       selectedYear: curYear,
-      totalRevData: [],
-      totalRevTable:[]
+      totalParticipantData: []
     }
   }
 
   componentWillReceiveProps(nextProps){
-    console.log(nextProps.totalRevData)
-    if(this.props.totalRevData !== nextProps.totalRevData){
-      if(nextProps.totalRevData){
-        this.setState({totalRevData:nextProps.totalRevData})
+    console.log(nextProps.totalParticipantData)
+    if(this.props.totalParticipantData !== nextProps.totalParticipantData){
+      if(nextProps.totalParticipantData){
+        this.setState({totalParticipantData:nextProps.totalParticipantData})
       }
     }
     if(this.props.selectedYear !== nextProps.selectedYear){
@@ -53,7 +39,7 @@ class TotalRev extends Component {
     }
 
   componentWillMount(){
-    this.getRevData(this.state.selectedYear)
+    this.getParticipantData(this.state.selectedYear)
   }
 
   handleYearSelect(value,option){
@@ -62,18 +48,18 @@ class TotalRev extends Component {
   }
 
   setYearRev(){
-    this.getRevData(this.state.selectedYear)
+    this.getParticipantData(this.state.selectedYear)
   }
 
-  getRevData(year){
+  getParticipantData(year){
     console.log(year)
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/revenue/'+year,
+      url: 'http://localhost:8000/bookedtours/summary/participants/'+year,
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_TOTAL_REV_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_TOTAL_REV_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_TOTAL_REV_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'GET_TOTAL_PARTICIPANT_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_TOTAL_PARTICIPANT_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_TOTAL_PARTICIPANT_FAILED' })
     })
   }
 
@@ -84,13 +70,13 @@ class TotalRev extends Component {
     return (
 
       <div>
-          <AreaChart width={600} height={200} data={this.state.totalRevData}
+          <AreaChart width={600} height={200} data={this.state.totalParticipantData}
                  margin={{top: 10, right: 30, left: 0, bottom: 0}}>
              <XAxis dataKey="month"/>
-             <YAxis dataKey='revenue'/>
+             <YAxis dataKey='participants'/>
              <CartesianGrid strokeDasharray="3 3"/>
              <Tooltip/>
-             <Area type='monotone' dataKey='revenue' stroke='#F81919' fill='#C70039' />
+             <Area type='monotone' dataKey='participants' stroke='#F81919' fill='#FF5733' />
            </AreaChart>
 
       </div>
@@ -101,9 +87,9 @@ class TotalRev extends Component {
 
 function mapStateToProps(state){
   return{
-    totalRevData: state.getTotalRev.totalRevData,
+    totalParticipantData: state.getTotalParticipant.totalParticipantData,
     selectedYear: state.updateYearDashBoard.selectedYear
   }
 }
 
-export default connect(mapStateToProps)(TotalRev)
+export default connect(mapStateToProps)(TotalParticipant)

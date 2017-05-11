@@ -57,7 +57,7 @@ class Schedule extends Component {
 
   getEvent(){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/public-private',
+      url: 'http://localhost:8000/bookedtours/calendar/public-private',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_EVENT_SUMMARY_ATTEMPT' }),

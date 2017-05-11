@@ -14,6 +14,7 @@ const addBookingMethods = (state = INITIAL_STATE, action) => {
       }
 
     case 'ADD_NEW_BOOKING_METHOD_SUCCESS':
+      console.log(action)
       console.log("success")
         return{
           addBookingMethodStatus: true

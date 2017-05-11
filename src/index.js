@@ -9,6 +9,7 @@ import {Router, IndexRoute, Route, browserHistory} from 'react-router';
 import reducer from './reducers'
 import enUS from 'antd/lib/locale-provider/en_US';
 import { LocaleProvider } from 'antd';
+
 //Pages
 import App from "./pages/App";
 import DashboardPage from "./pages/DashboardPage";

@@ -11,10 +11,10 @@ const Option = Select.Option;
 
 
 
-function throwOptionAgencyObject(data){
+function throwOptionBookingMethodObject(data){
   let temp = []
   for (let i = 0; i < data.length; i++) {
-    temp.push(<Option key= {i}>{data[i].agency_name}</Option>);
+    temp.push(<Option key= {i}>{data[i].name}</Option>);
   }
   return temp
 }
@@ -28,43 +28,42 @@ const EditCurCustomerModal = Form.create()(React.createClass({
     return {
       eachCustomer: this.props.eachCurCustomer,
       selectedTourName: "",
-      selectedAgency: "",
       selectedTourType: "",
       selectedTourTime: "",
-      agencyData:[],
+      bookingMethodLists:[],
       curTourID: this.props.curTourID,
-      selectedAgency: this.props.eachCurCustomer.agency
+      selectedBookingMethod: this.props.eachCurCustomer.booking_method
       }
     },
 
 
   componentWillMount(){
-    this.getAgencyList()
+    this.getBookingMethods()
   },
 
   componentWillReceiveProps(nextProps){
-    if(this.props.agencyData !== nextProps.agencyData){
-      if(nextProps.agencyData){
-        console.log(nextProps.agencyData)
-        this.setState({agencyData: nextProps.agencyData})
+
+    if(this.props.bookingMethodLists !== nextProps.bookingMethodLists){
+        if(nextProps.bookingMethodLists){
+            this.setState({bookingMethodLists:nextProps.bookingMethodLists})
+        }
       }
-    }
   },
 
-  getAgencyList(){
+  getBookingMethods(){
     apiAccess({
-      url: 'http://localhost:8000/agencies',
+      url: 'http://localhost:8000/bookingmethods/',
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_AGENCY_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_AGENCY_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_AGENCY_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_BOOKING_METHODS_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_FAILED' })
     })
-
   },
 
-  handleAgencySelect(value,option){
-    this.setState({ selectedAgency: this.state.agencyData[value].agency_name });
+  handleBookingMethodSelect(value,option){
+    console.log(this.state.bookingMethodLists[value].name)
+    this.setState({ selectedBookingMethod: this.state.bookingMethodLists[value].name });
   },
 
   handleSubmit(e) {
@@ -75,10 +74,8 @@ const EditCurCustomerModal = Form.create()(React.createClass({
         console.log(values)
 
         let payload = {
-
-          customer: {
             _id: this.state.eachCustomer._id,
-            agency: this.state.selectedAgency,
+            booking_method: this.state.selectedBookingMethod,
             email: this.props.form.getFieldValue(`email`),
             phone: this.props.form.getFieldValue(`phone`),
             name: this.props.form.getFieldValue(`name`),
@@ -88,18 +85,12 @@ const EditCurCustomerModal = Form.create()(React.createClass({
             participants: this.props.form.getFieldValue(`participants`),
             price: this.props.form.getFieldValue('price'),
             remark: this.props.form.getFieldValue(`remark`)
-          },
-
-          bookedTour: {
-            _id: this.state.curTourID
-          }
-
         }
 
         console.log(payload)
 
           apiAccess({
-            url: 'http://localhost:8000/bookedtours/update-customer',
+            url: 'http://localhost:8000/bookedtours/update-customer/'+this.state.curTourID,
             method: 'POST',
             payload: payload,
             attemptAction: () => this.props.dispatch({ type: 'EDIT_CUSTOMER_IN_TOUR_ATTEMPT' }),
@@ -154,18 +145,14 @@ const EditCurCustomerModal = Form.create()(React.createClass({
    }
  },
 
- handleAgencySelect(value,option){
-   this.setState({ selectedAgency: this.state.agencyData[value].agency_name });
- },
-
 
 
   render() {
 
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
-      labelCol: { span: 4 },
-      wrapperCol: { span: 20 },
+      labelCol: { span: 6 },
+      wrapperCol: { span: 18 },
     };
     //customer input form
   const formItemLayoutWithOutLabel = {
@@ -177,23 +164,23 @@ const EditCurCustomerModal = Form.create()(React.createClass({
     <div className = "customer-info">
       <Form className = "add-tour-form" horizontal onSubmit={this.handleSubmit}>
         <Row>
-          <Col span={8} offset={1}>
+          <Col span={10} >
               <FormItem
                 {...formItemLayout}
-                label="Agency"
+                label="Booking Method"
               >
-                {getFieldDecorator(`agency`, {
-                  initialValue: this.state.eachCustomer.agency
+                {getFieldDecorator(`bookingMethods`, {
+                  initialValue: this.state.eachCustomer.booking_method
                 })(
                   <Select
                      showSearch
-                     style={{ width: '80%', marginRight: 11 }}
-                     placeholder="Select an agency"
+                     style={{ width: '80%', marginRight: 5 }}
+                     placeholder="Select an booking method"
                      optionFilterProp="children"
-                     onSelect={this.handleAgencySelect}
+                     onSelect={this.handleBookingMethodSelect}
                      filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                    >
-                    {throwOptionAgencyObject(this.state.agencyData)}
+                    {throwOptionBookingMethodObject(this.state.bookingMethodLists)}
                    </Select>
                 )}
               </FormItem>
@@ -212,7 +199,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
                    message: "Please input customer's email.",
                  }],
                })(
-                 <Input placeholder="email" style={{ width: '80%', marginRight: 11 }} />
+                 <Input placeholder="email" style={{ width: '80%', marginRight: 5 }} />
                )}
 
              </FormItem>
@@ -231,7 +218,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
                    message: "Please input customer's name.",
                  }],
                })(
-                 <Input placeholder="name"  style={{ width: '80%', marginRight: 11 }} />
+                 <Input placeholder="name"  style={{ width: '80%', marginRight: 5 }} />
                )}
 
              </FormItem>
@@ -246,7 +233,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
                  validateTrigger: ['onChange', 'onBlur'],
 
                })(
-                 <Input placeholder="country"  style={{ width: '80%', marginRight: 11 }} />
+                 <Input placeholder="country"  style={{ width: '80%', marginRight: 5 }} />
                )}
 
              </FormItem>
@@ -261,14 +248,14 @@ const EditCurCustomerModal = Form.create()(React.createClass({
                 initialValue: this.state.eachCustomer.phone,
 
                })(
-                 <Input placeholder="phone"  style={{ width: '80%', marginRight: 11 }} />
+                 <Input placeholder="phone"  style={{ width: '80%', marginRight: 5 }} />
                )}
 
              </FormItem>
 
            </Col>
 
-           <Col span={14} offset = {1}>
+           <Col span={14}>
 
              <FormItem
                {...formItemLayout}
@@ -362,7 +349,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
 
 function mapStateToProps(state){
   return{
-    agencyData: state.getAgency.agencyData
+    bookingMethodLists: state.getBookingMethods.bookingMethodLists
   }
 }
 

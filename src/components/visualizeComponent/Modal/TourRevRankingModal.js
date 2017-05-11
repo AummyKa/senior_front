@@ -9,8 +9,7 @@ import { Modal ,ButtonToolbar } from 'react-bootstrap';
 import apiAccess from '../../../Helpers/apiAccess'
 
 
-const revTableData = (arrayJSON) =>{
-  console.log(arrayJSON)
+const revTourTableData = (arrayJSON) =>{
   if(arrayJSON!=null){
     for(var i = 0; i < arrayJSON.length; i++) {
       arrayJSON[i]["key"] = i;
@@ -19,15 +18,6 @@ const revTableData = (arrayJSON) =>{
   return arrayJSON
 }
 
-function getTotalMonthlyRev(pub,pri){
-
-  let intPub = parseInt(pub.replace(',',''))
-  let intPri = parseInt(pri.replace(',',''))
-  let total = intPub + intPri
-  return(
-    <span>{total}</span>
-  )
-}
 
 function throwOptionYearObject(){
   let today = new Date();
@@ -46,49 +36,51 @@ const Option = Select.Option;
 let today = new Date();
 let curYear = today.getFullYear();
 
-class PopNationModal extends Component {
+class TourRevRankingModal extends Component {
 
   constructor(props){
     super(props)
     this.state = {
       selectedYear: curYear,
-      amountNationsSummary:[]
+      tourRevRankingData: [],
+      allTourRevTableRankingData:[]
     }
   }
 
-  getPopularNation(year){
+
+  getAllTourRevRanking(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/total-participants/country/'+year,
+      url: 'http://localhost:8000/bookedtours/summary/revenue/tour-name/'+year,
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_SUMMARY_AMOUNT_NATIONS_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_SUMMARY_AMOUNT_NATIONS_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_SUMMARY_AMOUNT_NATIONS_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOUR_REV_RANKING_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_ALL_TOUR_REV_RANKING_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_ALL_TOUR_REV_RANKING_FAILED' })
     })
   }
 
   componentWillMount(){
-    this.getPopularNation(this.state.selectedYear)
+    this.getAllTourRevRanking(this.state.selectedYear)
   }
 
   componentWillReceiveProps(nextProps){
-    if(this.props.amountNationsSummary !== nextProps.amountNationsSummary){
-      if(nextProps.amountNationsSummary){
-        console.log(nextProps.amountNationsSummary)
-        this.setState({amountNationsSummary:nextProps.amountNationsSummary})
+    if(this.props.revTourRanking !== nextProps.revTourRanking){
+      if(nextProps.revTourRanking){
+        this.setState({tourRevRankingData: this.showAllRankingData(nextProps.revTourRanking)})
+        this.setState({allTourRevTableRankingData:revTourTableData(nextProps.revTourRanking)})
       }
     }
-
     if(this.props.selectedYear !== nextProps.selectedYear){
       if(nextProps.selectedYear){
         this.setState({selectedYear:nextProps.selectedYear})
-        this.getPopularNation(nextProps.selectedYear)
+        this.getAllTourRevRanking(nextProps.selectedYear)
       }
     }
+
   }
 
+
   handleYearSelect(value,option){
-    console.log(value)
     this.setState({selectedYear: value})
   }
 
@@ -96,14 +88,28 @@ class PopNationModal extends Component {
     this.getRevTableData(this.state.selectedYear)
   }
 
+  showAllRankingData(data){
+    let result = []
+    if(data){
+      for(let i=0;i<data.length;i++){
+        let rev = parseInt(data[i].revenue.replace(',',''));
+        var arrayJSON = {
+          tour_abbreviation: data[i].tour_name,
+          revenue: rev
+        }
+        result[i] = arrayJSON
+      }
+    }
+    return result
+  }
+
 
   render() {
 
-    const columns = [{ title: 'Month', dataIndex: 'month'},
+    const columns = [{ title: 'Tour', dataIndex: 'tour_name'},
                     {  title: 'Public',dataIndex: 'public'},
                     {  title: 'Private',dataIndex: 'private'},
-                    {  title: 'Total', dataIndex: 'total'}];
-
+                    {  title: 'Total', dataIndex: 'revenue'}];
 
     return (
 
@@ -113,15 +119,15 @@ class PopNationModal extends Component {
         <Row>
           <Col span={14}>
 
-            <div className = "pop-nation-chart-summary">
-              <ComposedChart layout="vertical" width={300} height={250} data={this.state.amountNationsSummary}
+            <div className = "tour-ranking-chart-summary">
+              <ComposedChart layout="vertical" width={300} height={250} data={this.state.tourRevRankingData}
                   margin={{top: 10, right: 10, bottom: 20, left: 2}}>
                 <XAxis type="number"/>
-                <YAxis dataKey="country" type="category"/>
+                <YAxis dataKey="tour_abbreviation" type="category"/>
                 <Tooltip/>
                 <Legend/>
                 <CartesianGrid stroke='#f5f5f5'/>
-                <Bar dataKey='participants' barSize={15} fill='#FFC300'/>
+                <Bar dataKey='revenue' barSize={15} fill='#FFC300'/>
 
              </ComposedChart>
             </div>
@@ -129,14 +135,14 @@ class PopNationModal extends Component {
           </Col>
           <Col span={10}>
             <Row>
-              <Col span = {14}><h5><b>Monthly revenue summary</b></h5></Col>
+              <Col span = {14}><h5><b>Tour Revenue Summary</b></h5></Col>
 
               <Col span = {8}>
                 <div className = "select-year">
                   <Select
                      showSearch
                      style={{width: 150}}
-                     defaultValue= {this.state.selectedYear}
+                     defaultValue= {this.setState.selectedYear}
                      placeholder="Year"
                      optionFilterProp="children"
                      onSelect={this.handleYearSelect.bind(this)}
@@ -150,7 +156,7 @@ class PopNationModal extends Component {
                     <Button type = "primary" onClick = {() => this.setYearRev()}>GO!</Button>
                 </Col>
             </Row>
-             <Table columns={columns} dataSource={this.state.totalRevTable} size="small" pagination={false} />
+             <Table columns={columns} dataSource={this.state.allTourRevTableRankingData} size="small" pagination={false} />
           </Col>
         </Row>
 
@@ -164,9 +170,9 @@ class PopNationModal extends Component {
 
 function mapStateToProps(state){
   return{
-    amountNationsSummary: state.getAmountNationsSummary.amountNationsSummary,
-    selectedYear: state.updateYearDashBoard.selectedYear
+    revTourRanking: state.getTourRevRanking.revTourRanking,
+      selectedYear: state.updateYearDashBoard.selectedYear
   }
 }
 
-export default connect(mapStateToProps)(PopNationModal)
+export default connect(mapStateToProps)(TourRevRankingModal)

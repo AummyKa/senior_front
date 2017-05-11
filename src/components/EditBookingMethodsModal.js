@@ -8,10 +8,13 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 
-class AddBookingMethodsModal extends Component{
+class EditBookingMethodsModal extends Component{
 
   constructor(props){
     super(props)
+    this.state = {
+       selectedBookingMethod: this.props.selectedBookingMethod
+    }
   }
 
 
@@ -20,27 +23,27 @@ class AddBookingMethodsModal extends Component{
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
 
-          let payload = {name: this.props.form.getFieldValue('bookingMethodName'),
-                         description: this.props.form.getFieldValue('description'),
-                         type: 'Individual'}
+          let payload = {name: this.props.form.getFieldValue('agencyName'),
+                         phone: this.props.form.getFieldValue('phone'),
+                         email: this.props.form.getFieldValue('email'),
+                         type: 'Individual',
+                         description: this.props.form.getFieldValue('description')}
 
             console.log(payload)
 
             apiAccess({
-              url: 'http://localhost:8000/bookingmethods/insert',
+              url: 'http://localhost:8000/bookingmethods/update/'+ this.state.selectedBookingMethod._id,
               method: 'POST',
               payload: payload,
-              attemptAction: () => this.props.dispatch({ type: 'ADD_NEW_BOOKING_METHOD_ATTEMPT' }),
-              successAction: (json) => this.props.dispatch({ type: 'ADD_NEW_BOOKING_METHOD_SUCCESS', json }),
-              failureAction: () => this.props.dispatch({ type: 'ADD_NEW_BOOKING_METHOD_FAILED' })
+              attemptAction: () => this.props.dispatch({ type: 'UPDATE_BOOKING_METHODS_ATTEMPT' }),
+              successAction: (json) => this.props.dispatch({ type: 'UPDATE_BOOKING_METHODS_SUCCESS', json }),
+              failureAction: () => this.props.dispatch({ type: 'UPDATE_BOOKING_METHODS_FAILED' })
             })
           }else
               console.log("error")
-    });
+      });
 
   }
-
-
 
 
   //name, surname
@@ -57,12 +60,13 @@ class AddBookingMethodsModal extends Component{
 
 
  checkTel(rule, value, callback){
-   if(!value.match(/^[0-9]+$/) || value.length != 10){
+   if(!value.match(/^[0-9]+$/) || value.length != 9){
      callback('the input should be an appropriate phone number');
    }else {
      callback()
    }
  }
+
 
  checkBookingMethodName(rule, value, callback){
    if(value.length > 50 ){
@@ -74,6 +78,8 @@ class AddBookingMethodsModal extends Component{
 
 
   render() {
+
+    // console.log(this.props.selectedAgency)
 
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -93,10 +99,11 @@ class AddBookingMethodsModal extends Component{
       <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
         <FormItem
           {...formItemLayout}
-          label="Booking Method Name"
+          label="Agency Name"
           hasFeedback
         >
-          {getFieldDecorator('bookingMethodName', {
+          {getFieldDecorator('agencyName', {
+            initialValue: this.state.selectedBookingMethod.name,
             rules: [{
               required: true, message: 'Please input your agency name!'
             }, {
@@ -113,15 +120,14 @@ class AddBookingMethodsModal extends Component{
           hasFeedback
         >
           {getFieldDecorator('description', {
-
+            initialValue: this.state.selectedBookingMethod.description,
           })(
             <Input type="textarea" rows={4} />
           )}
         </FormItem>
 
-
         <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit" size="large">Add Booking Methods</Button>
+          <Button type="primary" htmlType="submit" size="large">Submit</Button>
         </FormItem>
       </Form>
       </div>
@@ -129,10 +135,5 @@ class AddBookingMethodsModal extends Component{
   }
 }
 
-function mapStateToProps(state){
-  return{
 
-  }
-}
-
-export default Form.create({})(AddBookingMethodsModal)
+export default Form.create({})(EditBookingMethodsModal);

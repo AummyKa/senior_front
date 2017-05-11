@@ -13,7 +13,7 @@ class EditAgencyModal extends Component{
   constructor(props){
     super(props)
     this.state = {
-       selectedAgency: this.props.selectedAgency
+       selectedBookingMethod: this.props.selectedBookingMethod
     }
   }
 
@@ -23,19 +23,21 @@ class EditAgencyModal extends Component{
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
 
-          let payload = {agency_name: this.props.form.getFieldValue('agencyName'),
+          let payload = {name: this.props.form.getFieldValue('agencyName'),
                          phone: this.props.form.getFieldValue('phone'),
-                         email: this.props.form.getFieldValue('email')}
+                         email: this.props.form.getFieldValue('email'),
+                         type: 'Agency',
+                         description: this.props.form.getFieldValue('description')}
 
             console.log(payload)
 
             apiAccess({
-              url: 'http://localhost:8000/agencies/update/'+ this.state.selectedAgency._id,
+              url: 'http://localhost:8000/bookingmethods/update/'+ this.state.selectedBookingMethod._id,
               method: 'POST',
               payload: payload,
-              attemptAction: () => this.props.dispatch({ type: 'UPDATE_AGENCY_ATTEMPT' }),
-              successAction: (json) => this.props.dispatch({ type: 'UPDATE_AGENCY_SUCCESS', json }),
-              failureAction: () => this.props.dispatch({ type: 'UPDATE_AGENCY_FAILED' })
+              attemptAction: () => this.props.dispatch({ type: 'UPDATE_BOOKING_METHODS_ATTEMPT' }),
+              successAction: (json) => this.props.dispatch({ type: 'UPDATE_BOOKING_METHODS_SUCCESS', json }),
+              failureAction: () => this.props.dispatch({ type: 'UPDATE_BOOKING_METHODS_FAILED' })
             })
           }else
               console.log("error")
@@ -101,7 +103,7 @@ class EditAgencyModal extends Component{
           hasFeedback
         >
           {getFieldDecorator('agencyName', {
-            initialValue: this.state.selectedAgency.agencyName,
+            initialValue: this.state.selectedBookingMethod.name,
             rules: [{
               required: true, message: 'Please input your agency name!'
             }, {
@@ -118,7 +120,7 @@ class EditAgencyModal extends Component{
           hasFeedback
         >
           {getFieldDecorator('email', {
-            initialValue: this.state.selectedAgency.email,
+            initialValue: this.state.selectedBookingMethod.email,
             rules: [{
               type: 'email', message: 'The input is not valid E-mail!'
             }],
@@ -132,7 +134,7 @@ class EditAgencyModal extends Component{
           hasFeedback
         >
           {getFieldDecorator('phone', {
-            initialValue: this.state.selectedAgency.phone,
+            initialValue: this.state.selectedBookingMethod.phone,
             rules: [{
               validator: this.checkTel
             }],
@@ -141,8 +143,20 @@ class EditAgencyModal extends Component{
           )}
         </FormItem>
 
+        <FormItem
+          {...formItemLayout}
+          label="Description"
+          hasFeedback
+        >
+          {getFieldDecorator('description', {
+            initialValue: this.state.selectedBookingMethod.description,
+          })(
+            <Input type="textarea" rows={4} />
+          )}
+        </FormItem>
+
         <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit" size="large">Add Agency</Button>
+          <Button type="primary" htmlType="submit" size="large">Submit</Button>
         </FormItem>
       </Form>
       </div>

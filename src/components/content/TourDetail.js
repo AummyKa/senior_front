@@ -3,13 +3,15 @@ import PropTypes from 'prop-types'
 
 import AddNewTourModal from '../AddNewTourModal';
 
-import { Button, Col, Row} from 'antd';
+import { Button, Col, Row, Icon} from 'antd';
 import { Modal } from 'react-bootstrap';
 import apiAccess from '../../Helpers/apiAccess'
 
 import EachTourRevChart from '../EachTourRevChart'
 import EachTourExpertGuide from '../EachTourExpertGuide'
 import EachTourSchedule from '../EachTourSchedule'
+import EachTourCostModel from '../EachTourCostModel'
+import CostModelModal from '../CostModelModal'
 
 import {connect} from 'react-redux';
 import Cookies from 'js-cookie'
@@ -19,7 +21,8 @@ class TourDetail extends Component {
   constructor(props){
     super(props)
     this.state = {
-      tour_data: []
+      tour_data: [],
+      showCostModelModal: false
     }
   }
 
@@ -51,10 +54,36 @@ class TourDetail extends Component {
     }
   }
 
+  showCostModelModal(){
+    this.setState({showCostModelModal: true})
+  }
+
+
 
   render() {
 
+    let closeCostModelModal = () => { this.setState({showCostModelModal: false}) }
+
     return (
+
+      <div>
+
+      <div className="modal-container">
+          <Modal
+            show={this.state.showCostModelModal}
+            onHide={closeCostModelModal}
+            container={this}
+            aria-labelledby="contained-modal-title"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title">Cost Modal</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <CostModelModal dispatch = {this.props.dispatch}/>
+            </Modal.Body>
+
+          </Modal>
+      </div>
 
       <div className = "tour_content">
         <Row>
@@ -72,7 +101,14 @@ class TourDetail extends Component {
             </div>
 
             <div className = "cost-model">
-              <div className = "cost-model-title"><b>Cost Model</b></div>
+              <div className = "cost-model-title">
+                  <b>Cost Model
+                    <span><Icon type="edit"
+                    onClick = {()=>this.showCostModelModal()}
+                    className = "btn-edit-in-tour-detail" />
+                  </span></b>
+              </div>
+              <EachTourCostModel />
             </div>
 
             <div className = "edit-tour-data">
@@ -120,6 +156,7 @@ class TourDetail extends Component {
           </Col>
         </Row>
       </div>
+    </div>
 
     );
   }

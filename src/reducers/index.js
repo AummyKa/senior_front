@@ -46,8 +46,8 @@ import addCustomerModal from './Schedule/addCustomerModal'
 
 //BookingMethod
 import addBookingMethods from './BookingMethod/addBookingMethods'
-import updateAgency from './BookingMethod/updateAgency'
-import deleteAgency from './BookingMethod/deleteAgency'
+import updateBookingMethods from './BookingMethod/updateBookingMethods'
+import deleteBookingMethods from './BookingMethod/deleteBookingMethods'
 import getBookingMethods from './BookingMethod/getBookingMethods'
 
 //Home
@@ -56,6 +56,12 @@ import getTotalRevTable from './Home/getTotalRevTable'
 import getTourRevRanking from './Home/getTourRevRanking'
 import getAmountNationsSummary from './Home/getAmountNationsSummary'
 import updateYearDashBoard from './Home/updateYearDashBoard'
+import getTotalParticipant from './Home/getTotalParticipant'
+import getTotalParticipantTable from './Home/getTotalParticipantTable'
+import getYearlyTotalCustomer from './Home/getYearlyTotalCustomer'
+import getYearlyBookingTypeCustomer from './Home/getYearlyBookingTypeCustomer'
+import getYearlyTourTypeCustomer from './Home/getYearlyTourTypeCustomer'
+import getTourCustomerRanking from './Home/getTourCustomerRanking'
 
 const admin = combineReducers({
     login,
@@ -87,8 +93,8 @@ const admin = combineReducers({
     addGuideExpertField,
     getSuggestGuide,
     addBookingMethods,
-    updateAgency,
-    deleteAgency,
+    updateBookingMethods,
+    deleteBookingMethods,
     editCustomerModal,
     addCustomerModal,
     editCustomerInTour,
@@ -100,7 +106,13 @@ const admin = combineReducers({
     getTourRevRanking,
     getAmountNationsSummary,
     updateYearDashBoard,
-    getBookingMethods
+    getBookingMethods,
+    getTotalParticipant,
+    getTotalParticipantTable,
+    getYearlyTotalCustomer,
+    getYearlyBookingTypeCustomer,
+    getYearlyTourTypeCustomer,
+    getTourCustomerRanking
 })
 
 export default admin

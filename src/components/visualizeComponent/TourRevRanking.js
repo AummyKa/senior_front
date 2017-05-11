@@ -12,7 +12,7 @@ import apiAccess from '../../Helpers/apiAccess'
 let today = new Date();
 let curYear = today.getFullYear();
 
-class TourRanking extends Component {
+class TourRevRanking extends Component {
 
   constructor(props){
     super(props)
@@ -28,9 +28,9 @@ class TourRanking extends Component {
 
   componentWillReceiveProps(nextProps){
     if(this.props.revTourRanking !== nextProps.revTourRanking){
-      console.log(nextProps.revTourRanking)
       if(nextProps.revTourRanking){
-        this.setState({tourRankingData: nextProps.revTourRanking})
+        console.log(this.limitedShowRankingData(nextProps.revTourRanking))
+        this.setState({tourRankingData: this.limitedShowRankingData(nextProps.revTourRanking)})
       }
     }
 
@@ -43,9 +43,35 @@ class TourRanking extends Component {
 
   }
 
+  limitedShowRankingData(data){
+    let result = []
+    if(data){
+      if(data.length >=10){
+        for(let i=0;i<10;i++){
+          let rev = parseInt(data[i].revenue.replace(',',''));
+          var arrayJSON = {
+            tour_abbreviation: data[i].tour_abbreviation,
+            revenue: rev
+          }
+          result[i] = arrayJSON
+        }
+      }else{
+        for(let i=0;i<data.length;i++){
+          let rev = parseInt(data[i].revenue.replace(',',''));
+          var arrayJSON = {
+            tour_abbreviation: data[i].tour_abbreviation,
+            revenue: rev
+          }
+          result[i] = arrayJSON
+        }
+      }
+    }
+    return result
+  }
+
   getAllTourRevRanking(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/revenue/bookedtour/'+year,
+      url: 'http://localhost:8000/bookedtours/summary/revenue/tour-name/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOUR_REV_RANKING_ATTEMPT' }),
@@ -56,7 +82,7 @@ class TourRanking extends Component {
 
   render() {
 
-    console.log(this.state.selectedYear)
+    console.log(this.state.tourRankingData)
 
     return (
 
@@ -65,12 +91,11 @@ class TourRanking extends Component {
          <ComposedChart layout="vertical" width={300} height={250} data={this.state.tourRankingData}
              margin={{top: 10, right: 10, bottom: 20, left: 2}}>
            <XAxis type="number"/>
-           <YAxis dataKey="tour_name" type="category"/>
+           <YAxis dataKey="tour_abbreviation" type="category"/>
            <Tooltip/>
            <Legend/>
            <CartesianGrid stroke='#f5f5f5'/>
            <Bar dataKey='revenue' barSize={15} fill='#FFC300'/>
-
         </ComposedChart>
 
       </div>
@@ -86,4 +111,4 @@ function mapStateToProps(state){
   }
 }
 
-export default connect(mapStateToProps)(TourRanking)
+export default connect(mapStateToProps)(TourRevRanking)

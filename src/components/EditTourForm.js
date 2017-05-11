@@ -103,7 +103,7 @@ function formatData(data){
         key: data[i].key,
         _id: data[i].booked_by._id,
         name: data[i].booked_by.name,
-        agency: data[i].agency,
+        booking_method: data[i].booking_method,
         country: data[i].booked_by.country,
         email: data[i].booked_by.email,
         participants: data[i].participants,
@@ -137,10 +137,10 @@ const EditTourForm = Form.create()(React.createClass({
       dataIndex: 'name',
       width: 200
     },{
-      title: 'Agency',
-      dataIndex: 'agency',
+      title: 'Booking Method',
+      dataIndex: 'booking_method',
       width: 180,
-      sorter: (a, b) => a.agency - b.agency,
+      sorter: (a, b) => a.booking_method - b.booking_method,
     }, {
       title: 'Country',
       dataIndex: 'country',
@@ -242,16 +242,9 @@ const EditTourForm = Form.create()(React.createClass({
     console.log(tourID)
     console.log(cusEmail)
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/delete-customer',
+      url: 'http://localhost:8000/bookedtours/delete-customer/'+tourID,
       method: 'DELETE',
-      payload:{
-          bookedTour: {
-            _id: tourID
-          },
-          customer: {
-            email: cusEmail
-          }
-      },
+      payload:{ email: cusEmail  },
       attemptAction: () => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_ATTEMPT' }),
       successAction: (json) => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_SUCCESS', json }),
       failureAction: () => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_FAILED' })

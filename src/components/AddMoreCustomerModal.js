@@ -11,10 +11,10 @@ const Option = Select.Option;
 
 
 
-function throwOptionAgencyObject(data){
+function throwOptionBookingMethodObject(data){
   let temp = []
   for (let i = 0; i < data.length; i++) {
-    temp.push(<Option key= {i}>{data[i].agency_name}</Option>);
+    temp.push(<Option key= {i}>{data[i].name}</Option>);
   }
   return temp
 }
@@ -25,9 +25,9 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
 
   getInitialState(){
     return{
-      agencyData: [],
+      bookingMethodLists: [],
       tourID: this.props.addTourID,
-      selectedAgency: ''
+      selectedBookingMethod: 'Walk-in'
     }
   },
 
@@ -36,7 +36,7 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let payload = {
-          agency: this.state.selectedAgency,
+          booking_method: this.state.selectedBookingMethod,
           email: this.props.form.getFieldValue(`email`),
           name: this.props.form.getFieldValue(`name`),
           country: this.props.form.getFieldValue(`country`),
@@ -63,27 +63,26 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
   },
 
   componentWillMount(){
-    this.getAgencyList()
+    this.getBookingMethods()
   },
 
   componentWillReceiveProps(nextProps){
-    if(this.props.agencyData !== nextProps.agencyData){
-      if(nextProps.agencyData){
-        this.setState({agencyData: nextProps.agencyData})
-      }
+    if(this.props.bookingMethodLists !== nextProps.bookingMethodLists){
+        if(nextProps.bookingMethodLists){
+            this.setState({bookingMethodLists:nextProps.bookingMethodLists})
+        }
     }
   },
 
-  getAgencyList(){
+  getBookingMethods(){
     apiAccess({
-      url: 'http://localhost:8000/agencies',
+      url: 'http://localhost:8000/bookingmethods/',
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_AGENCY_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_AGENCY_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_AGENCY_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_BOOKING_METHODS_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_FAILED' })
     })
-
   },
 
   handlePasswordBlur(e) {
@@ -129,18 +128,17 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
    }
  },
 
- handleAgencySelect(value,option){
-   this.setState({ selectedAgency: this.state.agencyData[value].agency_name });
+ handleBookingMethodSelect(value,option){
+   console.log(this.state.bookingMethodLists[value].name)
+   this.setState({ selectedBookingMethod: this.state.bookingMethodLists[value].name });
  },
-
-
 
   render() {
 
     const { getFieldDecorator, getFieldValue } = this.props.form;
     const formItemLayout = {
-      labelCol: { span: 4 },
-      wrapperCol: { span: 20 },
+      labelCol: { span: 6 },
+      wrapperCol: { span: 18 },
     };
     //customer input form
   const formItemLayoutWithOutLabel = {
@@ -153,25 +151,24 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
           <Form horizontal onSubmit={this.handleSubmit}>
           <Row>
 
-            <Col span={8} offset={1}>
+            <Col span={10}>
 
               <FormItem
                 {...formItemLayout}
-                label="Agency"
+                label="Booking Method"
               >
-                {getFieldDecorator(`agency`, {
-                  initialValue: ['N/A'],
-
+                {getFieldDecorator(`bookingmethods`, {
+                  initialValue: ['Walk-in'],
                 })(
                   <Select
                      showSearch
-                     style={{ width: '80%', marginRight: 11 }}
+                     style={{ width: '80%', marginRight: 5 }}
                      placeholder="Select a person"
                      optionFilterProp="children"
-                     onSelect={this.handleAgencySelect}
+                     onSelect={this.handleBookingMethodSelect}
                      filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                    >
-                    {throwOptionAgencyObject(this.state.agencyData)}
+                    {throwOptionBookingMethodObject(this.state.bookingMethodLists)}
                    </Select>
                 )}
               </FormItem>
@@ -189,7 +186,7 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
                  message: "Please input customer's email.",
                }],
              })(
-               <Input placeholder="email" style={{ width: '80%', marginRight: 11 }} />
+               <Input placeholder="email" style={{ width: '80%', marginRight: 5 }} />
              )}
 
            </FormItem>
@@ -207,7 +204,7 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
                  message: "Please input customer's name.",
                }],
              })(
-               <Input placeholder="name"  style={{ width: '80%', marginRight: 11 }} />
+               <Input placeholder="name"  style={{ width: '80%', marginRight: 5 }} />
              )}
 
            </FormItem>
@@ -221,7 +218,7 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
                validateTrigger: ['onChange', 'onBlur'],
 
              })(
-               <Input placeholder="country"  style={{ width: '80%', marginRight: 11 }} />
+               <Input placeholder="country"  style={{ width: '80%', marginRight: 5 }} />
              )}
 
            </FormItem>
@@ -234,14 +231,14 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
              {getFieldDecorator(`phone`, {
                validateTrigger: ['onChange', 'onBlur'],
              },{ validator: this.checkTel})(
-               <Input placeholder="phone"  style={{ width: '80%', marginRight: 11 }} />
+               <Input placeholder="phone"  style={{ width: '80%', marginRight: 5 }} />
              )}
 
            </FormItem>
 
 
          </Col>
-           <Col span={14} offset = {1}>
+           <Col span={14}>
 
              <FormItem
                {...formItemLayout}
@@ -327,7 +324,7 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
 }));
 
 const mapStateToProps = (state) => ({
-    agencyData: state.getAgency.agencyData
+    bookingMethodLists: state.getBookingMethods.bookingMethodLists
 
 })
 

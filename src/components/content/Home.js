@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+
 
 import { BarChart, AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
          Bar, ComposedChart, PieChart, Pie, Sector, Cell  } from 'recharts';
@@ -10,12 +10,15 @@ import Cookies from 'js-cookie'
 
 import TotalRev from '../visualizeComponent/TotalRev'
 import BoxAbove from '../visualizeComponent/BoxAbove'
-import TourRanking from '../visualizeComponent/TourRanking'
+import TourRevRanking from '../visualizeComponent/TourRevRanking'
 import PopularNation from '../visualizeComponent/PopularNation'
 import TotalRevModal from '../visualizeComponent/Modal/TotalRevModal'
-import TourRankingModal from '../visualizeComponent/Modal/TourRankingModal'
+import TourRevRankingModal from '../visualizeComponent/Modal/TourRevRankingModal'
 import PopNationModal from '../visualizeComponent/Modal/PopNationModal'
-
+import TotalParticipant from '../visualizeComponent/TotalParticipant'
+import TotalParticipantModal from '../visualizeComponent/Modal/TotalParticipantModal'
+import TourCustomerRanking from '../visualizeComponent/TourCustomerRanking'
+import TourCustomerRankingModal from '../visualizeComponent/Modal/TourCustomerRankingModal'
 import { changeYearDashBoard } from '../../actions/action-changeYearDashBoard'
 
 
@@ -41,29 +44,38 @@ class Home extends Component {
   constructor(props){
     super(props)
     this.state = {
-      showMoreTourRanking: false,
+      showMoreTourRevRanking: false,
       showMoreNationsSummary: false,
-      showTotalRevenue:false,
-      selectedYear:curYear
+      showMoreTotalRevenue:false,
+      showMoreParticipantSummary:false,
+      selectedYear:curYear,
+      showMoreTourCustomerRankingSummary:false
     }
   }
 
 
-  handleClickShowMoreTourRanking(){
-    this.setState({showMoreTourRanking: true})
+  handleClickShowMoreTourRevRanking(){
+    this.setState({showMoreTourRevRanking: true})
   }
 
   handleClickShowMoreNationsSummary(){
     this.setState({showMoreNationsSummary: true})
   }
 
-  handleClickShowTotalRevenue(){
-    this.setState({showTotalRevenue: true})
+  handleClickshowMoreTotalRevenue(){
+    this.setState({showMoreTotalRevenue: true})
+  }
+
+  handleClickShowMoreTourCustomerRanking(){
+    this.setState({showMoreTourCustomerRankingSummary: true})
   }
 
   handleYearSelect(value,option){
-  console.log(value)
   this.setState({selectedYear: value})
+  }
+
+  handleClickShowTotalParticipant(value,option){
+    this.setState({showMoreParticipantSummary: true})
   }
 
   setYearRev(){
@@ -75,9 +87,11 @@ class Home extends Component {
 
   render() {
 
-    let closeshowMoreTourRanking = () => { this.setState({showMoreTourRanking: false}) }
-    let closeshowMoreNationsSummary = () => { this.setState({showMoreNationsSummary: false}) }
-    let closeshowTotalRevenue = () => { this.setState({showTotalRevenue:false}) }
+    let closeShowMoreTourRevRanking = () => { this.setState({showMoreTourRevRanking: false}) }
+    let closeShowMoreNationsSummary = () => { this.setState({showMoreNationsSummary: false}) }
+    let closeShowMoreTotalRevenue = () => { this.setState({showMoreTotalRevenue:false}) }
+    let closeShowMoreParticipantSummary = () => { this.setState({showMoreParticipantSummary:false}) }
+    let closeShowMoreTourCustomerRankingSummary = () => { this.setState({showMoreTourCustomerRankingSummary: false}) }
 
     return (
 
@@ -86,8 +100,8 @@ class Home extends Component {
         <div className="modal-container">
             <Modal
               bsSize="large"
-              show={this.state.showTotalRevenue}
-              onHide={closeshowTotalRevenue}
+              show={this.state.showMoreTotalRevenue}
+              onHide={closeShowMoreTotalRevenue}
               container={this}
               aria-labelledby="contained-modal-title"
             >
@@ -104,8 +118,8 @@ class Home extends Component {
         <div className="modal-container">
             <Modal
               bsSize="lg"
-              show={this.state.showMoreTourRanking}
-              onHide={closeshowMoreTourRanking}
+              show={this.state.showMoreTourRevRanking}
+              onHide={closeShowMoreTourRevRanking}
               container={this}
               aria-labelledby="contained-modal-title"
             >
@@ -113,7 +127,7 @@ class Home extends Component {
                 <Modal.Title id="contained-modal-title">Tour Total Revenue Summary</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <TourRankingModal dispatch = {this.props.dispatch} />
+                <TourRevRankingModal dispatch = {this.props.dispatch} />
               </Modal.Body>
 
             </Modal>
@@ -123,7 +137,7 @@ class Home extends Component {
             <Modal
               bsSize="lg"
               show={this.state.showMoreNationsSummary}
-              onHide={closeshowMoreNationsSummary}
+              onHide={closeShowMoreNationsSummary}
               container={this}
               aria-labelledby="contained-modal-title"
             >
@@ -137,82 +151,175 @@ class Home extends Component {
             </Modal>
         </div>
 
+        <div className="modal-container">
+            <Modal
+              bsSize="lg"
+              show={this.state.showMoreParticipantSummary}
+              onHide={closeShowMoreParticipantSummary}
+              container={this}
+              aria-labelledby="contained-modal-title"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title">Total Participant Summary</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <TotalParticipantModal dispatch = {this.props.dispatch} />
+              </Modal.Body>
+
+            </Modal>
+        </div>
+
+        <div className="modal-container">
+            <Modal
+              bsSize="lg"
+              show={this.state.showMoreTourCustomerRankingSummary}
+              onHide={closeShowMoreTourCustomerRankingSummary}
+              container={this}
+              aria-labelledby="contained-modal-title"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title">Tour Customer Summary</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <TourCustomerRankingModal dispatch ={this.props.dispatch}/>
+              </Modal.Body>
+
+            </Modal>
+        </div>
+
+        <div className = "year-selection">
+          <Row>
+
+            <Col span={6}>
+              <div className ="year-title" style = {{marginTop: '-7%'}}>
+                <h3>{this.state.selectedYear}</h3>
+              </div>
+            </Col>
+
+            <Col span={1}  offset ={11} >
+              <Icon type="calendar" style = {{fontSize: "22px"}} />
+            </Col>
+
+            <Col span={4}>
+              <Select
+                 showSearch
+                 style={{width: 150}}
+                 defaultValue= {this.state.selectedYear}
+                 placeholder="Year"
+                 optionFilterProp="children"
+                 onSelect={this.handleYearSelect.bind(this)}
+                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+               >
+                {throwOptionYearObject()}
+               </Select>
+             </Col>
+             <Col span={1}>
+               <Button type = "primary" onClick = {() => this.setYearRev()}>GO!</Button>
+            </Col>
+         </Row>
+        </div>
+
         <div className="gutter-example" >
-            <BoxAbove />
+            <BoxAbove dispatch = {this.props.dispatch}/>
         </div>
 
         <Row gutter={16}>
          <Col span={16}>
-
-           <div className = "year-selection">
-             <Row>
-
-               <Col span={1}  offset ={15} >
-                 <Icon type="calendar" style = {{fontSize: "22px"}} />
-               </Col>
-
-               <Col span={6}>
-                 <Select
-                    showSearch
-                    style={{width: 150}}
-                    defaultValue= {this.state.selectedYear}
-                    placeholder="Year"
-                    optionFilterProp="children"
-                    onSelect={this.handleYearSelect.bind(this)}
-                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                  >
-                   {throwOptionYearObject()}
-                  </Select>
-                </Col>
-                <Col span={1}>
-                  <Button type = "primary" onClick = {() => this.setYearRev()}>GO!</Button>
-               </Col>
-            </Row>
-           </div>
-
            <div className = "total-revenue">
              <div className = "total-revenue-label">
                <Row>
                  <Col span = {14}>
-                  <h4>Total Revenue</h4>
+                  <h4>Total Revenue Summary</h4>
                  </Col>
                 <Col span = {1} offset = {9}>
                   <Popover placement="top" title={"See more!"}>
                     <Icon className = "read-more-button" type="ellipsis"
-                      onClick = {()=> this.handleClickShowTotalRevenue()}/>
+                      onClick = {()=> this.handleClickshowMoreTotalRevenue()}/>
                  </Popover>
                 </Col>
               </Row>
              </div>
              <TotalRev dispatch = {this.props.dispatch}/>
            </div>
+
+           <div className = "total-participant">
+             <div className = "total-participant-label">
+               <Row>
+                 <Col span = {14}>
+                  <h4>Total Customer Summary</h4>
+                 </Col>
+                <Col span = {1} offset = {9}>
+                  <Popover placement="top" title={"See more!"}>
+                    <Icon className = "read-more-button" type="ellipsis"
+                      onClick = {()=> this.handleClickShowTotalParticipant()}/>
+                 </Popover>
+                </Col>
+              </Row>
+             </div>
+             <TotalParticipant dispatch = {this.props.dispatch} />
+           </div>
+
+           <div className = "total-cost-from-guide">
+             <div className = "total-cost-from-guide-label">
+               <Row>
+                 <Col span = {14}>
+                  <h4>Total Cost From Guide</h4>
+                 </Col>
+                <Col span = {1} offset = {9}>
+                  <Popover placement="top" title={"See more!"}>
+                    <Icon className = "read-more-button" type="ellipsis"
+                      onClick = {()=> this.handleClickShowTotalParticipant()}/>
+                 </Popover>
+                </Col>
+              </Row>
+             </div>
+
+           </div>
+
          </Col>
 
          <Col span={8}>
            <div className = "each-tour-total-revenue">
              <div className = "each-tour-total-revenue-label">
                 <Row>
-                  <Col span = {14}>
-                   <h4>Tour Ranking</h4>
+                  <Col span = {17}>
+                   <h4>Tour Revenue Ranking</h4>
                   </Col>
-                 <Col span = {1} offset = {8}>
+                 <Col span = {1} offset = {5}>
                    <Popover placement="top" title={"See more!"}>
                      <Icon className = "read-more-button" type="ellipsis"
-                       onClick = {()=> this.handleClickShowMoreTourRanking()}/>
+                       onClick = {()=> this.handleClickShowMoreTourRevRanking()}/>
                   </Popover>
                  </Col>
                </Row>
              </div>
-             <TourRanking dispatch = {this.props.dispatch}/>
+             <TourRevRanking dispatch = {this.props.dispatch}/>
+           </div>
+
+           <div className = "each-tour-total-customers">
+             <div className = "each-tour-total-customers-label">
+                <Row>
+                  <Col span = {17}>
+                   <h4>Tour Customer Ranking</h4>
+                  </Col>
+                 <Col span = {1} offset = {5}>
+                   <Popover placement="top" title={"See more!"}>
+                     <Icon className = "read-more-button" type="ellipsis"
+                       onClick = {()=> this.handleClickShowMoreTourCustomerRanking()}/>
+                  </Popover>
+                 </Col>
+               </Row>
+             </div>
+             <TourCustomerRanking dispatch = {this.props.dispatch}/>
            </div>
 
            <div className = "popular-nation">
              <div className = "popular-nation-label">
                <Row>
-                 <Col span = {14}>
+                 <Col span = {17}>
                   <h4>Popular Nation</h4>
                  </Col>
-                <Col span = {1} offset = {8}>
+                <Col span = {1} offset = {5}>
                   <Popover placement="top" title={"See more!"}>
                     <Icon className = "read-more-button" type="ellipsis"
                       onClick = {()=> this.handleClickShowMoreNationsSummary()}/>
@@ -248,10 +355,6 @@ class Home extends Component {
   }
 }
 
-function mapStateToProps(state){
-  return{
 
-  }
-}
 
-export default connect(mapStateToProps)(Home)
+export default Home

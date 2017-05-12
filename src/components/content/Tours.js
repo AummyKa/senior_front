@@ -20,8 +20,7 @@ class Tours extends Component {
     this.state = {
       tours_data: [],
       showAddNewTour: false,
-      showTourBox: true,
-      tour_id:''
+      showTourBox: true
     }
   }
 
@@ -35,18 +34,17 @@ class Tours extends Component {
 
   componentWillMount(){
     this.getTours()
+
   }
 
   componentWillReceiveProps(nextProps){
     if(this.props.tours_data !== nextProps.tours_data){
-      this.setState({tours_data: nextProps.tours_data})
+      if(nextProps.tours_data){
+        this.setState({tours_data: nextProps.tours_data})
+      }
     }
     if(nextProps.add_newTour_success_status){
       this.setState({showAddNewTour:false})
-    }
-    if(this.props.tour_cur_id !== nextProps.tour_cur_id){
-      this.setState({tour_id: nextProps.tour_cur_id})
-
     }
   }
 
@@ -69,6 +67,7 @@ class Tours extends Component {
       const TourBox = this.TourBox
       return data.map((item,index) => (
             <TourBox
+              dispatch = {this.props.dispatch}
               key = {index}
               item = {item}  />
         ));
@@ -78,10 +77,11 @@ class Tours extends Component {
 
   }
 
-  TourBox({item, show, handleClickBox}){
+  TourBox({item, show, handleClickBox,dispatch}){
     return (
       <Col className="gutter-row" span={8}>
         <Box
+          dispatch = {dispatch}
           data = {item}
         />
       </Col>
@@ -137,17 +137,16 @@ class Tours extends Component {
 function mapStateToProps(state) {
 
     return{
-        tours_data: state.getTours.tours_data,
-        add_newTour_success_status: state.addNewTour.add_newTour_success_status,
-        tour_cur_id: state.tourAction.tour_cur_id
+        tours_data: state.getTourData.tours_data,
+        add_newTour_success_status: state.addNewTour.add_newTour_success_status
     };
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getAllTourAttempt: () => dispatch({ type: 'GET_ALL_TOURS_ATTEMPT' }),
-    getAllTourSuccess: (json) => dispatch({ type: 'GET_ALL_TOURS_SUCCESS', json }),
-    getAllTourFailed: () => dispatch({ type: 'GET_ALL_TOURS_FAILED' })
+    getAllTourAttempt: () => dispatch({ type: 'GET_ALL_TOUR_DATA_ATTEMPT' }),
+    getAllTourSuccess: (json) => dispatch({ type: 'GET_ALL_TOUR_DATA_SUCCESS', json }),
+    getAllTourFailed: () => dispatch({ type: 'GET_ALL_TOUR_DATA_FAILED' })
   };
 };
 

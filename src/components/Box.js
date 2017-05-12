@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types'
 import Cookies from 'js-cookie'
-
+// import getCurTourID from '../actions/action-getCurTourID'
 
 const normal = {
 
@@ -40,6 +40,7 @@ class Box extends Component {
 
   handleClickBox(content){
     console.log(content)
+    // this.props.dispatch(getCurTourID("GET_CUR_TOUR_ID",this.state.tour_id))
     Cookies.set('tour_id',content._id)
     this.context.router.push('/tours/'+ content._id);
   }
@@ -68,7 +69,8 @@ class Box extends Component {
               <div className = "box-detail">
                   <h4>{this.state.content.tour_name}</h4>
               <ul>
-                  <li><h5>{this.state.content.place}</h5></li>
+                  <li><h5>{this.state.content.place}</h5>
+                  <h5 style = {{textAlign:'right'}}>{this.state.content.type}</h5></li>
                 </ul>
               </div>
             </div>

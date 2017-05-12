@@ -10,49 +10,190 @@ const Option = Select.Option;
 let title1 = "Amount of Participants"
 let title2 = "Tour Guide Cost(Baht)"
 
+function participantsAndFee(firstNum,secNum,guide_cost){
+    let result = []
+    for(let i =firstNum;i<=secNum;i++){
+      var sub ={
+        participants: i,
+        fee: guide_cost
+      }
+      result[i] = sub
+    }
+    return result
+}
+
+function createArray(len){
+  let arr = []
+  for(let i=1;i<len;i++){
+    arr[i]=i
+  }
+  return arr
+}
+
+function getHistoryGuidePaymentCondition(guide_payment){
+
+  if(typeof guide_payment!=='undefined' && typeof guide_payment !== null){
+    let data = [];
+          let first_participant_temp, last_participant_temp, fee_temp;
+
+          for(var i=0; i < guide_payment.length; i++){
+
+            if(i==0){
+              if(typeof guide_payment[i].participants !== 'undefined'){
+                first_participant_temp = guide_payment[i].participants
+              }else{
+                first_participant_temp = 0
+              }
+
+              if(typeof guide_payment[i].fee !== 'undefined'){
+                fee_temp = guide_payment[i].fee
+              }else{
+                fee_temp = 0
+              }
+
+            }
+
+            if(fee_temp==guide_payment[i].fee){
+              if(typeof guide_payment[i].participants !== 'undefined'){
+                last_participant_temp = guide_payment[i].participants;
+              }else{
+                last_participant_temp = 0
+              }
+
+            }
+
+            if(fee_temp!=guide_payment[i].fee && i>0){
+              let payment = {first: first_participant_temp,
+                             second: last_participant_temp,
+                             fee: fee_temp};
+              data.push(payment);
+              first_participant_temp = guide_payment[i].participants;
+              fee_temp = guide_payment[i].fee;
+            }
+          }
+
+          let lastParticipant =0
+          let lastFee =0
+
+          if(typeof guide_payment[guide_payment.length-1] !== 'undefined' &&
+          typeof guide_payment[guide_payment.length-1].participants !== 'undefined'){
+             lastParticipant = guide_payment[guide_payment.length-1].participants
+          }else{
+             lastParticipant = 0
+          }
+
+          if(typeof guide_payment[guide_payment.length-1] !== 'undefined' &&
+              typeof guide_payment[guide_payment.length-1].fee !== 'undefined' ){
+             lastFee = guide_payment[guide_payment.length-1].fee
+          }else{
+             lastFee = 0
+          }
+
+          data.push({last:lastParticipant, fee: lastFee});
+
+          return data
+
+  }else{
+    return []
+  }
+}
+
+
 class CostModelModal extends Component{
 
   constructor(props){
     super(props)
     this.state = {
-      tour_id: '',
-      uuid: 1
+      tour_id: this.props.tourId,
+      paymentConditionHistory:[],
+      last_fee:"",
+      dataArray: [1,2,3,4,5]
     }
   }
 
+  componentWillMount(){
+    this.getTourData()
+  }
+
+  componentWillReceiveProps(nextProps){
+
+    if(this.props.specific_tours_data !== nextProps.specific_tours_data){
+      if(typeof nextProps.specific_tours_data !== 'undefined'){
+        console.log(nextProps.specific_tours_data)
+        if(typeof getHistoryGuidePaymentCondition(nextProps.specific_tours_dataguide_payment !== 'undefined')){
+          let len = getHistoryGuidePaymentCondition(nextProps.specific_tours_data.guide_payment).length
+          this.setState({dataArray:createArray(len)})
+          this.setState({last_fee:getHistoryGuidePaymentCondition(nextProps.specific_tours_data.guide_payment)
+            [len-1].fee})
+          this.setState({paymentConditionHistory:getHistoryGuidePaymentCondition(nextProps.specific_tours_data.guide_payment)})
+        }
+      }
+    }
+  }
+
+  getTourData(){
+    apiAccess({
+      url: 'http://localhost:8000/tours/'+this.state.tour_id,
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_DATA_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_DATA_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_DATA_FAILED' })
+    })
+  }
+
   handleSubmit(e) {
-    console.log(e)
+
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log(values)
-      // if (!err) {
-      //
-      //   let payload = {email: this.props.form.getFieldValue('email'),
-      //                 password: this.props.form.getFieldValue('password'),
-      //                 confirm: this.props.form.getFieldValue('confirm'),
-      //                 title: this.props.form.getFieldValue('title')[0],
-      //                 name:this.props.form.getFieldValue('name'),
-      //                 surname:this.props.form.getFieldValue('surname'),
-      //                 role:this.props.form.getFieldValue('role')[0],
-      //                 workplace:this.props.form.getFieldValue('workplace')[0],
-      //                 phone:"0"+ this.props.form.getFieldValue('phone'),
-      //                 contract:this.props.form.getFieldValue('contract')[0]}
-      //
-      //     console.log(payload)
-      //
-      //     apiAccess({
-      //       url: 'http://localhost:8000/register',
-      //       method: 'POST',
-      //       payload: payload,
-      //       attemptAction: () => this.props.dispatch({ type: 'REGIST_ATTEMPT' }),
-      //       successAction: (json) => this.props.dispatch({ type: 'REGIST_SUCCESS', json }),
-      //       failureAction: () => this.props.dispatch({ type: 'REGIST_FAILED' })
-      //     })
-      //   }else
-      //       console.log("error")
+
+      if (!err) {
+
+        const count = this.props.form.getFieldValue('keys').length
+        console.log(count)
+
+        let formResult = []
+        for(var i = 1; i <= count; i++){
+            let firstNum = this.props.form.getFieldValue(`firstNumber-${i}`)
+            let secNum = this.props.form.getFieldValue(`secondNumber-${i}`)
+            let guide_cost = this.props.form.getFieldValue(`guide-cost-${i}`)
+
+            let result = participantsAndFee(firstNum,secNum,guide_cost)
+            formResult.push(result)
+        }
+
+        let lastNum = this.props.form.getFieldValue(`lastNumber`)
+        let lastPrice = this.props.form.getFieldValue(`lastPrice`)
+
+        var arr = {
+          participants: lastNum,
+          fee: lastPrice
+        }
+
+        formResult.push(arr)
+
+        //flattened array
+        var flattened = formResult.reduce(function(a, b) {
+          return a.concat(b);
+        });
+
+        //remove undefined values from array
+        var guide_payment = flattened.filter(function( element ) {
+           return element !== undefined;
+        });
+
+          apiAccess({
+            url: 'http://localhost:8000/tours/update-guide-payment/'+this.state.tour_id,
+            method: 'POST',
+            payload:{ guide_payment },
+            attemptAction: () => this.props.dispatch({ type: 'POST_GUIDE_PAYMENT_EACH_TOUR_ATTEMPT' }),
+            successAction: (json) => this.props.dispatch({ type: 'POST_GUIDE_PAYMENT_EACH_TOUR_SUCCESS', json }),
+            failureAction: () => this.props.dispatch({ type: 'POST_GUIDE_PAYMENT_EACH_TOUR_FAILED' })
+          })
+
+        }else
+            console.log("error")
       });
-
-
   }
 
   editCondition(){
@@ -63,30 +204,18 @@ class CostModelModal extends Component{
 
   }
 
-  componentWillMount(){
 
-
-  }
 
   add(){
-    console.log(this.state.uuid)
-    let num = this.state.uuid
-    let prev = num
-    num++
-    this.setState({uuid:num})
-    console.log(num)
-
     const { form } = this.props;
     // can use data-binding to get
     const keys = form.getFieldValue('keys');
+    let num = keys.slice(-1)[0]
+    num++
     const nextKeys = keys.concat(num);
-
-    // form.setFieldsValue({
-    //   `lastNumber-${num}`: `firstNumber-${prev}`
-    // });
-    // can use data-binding to set
-    // important! notify form to detect changes
-
+    form.setFieldsValue({
+      keys: nextKeys,
+    });
   }
 
   remove(k){
@@ -103,6 +232,81 @@ class CostModelModal extends Component{
     });
  }
 
+checkFirstValue(prevValue,number){
+  if(typeof this.state.paymentConditionHistory !=='undefined' &&
+  typeof this.state.paymentConditionHistory[number -1] !== 'undefined' &&
+  typeof this.state.paymentConditionHistory[number -1].first !== 'undefined'
+  ){
+    return this.state.paymentConditionHistory[number-1].first
+  }else {
+    return prevValue
+  }
+
+}
+
+checkSecondValue(number){
+  if(typeof this.state.paymentConditionHistory !=='undefined' &&
+  typeof this.state.paymentConditionHistory[number -1] !== 'undefined' &&
+  typeof this.state.paymentConditionHistory[number -1].second !== 'undefined'
+  ){
+    return this.state.paymentConditionHistory[number-1].second
+  }else {
+    return ''
+  }
+}
+
+checkCostValue(number){
+  if(typeof this.state.paymentConditionHistory !=='undefined' &&
+  typeof this.state.paymentConditionHistory[number -1] !== 'undefined' &&
+  typeof this.state.paymentConditionHistory[number -1].fee !== 'undefined'
+  ){
+    return this.state.paymentConditionHistory[number-1].fee
+  }else {
+    return ''
+  }
+}
+
+getNextValue(preValue){
+  console.log(preValue)
+  if(preValue){
+    return preValue+1
+  }
+  // if(typeof this.state.paymentConditionHistory !=='undefined' &&
+  // typeof this.state.paymentConditionHistory[this.state.paymentConditionHistory.length-1] !== 'undefined' &&
+  // typeof this.state.paymentConditionHistory[this.state.paymentConditionHistory.length -1].last !== 'undefined'
+  // ){
+  //   return this.state.paymentConditionHistory[this.state.paymentConditionHistory.length -1].last
+  // }else if(preValue){
+  //   return preValue+1
+  // }else
+  //  return ''
+}
+
+checkLastCost(){
+  if(typeof this.state.last_fee !== 'undefined'){
+    return this.state.last_fee
+  }else
+    return ''
+  // if(typeof this.state.paymentConditionHistory !=='undefined' &&
+  // typeof this.state.paymentConditionHistory[this.state.paymentConditionHistory.lenght-1] !== 'undefined' &&
+  // typeof this.state.paymentConditionHistory[this.state.paymentConditionHistory.length -1].fee !== 'undefined'
+  // ){
+  //   return this.state.paymentConditionHistory[this.state.paymentConditionHistory.length -1].fee
+  // }else {
+  //   return ''
+  // }
+}
+
+// checkDuplicateNumber(rule, value, callback){
+//   console.log(rule)
+//   const form = this.props.form;
+//   console.log(form.getFieldValue(`firstNumber-`+rule))
+//   if(value == form.getFieldValue(`firstNumber-`+rule)){
+//     callback('The numbers should not be the same!');
+//   }else {
+//     callback();
+//   }
+// }
 
 
   render() {
@@ -112,6 +316,10 @@ class CostModelModal extends Component{
       labelCol: { span: 12, offset: 1},
       wrapperCol: { span: 10, offset: 1 },
     };
+    const feeLayout = {
+      labelCol: { span: 12, offset: 1},
+      wrapperCol: { span: 14, offset: 1 },
+    }
     const lastformItemLayout = {
       labelCol: { span: 14 },
       wrapperCol: { span: 9 },
@@ -125,7 +333,7 @@ class CostModelModal extends Component{
     };
 
 
-   getFieldDecorator('keys', { initialValue: [1,2,3,4,5] });
+   getFieldDecorator('keys', { initialValue: this.state.dataArray });
    const keys = getFieldValue('keys');
 
 
@@ -143,7 +351,9 @@ class CostModelModal extends Component{
                        label= {title}
                        hasFeedback
                      >
-                      {getFieldDecorator(`firstNumber-${k}`,{initialValue: getFieldValue(`secondNumber-${k-1}`)} || 0, {
+                      {getFieldDecorator(`firstNumber-${k}`
+                        ,{initialValue: this.checkFirstValue(this.getNextValue(getFieldValue(`secondNumber-${k-1}`)),k)
+                        }, {
                         rules: [{
                           required: true }]
                         })(
@@ -159,7 +369,7 @@ class CostModelModal extends Component{
                        {...formItemLayout}
                        hasFeedback
                      >
-                      {getFieldDecorator(`secondNumber-${k}`, {
+                      {getFieldDecorator(`secondNumber-${k}`,{initialValue: this.checkSecondValue(k)}, {
                         rules: [{
                           required: true }]
                         })(
@@ -169,10 +379,10 @@ class CostModelModal extends Component{
                     </Col>
                     <Col span={6}>
                       <FormItem
-                       {...formItemLayout}
+                       {...feeLayout}
                        hasFeedback
                      >
-                      {getFieldDecorator(`guide-cost-${k}`, {
+                      {getFieldDecorator(`guide-cost-${k}`,{initialValue: this.checkCostValue(k)}, {
                         rules: [{
                           required: true }]
                         })(
@@ -221,7 +431,8 @@ class CostModelModal extends Component{
                    label= "Last condition"
                    hasFeedback
                  >
-                   {getFieldDecorator(`lastNumber`,{initialValue: getFieldValue(`secondNumber-${getFieldValue('keys').length}`)}|| 0
+                   {getFieldDecorator(`lastNumber`
+                   ,{initialValue: this.getNextValue(getFieldValue(`secondNumber-${getFieldValue('keys').length-1}`))}|| 0
                    , {
                      rules: [{
                        required: true }]
@@ -238,10 +449,10 @@ class CostModelModal extends Component{
                 </Col>
                 <Col span={6} offset={4}>
                   <FormItem
-                   {...formItemLayout}
+                   {...feeLayout}
                    hasFeedback
                  >
-                 {getFieldDecorator(`lastPrice`,{
+                 {getFieldDecorator(`lastPrice`, {initialValue: this.checkLastCost()}, {
                    rules: [{
                      required: true }]
                    })(
@@ -261,8 +472,8 @@ class CostModelModal extends Component{
         </Col>
       </Row>
         <FormItem {...formItemLayoutWithOutLabelPlus}>
-          <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
-            <Icon type="plus" /> Add field
+          <Button type="dashed" onClick={this.add.bind(this)} style={{ width: '60%' }}>
+            <Icon type="plus" /> Add More Condition
           </Button>
         </FormItem>
         <FormItem {...formItemLayoutWithOutLabel}>
@@ -275,7 +486,7 @@ class CostModelModal extends Component{
 
 function mapStateToProps(state){
   return{
-
+    specific_tours_data: state.getSpecificTourData.specific_tours_data
   }
 }
 

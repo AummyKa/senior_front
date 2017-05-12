@@ -12,6 +12,8 @@ import changeDateFormat from '../Helpers/changeDateFormat'
 import {editCustomerModal} from '../actions/action-editCustomerModal'
 import {addCustomerModal} from '../actions/action-addCustomerModal'
 
+import GuideSuggestionModal from './GuideSuggestionModal'
+
 import {Modal } from 'react-bootstrap';
 
 import Cookies from 'js-cookie'
@@ -65,7 +67,6 @@ function getGuideName(list,resultJSON){
 }
 
 function throwOptionGuideObject(data){
-  console.log(data)
   let temp = []
   if(data){
     for (let i = 0; i < data.length; i++) {
@@ -95,7 +96,6 @@ function throwOptionTourNameObject(data){
 }
 
 function formatData(data){
-  console.log(data)
   let temp = []
   if(data){
     for(var i = 0; i < data.length; i++){
@@ -201,7 +201,8 @@ const EditTourForm = Form.create()(React.createClass({
       cusTourDelete:"",
       showAddMoreCustomer: false,
       tours_name: [],
-      selectedTourPeriod: ''
+      selectedTourPeriod: '',
+      showSuggest: false
     }
   },
 
@@ -210,7 +211,6 @@ const EditTourForm = Form.create()(React.createClass({
   },
 
   handleTourPeriodSelect(value,option){
-    console.log(value)
     this.setState({ selectedTourPeriod: tour_period[value].value});
   },
 
@@ -225,9 +225,9 @@ const EditTourForm = Form.create()(React.createClass({
       url: 'http://localhost:8000/bookedtours/'+id,
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_BOOKED_TOUR_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_SPECIFIC_BOOKED_TOUR_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_BOOKED_TOUR_FAILED' })
     })
   },
 
@@ -239,8 +239,6 @@ const EditTourForm = Form.create()(React.createClass({
   },
 
   deleteCustomer(tourID,cusEmail){
-    console.log(tourID)
-    console.log(cusEmail)
     apiAccess({
       url: 'http://localhost:8000/bookedtours/delete-customer/'+tourID,
       method: 'DELETE',
@@ -279,9 +277,9 @@ const EditTourForm = Form.create()(React.createClass({
     if(this.props.eachTour !== nextProps.eachTour){
 
       if(nextProps.eachTour){
-        console.log(<div>{nextProps.eachTour.tour_guide}</div>.props.children)
-        console.log(nextProps.eachTour)
-        this.setState({eachCurGuideTour: <div>{nextProps.eachTour.tour_guide}</div>.props.children})
+        if(typeof nextProps.eachTour.tour_guide !== 'undefined' && nextProps.eachTour.tour_guide !== null){
+          this.setState({eachCurGuideTour: <div>{nextProps.eachTour.tour_guide}</div>.props.children})
+        }
         this.setState({eachTour:nextProps.eachTour})
       }
     }
@@ -311,12 +309,12 @@ const EditTourForm = Form.create()(React.createClass({
       }
     }
 
-    if(this.props.tours_data !== nextProps.tours_data){
-      if(nextProps.tours_data){
-        console.log(nextProps.tours_data)
-        this.setState({tours_name: nextProps.tours_data})
+    if(this.props.all_tours_name !== nextProps.all_tours_name){
+      if(nextProps.all_tours_name){
+        this.setState({tours_name: nextProps.all_tours_name})
       }
     }
+
   },
 
   getAllTourName(){
@@ -336,6 +334,11 @@ const EditTourForm = Form.create()(React.createClass({
     this.getAllTourName()
   },
 
+  showSuggestModal(){
+    this.setState({showSuggest: true})
+  },
+
+
 
   render(){
 
@@ -345,6 +348,7 @@ const EditTourForm = Form.create()(React.createClass({
       wrapperCol: { span: 20 },
     };
 
+    let closeSuggest = () => { this.setState({showSuggest: false}) }
     let closeEachTour = () => { this.setState({showCustomerEdit: false})}
     let closeCustomerDeleteWarning = () => this.setState({showCustomerDeleteWarning: false})
     let closeAddMoreCustomer = () => this.setState({showAddMoreCustomer: false})
@@ -354,6 +358,22 @@ const EditTourForm = Form.create()(React.createClass({
    return (
 
      <div>
+
+       <Modal
+         show={this.state.showSuggest}
+         onHide={closeSuggest}
+         container={this}
+         aria-labelledby="contained-modal-title"
+       >
+         <Modal.Body>
+           <GuideSuggestionModal dispatch = {this.props.dispatch}
+             selectedTourName = {this.state.selectedTourName}
+             selectedTourPeriod = {this.state.selectedTourPeriod}
+             selectedStartDate = {changeDateFormat(this.props.dateTour)}
+             />
+         </Modal.Body>
+
+       </Modal>
 
        <div className="modal-container" >
            <Modal
@@ -450,12 +470,14 @@ const EditTourForm = Form.create()(React.createClass({
            {...formItemLayout}
            label="Tour Guide"
          >
+         <Row gutter={10}>
+            <Col span={13}>
            {getFieldDecorator('tourguide', {
              initialValue: this.state.eachCurGuideTour.fullname
            })(
              <Select
                 showSearch
-                style={{ width: '80%', marginRight: 11, marginLeft: 8 }}
+                style={{ width: '100%', marginRight: 11, marginLeft: 8 }}
                 placeholder="Select a person"
                 optionFilterProp="children"
                 onSelect={this.handleGuideSelect}
@@ -464,6 +486,12 @@ const EditTourForm = Form.create()(React.createClass({
                {throwOptionGuideObject(this.state.guide_name)}
               </Select>
            )}
+         </Col>
+          <Col span={9}>
+            <Button style = {{backgroundColor: '#FFD310', color: 'white'}} onClick = {()=> this.showSuggestModal()} >
+              Suggest guide!</Button>
+         </Col>
+   </Row>
          </FormItem>
 
          <FormItem
@@ -495,11 +523,11 @@ const EditTourForm = Form.create()(React.createClass({
 function mapStateToProps(state) {
 
     return {
-        tours_data: state.getTours.tours_data,
+        all_tours_name: state.getToursName.all_tours_name,
         eachGuideName: state.getEachGuideName.eachGuideName,
         dateTour: state.addTourForm.dateTour,
-        eachTour: state.getSpecificTour.eachTour,
-        curTourID: state.getSpecificTour.curTourID,
+        eachTour: state.getSpecificBookedTour.eachTour,
+        curTourID: state.getSpecificBookedTour.curTourID,
         delete_cus_status: state.deleteCurCustomerInTour.delete_cus_status,
         editCustomerInTourStatus: state.editCustomerInTour.editCustomerInTourStatus,
         addCustomerSuccess: state.addNewCustomerInTour.addCustomerSuccess,

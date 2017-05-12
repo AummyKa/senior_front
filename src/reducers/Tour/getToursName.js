@@ -1,10 +1,10 @@
 
 const INITIAL_STATE = {
-  tours_data : ""
+  all_tours_name : ""
 
 }
 // { type: 'LOGIN_SUCCESS', text }
-const getTours = (state = INITIAL_STATE, action) => {
+const getToursName = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case 'GET_ALL_TOURS_ATTEMPT':
       return {
@@ -13,7 +13,7 @@ const getTours = (state = INITIAL_STATE, action) => {
     case 'GET_ALL_TOURS_SUCCESS':
       // action: { type: 'LOGIN_SUCCESS', json: { token: '' }}
       return{
-        tours_data : action.json,
+        all_tours_name : action.json,
         get_tour_success_status: true
       }
 
@@ -27,4 +27,4 @@ const getTours = (state = INITIAL_STATE, action) => {
   }
 }
 
-export default getTours
+export default getToursName

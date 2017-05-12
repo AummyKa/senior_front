@@ -12,8 +12,6 @@ import { Modal } from 'react-bootstrap';
 
 import { connect } from 'react-redux'
 
-import AddTourForm from '../AddTourForm';
-
 
 class SlotDetail extends Component {
 
@@ -155,6 +153,16 @@ class SlotDetail extends Component {
           total_p += data[i].customers[j].participants
         }
 
+        let guide =''
+        if(typeof data[i].tour_guide !== null && typeof data[i].tour_guide !== 'undefined' ){
+          if(data[i].tour_guide && typeof data[i].tour_guide.fullname !== 'undefined'){
+              guide = data[i].tour_guide.fullname
+          }
+        }else {
+          guide = ''
+        }
+
+
         var tourDetail = {
           key: i,
           id: data[i]._id,
@@ -163,7 +171,7 @@ class SlotDetail extends Component {
           tour_name: data[i].tour_name,
           tour_type: data[i].tour_type,
           tour_period: data[i].tour_period,
-          guide: data[i].tour_guide.fullname,
+          guide: guide,
           participants: total_p
         }
         tours[i] = tourDetail
@@ -185,9 +193,9 @@ getCurTour(record){
     url: 'http://localhost:8000/bookedtours/'+id,
     method: 'GET',
     payload: null,
-    attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_ATTEMPT' }),
-    successAction: (json) => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_SUCCESS', json }),
-    failureAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_FAILED' })
+    attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_BOOKED_TOUR_ATTEMPT' }),
+    successAction: (json) => this.props.dispatch({ type: 'GET_SPECIFIC_BOOKED_TOUR_SUCCESS', json }),
+    failureAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_BOOKED_TOUR_FAILED' })
   })
 }
 

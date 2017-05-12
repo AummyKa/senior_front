@@ -1,6 +1,7 @@
 
 const INITIAL_STATE = {
-  selectedYear:''
+  selectedYear:'',
+  selectedTourTear:''
 }
 // { type: 'LOGIN_SUCCESS', text }
 const updateYearDashBoard = (state = INITIAL_STATE, action) => {
@@ -9,6 +10,10 @@ const updateYearDashBoard = (state = INITIAL_STATE, action) => {
     case 'CHANGE_YEAR':
       return {
         selectedYear: action.selectedYear
+      }
+    case 'CHANGE_TOUR_DASHBOARD_YEAR':
+      return {
+        selectedTourYear: action.selectedYear
       }
 
       default:

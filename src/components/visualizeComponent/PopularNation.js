@@ -9,7 +9,7 @@ import apiAccess from '../../Helpers/apiAccess'
 
 //Pie Chart
 
-const COLORS = ['#900C3F', '#C70039', '#FF5733', '#FFC300'];
+const COLORS = ['#900C3F', '#C70039', '#FF5733', '#FFC300','#DAF7A6','#4ACB09'];
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
  	const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -32,24 +32,40 @@ const columns = [{
 }]
 
 
-const AddKeyPopNationTable = (arrayJSON) =>{
+const limitNationChart = (arrayJSON) =>{
   let resultJSON = []
   if(arrayJSON!=null){
-    if(arrayJSON.length > 4){
-      for(var i = 0; i < 4; i++) {
+    if(arrayJSON.length > 5){
+      for(var i = 0; i < 5; i++) {
+        arrayJSON[i]["key"] = i;
         resultJSON[i] = arrayJSON[i]
-        resultJSON[i]["key"] = i
       }
+      let leftParticipants = 0
+      for(var i=5;i<arrayJSON.length;i++){
+        leftParticipants = leftParticipants + arrayJSON[i].participants
+      }
+      resultJSON.push({country:'others',participants:leftParticipants})
+
     }else{
       for(var i = 0; i < arrayJSON.length; i++) {
         resultJSON[i] = arrayJSON[i]
-        resultJSON[i]["key"] = i
-    }
+      }
 
   }
 }
   return resultJSON
 }
+
+const createTable = (arrayJSON) =>{
+  console.log(arrayJSON)
+  if(arrayJSON!=null){
+    for(var i = 0; i < arrayJSON.length; i++) {
+
+  }
+}
+  return arrayJSON
+}
+
 
 
 
@@ -85,7 +101,8 @@ class PopularNation extends Component {
     console.log(nextProps.amountNationsSummary)
     if(this.props.amountNationsSummary !== nextProps.amountNationsSummary){
       if(nextProps.amountNationsSummary){
-        this.setState({amountNationsSummary:nextProps.amountNationsSummary})
+        this.setState({amountNationsSummary:limitNationChart(nextProps.amountNationsSummary)})
+        this.setState({amountNationsSummaryTable:createTable(nextProps.amountNationsSummary)})
       }
     }
     if(this.props.selectedYear !== nextProps.selectedYear){
@@ -122,7 +139,7 @@ listNations(data) {
           <div className= "piechart-container">
                 <PieChart width={300} height={170} onMouseEnter={this.onPieEnter}>
                     <Pie
-                      data={AddKeyPopNationTable(this.state.amountNationsSummary)}
+                      data={this.state.amountNationsSummary}
                       cx={140}
                       cy={80}
                       labelLine={false}
@@ -142,12 +159,12 @@ listNations(data) {
 
                 <div className= "popular-color-label">
 
-                    {this.listNations(AddKeyPopNationTable(this.state.amountNationsSummary))}
+                    {this.listNations(this.state.amountNationsSummary)}
 
                 </div>
 
                 <div className = "pop-nation-table">
-                  <Table columns={columns} dataSource={AddKeyPopNationTable(this.state.amountNationsSummary)} size="small" pagination={false} />
+                  <Table columns={columns} dataSource={this.state.amountNationsSummary} size="small" pagination={false} />
                 </div>
 
             </div>

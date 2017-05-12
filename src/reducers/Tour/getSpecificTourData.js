@@ -1,22 +1,22 @@
 const INITIAL_STATE = {
-  tours_data : []
+  specific_tours_data : []
 }
 
 // { type: 'LOGIN_SUCCESS', text }
-const getTourData = (state = INITIAL_STATE, action) => {
+const getSpecificTourData = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case 'GET_ALL_TOUR_DATA_ATTEMPT':
+    case 'GET_SPECIFIC_TOUR_DATA_ATTEMPT':
 
       return {
         //loading sign
       }
-    case 'GET_ALL_TOUR_DATA_SUCCESS':
+    case 'GET_SPECIFIC_TOUR_DATA_SUCCESS':
       // action: { type: 'LOGIN_SUCCESS', json: { token: '' }}
       let data = action.json
       return {
-        tours_data: data
+        specific_tours_data: data
       }
-    case 'GET_ALL_TOUR_DATA_FAILED':
+    case 'GET_SPECIFIC_TOUR_DATA_FAILED':
         console.log("fail")
       return {
         //pop up
@@ -28,4 +28,4 @@ const getTourData = (state = INITIAL_STATE, action) => {
 }
 }
 
-export default getTourData
+export default getSpecificTourData

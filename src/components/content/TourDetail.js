@@ -3,18 +3,38 @@ import PropTypes from 'prop-types'
 
 import AddNewTourModal from '../AddNewTourModal';
 
-import { Button, Col, Row, Icon} from 'antd';
+import { Button, Col, Row, Icon, Select} from 'antd';
 import { Modal } from 'react-bootstrap';
 import apiAccess from '../../Helpers/apiAccess'
 
 import EachTourRevChart from '../EachTourRevChart'
 import EachTourExpertGuide from '../EachTourExpertGuide'
-import EachTourSchedule from '../EachTourSchedule'
 import EachTourCostModel from '../EachTourCostModel'
 import CostModelModal from '../CostModelModal'
+import EachTourPopularNation from '../EachTourPopularNation'
+import EachTourEditFormModal from '../EachTourEditFormModal'
+import { changeYearDashBoard } from '../../actions/action-changeYearDashBoard'
 
-import {connect} from 'react-redux';
 import Cookies from 'js-cookie'
+// import getCurTourID from '../../actions/action-getCurTourID'
+import {connect} from 'react-redux';
+
+const Option = Select.Option;
+let today = new Date();
+let curYear = today.getFullYear();
+
+function throwOptionYearObject(){
+  let today = new Date();
+  let curYear = today.getFullYear();
+  let startYear = 2000
+
+  let temp = []
+  for (let i = startYear; i <= curYear; i++) {
+    temp.push(<Option key= {i}>{i}</Option>);
+  }
+  return temp
+}
+
 
 class TourDetail extends Component {
 
@@ -22,7 +42,10 @@ class TourDetail extends Component {
     super(props)
     this.state = {
       tour_data: [],
-      showCostModelModal: false
+      showCostModelModal: false,
+      tour_id: Cookies.get('tour_id'),
+      selectedYear:curYear,
+      showEditTourModal:false
     }
   }
 
@@ -31,26 +54,53 @@ class TourDetail extends Component {
   }
 
 
-  getTourData(){
-    let id = Cookies.get('tour_id')
+  getSpecificTourData(){
+    console.log(this.state.tour_id)
     apiAccess({
-      url: 'http://localhost:8000/tours/'+id,
+      url: 'http://localhost:8000/tours/'+this.state.tour_id,
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_TOUR_DATA_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_TOUR_DATA_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_TOUR_DATA_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_DATA_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_DATA_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_DATA_FAILED' })
     })
   }
 
   componentWillMount(){
-    this.getTourData()
+    this.getSpecificTourData(this.state.tour_id)
+
   }
 
   componentWillReceiveProps(nextProps){
-    if(this.props.tour_data !== nextProps.tour_data){
-      this.setState({tour_data:nextProps.tour_data})
-      console.log(nextProps.tour_data)
+    if(this.props.tour_cur_id !== nextProps.tour_cur_id){
+      this.setState({tour_id:nextProps.tour_cur_id})
+      console.log(nextProps.tour_cur_id)
+    }
+    console.log(nextProps.specific_tours_data)
+    if(this.props.specific_tours_data !== nextProps.specific_tours_data){
+      if(nextProps.specific_tours_data){    
+        this.setState({tour_data:nextProps.specific_tours_data})
+
+      }
+    }
+
+    if(this.props.postGuidePaymentEachTourStatus !== nextProps.postGuidePaymentEachTourStatus){
+      if(nextProps.postGuidePaymentEachTourStatus){
+        this.setState({showCostModelModal:false})
+        this.getSpecificTourData()
+      }
+    }
+
+    if(this.props.selectedTourYear!==nextProps.selectedTourYear){
+      if(nextProps.selectedTourYear){
+        this.setState({selectedYear:nextProps.selectedTourYear})
+      }
+    }
+    if(this.props.updateEachTourStatus!==nextProps.updateEachTourStatus){
+      if(nextProps.updateEachTourStatus){
+        this.setState({showEditTourModal:false})
+        this.getSpecificTourData()
+      }
     }
   }
 
@@ -58,15 +108,43 @@ class TourDetail extends Component {
     this.setState({showCostModelModal: true})
   }
 
+  handleYearSelect(value,option){
+  this.setState({selectedYear: value})
+  }
 
+  setYearRev(){
+    this.props.dispatch(changeYearDashBoard('CHANGE_TOUR_DASHBOARD_YEAR',this.state.selectedYear))
+  }
+
+  editTour(){
+    this.setState({showEditTourModal:true})
+  }
 
   render() {
 
     let closeCostModelModal = () => { this.setState({showCostModelModal: false}) }
+    let closeEditTourModal = () => { this.setState({showEditTourModal:false}) }
 
     return (
 
       <div>
+
+      <div className="modal-container">
+          <Modal
+            show={this.state.showEditTourModal}
+            onHide={closeEditTourModal}
+            container={this}
+            aria-labelledby="contained-modal-title"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title">Cost Modal</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <EachTourEditFormModal tourId= {this.state.tour_id} dispatch = {this.props.dispatch}/>
+            </Modal.Body>
+
+          </Modal>
+      </div>
 
       <div className="modal-container">
           <Modal
@@ -79,7 +157,7 @@ class TourDetail extends Component {
               <Modal.Title id="contained-modal-title">Cost Modal</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <CostModelModal dispatch = {this.props.dispatch}/>
+              <CostModelModal tourId= {this.state.tour_id} dispatch = {this.props.dispatch}/>
             </Modal.Body>
 
           </Modal>
@@ -108,7 +186,7 @@ class TourDetail extends Component {
                     className = "btn-edit-in-tour-detail" />
                   </span></b>
               </div>
-              <EachTourCostModel />
+              <EachTourCostModel dispatch = {this.props.dispatch} tourId = {this.state.tour_id} />
             </div>
 
             <div className = "edit-tour-data">
@@ -118,40 +196,62 @@ class TourDetail extends Component {
             <div className = "expert-list">
               <div className = "expert-guide-list-title"><b>Expert Guide</b></div>
               <div className = "expert-list-table">
-                <EachTourExpertGuide/>
+                <EachTourExpertGuide dispatch = {this.props.dispatch} tourId={this.state.tour_id} />
               </div>
             </div>
 
           </Col>
           <Col span ={16} offset = {1}>
+
+            <div className = "edit-and-year-selected">
+              <Row>
+
+                <Col span={6}>
+                  <div className ="year-title" style = {{marginTop: '-11%'}}>
+                    <h3>{this.state.selectedYear}</h3>
+                  </div>
+                </Col>
+
+                <Col span={1}  offset ={6} >
+                  <Icon type="calendar" style = {{fontSize: "22px"}} />
+                </Col>
+
+                <Col span={6}>
+                  <Select
+                     showSearch
+                     style={{width: 150}}
+                     defaultValue= {this.state.selectedYear}
+                     placeholder="Year"
+                     optionFilterProp="children"
+                     onSelect={this.handleYearSelect.bind(this)}
+                     filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                   >
+                    {throwOptionYearObject()}
+                   </Select>
+                 </Col>
+                 <Col span={2}>
+                   <Button type = "primary" onClick = {() => this.setYearRev()}>GO!</Button>
+                </Col>
+                <Col span={3} >
+                  <Button style={{backgroundColor:'#900C3F',color:'#ffffff'}} onClick = {() => this.editTour()}>Edit Tour!</Button>
+               </Col>
+             </Row>
+            </div>
+
             <div className = "tour-graph">
               <div className = "tour-graph-title"><b>Tour Revenue</b></div>
 
               <div className = "tour-rev-chart">
-                <EachTourRevChart />
+                <EachTourRevChart tourId= {this.state.tour_id} dispatch = {this.props.dispatch} />
               </div>
 
             </div>
-            {/*
-            <div className = "tour-schedule">
-              <div className = "each-tour-schedule-title"><b>Tour Schedule</b></div>
-              <div className = "tour-schedule-wrapper">
 
-              </div>
+            <div className = "each-tour-popular-nation">
+              <div className = "each-tour-popular-nation-title"><b>Popular Nation</b></div>
+              <EachTourPopularNation tourId= {this.state.tour_id} dispatch = {this.props.dispatch} />
             </div>
-            */}
-            <Row>
-              <Col span = {14}>
-                <div className = "each-tour-popular-nation">
-                  <div className = "each-tour-popular-nation-title"><b>Popular Nation</b></div>
-                </div>
-              </Col>
-              <Col span = {9} offset = {1}>
-                <div className = "each-tour-unassigned-guide">
-                  <div className = "each-tour-unassigned-guide-title"><b>Unassigned Guide</b></div>
-                </div>
-              </Col>
-            </Row>
+
 
           </Col>
         </Row>
@@ -167,7 +267,10 @@ class TourDetail extends Component {
 function mapStateToProps(state){
   return{
     tour_cur_id: state.tourAction.tour_cur_id,
-    tour_data: state.getTourData.tour_data
+    specific_tours_data: state.getSpecificTourData.specific_tours_data,
+    postGuidePaymentEachTourStatus: state.postGuidePaymentEachTour.postGuidePaymentEachTourStatus,
+    selectedTourYear: state.updateYearDashBoard.selectedTourYear,
+    updateEachTourStatus: state.updateEachTour.updateEachTourStatus
   }
 }
 

@@ -5,14 +5,14 @@ const INITIAL_STATE = {
   curTourID: ""
 }
 // { type: 'LOGIN_SUCCESS', text }
-const editSpecificTour = (state = INITIAL_STATE, action) => {
+const getSpecificBookedTour = (state = INITIAL_STATE, action) => {
   switch (action.type) {
 
-    case 'GET_SPECIFIC_TOUR_ATTEMPT':
+    case 'GET_SPECIFIC_BOOKED_TOUR_ATTEMPT':
       return {
 
       }
-    case 'GET_SPECIFIC_TOUR_SUCCESS':
+    case 'GET_SPECIFIC_BOOKED_TOUR_SUCCESS':
       console.log(action)
       console.log(action.json._id)
       return {
@@ -20,7 +20,7 @@ const editSpecificTour = (state = INITIAL_STATE, action) => {
         eachTour : action.json,
         eachTourState: true
       }
-    case 'GET_SPECIFIC_TOUR_FAILED':
+    case 'GET_SPECIFIC_BOOKED_TOUR_FAILED':
 
       return {
 
@@ -38,4 +38,4 @@ const editSpecificTour = (state = INITIAL_STATE, action) => {
 }
 }
 
-export default editSpecificTour
+export default getSpecificBookedTour

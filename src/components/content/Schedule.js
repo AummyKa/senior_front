@@ -6,7 +6,7 @@ import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 
 import SlotDetail from './SlotDetail'
-import AddTourForm from '../AddTourForm'
+import AddBookedTourForm from '../AddBookedTourForm'
 import EditTourForm from '../EditTourForm'
 import EditCurCustomerModal from '../EditCurCustomerModal'
 import AddMoreCustomerModal from '../AddMoreCustomerModal'
@@ -126,8 +126,9 @@ class Schedule extends Component {
     }
     console.log(nextProps.delete_cus_status)
     if(this.props.delete_cus_status !== nextProps.delete_cus_status){
+      this.getEvent()
       if(nextProps.delete_cus_status){
-        this.getEvent()
+        // this.getEvent()
       }
     }
 
@@ -257,7 +258,7 @@ class Schedule extends Component {
               </Modal.Header>
               <Modal.Body>
 
-                <AddTourForm dispatch = {this.props.dispatch} />
+                <AddBookedTourForm dispatch = {this.props.dispatch} />
 
               </Modal.Body>
 
@@ -363,8 +364,8 @@ const mapStateToProps = (state) => ({
   showAddTourModal: state.addTourForm.showAddTourModal,
   dateTour:state.addTourForm.dateTour,
   addBookerAndTour: state.postBookerAndTour.addBookerAndTour,
-  eachTourState: state.getSpecificTour.eachTourState,
-  eachTour: state.getSpecificTour.eachTour,
+  eachTourState: state.getSpecificBookedTour.eachTourState,
+  eachTour: state.getSpecificBookedTour.eachTour,
   selectedDate: state.spreadSelectedDate.selectedDate,
   events: state.getEventSummary.events,
   delete_cus_status: state.deleteCurCustomerInTour.delete_cus_status

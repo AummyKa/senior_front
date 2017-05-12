@@ -23,11 +23,11 @@ import getStaffLists from './Staff/getStaffLists'
 import updateStaff from './Staff/updateStaff'
 
 //Tours
-import getTours from './Tour/getTours'
+import getToursName from './Tour/getToursName'
 import addTourForm from './Tour/addTourForm'
 import postBookerAndTour from './Tour/postBookerAndTour'
 import getBookerAndTour from './Tour/getBookerAndTour'
-import getSpecificTour from './Tour/getSpecificTour'
+import getSpecificBookedTour from './Tour/getSpecificBookedTour'
 import deleteCurCustomerInTour from './Tour/deleteCurCustomerInTour'
 import deletedTour from './Tour/deletedTour'
 import addNewTour from './Tour/addNewTour'
@@ -35,7 +35,14 @@ import tourAction from './Tour/tourAction'
 import addNewCustomerInTour from './Tour/addNewCustomerInTour'
 import selectTourID from './Tour/selectTourID'
 import getTourData from './Tour/getTourData'
+import getSpecificTourData from './Tour/getSpecificTourData'
 import editCustomerInTour from './Tour/editCustomerInTour'
+import postGuidePaymentEachTour from './Tour/postGuidePaymentEachTour'
+import getEachTourYearlyRevenue from './Tour/getEachTourYearlyRevenue'
+import getEachTourYearlyRevenueTable from './Tour/getEachTourYearlyRevenueTable'
+import getEachTourExpertGuide from './Tour/getEachTourExpertGuide'
+import getAmountNationsOfEachTour from './Tour/getAmountNationsOfEachTour'
+import updateEachTour from './Tour/updateEachTour'
 
 //schedule
 import calendar from './Schedule/calendar'
@@ -71,7 +78,7 @@ const admin = combineReducers({
     pendingUser,
     pendingApproved,
     calendar,
-    getTours,
+    getToursName,
     guideProfile,
     getStaffLists,
     logout,
@@ -79,7 +86,7 @@ const admin = combineReducers({
     addTourForm,
     postBookerAndTour,
     getBookerAndTour,
-    getSpecificTour,
+    getSpecificBookedTour,
     getEventSummary,
     deleteCurCustomerInTour,
     spreadSelectedDate,
@@ -112,7 +119,14 @@ const admin = combineReducers({
     getYearlyTotalCustomer,
     getYearlyBookingTypeCustomer,
     getYearlyTourTypeCustomer,
-    getTourCustomerRanking
+    getTourCustomerRanking,
+    postGuidePaymentEachTour,
+    getEachTourYearlyRevenue,
+    getEachTourYearlyRevenueTable,
+    getSpecificTourData,
+    getEachTourExpertGuide,
+    getAmountNationsOfEachTour,
+    updateEachTour
 })
 
 export default admin

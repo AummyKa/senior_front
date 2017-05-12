@@ -62,7 +62,6 @@ function getGuideName(gList,resultJSON){
       resultJSON[i] = objectJSON
     }
   }
-
 }
 
 
@@ -79,7 +78,6 @@ function throwOptionGuideObject(data){
 }
 
 function throwOptionBookingMethodObject(data){
-  console.log(data)
   let temp = []
   for (let i = 0; i < data.length; i++) {
     temp.push(<Option key= {i}>{data[i].name}</Option>);
@@ -113,7 +111,7 @@ function throwOptionTourNameObject(data){
   }
 }
 
-const AddTourForm = Form.create()(React.createClass({
+const AddBookedTourForm = Form.create()(React.createClass({
 
   getInitialState() {
     return{
@@ -122,7 +120,7 @@ const AddTourForm = Form.create()(React.createClass({
       cusLen: 0,
       guide_name: [],
       selectedTourName: "",
-      selectedBookingMethod: 'Walk-in',
+      selectedBookingMethod: "Walk-in",
       selectedTourType: "",
       selectedTourTime: "",
       showSuggest: false,
@@ -183,9 +181,11 @@ const AddTourForm = Form.create()(React.createClass({
       }
     }
 
-    if(this.props.tours_data !== nextProps.tours_data){
-      this.setState({tours_name: nextProps.tours_data})
-      console.log(nextProps.tours_data)
+    if(this.props.all_tours_name !== nextProps.all_tours_name){
+      if(nextProps.all_tours_name){
+        this.setState({tours_name: nextProps.all_tours_name})
+        console.log(nextProps.all_tours_name)
+      }
     }
 
     if(nextProps.isStoppedCountingAddTour){
@@ -194,7 +194,6 @@ const AddTourForm = Form.create()(React.createClass({
 
     if(this.props.bookingMethodLists !== nextProps.bookingMethodLists){
       if(nextProps.bookingMethodLists){
-
         this.setState({bookingMethods: nextProps.bookingMethodLists})
       }
     }
@@ -217,7 +216,7 @@ const AddTourForm = Form.create()(React.createClass({
 
           let formResult = []
           for(var i = 1; i <= count; i++){
-            console.log(this.props.form.getFieldValue(`pickup_time-${i}`))
+            console.log(this.state.selectedbookingMethod)
             var customer = {
                 booking_method: this.state.selectedbookingMethod,
                 email: this.props.form.getFieldValue(`email-${i}`),
@@ -233,6 +232,7 @@ const AddTourForm = Form.create()(React.createClass({
 
             formResult[i-1] = customer
           }
+          console.log(formResult)
 
           let dateTour = changeDateFormat(this.props.dateTour)
 
@@ -683,12 +683,12 @@ function mapStateToProps(state) {
 
     return {
         bookingMethodLists: state.getBookingMethods.bookingMethodLists,
-        tours_data: state.getTours.tours_data,
+        all_tours_name: state.getToursName.all_tours_name,
         eachGuideName: state.getEachGuideName.eachGuideName,
         dateTour: state.addTourForm.dateTour,
-        eachTour: state.getSpecificTour.eachTour,
+        eachTour: state.getSpecificBookedTour.eachTour,
         isStoppedCountingAddTour: state.addTourForm.isStoppedCountingAddTour
     };
 }
 
-export default connect(mapStateToProps)(AddTourForm);
+export default connect(mapStateToProps)(AddBookedTourForm);

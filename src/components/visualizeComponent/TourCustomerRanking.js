@@ -36,7 +36,7 @@ class TourCustomerRanking extends Component {
     if(this.props.selectedYear !== nextProps.selectedYear){
       if(nextProps.selectedYear){
         this.setState({selectedYear:nextProps.selectedYear})
-        this.getAllTourRevRanking(nextProps.selectedYear)
+        this.getAllTourCustomerRanking(nextProps.selectedYear)
       }
     }
 
@@ -60,6 +60,7 @@ class TourCustomerRanking extends Component {
 
 
   getAllTourCustomerRanking(year){
+    console.log(year)
     apiAccess({
       url: 'http://localhost:8000/bookedtours/summary/participants/tour-name/'+year,
       method: 'GET',

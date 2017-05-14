@@ -126,7 +126,7 @@ class TotalRevModal extends Component {
                  <YAxis dataKey='revenue'/>
                  <CartesianGrid strokeDasharray="3 3"/>
                  <Tooltip/>
-                 <Area type='monotone' dataKey='revenue' stroke='#F81919' fill='#C70039' />
+                 <Area type='monotone' dataKey='revenue' stroke='#4DA807' fill='#68F000' />
                </AreaChart>
             </div>
 

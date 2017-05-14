@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { Row,Col,Radio,Button,Input, DatePicker,Form, Table } from 'antd';
 import {connect} from 'react-redux';
+import apiAccess from '../../Helpers/apiAccess'
 
 import moment from 'moment';
 import { Select } from 'antd';
+import Cookies from 'js-cookie'
+
 const Option = Select.Option;
 const { MonthPicker, RangePicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
@@ -18,36 +21,6 @@ const monthFormat = 'YYYY-MM';
 // const dateFormat = 'YYYY-MM-DD';
 // moment.locale('en_US');
 
-
-
-const data = [{
-  key: '1',
-  date: '2016-02-04',
-  start: '20:30',
-  end: '23:30',
-  hours: '3',
-  type: 'Public',
-  tourname: 'Eat at night',
-  tourist: '12/12'
-}, {
-  key: '2',
-  date: '2016-02-04',
-  start: '20:30',
-  end: '23:30',
-  hours: '3',
-  type: 'Private',
-  tourname: 'Eat at night',
-  tourist: '12/12'
-}, {
-  key: '3',
-  date: '2016-02-04',
-  start: '20:30',
-  end: '23:30',
-  hours: '3',
-  type: 'Public',
-  tourname: 'Eat at night',
-  tourist: '12/12'
-}];
 //
 const expertData = [{
   key: '1',
@@ -66,6 +39,19 @@ const expertData = [{
   rate: 5
 }];
 
+const createTable = (arrayJSON) =>{
+  if(arrayJSON){
+    for(var i = 0; i < arrayJSON.length; i++) {
+      arrayJSON[i]["key"] = i;
+  }
+    return arrayJSON
+  }
+}
+
+let today = new Date();
+let curYear = today.getFullYear();
+let curMonth = today.getMonth()+1
+
 class GuideHistory extends Component {
 
   constructor(props){
@@ -74,13 +60,25 @@ class GuideHistory extends Component {
       current_m_salary: "28,500",
       amount_of_working_month: "72",
       average_salary: "30,000",
-      cur_m_working_tour: "7"
+      cur_m_working_tour: "7",
+      selectedMonth:curMonth,
+      selectedYear:curYear,
+      guideIncomeSummary:[]
     }
   }
 
-
-  handleChange(value) {
-    console.log(`selected ${value}`);
+  getHistoryData(year,month){
+     let guide_id = Cookies.get('guide_id')
+     console.log(year)
+     console.log(month)
+    apiAccess({
+      url: '  http://localhost:8000/staffs/tour-guides/income-summary/'+guide_id+'/'+year+'/'+month,
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_INCOME_SUMMARY_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_GUIDE_INCOME_SUMMARY_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_GUIDE_INCOME_SUMMARY_FAILED' })
+    })
   }
 
   startDateInput(date,dateString){
@@ -91,8 +89,29 @@ class GuideHistory extends Component {
     this.setState({endMonthInput : dateString})
   }
 
-  onChange(date, dateString) {
-    console.log(date, dateString);
+  handleMonthChange(date, dateString) {
+    let year = parseInt(dateString.substring(0,4))
+    let month = parseInt(dateString.substring(5,dateString.length))
+
+    this.setState({selectedMonth:month})
+    this.setState({selectedYear:year})
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(this.props.guideIncomeSummary !== nextProps.guideIncomeSummary){
+      if(nextProps.guideIncomeSummary){
+        console.log(nextProps.guideIncomeSummary.summarizedData)
+        this.setState({guideIncomeSummary:createTable(nextProps.guideIncomeSummary.summarizedData)})
+      }
+    }
+  }
+
+  componentWillMount(){
+    this.getHistoryData(this.state.selectedYear,this.state.selectedMonth)
+  }
+
+  changeDate(){
+    this.getHistoryData(this.state.selectedYear,this.state.selectedMonth)
   }
 
   render() {
@@ -103,24 +122,20 @@ class GuideHistory extends Component {
 
     const columns = [
     {
-      title: 'Date',
-      dataIndex: 'date'
-    },
-    {
-      title: 'Start Time',
-      dataIndex: 'startTime'
+      title: 'Start Date',
+      dataIndex: 'start_date'
     },
     {
       title: 'Tour name',
-      dataIndex: 'tourname',
-      key: 'tourname',
-      filteredValue: filteredInfo.tourname|| null,
-      onFilter: (value, record) => record.tourname.includes(value),
-      sorter: (a, b) => a.tourname.length - b.tourname.length,
-      sortOrder: sortedInfo.columnKey === 'tourname' && sortedInfo.order
+      dataIndex: 'tour_name',
+      key: 'tour_name',
+      filteredValue: filteredInfo.tour_name|| null,
+      onFilter: (value, record) => record.tour_name.includes(value),
+      sorter: (a, b) => a.tour_name.length - b.tour_name.length,
+      sortOrder: sortedInfo.columnKey === 'tour_name' && sortedInfo.order
     },{
-      title: 'Type',
-      dataIndex: 'type',
+      title: 'Tour Type',
+      dataIndex: 'tour_type',
       filters: [
         { text: 'Public', value: 'Public' },
         { text: 'Private', value: 'Private' }
@@ -129,8 +144,11 @@ class GuideHistory extends Component {
       onFilter: (value, record) => record.type.includes(value)
     },
     {
-      title: 'Participant',
-      dataIndex: 'participant'
+      title: 'Participants',
+      dataIndex: 'participants'
+    },{
+      title: 'Payment',
+      dataIndex: 'payment'
     }]
 
     return (
@@ -141,7 +159,6 @@ class GuideHistory extends Component {
         <Row>
            <Col span={12}>
            <ul>
-            <li>Current month salary</li><br/>
             <li>Amount of working month</li><br/>
             <li>Average salary</li><br/><br/>
           </ul>
@@ -149,7 +166,6 @@ class GuideHistory extends Component {
 
            <Col span={12}>
              <ul>
-              <li>{this.state.current_m_salary}     baht</li><br/>
               <li>{this.state.amount_of_working_month}     tours</li><br/>
               <li>{this.state.average_salary}     baht</li><br/><br/>
             </ul>
@@ -160,17 +176,17 @@ class GuideHistory extends Component {
         <div className = "guide-tourlist">
           <Row>
             <Col span={6}>
-              <h4>List of responsible tour</h4>
+              <h4>List of responsible tours</h4>
             </Col>
             <Col span={5} offset={11}>
-              <MonthPicker onChange={this.onChange} placeholder="Select month" />
+              <MonthPicker onChange={this.handleMonthChange.bind(this)} placeholder="Select month" />
             </Col>
             <Col span={1}>
-              <Button type="primary">Go!</Button>
+              <Button type="primary" onClick={()=>this.changeDate()} >Go!</Button>
             </Col>
           </Row>
 
-           <Table columns={columns} dataSource={data} size="middle" />
+           <Table columns={columns} dataSource={this.state.guideIncomeSummary} size="middle" />
         </div>
 
       </div>
@@ -179,10 +195,9 @@ class GuideHistory extends Component {
 }
 
 function mapStateToProps(state) {
-
-    return {
-
-      }
+  return {
+    guideIncomeSummary: state.getGuideIncomeSummary.guideIncomeSummary
+  }
 }
 
 

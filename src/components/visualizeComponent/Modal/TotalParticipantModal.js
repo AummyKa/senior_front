@@ -20,27 +20,6 @@ const participantTableData = (arrayJSON) =>{
   return arrayJSON
 }
 
-// function getTotalMonthlyRev(pub,pri){
-//   let intPub = 0
-//   let intPri = 0
-//   let total = 0
-//
-//   if(pub.includes(",")){
-//     intPub = parseInt(pub.replace(',',''))
-//     total = total + intPub
-//   }else if(pri.includes(",")){
-//     intPri = parseInt(pri.replace(',',''))
-//     total = total + intPri
-//   }else{
-//     let total = pub + pri
-//   }
-//
-//   console.log(total)
-//   return(
-//     <span>{total}</span>
-//   )
-// }
-
 function throwOptionYearObject(){
   let today = new Date();
   let curYear = today.getFullYear();
@@ -63,7 +42,7 @@ class TotalParticipantModal extends Component {
   constructor(props){
     super(props)
     this.state = {
-      selectedYear: curYear,
+      selectedYear: this.props.selectedYear,
       totalParticipantData: [],
       totalParticipantTable:[]
     }
@@ -149,7 +128,7 @@ class TotalParticipantModal extends Component {
                  <YAxis dataKey='participants'/>
                  <CartesianGrid strokeDasharray="3 3"/>
                  <Tooltip/>
-                 <Area type='monotone' dataKey='participants' stroke='#F81919' fill='#FF5733' />
+                 <Area type='monotone' dataKey='participants' stroke='#D67A01' fill='#ECF000' />
                </AreaChart>
             </div>
 
@@ -174,7 +153,7 @@ class TotalParticipantModal extends Component {
                 </div>
                 </Col>
                 <Col span = {2}>
-                    <Button type = "primary" onClick = {() => this.setYearRev()}>GO!</Button>
+                    <Button type = "primary" onClick = {() => this.setYearRev().bind(this)}>GO!</Button>
                 </Col>
             </Row>
              <Table columns={columns} dataSource={this.state.totalParticipantTable} size="small" pagination={false} />

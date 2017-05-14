@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux'
 
 import { BarChart, AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
          Bar, ComposedChart, PieChart, Pie, Sector, Cell  } from 'recharts';
@@ -19,6 +19,8 @@ import TotalParticipant from '../visualizeComponent/TotalParticipant'
 import TotalParticipantModal from '../visualizeComponent/Modal/TotalParticipantModal'
 import TourCustomerRanking from '../visualizeComponent/TourCustomerRanking'
 import TourCustomerRankingModal from '../visualizeComponent/Modal/TourCustomerRankingModal'
+import TotalCostFromGuide from '../visualizeComponent/TotalCostFromGuide'
+
 import { changeYearDashBoard } from '../../actions/action-changeYearDashBoard'
 
 
@@ -79,7 +81,7 @@ class Home extends Component {
   }
 
   setYearRev(){
-    Cookies.set('selectedYearInDashBoard',this.state.selectedYear)
+    // Cookies.set('selectedYearInDashBoard',this.state.selectedYear)
     // this.getRevData(this.state.selectedYear)
     this.props.dispatch(changeYearDashBoard('CHANGE_YEAR',this.state.selectedYear))
   }
@@ -273,7 +275,7 @@ class Home extends Component {
                 </Col>
               </Row>
              </div>
-
+             <TotalCostFromGuide dispatch={this.props.dispatch}/>
            </div>
 
          </Col>
@@ -355,6 +357,10 @@ class Home extends Component {
   }
 }
 
+function mapStateToProps(state){
+  return{
 
+  }
+}
 
-export default Home
+export default connect(mapStateToProps)(Home)

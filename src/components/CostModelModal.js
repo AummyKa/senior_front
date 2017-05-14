@@ -233,44 +233,56 @@ class CostModelModal extends Component{
  }
 
 checkFirstValue(prevValue,number){
-  if(typeof this.state.paymentConditionHistory !=='undefined' &&
-  typeof this.state.paymentConditionHistory[number -1] !== 'undefined' &&
-  typeof this.state.paymentConditionHistory[number -1].first !== 'undefined'
-  ){
-    return this.state.paymentConditionHistory[number-1].first
-  }else {
-    return prevValue
-  }
+  if(typeof prevValue !== 'undefined' && typeof number !== 'undefined'){
+    if(typeof this.state.paymentConditionHistory ==='undefined' ||
+    typeof this.state.paymentConditionHistory[number -1] === 'undefined' ||
+    typeof this.state.paymentConditionHistory[number -1].first === 'undefined'
+    ){
+      console.log(prevValue)
+      return 0
+    }else {
+      console.log(this.state.paymentConditionHistory[number-1].first)
+      return this.state.paymentConditionHistory[number-1].first
 
+    }
+  }
 }
 
 checkSecondValue(number){
-  if(typeof this.state.paymentConditionHistory !=='undefined' &&
-  typeof this.state.paymentConditionHistory[number -1] !== 'undefined' &&
-  typeof this.state.paymentConditionHistory[number -1].second !== 'undefined'
-  ){
-    return this.state.paymentConditionHistory[number-1].second
+  if(typeof number !== 'undefined' && typeof this.state.paymentConditionHistory !=='undefined' ){
+    if(typeof this.state.paymentConditionHistory[number -1] !== 'undefined' &&
+    typeof this.state.paymentConditionHistory[number -1].second !== 'undefined'
+    ){
+      return this.state.paymentConditionHistory[number-1].second
+    }else {
+      return 0
+    }
   }else {
-    return ''
+    return 0
   }
 }
 
 checkCostValue(number){
-  if(typeof this.state.paymentConditionHistory !=='undefined' &&
-  typeof this.state.paymentConditionHistory[number -1] !== 'undefined' &&
-  typeof this.state.paymentConditionHistory[number -1].fee !== 'undefined'
-  ){
-    return this.state.paymentConditionHistory[number-1].fee
-  }else {
-    return ''
-  }
+  if(typeof number !== 'undefined'){
+    if(typeof this.state.paymentConditionHistory !=='undefined' &&
+    typeof this.state.paymentConditionHistory[number -1] !== 'undefined' &&
+    typeof this.state.paymentConditionHistory[number -1].fee !== 'undefined'
+    ){
+      return this.state.paymentConditionHistory[number-1].fee
+    }else {
+      return 0
+    }
+  }else
+    return 0
 }
 
 getNextValue(preValue){
-  console.log(preValue)
-  if(preValue){
+
+  if(typeof preValue !== 'undefined'){
+    console.log(preValue)
     return preValue+1
-  }
+  }else
+    return ''
   // if(typeof this.state.paymentConditionHistory !=='undefined' &&
   // typeof this.state.paymentConditionHistory[this.state.paymentConditionHistory.length-1] !== 'undefined' &&
   // typeof this.state.paymentConditionHistory[this.state.paymentConditionHistory.length -1].last !== 'undefined'

@@ -5,7 +5,7 @@ import {changePage} from '../actions/action-changePage'
 import apiAccess from '../Helpers/apiAccess'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
-
+import Cookies from 'js-cookie'
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -26,13 +26,24 @@ class NavBar extends Component {
     router: PropTypes.object.isRequired
   }
 
+  componentWillReceiveProps(nextProps){
+    if(this.props.isLogout !== nextProps.isLogout){
+      if(nextProps.isLogout){
+
+      }
+    }
+  }
+
   handleClick = (e) => {
 
     if(e.key=="Logout"){
+      let token = Cookies.get('token')
       apiAccess({
         url: 'http://localhost:8000/logout',
-        method: 'GET',
-        payload: {},
+        method: 'POST',
+        payload: {
+          token: token
+        },
         attemptAction: () => this.props.dispatch({ type: 'LOGOUT_ATTEMPT' }),
         successAction: (json) => this.props.dispatch({ type: 'LOGOUT_SUCCESS', json }),
         failureAction: () => this.props.dispatch({ type: 'LOGOUT_FAILED' })
@@ -45,9 +56,8 @@ class NavBar extends Component {
   componentWillReceiveProps = (nextProps) => {
     console.log(nextProps.isLogout)
     if(this.props.isLogout !== nextProps.isLogout){
+      Cookies.remove('token')
       this.context.router.replace('/')
-      window.location.replace("/home")
-      // this.setState({data: GuideUserData(nextProps.guideDetail,)})
     }
   }
 

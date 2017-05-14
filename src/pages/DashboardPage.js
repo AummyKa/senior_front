@@ -39,14 +39,14 @@ class DashboardPage extends Component {
   render(){
           return(
           <div>
-              <Row>
-                  <Col span={4}>
-                      <SideBar dispatch={this.props.dispatch}/>
+              <Row style = {{height:'100%',backgroundColor:'#ffffff'}}>
+                  <Col xs={0} lg={4} style = {{height:'100%' }}>
+                      <SideBar dispatch={this.props.dispatch} />
                           {/*{this.state.people.map(({ _id, name, age }) => {*/}
                               {/*return <div key={_id}>#{_id} Name: {name}, Age: {age}</div>*/}
                           {/*})}*/}
                   </Col>
-                  <Col span={20} style = {{height:'100%'}} >
+                  <Col xs={24} lg={20} >
                     <NavBar dispatch={this.props.dispatch} />
                       <div style={{ padding: 60 }}>
                         {this.props.children}

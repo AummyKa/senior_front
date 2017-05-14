@@ -66,13 +66,14 @@ function getGuideName(gList,resultJSON){
 
 
 function throwOptionGuideObject(data){
-  console.log(data)
   let temp = []
   if(data){
     for (let i = 0; i < data.length; i++) {
       temp.push(<Option key= {i}><div>{data[i].fullname}</div></Option>);
+      // if(data[i].isActive){
+      //   temp.push(<Option key= {i}><div>{data[i].fullname}</div></Option>);
+      // }
     }
-
   }
   return temp
 }
@@ -125,7 +126,9 @@ const AddBookedTourForm = Form.create()(React.createClass({
       selectedTourTime: "",
       showSuggest: false,
       tours_name: [],
-      bookingMethods: []
+      bookingMethods: [],
+      selectedGuideName:''
+
     }
   },
 
@@ -175,7 +178,6 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
   componentWillReceiveProps(nextProps){
     if(this.props.eachGuideName !== nextProps.eachGuideName){
-      console.log(nextProps.eachGuideName)
       if(nextProps.eachGuideName){
         this.setState({guide_name: nextProps.eachGuideName})
       }
@@ -184,7 +186,6 @@ const AddBookedTourForm = Form.create()(React.createClass({
     if(this.props.all_tours_name !== nextProps.all_tours_name){
       if(nextProps.all_tours_name){
         this.setState({tours_name: nextProps.all_tours_name})
-        console.log(nextProps.all_tours_name)
       }
     }
 
@@ -210,15 +211,14 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
       this.props.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values);
 
           const count = this.props.form.getFieldValue('keys').length
 
           let formResult = []
           for(var i = 1; i <= count; i++){
-            console.log(this.state.selectedbookingMethod)
+
             var customer = {
-                booking_method: this.state.selectedbookingMethod,
+                booking_method: this.handleBookingMethodSelect(this.props.form.getFieldValue(`bookingMethods-${i}`)),
                 email: this.props.form.getFieldValue(`email-${i}`),
                 phone: this.props.form.getFieldValue(`phone-${i}`),
                 name: this.props.form.getFieldValue(`name-${i}`),
@@ -232,7 +232,6 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
             formResult[i-1] = customer
           }
-          console.log(formResult)
 
           let dateTour = changeDateFormat(this.props.dateTour)
 
@@ -250,14 +249,12 @@ const AddBookedTourForm = Form.create()(React.createClass({
               },
             }
 
-          console.log(payLoad)
           this.addBookerAndTour(payLoad)
         }
       });
     },
 
   handleTourPeriodSelect(value,option){
-    console.log(value)
     this.setState({ selectedTourPeriod: tour_period[value].value});
   },
 
@@ -266,8 +263,8 @@ const AddBookedTourForm = Form.create()(React.createClass({
     // this.setState({ selectedGuideID: this.state.guide_name[value]._id})
   },
 
-  handleBookingMethodSelect(value,option){
-    this.setState({ selectedBookingMethod: this.state.bookingMethods[value].name });
+  handleBookingMethodSelect(value){
+    return this.state.bookingMethods[value].name ;
   },
 
   handleTourNameSelect(value,option){
@@ -280,7 +277,6 @@ const AddBookedTourForm = Form.create()(React.createClass({
   },
 
   handleTourTime(time,timeString){
-    console.log(timeString)
     this.setState({selectedTourTime: timeString})
   },
 
@@ -298,12 +294,18 @@ const AddBookedTourForm = Form.create()(React.createClass({
     });
  },
 
+ checkTel(rule, value, callback){
+   if(!value.match(/^[0-9]+$/) || value.length != 9){
+     callback('the input should be an appropriate phone number');
+   }else {
+     callback()
+   }
+ },
+
  add(){
    let num = this.state.uuid
    num++
    this.setState({uuid:num})
-   console.log(num)
-
    const { form } = this.props;
    // can use data-binding to get
    const keys = form.getFieldValue('keys');
@@ -328,10 +330,6 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
   showSuggestModal(){
     this.setState({showSuggest: true})
-  },
-
-  submitSuggest(){
-    console.log("hello suggestion")
   },
 
 
@@ -393,15 +391,11 @@ const AddBookedTourForm = Form.create()(React.createClass({
          <FormItem
            {...formItemLayout}
            label= {'Email : '}
-           required={false}
          >
            {getFieldDecorator(`email-${k}`, {
-             validateTrigger: ['onChange', 'onBlur'],
              rules: [{
                required: true,
-               whitespace: true,
-               message: "Please input customer's email.",
-             }],
+               type: 'email', message: 'The input is not valid E-mail!'}]
            })(
              <Input placeholder="email" style={{ width: '80%', marginRight: 5 }} />
            )}
@@ -411,7 +405,6 @@ const AddBookedTourForm = Form.create()(React.createClass({
          <FormItem
            {...formItemLayout}
            label={'Name : '}
-           required={false}
          >
            {getFieldDecorator(`name-${k}`, {
              validateTrigger: ['onChange', 'onBlur'],
@@ -429,11 +422,11 @@ const AddBookedTourForm = Form.create()(React.createClass({
          <FormItem
            {...formItemLayout}
            label={'Country : '}
-           required={false}
          >
-           {getFieldDecorator(`country-${k}`, {
-             validateTrigger: ['onChange', 'onBlur'],
-
+           {getFieldDecorator(`country-${k}`,  {
+             rules: [{
+               required: true, message: 'Please input your password!',
+             }],
            })(
              <Input placeholder="country"  style={{ width: '80%', marginRight: 5 }} />
            )}
@@ -488,7 +481,8 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
          <FormItem
             {...formItemLayout}
-            label="Pickup time"
+            label={'Pickup time'}
+            required={false}
           >
             {getFieldDecorator(`pickup_time-${k}`)(
               <TimePicker
@@ -502,7 +496,9 @@ const AddBookedTourForm = Form.create()(React.createClass({
             label={'Participant : '}
           >
 
-          {getFieldDecorator(`participants-${k}`)(
+          {getFieldDecorator(`participants-${k}`, {
+            rules: [{ required: true, message: 'Please input amount of participants!' }],
+          })(
             <InputNumber
               style={{ width: '30%', marginRight: 11}}
               min={1}
@@ -687,7 +683,8 @@ function mapStateToProps(state) {
         eachGuideName: state.getEachGuideName.eachGuideName,
         dateTour: state.addTourForm.dateTour,
         eachTour: state.getSpecificBookedTour.eachTour,
-        isStoppedCountingAddTour: state.addTourForm.isStoppedCountingAddTour
+        isStoppedCountingAddTour: state.addTourForm.isStoppedCountingAddTour,
+        guideIncomeSummary: state.getGuideIncomeSummary.guideIncomeSummary
     };
 }
 

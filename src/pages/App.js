@@ -33,6 +33,8 @@ class App extends Component {
 
     if (!Cookies.get('token')) {
       this.context.router.replace('/')
+    }else {
+      this.context.router.replace('/home')
     }
   }
 

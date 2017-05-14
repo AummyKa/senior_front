@@ -56,7 +56,6 @@ class TourDetail extends Component {
 
 
   getSpecificTourData(){
-    console.log(this.state.tour_id)
     apiAccess({
       url: 'http://localhost:8000/tours/'+this.state.tour_id,
       method: 'GET',
@@ -75,9 +74,7 @@ class TourDetail extends Component {
   componentWillReceiveProps(nextProps){
     if(this.props.tour_cur_id !== nextProps.tour_cur_id){
       this.setState({tour_id:nextProps.tour_cur_id})
-      console.log(nextProps.tour_cur_id)
     }
-    console.log(nextProps.specific_tours_data)
     if(this.props.specific_tours_data !== nextProps.specific_tours_data){
       if(nextProps.specific_tours_data){
         this.setState({tour_data:nextProps.specific_tours_data})
@@ -98,6 +95,7 @@ class TourDetail extends Component {
         this.getSpecificTourData()
       }
     }
+
   }
 
   showCostModelModal(){
@@ -109,7 +107,6 @@ class TourDetail extends Component {
   }
 
   setSelectedYear(){
-    console.log(this.state.selectedYear)
     this.props.dispatch(changeYearDashBoard('CHANGE_TOUR_DASHBOARD_YEAR',this.state.selectedYear))
   }
 
@@ -193,8 +190,7 @@ class TourDetail extends Component {
 
             <div className = "participant-data">
               <div className = "participant-tour-title"><b>Participants Record</b></div>
-              <EachTourYearlyParticipantSummary  selectedYear = {this.state.selectedYear}
-                                                 dispatch = {this.props.dispatch}
+              <EachTourYearlyParticipantSummary  dispatch = {this.props.dispatch}
                                                  tourId = {this.state.tour_id} />
             </div>
 

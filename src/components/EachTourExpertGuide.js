@@ -7,19 +7,6 @@ import StarRatingComponent from 'react-star-rating-component';
 import {connect} from 'react-redux'
 import apiAccess from '../Helpers/apiAccess'
 
-const data = [{
-  key: '1',
-  guidename: 'Mr. SomChai Arunrat',
-  rating: 5,
-}, {
-  key: '2',
-  guidename: 'Ms. Wattana Reaingsuk',
-  rating: 5,
-}, {
-  key: '3',
-  guidename: 'Suppakorn Amornchai',
-  rating: 4,
-}];
 
 const createTable = (arrayJSON) =>{
   if(arrayJSON){

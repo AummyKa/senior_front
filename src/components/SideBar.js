@@ -51,15 +51,7 @@ class SideBar extends Component {
 
       </aside>
       <div className="layout-main">
-        <div className="layout-header"></div>
-        <div className="layout-container">
-
-          <div className="layout-content">
-            <div style={{ height: 590 }}>
-
-            </div>
-          </div>
-        </div>
+        
 
       </div>
     </div>

@@ -33,7 +33,7 @@ class TotalParticipant extends Component {
     if(this.props.selectedYear !== nextProps.selectedYear){
       if(nextProps.selectedYear){
         this.setState({selectedYear:nextProps.selectedYear})
-        this.getRevData(nextProps.selectedYear)
+        this.getParticipantData(nextProps.selectedYear)
       }
     }
     }
@@ -43,7 +43,6 @@ class TotalParticipant extends Component {
   }
 
   handleYearSelect(value,option){
-    console.log(value)
     this.setState({selectedYear: value})
   }
 
@@ -52,7 +51,6 @@ class TotalParticipant extends Component {
   }
 
   getParticipantData(year){
-    console.log(year)
     apiAccess({
       url: 'http://localhost:8000/bookedtours/summary/participants/'+year,
       method: 'GET',
@@ -76,7 +74,7 @@ class TotalParticipant extends Component {
              <YAxis dataKey='participants'/>
              <CartesianGrid strokeDasharray="3 3"/>
              <Tooltip/>
-             <Area type='monotone' dataKey='participants' stroke='#F81919' fill='#FF5733' />
+             <Area type='monotone' dataKey='participants' stroke='#D67A01' fill='#ECF000' />
            </AreaChart>
 
       </div>

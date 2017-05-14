@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
-import { AutoComplete, Row,Col,Table, Input, Button, Icon, Select } from 'antd';
+import { AutoComplete, Row,Col,Table, Input, Button, Icon, Select, Tag } from 'antd';
 
 
 import apiAccess from '../../Helpers/apiAccess'
@@ -153,11 +153,11 @@ onInputChange = (e) => {
     console.log(isActive)
     if(isActive){
       return(
-        <div>Active</div>
+        <Tag color="#0CDB32">Active</Tag>
       )
     }else{
       return(
-        <div style = {{color:'red'}}>InActive</div>
+        <Tag color="#EE1908">InActive</Tag>
       )
     }
   }

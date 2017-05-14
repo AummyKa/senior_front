@@ -25,8 +25,6 @@ class GuideLayout extends Component {
       btnColor3: "#DCD5D3",
       btnColor4: "#DCD5D3",
       name: "",
-
-
     }
   }
 

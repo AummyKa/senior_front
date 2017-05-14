@@ -57,7 +57,7 @@ class BoxAbove extends Component {
 
   getMostPopularTour(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/participants/tour-name/'+year,
+      url: 'http://localhost:8000/bookedtours/most-popular-tour/participants/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOUR_CUSTOMERS_RANKING_ATTEMPT' }),
@@ -77,9 +77,18 @@ class BoxAbove extends Component {
   }
 
   getYearlyTheMostPopularTour(data){
-    console.log(data)
-    let tourname = data[0].tour_name
-    let amt_customer = data[0].participants
+    let tourname = 'N/A'
+    let amt_customer = 0
+
+      if(typeof data[0] !== 'undefined' && typeof data[0].tour_name){
+        tourname = data[0].tour_name
+      }
+
+      if(typeof data[0] !== 'undefined' && typeof data[0].participants){
+        amt_customer = data[0].participants
+      }
+    
+
     let result = tourname+ ': '+amt_customer+ ' customers'
     this.setState({mostYearlyPopularTour:result})
   }
@@ -108,13 +117,21 @@ class BoxAbove extends Component {
     if(this.props.selectedYear !== nextProps.selectedYear){
       if(nextProps.selectedYear){
         this.setState({selectedYear:nextProps.selectedYear})
+        this.getMostPopularTour(nextProps.selectedYear)
+        this.getYearlyTourTypeCustomer(nextProps.selectedYear)
+        this.getYearlyBookingTypeCustomer(nextProps.selectedYear)
+        this.getYearlyTotalCustomer(nextProps.selectedYear)
+
       }
     }
 
     if(this.props.totalYearlyCustomer !== nextProps.totalYearlyCustomer){
       if(nextProps.totalYearlyCustomer){
-        let totalCustomers = nextProps.totalYearlyCustomer[0].participants
-        this.setState({netCustomers: totalCustomers})
+        if(typeof nextProps.totalYearlyCustomer[0] !=='undefined'
+        && typeof nextProps.totalYearlyCustomer[0].participants ){
+          let totalCustomers = nextProps.totalYearlyCustomer[0].participants
+          this.setState({netCustomers: totalCustomers})
+        }
       }
     }
 

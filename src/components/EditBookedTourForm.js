@@ -70,6 +70,9 @@ function throwOptionGuideObject(data){
   let temp = []
   if(data){
     for (let i = 0; i < data.length; i++) {
+      // if(data[i].isActive){
+      //   temp.push(<Option key= {i}><div>{data[i].fullname}</div></Option>);
+      // }
       temp.push(<Option key= {i}><div>{data[i].fullname}</div></Option>);
     }
 
@@ -129,7 +132,7 @@ function throwOptionTourPeriodObject(data){
 
 let uuid = 0;
 
-const EditTourForm = Form.create()(React.createClass({
+const EditBookedTourForm = Form.create()(React.createClass({
 
   getInitialState() {
     this.columns = [{
@@ -202,13 +205,49 @@ const EditTourForm = Form.create()(React.createClass({
       showAddMoreCustomer: false,
       tours_name: [],
       selectedTourPeriod: '',
-      showSuggest: false
+      showSuggest: false,
+      selectedTourTime:''
     }
   },
 
   handleSubmit(e){
-      e.preventDefault();
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+
+        let payload={
+             start_time: this.state.selectedTourTime,
+             tour_period: this.props.form.getFieldValue(`tour_period`),
+             tour_name: this.props.form.getFieldValue(`tourname`),
+             tour_type: this.props.form.getFieldValue(`tourtype`),
+             tour_guide: this.state.selectedGuide
+           }
+
+           apiAccess({
+             url: 'http://localhost:8000/bookedtours/update/'+this.state.curTourID,
+             method: 'POST',
+             payload: payload,
+             attemptAction: () => this.props.dispatch({ type: 'UPDATE_EACH_BOOKED_TOUR_ATTEMPT' }),
+             successAction: (json) => this.props.dispatch({ type: 'UPDATE_EACH_BOOKED_TOUR_SUCCESS', json }),
+             failureAction: () => this.props.dispatch({ type: 'UPDATE_EACH_BOOKED_TOUR_FAILED' })
+           })
+
+         }
+    });
   },
+
+
+  handleTourTime(time,timeString){
+    console.log(timeString)
+    this.setState({selectedTourTime: timeString})
+  },
+
+  handleGuideSelect(value,option){
+    this.setState({ selectedGuide: this.state.guide_name[value]._id});
+    // this.setState({ selectedGuideID: this.state.guide_name[value]._id})
+  },
+
 
   handleTourPeriodSelect(value,option){
     this.setState({ selectedTourPeriod: tour_period[value].value});
@@ -277,7 +316,9 @@ const EditTourForm = Form.create()(React.createClass({
     if(this.props.eachTour !== nextProps.eachTour){
 
       if(nextProps.eachTour){
+        this.setState({selectedTourTime:nextProps.eachTour.start_time})
         if(typeof nextProps.eachTour.tour_guide !== 'undefined' && nextProps.eachTour.tour_guide !== null){
+          this.setState({selectedGuide:<div>{nextProps.eachTour.tour_guide}</div>.props.children._id})
           this.setState({eachCurGuideTour: <div>{nextProps.eachTour.tour_guide}</div>.props.children})
         }
         this.setState({eachTour:nextProps.eachTour})
@@ -315,6 +356,14 @@ const EditTourForm = Form.create()(React.createClass({
       }
     }
 
+    if(this.props.updateEachBookedTourStatus !== nextProps.updateEachBookedTourStatus){
+      if(nextProps.updateEachBookedTourStatus){
+        this.getCurTour(this.state.curTourID)
+        this.getGuideNameList()
+        this.getAllTourName()
+      }
+    }
+
   },
 
   getAllTourName(){
@@ -337,7 +386,6 @@ const EditTourForm = Form.create()(React.createClass({
   showSuggestModal(){
     this.setState({showSuggest: true})
   },
-
 
 
   render(){
@@ -504,15 +552,27 @@ const EditTourForm = Form.create()(React.createClass({
              <TimePicker
                style={{ width: '80%', marginRight: 11, marginLeft: 8}}
                format={format} placeholder = "tourtime"
+               onChange={this.handleTourTime}
                />
            )}
          </FormItem>
 
        </Col>
      </Row>
+
+       <FormItem style = {{marginBottom: '1%'}}>
+         <Row>
+          <Col span={3} offset={18}>
+            <Button type="primary" style={{width:'90%'}} htmlType="submit" >Save Edit Tour</Button>
+          </Col>
+          <Col span={3}>
+            <Button type="primary" className = 'add-more-customer' onClick = {() => this.addMoreCustomer()}>Add more customer</Button>
+          </Col>
+         </Row>
+       </FormItem>
+
      </Form>
 
-     <Button type="primary" className = 'add-more-customer' onClick = {() => this.addMoreCustomer()}>Add more customer</Button>
      <Table columns={this.columns} dataSource={formatData(this.state.eachTour.customers)} scroll={{ x: 1700 }}/>
 
      </div>
@@ -531,8 +591,9 @@ function mapStateToProps(state) {
         delete_cus_status: state.deleteCurCustomerInTour.delete_cus_status,
         editCustomerInTourStatus: state.editCustomerInTour.editCustomerInTourStatus,
         addCustomerSuccess: state.addNewCustomerInTour.addCustomerSuccess,
+        updateEachBookedTourStatus: state.updateEachBookedTour.updateEachBookedTourStatus
 
     };
 }
 
-export default connect(mapStateToProps)(EditTourForm);
+export default connect(mapStateToProps)(EditBookedTourForm);

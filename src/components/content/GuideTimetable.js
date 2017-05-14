@@ -19,77 +19,6 @@ BigCalendar.momentLocalizer(moment);
 
 const today = new Date()
 
-const events = [
-  {
-    'title': 'MOR',
-    'start': new Date(2015, 3, 10),
-    'end': new Date(2015, 3, 10)
-  },
-  {
-    'title': 'AFT',
-    'start': new Date(2015, 3, 7),
-    'end': new Date(2015, 3, 10)
-  },
-
-  {
-    'title': 'EVE',
-    'start': new Date(2016, 2, 13, 0, 0, 0),
-    'end': new Date(2016, 2, 20, 0, 0, 0)
-  },
-
-  {
-    'title': 'FULL',
-    'start': new Date(2016, 10, 6, 0, 0, 0),
-    'end': new Date(2016, 10, 13, 0, 0, 0)
-  },
-
-  {
-    'title': 'MOR',
-    'start': new Date(2015, 3, 9, 0, 0, 0),
-    'end': new Date(2015, 3, 9, 0, 0, 0)
-  },
-  {
-    'title': 'EVE',
-    'start': new Date(2015, 3, 11),
-    'end': new Date(2015, 3, 13),
-    desc: 'Big conference for important people'
-  },
-  {
-    'title': 'MOR',
-    'start': new Date(2015, 3, 12, 10, 30, 0, 0),
-    'end': new Date(2015, 3, 12, 12, 30, 0, 0),
-    desc: 'Pre-meeting meeting, to prepare for the meeting'
-  },
-  {
-    'title': 'AFT',
-    'start':new Date(2015, 3, 12, 12, 0, 0, 0),
-    'end': new Date(2015, 3, 12, 13, 0, 0, 0),
-    desc: 'Power lunch'
-  },
-  {
-    'title': 'AFT',
-    'start':new Date(2015, 3, 12,14, 0, 0, 0),
-    'end': new Date(2015, 3, 12,15, 0, 0, 0)
-  },
-  {
-    'title': 'MOR',
-    'start':new Date(2015, 3, 12, 17, 0, 0, 0),
-    'end': new Date(2015, 3, 12, 17, 30, 0, 0),
-    desc: 'Most important meal of the day'
-  },
-  {
-    'title': 'EVE',
-    'start':new Date(2015, 3, 12, 20, 0, 0, 0),
-    'end': new Date(2015, 3, 12, 21, 0, 0, 0)
-  },
-  {
-    'title': 'FULL',
-    'start':new Date(2015, 3, 13, 7, 0, 0),
-    'end': new Date(2015, 3, 13, 10, 30, 0)
-  }
-]
-
-
 class GuideTimetable extends Component {
 
   constructor(props){
@@ -102,7 +31,8 @@ class GuideTimetable extends Component {
       morningClicked: false,
       afternoonClicked: false,
       eveningClicked: false,
-      fullDayClicked: false
+      fullDayClicked: false,
+      guideUnavailableDates:[]
     }
   }
 
@@ -197,6 +127,45 @@ class GuideTimetable extends Component {
 
   }
 
+  getGuideUnAvailibility(){
+    let id = Cookies.get('guide_id')
+    apiAccess({
+      url: 'http://localhost:8000/staffs/tour-guides/calendar/unavailability/'+id,
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_ALL_UNAVAIL_DATE_EACH_GUIDE_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_ALL_UNAVAIL_DATE_EACH_GUIDE_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_ALL_UNAVAIL_DATE_EACH_GUIDE_FAILED' })
+    })
+  }
+
+  eventStyleGetter(event, start, end, isSelected) {
+
+  let backgroundColor = event.hexColor
+  let title = event.title
+
+  if(title.match('Morning')){
+    backgroundColor = '#' + 'ffc508';
+  }else if(title.match('Afternoon')){
+    backgroundColor = '#' + 'ff5733';
+  }else if(title.match('Evening')){
+    backgroundColor = '#' + '3b9df9';
+  }else if(title.match('Full-Day')){
+    backgroundColor = '#' + '581845';
+  }
+    let style = {
+        backgroundColor: backgroundColor,
+        borderRadius: '0px',
+        opacity: 0.8,
+        color: 'white',
+        border: '0px',
+        display: 'block'
+    };
+    return {
+        style: style
+    };
+}
+
   handleTagClose(tag){
     switch (tag) {
       case 'morning':
@@ -227,34 +196,16 @@ class GuideTimetable extends Component {
 
       }
     }
+    if(this.props.allUnAvailDateEachGuide !== nextProps.allUnAvailDateEachGuide){
+      if(nextProps.allUnAvailDateEachGuide){
+        console.log(nextProps.allUnAvailDateEachGuide)
+        this.setState({guideUnavailableDates:nextProps.allUnAvailDateEachGuide})
+      }
+    }
   }
 
-  eventStyleGetter(event, start, end, isSelected){
-    console.log(event);
-
-    let backgroundColor = '#' + event.hexColor;
-
-    if(event.title == "MOR"){
-      backgroundColor = '#' + 'ffc300';
-    }else if(event.title == "AFT"){
-      backgroundColor = '#' + 'ff5733';
-    }else if(event.title == "EVE"){
-      backgroundColor = '#' + '3b9df9'
-    }else if(event.title == "FULL"){
-      backgroundColor = '#' + '581845';
-    }
-
-    let style = {
-        backgroundColor: backgroundColor,
-        borderRadius: '0px',
-        opacity: 0.8,
-        color: 'white',
-        border: '0px',
-        display: 'block'
-    };
-    return {
-        style: style
-    };
+  componentWillMount(){
+    this.getGuideUnAvailibility()
   }
 
   render() {
@@ -273,7 +224,7 @@ class GuideTimetable extends Component {
                   <BigCalendar
                     selectable
                 {...this.props}
-                events = {events}
+                events = {this.state.guideUnavailableDates}
                 culture='en-GB'
                 eventPropGetter={(this.eventStyleGetter)}
                 views={['month']}
@@ -332,7 +283,7 @@ class GuideTimetable extends Component {
                   </Row>
                 </div>
                 <div className = "submit-avail-button">
-                  <Button className = "submit-avail-btn" type = "primary" onClick = {() => this.submitUnAvailability()}> Submit</Button>
+                  <Button className = "btn-submit-avail" type = "primary" onClick = {() => this.submitUnAvailability()}> Submit</Button>
                 </div>
               </div>
             </Col>
@@ -348,7 +299,8 @@ class GuideTimetable extends Component {
 function mapStateToProps(state) {
 
     return {
-        addUnAvailDateEachGuideStatus: state.addUnAvailDateEachGuide.addUnAvailDateEachGuideStatus
+        addUnAvailDateEachGuideStatus: state.addUnAvailDateEachGuide.addUnAvailDateEachGuideStatus,
+        allUnAvailDateEachGuide: state.getAllUnAvailDateEachGuide.allUnAvailDateEachGuide
       }
 }
 

@@ -115,7 +115,7 @@ class EachTourPopularNation extends Component {
   componentWillReceiveProps(nextProps){
     console.log(nextProps.amountNationsOfEachTour)
     if(this.props.amountNationsOfEachTour !== nextProps.amountNationsOfEachTour){
-      if(nextProps.amountNationsOfEachTour){
+      if(typeof nextProps.amountNationsOfEachTour !== 'undefined' || typeof nextProps.amountNationsOfEachTour !== null){
         this.setState({amountNationsOfEachTour:limitNationTable(nextProps.amountNationsOfEachTour)})
         this.setState({amountNationsOfEachTourTable:createTable(nextProps.amountNationsOfEachTour)})
       }
@@ -172,7 +172,7 @@ class EachTourPopularNation extends Component {
             </Col>
             <Col span={12} offset={1}>
               <div className = "pop-nation-table">
-                <Table dataSource ={this.state.amountNationsOfEachTourTable} columns={columns} size='small'/ >
+                <Table dataSource ={Array.prototype.slice.apply(this.state.amountNationsOfEachTourTable || [])} columns={columns} size='small'/ >
               </div>
             </Col>
           </Row>

@@ -18,6 +18,10 @@ import deleteEachGuideExpert from './Guide/deleteEachGuideExpert'
 import updateEachGuideExpert from './Guide/updateEachGuideExpert'
 import addUnAvailDateEachGuide from './Guide/addUnAvailDateEachGuide'
 import updateEachGuideStatus from './Guide/updateEachGuideStatus'
+import getGuideIncomeSummary from './Guide/getGuideIncomeSummary'
+import getAllUnAvailDateEachGuide from './Guide/getAllUnAvailDateEachGuide'
+import getYearlyTotalCostFromGuide from './Guide/getYearlyTotalCostFromGuide'
+
 
 //staff
 import getStaffLists from './Staff/getStaffLists'
@@ -45,6 +49,7 @@ import getEachTourExpertGuide from './Tour/getEachTourExpertGuide'
 import getAmountNationsOfEachTour from './Tour/getAmountNationsOfEachTour'
 import updateEachTour from './Tour/updateEachTour'
 import getEachTourYearlyParticipants from './Tour/getEachTourYearlyParticipants'
+import updateEachBookedTour from './Tour/updateEachBookedTour'
 
 //schedule
 import calendar from './Schedule/calendar'
@@ -130,7 +135,11 @@ const admin = combineReducers({
     getAmountNationsOfEachTour,
     updateEachTour,
     getEachTourYearlyParticipants,
-    updateEachGuideStatus
+    updateEachGuideStatus,
+    updateEachBookedTour,
+    getGuideIncomeSummary,
+    getAllUnAvailDateEachGuide,
+    getYearlyTotalCostFromGuide
 })
 
 export default admin

@@ -85,12 +85,6 @@ class GuidePersonal extends Component {
     this.setState({edit:true})
   }
 
-  showButtonSave(){
-    return(
-      <Button className = "save-guide-edit" onClick ={()=>this.saveEdit(Cookies.get('guide_id'))} >Save</Button>
-    )
-  }
-
   saveEdit(id){
     console.log(id)
     let payload = {
@@ -233,9 +227,11 @@ class GuidePersonal extends Component {
            </Col>
         </Row>
         <div className = "guide-edit-button">
-          {this.state.edit ? this.showButtonSave() : null}
+          {this.state.edit ?
+          <Button className = "btn-save-guide-edit" onClick ={()=>this.saveEdit(Cookies.get('guide_id'))} >Save</Button>:
+          <Button className = "btn-edit-guide-profile" onClick ={()=>this.guideEdit()} >Edit</Button>}
         </div>
-        <Button className = "edit-guide-profile" onClick ={()=>this.guideEdit()} >Edit</Button>
+
       </div>
     );
   }

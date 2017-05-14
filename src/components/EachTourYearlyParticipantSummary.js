@@ -25,7 +25,7 @@ class EachTourYearlyParticipantSummary extends Component {
     super(props)
     this.state ={
       tour_id: this.props.tourId,
-      selectedYear: curYear,
+      selected_Year: curYear,
       eachTourYearlyParticipants:[]
     }
   }
@@ -44,7 +44,7 @@ class EachTourYearlyParticipantSummary extends Component {
   componentWillReceiveProps(nextProps){
 
     if(nextProps.eachTourYearlyParticipants !== this.props.eachTourYearlyParticipants){
-      if(nextProps.eachTourYearlyParticipants){
+      if(typeof nextProps.eachTourYearlyParticipants !== 'undefined'){
         console.log(nextProps.eachTourYearlyParticipants)
         this.setState({eachTourYearlyParticipants:createTable(nextProps.eachTourYearlyParticipants)})
       }
@@ -52,14 +52,14 @@ class EachTourYearlyParticipantSummary extends Component {
     if(this.props.selectedTourYear !== nextProps.selectedTourYear){
       if(nextProps.selectedTourYear){
         console.log(nextProps.selectedTourYear)
-        this.setState({selectedYear:nextProps.selectedTourYear})
+        this.setState({selected_Year:nextProps.selectedTourYear})
         this.getEachTourYearlyParticipants(nextProps.selectedTourYear)
       }
     }
   }
 
   componentWillMount(){
-    this.getEachTourYearlyParticipants(this.state.selectedYear)
+    this.getEachTourYearlyParticipants(this.state.selected_Year)
   }
 
   render() {
@@ -73,7 +73,7 @@ class EachTourYearlyParticipantSummary extends Component {
     return (
 
        <div className = "each-tour-expert-guide">
-            <Table columns={columns} dataSource={this.state.eachTourYearlyParticipants} size="small" pagination = {false} />
+            <Table columns={columns} dataSource={Array.prototype.slice.apply(this.state.eachTourYearlyParticipants || [])} size="small" pagination = {false} />
         </div>
 
 

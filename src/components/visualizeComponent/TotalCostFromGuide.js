@@ -25,52 +25,48 @@ const Option = Select.Option;
 let today = new Date();
 let curYear = today.getFullYear();
 
-class TotalRev extends Component {
+class TotalCostFromGuide extends Component {
 
   constructor(props){
     super(props)
 
     this.state = {
       selectedYear: curYear,
-      totalRevData: [],
-      totalRevTable:[]
+      yearlyTotalCostFromGuide: []
     }
   }
 
   componentWillReceiveProps(nextProps){
-    if(this.props.totalRevData !== nextProps.totalRevData){
-      if(nextProps.totalRevData){
-        this.setState({totalRevData:nextProps.totalRevData})
-      }
-    }
+
     if(this.props.selectedYear !== nextProps.selectedYear){
       if(nextProps.selectedYear){
         this.setState({selectedYear:nextProps.selectedYear})
-        this.getRevData(nextProps.selectedYear)
+        this.getCostData(nextProps.selectedYear)
       }
     }
+
+    if(this.props.yearlyTotalCostFromGuide !== nextProps.yearlyTotalCostFromGuide){
+      if(nextProps.yearlyTotalCostFromGuide){
+        console.log(nextProps.yearlyTotalCostFromGuide)
+        this.setState({yearlyTotalCostFromGuide:nextProps.yearlyTotalCostFromGuide})
+      }
+    }
+
     }
 
   componentWillMount(){
-    this.getRevData(this.state.selectedYear)
+    this.getCostData(this.state.selectedYear)
   }
 
-  handleYearSelect(value,option){
-    this.setState({selectedYear: value})
-  }
-
-  setYearRev(){
-    this.getRevData(this.state.selectedYear)
-  }
-
-  getRevData(year){
+  getCostData(year){
+    console.log(year)
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/revenue/'+year,
+      url: 'http://localhost:8000/staffs/tour-guides/summary/payment/'+year,
       method: 'GET',
       payload: null,
-      attemptAction: () => this.props.dispatch({ type: 'GET_TOTAL_REV_ATTEMPT' }),
-      successAction: (json) => this.props.dispatch({ type: 'GET_TOTAL_REV_SUCCESS', json }),
-      failureAction: () => this.props.dispatch({ type: 'GET_TOTAL_REV_FAILED' })
+      attemptAction: () => this.props.dispatch({ type: 'GET_YEARLY_TOTAL_COST_FROM_GUIDE_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_YEARLY_TOTAL_COST_FROM_GUIDE_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_YEARLY_TOTAL_COST_FROM_GUIDE_FAILED' })
     })
   }
 
@@ -81,13 +77,13 @@ class TotalRev extends Component {
     return (
 
       <div>
-          <AreaChart width={600} height={200} data={this.state.totalRevData}
+          <AreaChart width={600} height={200} data={this.state.yearlyTotalCostFromGuide}
                  margin={{top: 10, right: 30, left: 0, bottom: 0}}>
              <XAxis dataKey="month"/>
-             <YAxis dataKey='revenue'/>
+             <YAxis dataKey='payment'/>
              <CartesianGrid strokeDasharray="3 3"/>
              <Tooltip/>
-             <Area type='monotone' dataKey='revenue' stroke='#4DA807' fill='#68F000' />
+             <Area type='monotone' dataKey='payment' stroke='#F81919' fill='#F74206' />
            </AreaChart>
 
       </div>
@@ -99,8 +95,9 @@ class TotalRev extends Component {
 function mapStateToProps(state){
   return{
     totalRevData: state.getTotalRev.totalRevData,
-    selectedYear: state.updateYearDashBoard.selectedYear
+    selectedYear: state.updateYearDashBoard.selectedYear,
+    yearlyTotalCostFromGuide: state.getYearlyTotalCostFromGuide.yearlyTotalCostFromGuide
   }
 }
 
-export default connect(mapStateToProps)(TotalRev)
+export default connect(mapStateToProps)(TotalCostFromGuide)

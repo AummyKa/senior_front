@@ -61,18 +61,19 @@ class EachTourRevChart extends Component {
 
   componentWillReceiveProps(nextProps){
     if(this.props.eachTourYearlyRevenue !== nextProps.eachTourYearlyRevenue){
-      if(nextProps.eachTourYearlyRevenue){
+      if(typeof nextProps.eachTourYearlyRevenue !=='undefined' || nextProps.eachTourYearlyRevenue !== null ){
         this.setState({eachTourYearlyRevenue:nextProps.eachTourYearlyRevenue})
       }
     }
     if(this.props.eachTourYearlyRevenueTable !== nextProps.eachTourYearlyRevenueTable){
-      if(nextProps.eachTourYearlyRevenueTable){
+      if(typeof nextProps.eachTourYearlyRevenueTable !== 'undefined' || nextProps.eachTourYearlyRevenue !== null){
+        console.log(nextProps.eachTourYearlyRevenueTable)
         this.setState({eachTourYearlyRevenueTable:tourRevenueTableData(nextProps.eachTourYearlyRevenueTable)})
       }
     }
 
     if(this.props.selectedTourYear!==nextProps.selectedTourYear){
-      if(nextProps.selectedTourYear){
+      if(typeof nextProps.selectedTourYear !=='undefined' || nextProps.eachTourYearlyRevenue !== null){
         this.setState({selected_Year:nextProps.selectedTourYear})
         console.log(nextProps.selectedTourYear)
         this.getEachTourYearlyRevenue(nextProps.selectedTourYear)
@@ -111,7 +112,7 @@ class EachTourRevChart extends Component {
                 <Col span = {10}><h5><b>Monthly revenue summary</b></h5></Col>
                 <Col span = {6} offset = {8}><h5>Year</h5></Col>
               </Row>
-                <Table columns={columns} dataSource={this.state.eachTourYearlyRevenueTable}
+                <Table columns={columns} dataSource={Array.prototype.slice.apply(this.state.eachTourYearlyRevenueTable || [])}
                   pagination={false} size="small" />
             </div>
 

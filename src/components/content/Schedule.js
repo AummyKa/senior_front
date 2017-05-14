@@ -7,7 +7,7 @@ import moment from 'moment';
 
 import SlotDetail from './SlotDetail'
 import AddBookedTourForm from '../AddBookedTourForm'
-import EditTourForm from '../EditTourForm'
+import EditBookedTourForm from '../EditBookedTourForm'
 import EditCurCustomerModal from '../EditCurCustomerModal'
 import AddMoreCustomerModal from '../AddMoreCustomerModal'
 
@@ -92,7 +92,7 @@ class Schedule extends Component {
   if(title.match('Public')){
     backgroundColor = '#' + '27c518';
   }else if(title.match('Private')){
-    backgroundColor = '#' + 'fe4f1b';
+    backgroundColor = '#' + '0590c8';
   }
     let style = {
         backgroundColor: backgroundColor,
@@ -300,7 +300,7 @@ handleFilterSelect(value,option){
                     {this.state.selectedTourName} at {this.state.selectedDate}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <EditTourForm eachTourData = {this.props.eachTour} />
+                  <EditBookedTourForm eachTourData = {this.props.eachTour} />
                 </Modal.Body>
 
               </Modal>

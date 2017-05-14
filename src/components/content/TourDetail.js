@@ -13,6 +13,7 @@ import EachTourCostModel from '../EachTourCostModel'
 import CostModelModal from '../CostModelModal'
 import EachTourPopularNation from '../EachTourPopularNation'
 import EachTourEditFormModal from '../EachTourEditFormModal'
+import EachTourYearlyParticipantSummary from '../EachTourYearlyParticipantSummary'
 import { changeYearDashBoard } from '../../actions/action-changeYearDashBoard'
 
 import Cookies from 'js-cookie'
@@ -78,7 +79,7 @@ class TourDetail extends Component {
     }
     console.log(nextProps.specific_tours_data)
     if(this.props.specific_tours_data !== nextProps.specific_tours_data){
-      if(nextProps.specific_tours_data){    
+      if(nextProps.specific_tours_data){
         this.setState({tour_data:nextProps.specific_tours_data})
 
       }
@@ -91,11 +92,6 @@ class TourDetail extends Component {
       }
     }
 
-    if(this.props.selectedTourYear!==nextProps.selectedTourYear){
-      if(nextProps.selectedTourYear){
-        this.setState({selectedYear:nextProps.selectedTourYear})
-      }
-    }
     if(this.props.updateEachTourStatus!==nextProps.updateEachTourStatus){
       if(nextProps.updateEachTourStatus){
         this.setState({showEditTourModal:false})
@@ -112,7 +108,8 @@ class TourDetail extends Component {
   this.setState({selectedYear: value})
   }
 
-  setYearRev(){
+  setSelectedYear(){
+    console.log(this.state.selectedYear)
     this.props.dispatch(changeYearDashBoard('CHANGE_TOUR_DASHBOARD_YEAR',this.state.selectedYear))
   }
 
@@ -171,7 +168,11 @@ class TourDetail extends Component {
             </div>
 
             <div className = "tour-title" style = {{  fontSize: 20 }}>
-              {this.state.tour_data.tour_name}
+              <b>{this.state.tour_data.tour_name}</b>
+            </div>
+
+            <div className = "tour-type" style = {{  fontSize: 15 }}>
+              {this.state.tour_data.type}
             </div>
 
             <div className = "tour-description">
@@ -186,17 +187,21 @@ class TourDetail extends Component {
                     className = "btn-edit-in-tour-detail" />
                   </span></b>
               </div>
-              <EachTourCostModel dispatch = {this.props.dispatch} tourId = {this.state.tour_id} />
+              <EachTourCostModel dispatch = {this.props.dispatch}
+                                 tourId = {this.state.tour_id} />
             </div>
 
-            <div className = "edit-tour-data">
-              <div className = "edit-tour-title"><b>Edit Tour</b></div>
+            <div className = "participant-data">
+              <div className = "participant-tour-title"><b>Participants Record</b></div>
+              <EachTourYearlyParticipantSummary  selectedYear = {this.state.selectedYear}
+                                                 dispatch = {this.props.dispatch}
+                                                 tourId = {this.state.tour_id} />
             </div>
 
             <div className = "expert-list">
               <div className = "expert-guide-list-title"><b>Expert Guide</b></div>
               <div className = "expert-list-table">
-                <EachTourExpertGuide dispatch = {this.props.dispatch} tourId={this.state.tour_id} />
+                <EachTourExpertGuide dispatch = {this.props.dispatch} tourId = {this.state.tour_id} />
               </div>
             </div>
 
@@ -230,7 +235,7 @@ class TourDetail extends Component {
                    </Select>
                  </Col>
                  <Col span={2}>
-                   <Button type = "primary" onClick = {() => this.setYearRev()}>GO!</Button>
+                   <Button type = "primary" onClick = {() => this.setSelectedYear()}>GO!</Button>
                 </Col>
                 <Col span={3} >
                   <Button style={{backgroundColor:'#900C3F',color:'#ffffff'}} onClick = {() => this.editTour()}>Edit Tour!</Button>

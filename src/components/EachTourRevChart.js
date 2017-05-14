@@ -34,9 +34,12 @@ class EachTourRevChart extends Component {
   }
 
 
-  getEachTourYearlyRevenue(){
+  getEachTourYearlyRevenue(year){
+    if(typeof year === 'undefined'){
+      year = curYear
+    }
     apiAccess({
-      url: 'http://localhost:8000/tours/'+ this.state.tour_id +'/revenue/'+this.state.selected_year,
+      url: 'http://localhost:8000/tours/'+ this.state.tour_id +'/revenue/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_EACH_TOUR_YEARLY_REVENUE_ATTEMPT' }),
@@ -45,9 +48,9 @@ class EachTourRevChart extends Component {
     })
   }
 
-  getEachTourYearlyRevenueTable(){
+  getEachTourYearlyRevenueTable(year){
     apiAccess({
-      url: 'http://localhost:8000/tours/'+ this.state.tour_id +'/revenue/tour-type/'+this.state.selected_year,
+      url: 'http://localhost:8000/tours/'+ this.state.tour_id +'/revenue/tour-type/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_EACH_TOUR_YEARLY_REVENUE_TABLE_ATTEMPT' }),
@@ -67,16 +70,20 @@ class EachTourRevChart extends Component {
         this.setState({eachTourYearlyRevenueTable:tourRevenueTableData(nextProps.eachTourYearlyRevenueTable)})
       }
     }
+
     if(this.props.selectedTourYear!==nextProps.selectedTourYear){
       if(nextProps.selectedTourYear){
-        this.setState({selectedYear:nextProps.selectedTourYear})
+        this.setState({selected_Year:nextProps.selectedTourYear})
+        console.log(nextProps.selectedTourYear)
+        this.getEachTourYearlyRevenue(nextProps.selectedTourYear)
+        this.getEachTourYearlyRevenueTable(nextProps.selectedTourYear)
       }
     }
   }
 
   componentWillMount(){
-    this.getEachTourYearlyRevenue()
-    this.getEachTourYearlyRevenueTable()
+    this.getEachTourYearlyRevenue(this.state.selected_Year)
+    this.getEachTourYearlyRevenueTable(this.state.selected_year)
   }
 
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row,Col,Radio,Button,Input, DatePicker, Table, Icon, Popconfirm } from 'antd';
+import { Row,Col,Button,Input, DatePicker, Table, Icon, Popconfirm, Popover, Switch} from 'antd';
 // import StarRating from 'react-star-rating';
 import {connect} from 'react-redux';
 import moment from 'moment';
@@ -15,6 +15,19 @@ import AddGuideTourRatingModal from '../AddGuideTourRatingModal'
 const { MonthPicker, RangePicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
 
+
+const checkActive = (isActive) =>{
+  console.log(isActive)
+  if(isActive){
+    return(
+      <div>Active</div>
+    )
+  }else{
+    return(
+      <div style = {{color:'red'}}>InActive</div>
+    )
+  }
+}
 
 
 class GuideExperience extends Component {
@@ -37,7 +50,9 @@ class GuideExperience extends Component {
       favSelected: 0,
       showAddRatingModal: false,
       newExpertRating: 0,
-      starFavColor:"#FDDC02"
+      starFavColor:"#FDDC02",
+      guideIsActive: false,
+      showChangeGuideStatus: false
     }
   }
 
@@ -46,11 +61,13 @@ class GuideExperience extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    console.log(this.state.favEditable)
     if(this.props.curGuideProfile !== nextProps.curGuideProfile){
       if(nextProps.curGuideProfile){
-        console.log(nextProps.curGuideProfile)
         this.setState({guideProfile: nextProps.curGuideProfile})
+        console.log(nextProps.curGuideProfile.isActive)
+
+        this.setState({guideIsActive:nextProps.curGuideProfile.isActive})
+
         this.setState({guideProfileExpert: this.createGuideRatingData(nextProps.curGuideProfile.expert)})
         // this.setState({guideRatingData: this.createGuideRatingData(nextProps.curGuideProfile)})
       }
@@ -61,7 +78,7 @@ class GuideExperience extends Component {
         this.setState({starFavColor:"#FDDC02"})
       }
     }
-    console.log(nextProps.addGuideExpertStatus)
+
     if(this.props.addGuideExpertStatus !== nextProps.addGuideExpertStatus){
       if(nextProps.addGuideExpertStatus){
         this.setState({showAddRatingModal: false})
@@ -77,6 +94,12 @@ class GuideExperience extends Component {
 
     if(this.props.updateEachGuideExpertStatus !== nextProps.updateEachGuideExpertStatus){
       if(nextProps.updateEachGuideExpertStatus){
+        this.eachGuide(Cookies.get('guide_id'))
+      }
+    }
+    console.log(nextProps.updateEachGuideStatusStatus)
+    if(this.props.updateEachGuideStatusStatus !== nextProps.updateEachGuideStatusStatus){
+      if(nextProps.updateEachGuideStatusStatus){
         this.eachGuide(Cookies.get('guide_id'))
       }
     }
@@ -112,7 +135,6 @@ class GuideExperience extends Component {
         resultJSON[i] = objectJSON
     }
   }
-    console.log(resultJSON)
     return resultJSON
   }
 
@@ -147,14 +169,14 @@ class GuideExperience extends Component {
     this.setState({ searchText: e.target.value });
   }
 
-  onSearch = (value) => {
-    console.log(value)
+  onSearch = () => {
+
     const { searchText } = this.state;
     const reg = new RegExp(searchText, 'gi');
     this.setState({
       filterDropdownVisible: false,
       filtered: !!searchText,
-      data: this.state.guideRatingData.map((record) => {
+      data: this.state.guideProfileExpert.map((record) => {
         const match = record.tour.match(reg);
         if (!match) {
           return null;
@@ -211,16 +233,15 @@ class GuideExperience extends Component {
 
   handleExpertChange(nextValue, prevValue, name){
     if(nextValue){
-      console.log(nextValue)
       this.setState({newExpertRating:nextValue})
     }
   }
 
   editRating(record,index){
-    console.log(record)
+
     console.log(record.key)
     const dataSource = [...this.state.guideProfileExpert];
-    console.log(dataSource)
+
     dataSource[record.key].starColor = "#F92525"
     dataSource[record.key].editable = true
 
@@ -229,7 +250,6 @@ class GuideExperience extends Component {
 
   updateRating(record,index){
     let id = Cookies.get('guide_id')
-    console.log(this.state.newExpertRating)
     let newRating = this.state.newExpertRating
 
     let payload = {
@@ -267,6 +287,34 @@ class GuideExperience extends Component {
     })
   }
 
+  changeGuideStatus = () =>{
+    this.setState({showChangeGuideStatus:true})
+  }
+
+  handleChangeGuideStatus(checked){
+    this.setState({guideIsActive:checked})
+  }
+
+  saveGuideStatus = () =>{
+    this.setState({showChangeGuideStatus:false})
+    let id = Cookies.get('guide_id')
+    console.log(id)
+    console.log(this.state.guideIsActive)
+
+    apiAccess({
+     url: 'http://localhost:8000/staffs/tour-guides/update-status/'+id,
+     method: 'POST',
+     payload: {
+       isActive: this.state.guideIsActive
+     },
+     attemptAction: () => this.props.dispatch({ type: 'UPDATE_EACH_GUIDE_STATUS_ATTEMPT' }),
+     successAction: (json) => this.props.dispatch({ type: 'UPDATE_EACH_GUIDE_STATUS_SUCCESS', json }),
+     failureAction: () => this.props.dispatch({ type: 'UPDATE_EACH_GUIDE_STATUS_FAILED' })
+   })
+  }
+
+
+
   render() {
 
   let { sortedInfo, filteredInfo } = this.state;
@@ -277,22 +325,23 @@ class GuideExperience extends Component {
       title: 'Tour name',
       dataIndex: 'tour',
       key: 'tour',
-      width: 300
-      // filterDropdown: (
-      //   <div className="custom-filter-dropdown">
-      //     <Input.Search
-      //       ref={ele => this.searchInput = ele}
-      //       placeholder="Search name"
-      //       value={this.state.searchText}
-      //       onChange={this.onInputChange}
-      //       onPressEnter={this.onSearch}
-      //     />
-      //     <Button type="primary" onClick={this.onSearch}>Search</Button>
-      //   </div>
-      // ),
-      // filterIcon: <Icon type="search" style={{ color: this.state.filtered ? '#108ee9' : '#aaa' }} />,
-      // filterDropdownVisible: this.state.filterDropdownVisible,
-      // onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible })
+      width: 300,
+      filterDropdown: (
+      <div className="custom-filter-dropdown">
+        <Input style = {{width:'80%'}}
+          ref={ele => this.searchInput = ele}
+          placeholder="Search name"
+          value={this.state.searchText}
+          onChange={this.onInputChange}
+          onPressEnter={this.onSearch}
+        />
+        <Button type="primary" icon="search"  onClick={this.onSearch} />
+    </div>
+  ),
+  filterIcon: <Icon type="search" style={{ color: this.state.filtered ? '#108ee9' : '#aaa' }} />,
+  filterDropdownVisible: this.state.filterDropdownVisible,
+  onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible }, () => this.searchInput.focus())
+
     },
     {
       title: 'Rating', dataIndex: 'rate', key: 'key', width: 200,
@@ -330,6 +379,7 @@ class GuideExperience extends Component {
 
 
     let closeRatingModal = () => {this.setState({showAddRatingModal: false})}
+    let closeChangeGuideStatus = () => {this.setState({showChangeGuideStatus: false})}
 
     return (
 
@@ -358,6 +408,7 @@ class GuideExperience extends Component {
            <ul>
             <li>StartDate</li><br/>
             <li>Amount of working tours</li><br/>
+            <li>Status</li><br/>
             <li>favorable point</li><br/>
 
           </ul>
@@ -367,22 +418,47 @@ class GuideExperience extends Component {
              <ul>
               <li>{this.state.startdate}</li><br/>
               <li>{this.state.amount_of_workTours}  tours</li><br/>
-              <li><span>
-                <StarRatingComponent
-                  name="favorable"
-                  starCount={5}
-                  onStarClick = {this.countingFavStar.bind(this)}
-                  value={this.state.guideProfile.favorable}
-                  editing={this.state.favEditable}
-                  starColor= {this.state.starFavColor}
-                  emptyStarColor= "#000000"
-                  renderStarIcon={() => <span><Icon className = "star-rate" type="star" /></span>}
-                />
-              { this.state.favEditable ?
-                <Button style = {{marginLeft: 50}} onClick = {()=> this.savefavorable() }>Save!</Button>
-              : <Button style = {{marginLeft: 50}} onClick = {()=> this.editfavorable() }>Edit !</Button>
-              }
-              </span></li><br/>
+              <li>
+                <Row>
+                  <Col span={3}>
+                    {this.state.guideIsActive ? <div>Active</div> :
+                    <div style ={{color:'red'}}>InActive</div> }
+                  </Col>
+                  <Col span={2} offset={1}>
+                     <Switch checkedChildren={'Active'} unCheckedChildren={'inActive'}
+                       onChange={this.handleChangeGuideStatus.bind(this)}
+                       disabled={!this.state.showChangeGuideStatus} defaultChecked ={this.state.guideIsActive}  />
+                  </Col>
+                  <Col span={3} offset={3}>
+                    { this.state.showChangeGuideStatus ?
+                      <Button onClick={()=>this.saveGuideStatus()}>Save!</Button>
+                      :<Button onClick={()=>this.changeGuideStatus()}>Edit Status</Button>
+                    }
+                  </Col>
+                </Row>
+              </li><br/>
+              <li>
+                <Row>
+                  <Col span={6}>
+                    <StarRatingComponent
+                      name="favorable"
+                      starCount={5}
+                      onStarClick = {this.countingFavStar.bind(this)}
+                      value={this.state.guideProfile.favorable}
+                      editing={this.state.favEditable}
+                      starColor= {this.state.starFavColor}
+                      emptyStarColor= "#000000"
+                      renderStarIcon={() => <span><Icon className = "star-rate" type="star" /></span>}
+                    />
+                  </Col>
+                  <Col span={3} style={{marginLeft:'1px'}}>
+                    { this.state.favEditable ?
+                      <Button style = {{marginLeft: 50}} onClick = {()=> this.savefavorable() }>Save!</Button>
+                    : <Button style = {{marginLeft: 50}} onClick = {()=> this.editfavorable() }>Edit !</Button>
+                    }
+                  </Col>
+                </Row>
+              </li><br/>
             </ul>
            </Col>
         </Row>
@@ -410,7 +486,8 @@ function mapStateToProps(state){
       curGuideProfile: state.guideProfile.curGuideProfile,
       updateStaffStatus: state.updateStaff.updateStaffStatus,
       addGuideExpertStatus: state.addGuideExpertField.addGuideExpertStatus,
-      updateEachGuideExpertStatus: state.updateEachGuideExpert.updateEachGuideExpertStatus
+      updateEachGuideExpertStatus: state.updateEachGuideExpert.updateEachGuideExpertStatus,
+      updateEachGuideStatusStatus: state.updateEachGuideStatus.updateEachGuideStatusStatus
   }
 }
 

@@ -91,6 +91,10 @@ class GuideHistory extends Component {
     this.setState({endMonthInput : dateString})
   }
 
+  onChange(date, dateString) {
+    console.log(date, dateString);
+  }
+
   render() {
 
     let { sortedInfo, filteredInfo } = this.state;
@@ -154,11 +158,18 @@ class GuideHistory extends Component {
       </div>
 
         <div className = "guide-tourlist">
-            <h4>List of responsible tour Start {<MonthPicker style={{ width: 80 }} size={"default"}
-            defaultValue ={moment(this.state.startMonthInput, monthFormat)} onChange={this.startDateInput.bind(this)} />}
-            End {<MonthPicker style={{ width: 80 }} size={"default"}
-            defaultValue ={moment(this.state.endMonthInput, monthFormat)} onChange={this.endDateInput.bind(this)}/>}
-            </h4>
+          <Row>
+            <Col span={6}>
+              <h4>List of responsible tour</h4>
+            </Col>
+            <Col span={5} offset={11}>
+              <MonthPicker onChange={this.onChange} placeholder="Select month" />
+            </Col>
+            <Col span={1}>
+              <Button type="primary">Go!</Button>
+            </Col>
+          </Row>
+
            <Table columns={columns} dataSource={data} size="middle" />
         </div>
 

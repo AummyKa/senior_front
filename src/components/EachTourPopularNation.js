@@ -90,16 +90,16 @@ class EachTourPopularNation extends Component {
   constructor(props){
     super(props)
     this.state = {
-      selectedYear: curYear,
+      selected_year: curYear,
       amountNationsOfEachTour:[],
       amountNationsOfEachTourTable:[],
       tour_id: this.props.tourId
     }
   }
 
-  getPopularNation(){
+  getPopularNation(year){
     apiAccess({
-      url: 'http://localhost:8000/tours/'+this.state.tour_id +'/popular-nation/'+this.state.selectedYear,
+      url: 'http://localhost:8000/tours/'+this.state.tour_id +'/popular-nation/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_AMOUNT_NATIONS_OF_EACH_TOUR_ATTEMPT' }),
@@ -109,7 +109,7 @@ class EachTourPopularNation extends Component {
   }
 
   componentWillMount(){
-    this.getPopularNation()
+    this.getPopularNation(this.state.selected_year)
   }
 
   componentWillReceiveProps(nextProps){
@@ -122,7 +122,8 @@ class EachTourPopularNation extends Component {
     }
     if(this.props.selectedTourYear!==nextProps.selectedTourYear){
       if(nextProps.selectedTourYear){
-        this.setState({selectedYear:nextProps.selectedTourYear})
+        this.setState({selected_year:nextProps.selectedTourYear})
+        this.getPopularNation(nextProps.selectedTourYear)
       }
     }
   }

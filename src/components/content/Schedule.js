@@ -17,14 +17,31 @@ import {editCustomerModal} from '../../actions/action-editCustomerModal'
 import { addTour } from '../../actions/action-addTour'
 import {addCustomerModal} from '../../actions/action-addCustomerModal'
 
-import{ Row,Col } from 'antd'
-import { Modal , Button, ButtonToolbar } from 'react-bootstrap';
+import{ Row,Col, Select, Button } from 'antd'
+import { Modal } from 'react-bootstrap';
 
 import Cookies from 'js-cookie'
 
 require('react-big-calendar/lib/css/react-big-calendar.css');
 
 BigCalendar.momentLocalizer(moment);
+
+
+const Option = Select.Option;
+const filter = ["Guide","Tour","All"]
+
+function throwOptionFilterObject(filter){
+  console.log(filter)
+  let temp =[]
+  if(filter){
+    for (let i = 0; i < filter.length; i++) {
+      console.log(filter[i])
+      temp.push(<Option key= {i}>{filter[i]}</Option>);
+    }
+  }
+  return temp
+}
+
 class Schedule extends Component {
 
   constructor(props){
@@ -42,7 +59,8 @@ class Schedule extends Component {
       editCurCustomer: [],
       showAddMoreCustomer: false,
       curTourID: '',
-      addTourID: ''
+      addTourID: '',
+      selectedFilter:''
     }
   }
 
@@ -87,6 +105,10 @@ class Schedule extends Component {
     return {
         style: style
     };
+}
+
+handleFilterSelect(value,option){
+  this.setState({selectedFilter: filter[value]})
 }
 
 
@@ -303,32 +325,35 @@ class Schedule extends Component {
           </Modal>
       </div>
 
-      <div className = "schedule-container">
-        <Row style = {{width: '100%'}}>
-          <Row >
-
-            <Col span = {6}>
-              <div className = "topic">
-                  <h2>Schedule</h2>
-              </div>
-            </Col>
-            <Col span = {6} offset = {12}>
-              <div className = "button-filter-schedule">
-                <ButtonToolbar>
-                     <Button bsStyle="info">All</Button>
-                     <Button bsStyle="info">Guide</Button>
-                     <Button bsStyle="info">Tour</Button>
-                </ButtonToolbar>
-              </div>
-            </Col>
-         </Row>
-
+      <div className = "schedule-container" style = {{marginTop:'-4%'}}>
          <div className = "schedule-filter">
-
+           <Row>
+             <Col span ={2}>
+                <h2>Schedule</h2>
+             </Col>
+             <Col span={1} offset={15}>
+              <div style = {{fontSize:'18px'}}>Filter:</div>
+             </Col>
+             <Col span={4} style = {{marginLeft:'1%'}}>
+               <Select
+                  showSearch
+                  style={{width: 150}}
+                  placeholder="Filter"
+                  optionFilterProp="children"
+                  onSelect={this.handleFilterSelect.bind(this)}
+                  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                >
+                 {throwOptionFilterObject(filter)}
+                </Select>
+             </Col>
+             <Col span={1}>
+               <Button type='primary'>Go!</Button>
+             </Col>
+           </Row>
          </div>
 
           <Row>
-            <Col span = {24} style = {{height: 500}}>
+            <Col span = {24} style = {{height: 450}}>
               <div className = "big-table">
                   <h3 className='callout'>
                   </h3>
@@ -343,7 +368,7 @@ class Schedule extends Component {
                 </div>
             </Col>
             </Row>
-          </Row>
+
         </div>
 
 

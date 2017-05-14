@@ -48,8 +48,8 @@ class EachTourEditFormModal extends Component{
   componentWillReceiveProps(nextProps){
     console.log(nextProps.specific_tours_data)
     if(this.props.specific_tours_data !== nextProps.specific_tours_data){
+      this.setState({selectedTourType:nextProps.specific_tours_data.type})
       if(nextProps.specific_tours_data){
-        this.setState({selectedTourType:nextProps.specific_tours_data.type})
         this.setState({tour_data:nextProps.specific_tours_data})
       }
     }
@@ -63,7 +63,7 @@ class EachTourEditFormModal extends Component{
         let payload = {tour_name: this.props.form.getFieldValue('tourname'),
                        tour_abbreviation: this.props.form.getFieldValue('tour_abbreviation'),
                        place: this.props.form.getFieldValue('place'),
-                       type: this.props.form.getFieldValue('type'),
+                       type: this.state.selectedTourType,
                        description:this.props.form.getFieldValue('description')}
 
           console.log(payload)
@@ -124,7 +124,9 @@ class EachTourEditFormModal extends Component{
 }
 
 handleTourTypeSelect(value,option){
-  this.setState({ selectedTourPeriod: tourtypes[value].value});
+  console.log(value)
+  console.log(tourtypes[value].value)
+  this.setState({ selectedTourType: tourtypes[value].value});
 }
 
 

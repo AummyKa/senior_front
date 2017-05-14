@@ -6,7 +6,8 @@ import { connect } from 'react-redux'
 import { Router, Route, Link, browserHistory, IndexRoute  } from 'react-router'
 import Cookies from 'js-cookie'
 
-
+import enUS from 'antd/lib/locale-provider/en_US';
+import { LocaleProvider } from 'antd'
 
 
 class App extends Component {
@@ -38,7 +39,9 @@ class App extends Component {
   render () {
     return (
       <div>
-        {this.props.children}
+        <LocaleProvider locale={enUS}>
+          {this.props.children}
+        </LocaleProvider>
       </div>
     )
   }

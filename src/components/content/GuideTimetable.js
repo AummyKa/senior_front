@@ -32,42 +32,54 @@ class GuideTimetable extends Component {
       afternoonClicked: false,
       eveningClicked: false,
       fullDayClicked: false,
-      guideUnavailableDates:[]
+      guideUnavailableDates:[],
+      eachGuideUnAvailableEachDate:[]
     }
   }
 
   choosingDate(start){
     let strDate = start.toString().substring(0,15)
     let date = changeDateFormat(strDate)
+    let id = Cookies.get('guide_id')
     this.setState({selectedDate:date})
+
+    apiAccess({
+      url: 'http://localhost:8000/staffs/unavailability/'+id+'/'+date,
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_EACH_GUIDE_UNAVAIL_EACH_DATE_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_EACH_GUIDE_UNAVAIL_EACH_DATE_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_EACH_GUIDE_UNAVAIL_EACH_DATE_FAILED' })
+    })
+
   }
 
   handleUnavailClicked(type){
 
-    if(this.state.morningClicked && this.state.afternoonClicked && type == "evening"){
+    if(this.state.morningClicked && this.state.afternoonClicked && type == "Evening"){
       this.setState({fullDayClicked:true,eveningClicked:false,afternoonClicked:false,morningClicked:false})
 
-    }else if(this.state.eveningClicked && this.state.afternoonClicked && type == "morning"){
+    }else if(this.state.eveningClicked && this.state.afternoonClicked && type == "Morning"){
       this.setState({fullDayClicked:true,eveningClicked:false,afternoonClicked:false,morningClicked:false})
 
-    }else if(this.state.eveningClicked && this.state.morningClicked && type == "afternoon"){
+    }else if(this.state.eveningClicked && this.state.morningClicked && type == "Afternoon"){
       this.setState({fullDayClicked:true,eveningClicked:false,afternoonClicked:false,morningClicked:false})
 
     }else{
       switch (type) {
-        case 'morning':
+        case 'Morning':
         this.setState({morningClicked:true,fullDayClicked:false})
         break;
 
-        case 'afternoon':
+        case 'Afternoon':
         this.setState({afternoonClicked:true,fullDayClicked:false})
         break;
 
-        case 'evening':
+        case 'Evening':
         this.setState({eveningClicked:true,fullDayClicked:false})
         break;
 
-        case 'full-day':
+        case 'Full-Day':
         this.setState({fullDayClicked:true,eveningClicked:false,afternoonClicked:false,morningClicked:false})
         break;
 
@@ -90,23 +102,21 @@ class GuideTimetable extends Component {
     if(this.state.eveningClicked){
       arr.push("Evening")
     }
-
-    if(arr.length == 3){
-      arr.splice(0,arr.length)
+    if(this.state.fullDayClicked){
       arr.push("Full-Day")
     }
 
-
-    var unAvailObj = {};
+    var result = [];
       for (var x = 0; x < arr.length; x++) {
-        unAvailObj[x] =
+      let  unAvailObj =
             {
               date: selectedDated,
               time_period: arr[x]
             };
+        result.push(unAvailObj)
       }
 
-    return unAvailObj
+    return result
   }
 
   submitUnAvailability(){
@@ -117,7 +127,7 @@ class GuideTimetable extends Component {
     console.log(unAvailList)
 
     apiAccess({
-      url: 'http://localhost:8000/staffs/add-unavailability/'+id,
+      url: 'http://localhost:8000/staffs/update-unavailability/'+id+'/'+this.state.selectedDate,
       method: 'POST',
       payload: unAvailList,
       attemptAction: () => this.props.dispatch({ type: 'ADD_UNAVAIL_DATE_EACH_GUIDE_ATTEMPT' }),
@@ -168,19 +178,19 @@ class GuideTimetable extends Component {
 
   handleTagClose(tag){
     switch (tag) {
-      case 'morning':
+      case 'Morning':
       this.setState({morningClicked:false})
       break;
 
-      case 'afternoon':
+      case 'Afternoon':
       this.setState({afternoonClicked:false})
       break;
 
-      case 'evening':
+      case 'Evening':
       this.setState({eveningClicked:false})
       break;
 
-      case 'full-day':
+      case 'Full-Day':
       this.setState({fullDayClicked:false,eveningClicked:false,afternoonClicked:false,morningClicked:false})
       break;
 
@@ -193,7 +203,7 @@ class GuideTimetable extends Component {
     console.log(nextProps.addUnAvailDateEachGuideStatus)
     if(this.props.addUnAvailDateEachGuideStatus !== nextProps.addUnAvailDateEachGuideStatus){
       if(nextProps.addUnAvailDateEachGuideStatus){
-
+        this.getGuideUnAvailibility()
       }
     }
     if(this.props.allUnAvailDateEachGuide !== nextProps.allUnAvailDateEachGuide){
@@ -202,10 +212,35 @@ class GuideTimetable extends Component {
         this.setState({guideUnavailableDates:nextProps.allUnAvailDateEachGuide})
       }
     }
+    if(this.props.eachGuideUnAvailableEachDate !== nextProps.eachGuideUnAvailableEachDate)
+      if(nextProps.eachGuideUnAvailableEachDate){
+        console.log(nextProps.eachGuideUnAvailableEachDate)
+        this.setState({eachGuideUnAvailableEachDate:nextProps.eachGuideUnAvailableEachDate})
+        this.showUnAvailableTime(nextProps.eachGuideUnAvailableEachDate)
+      }
   }
 
   componentWillMount(){
     this.getGuideUnAvailibility()
+  }
+
+  showUnAvailableTime(time){
+    console.log(time)
+    if(typeof time != "undefined" && time != null && time.length > 0){
+      for(let i=0; i<time.length; i++){
+          this.handleUnavailClicked(time[i])
+      }
+    }else {
+      console.log("hi")
+      this.setState({morningClicked:false,afternoonClicked:false,eveningClicked:false,fullDayClicked:false,})
+    }
+
+  }
+
+  showAllAvailabileTag(){
+    return(
+      <Tag color="#68EA22">Available All Day</Tag>
+    )
   }
 
   render() {
@@ -253,32 +288,32 @@ class GuideTimetable extends Component {
                   <h4>Unavailable time</h4>
 
                   { !this.state.morningClicked && !this.state.afternoonClicked && !this.state.eveningClicked && !this.state.fullDayClicked
-                    ? <Tag color="#68EA22">Available All Day</Tag> : null
+                    ? this.showAllAvailabileTag() : null
                   }
 
                   { this.state.morningClicked ?
-                    <Tag closable={true} color="#FFC300" afterClose={() => this.handleTagClose("morning")}>Morning</Tag> : null
+                    <Tag closable={true} color="#FFC300" afterClose={() => this.handleTagClose("Morning")}>Morning</Tag> : null
                   }
                   { this.state.afternoonClicked ?
-                    <Tag closable={true} color="#FF5733" afterClose={() => this.handleTagClose("afternoon")}>Afternoon</Tag> : null
+                    <Tag closable={true} color="#FF5733" afterClose={() => this.handleTagClose("Afternoon")}>Afternoon</Tag> : null
                   }
                   { this.state.eveningClicked ?
-                    <Tag closable={true} color="#3B9DF9" afterClose={() => this.handleTagClose("evening")}>Evening</Tag> : null
+                    <Tag closable={true} color="#3B9DF9" afterClose={() => this.handleTagClose("Evening")}>Evening</Tag> : null
                   }
                   { this.state.fullDayClicked ?
-                    <Tag closable={true} color="#581845" afterClose={() => this.handleTagClose("full-day")}>Full Day</Tag> : null
+                    <Tag closable={true} color="#581845" afterClose={() => this.handleTagClose("Full-Day")}>Full Day</Tag> : null
                   }
 
                 </div>
                 <div className = "combo-button">
                   <Row gutter = {16}>
-                    <Col span = {10}><Button className = "Morning-btn" onClick ={()=> this.handleUnavailClicked("morning")}>
+                    <Col span = {10}><Button className = "Morning-btn" onClick ={()=> this.handleUnavailClicked("Morning")}>
                       <h4>Morning</h4></Button></Col>
-                    <Col span = {10}><Button className = "Afternoon-btn" onClick ={()=> this.handleUnavailClicked("afternoon")}>
+                    <Col span = {10}><Button className = "Afternoon-btn" onClick ={()=> this.handleUnavailClicked("Afternoon")}>
                       <h4>Afternoon</h4></Button></Col>
-                    <Col span = {10}><Button className = "Evening-btn" onClick ={()=> this.handleUnavailClicked("evening")}>
+                    <Col span = {10}><Button className = "Evening-btn" onClick ={()=> this.handleUnavailClicked("Evening")}>
                       <h4>Evening</h4></Button></Col>
-                    <Col span = {10}><Button className = "Fullday-btn" onClick ={()=> this.handleUnavailClicked("full-day")}>
+                    <Col span = {10}><Button className = "Fullday-btn" onClick ={()=> this.handleUnavailClicked("Full-Day")}>
                       <h4>Fullday</h4></Button></Col>
                   </Row>
                 </div>
@@ -300,7 +335,8 @@ function mapStateToProps(state) {
 
     return {
         addUnAvailDateEachGuideStatus: state.addUnAvailDateEachGuide.addUnAvailDateEachGuideStatus,
-        allUnAvailDateEachGuide: state.getAllUnAvailDateEachGuide.allUnAvailDateEachGuide
+        allUnAvailDateEachGuide: state.getAllUnAvailDateEachGuide.allUnAvailDateEachGuide,
+        eachGuideUnAvailableEachDate: state.getEachGuideUnAvailableEachDate.eachGuideUnAvailableEachDate
       }
 }
 

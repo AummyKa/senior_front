@@ -21,6 +21,7 @@ import updateEachGuideStatus from './Guide/updateEachGuideStatus'
 import getGuideIncomeSummary from './Guide/getGuideIncomeSummary'
 import getAllUnAvailDateEachGuide from './Guide/getAllUnAvailDateEachGuide'
 import getYearlyTotalCostFromGuide from './Guide/getYearlyTotalCostFromGuide'
+import getEachGuideUnAvailableEachDate from './Guide/getEachGuideUnAvailableEachDate'
 
 
 //staff
@@ -139,7 +140,8 @@ const admin = combineReducers({
     updateEachBookedTour,
     getGuideIncomeSummary,
     getAllUnAvailDateEachGuide,
-    getYearlyTotalCostFromGuide
+    getYearlyTotalCostFromGuide,
+    getEachGuideUnAvailableEachDate
 })
 
 export default admin

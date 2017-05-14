@@ -63,7 +63,7 @@ class SlotDetail extends Component {
 
   componentWillMount(){
     this.getTourAndBookerDetail()
-    this.screenTourAndBooker()
+    this.screenTourAndBooker(this.state.bookerAndTourDetail)
     this.setState({selectedDate:this.props.selectedDate})
     this.setState({valid_date_status:this.props.valid_date_status})
     this.setState({delete_status:this.props.delete_status})
@@ -109,11 +109,16 @@ class SlotDetail extends Component {
     if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
       if(nextProps.addBookerAndTour){
         this.getTourAndBookerDetail()
+        this.screenTourAndBooker(this.state.bookerAndTourDetail)
+        //this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
       }
     }
 
     if(this.props.bookerAndTourDetail !== nextProps.bookerAndTourDetail){
-      this.screenTourAndBooker(nextProps.bookerAndTourDetail)
+      if(nextProps.bookerAndTourDetail){
+        this.setState({bookerAndTourDetail:nextProps.bookerAndTourDetail})
+        this.screenTourAndBooker(nextProps.bookerAndTourDetail)
+      }
     }
     this.setState({wholeBookerAndTour: nextProps.bookerAndTourDetail})
 

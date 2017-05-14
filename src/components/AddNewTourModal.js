@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux'
 
 import apiAccess from '../Helpers/apiAccess'
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, InputNumber, Upload } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, InputNumber, Upload, message } from 'antd';
 import { error } from './Modal'
+import { Modal } from 'react-bootstrap'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -22,11 +23,33 @@ const type = [{
 }];
 
 
+function getBase64(img, callback) {
+  const reader = new FileReader();
+  reader.addEventListener('load', () => callback(reader.result));
+  reader.readAsDataURL(img);
+}
+
+function beforeUpload(file) {
+  console.log(file)
+  const isJPG = file.type === 'image/jpeg';
+  if (!isJPG) {
+    alert('You can only upload JPG file!');
+  }
+  const isLt2M = file.size / 1024 / 1024 < 2;
+  if (!isLt2M) {
+    alert('Image must smaller than 2MB!');
+  }
+  return isJPG && isLt2M;
+}
+
+
 const AddNewTourModal = Form.create()(React.createClass({
 
   getInitialState() {
     return {
-
+      previewVisible: false,
+      previewImage: '',
+      fileList: [],
       }
     },
 
@@ -36,7 +59,8 @@ const AddNewTourModal = Form.create()(React.createClass({
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
 
-        let payload = {tour_name: this.props.form.getFieldValue('tourname'),
+        let payload = {image_url : this.state.fileList,
+                       tour_name: this.props.form.getFieldValue('tourname'),
                        tour_abbreviation: this.props.form.getFieldValue('tour_abbreviation'),
                        place: this.props.form.getFieldValue('place'),
                        type: this.props.form.getFieldValue('type')[0],
@@ -44,19 +68,27 @@ const AddNewTourModal = Form.create()(React.createClass({
 
           console.log(payload)
 
-          apiAccess({
-            url: 'http://localhost:8000/tours/insert',
-            method: 'POST',
-            payload: payload,
-            attemptAction: () => this.props.dispatch({ type: 'ADD_NEW_TOUR_ATTEMPT' }),
-            successAction: (json) => this.props.dispatch({ type: 'ADD_NEW_TOUR_SUCCESS', json }),
-            failureAction: () => this.props.dispatch({ type: 'ADD_NEW_TOUR_FAILED' })
-          })
+          // apiAccess({
+          //   url: 'http://localhost:8000/tours/insert',
+          //   method: 'POST',
+          //   payload: payload,
+          //   attemptAction: () => this.props.dispatch({ type: 'ADD_NEW_TOUR_ATTEMPT' }),
+          //   successAction: (json) => this.props.dispatch({ type: 'ADD_NEW_TOUR_SUCCESS', json }),
+          //   failureAction: () => this.props.dispatch({ type: 'ADD_NEW_TOUR_FAILED' })
+          // })
         }else
             console.log("error")
       });
-
   },
+
+
+normFile(e){
+  console.log('Upload event:', e);
+  if (Array.isArray(e)) {
+    return e;
+  }
+  return e && e.fileList;
+},
 
 
   //name, surname
@@ -89,7 +121,30 @@ const AddNewTourModal = Form.create()(React.createClass({
 },
 
 
+handleCancel(){
+  this.setState({ previewVisible: false })
+},
+
+handlePreview(file){
+  this.setState({
+    previewImage: file.url || file.thumbUrl,
+    previewVisible: true,
+  });
+},
+
+handleChange({ fileList }){
+  this.setState({ fileList })
+},
+
   render() {
+
+    const { previewVisible, previewImage, fileList } = this.state;
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
 
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -178,13 +233,29 @@ const AddNewTourModal = Form.create()(React.createClass({
               valuePropName: 'fileList',
               getValueFromEvent: this.normFile,
             })(
-              <Upload.Dragger name="files" action="/upload.do">
-                <p className="ant-upload-drag-icon">
-                  <Icon type="inbox" />
-                </p>
-                <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p>
-              </Upload.Dragger>
+              <div className="clearfix">
+              <Upload
+                action="//localhost:8000/tours/insert"
+                listType="picture-card"
+                fileList={fileList}
+                beforeUpload={beforeUpload}
+                onPreview={this.handlePreview}
+                onChange={this.handleChange}
+              >
+                {fileList.length == 1 ? null : uploadButton}
+              </Upload>
+              <Modal show={previewVisible}
+                onHide={this.handleCancel}
+                container={this}
+                aria-labelledby="contained-modal-title" style ={{paddingLeft:'0px'}}>
+                <Modal.Header closeButton>
+                </Modal.Header>
+                <Modal.Body>
+                <img alt="example" style={{ width: '100%', height:'100%'}}
+                   src={previewImage} />
+               </Modal.Body>
+              </Modal>
+            </div>
             )}
           </div>
         </FormItem>

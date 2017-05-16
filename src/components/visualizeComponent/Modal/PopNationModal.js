@@ -93,7 +93,7 @@ class PopNationModal extends Component {
   }
 
   setYearRev(){
-    this.getRevTableData(this.state.selectedYear)
+    this.getPopularNation(this.state.selectedYear)
   }
 
 
@@ -115,13 +115,13 @@ class PopNationModal extends Component {
 
             <div className = "pop-nation-chart-summary">
               <ComposedChart layout="vertical" width={300} height={250} data={this.state.amountNationsSummary}
-                  margin={{top: 10, right: 10, bottom: 20, left: 2}}>
+                >
                 <XAxis type="number"/>
                 <YAxis dataKey="country" type="category"/>
                 <Tooltip/>
                 <Legend/>
                 <CartesianGrid stroke='#f5f5f5'/>
-                <Bar dataKey='participants' barSize={15} fill='#FFC300'/>
+                <Bar dataKey='participants' barSize={14} fill='#FFC300'/>
 
              </ComposedChart>
             </div>

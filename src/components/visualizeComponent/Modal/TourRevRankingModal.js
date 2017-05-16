@@ -67,6 +67,7 @@ class TourRevRankingModal extends Component {
     if(this.props.revTourRanking !== nextProps.revTourRanking){
       if(nextProps.revTourRanking){
         this.setState({tourRevRankingData: this.showAllRankingData(nextProps.revTourRanking)})
+        console.log(nextProps.revTourRanking)
         this.setState({allTourRevTableRankingData:revTourTableData(nextProps.revTourRanking)})
       }
     }
@@ -85,7 +86,9 @@ class TourRevRankingModal extends Component {
   }
 
   setYearRev(){
-    this.getRevTableData(this.state.selectedYear)
+    console.log("yeah")
+    this.getAllTourRevRanking(this.state.selectedYear)
+    // this.setState({allTourRevTableRankingData: this.state
   }
 
   showAllRankingData(data){

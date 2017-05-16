@@ -26,12 +26,24 @@ const GuideSuggestion = React.createClass({
 
     if(arrayJSON!=null){
       for(var i = 0; i < arrayJSON.length; i++) {
+        let guide_rate = 0
+        let guide_favorable = 0
+
+        if(typeof arrayJSON[i].expert !== 'undefined' &&
+        typeof arrayJSON[i].expert.rate !== 'undefined'){
+          guide_rate = arrayJSON[i].expert.rate
+        }
+
+        if(typeof arrayJSON[i].expert !== 'undefined' &&
+        typeof arrayJSON[i].expert.favorable !== 'undefined'){
+          guide_favorable = arrayJSON[i].expert.favorable
+        }
 
         var objectJSON = {
           key: i,
           guidename: arrayJSON[i].fullname || '',
-          rating: arrayJSON[i].expert.rate || 0,
-          favorite: arrayJSON[i].favorable || 0
+          rating: guide_rate,
+          favorite: guide_favorable
         }
 
         resultJSON[i] = objectJSON

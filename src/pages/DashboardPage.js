@@ -14,6 +14,8 @@ import Schedule from '../components/content/Schedule'
 import Staff from '../components/content/Staff'
 import GuideLayout from '../components/content/GuideLayout'
 
+import Cookies from 'js-cookie'
+
 class DashboardPage extends Component {
 
   constructor(props){
@@ -27,7 +29,8 @@ class DashboardPage extends Component {
       finance: false,
       pendinglist: false,
       tours: false,
-      guideLay: false
+      guideLay: false,
+      userRole: Cookies.get('userRole')
 
     }
   }
@@ -39,6 +42,7 @@ class DashboardPage extends Component {
   render(){
           return(
           <div>
+            {this.state.userRole !== 'Tour Guide' ?
               <Row style = {{height:'100%',backgroundColor:'#ffffff'}}>
                   <Col xs={0} lg={4} style = {{height:'100%' }}>
                       <SideBar dispatch={this.props.dispatch} />
@@ -46,6 +50,7 @@ class DashboardPage extends Component {
                               {/*return <div key={_id}>#{_id} Name: {name}, Age: {age}</div>*/}
                           {/*})}*/}
                   </Col>
+
                   <Col xs={24} lg={20} >
                     <NavBar dispatch={this.props.dispatch} />
                       <div style={{ padding: 60 }}>
@@ -54,7 +59,17 @@ class DashboardPage extends Component {
                       </div>
                   </Col>
               </Row>
-          </div>
+              :
+              <Row>
+                  <NavBar dispatch={this.props.dispatch}
+                    style = {{width:'70%', margin:'0 auto'}} />
+                    <div style = {{width:'70%', margin:'0 auto',marginTop:'3%',marginButtom:'3%'}}>
+                      {this.props.children}
+
+                    </div>
+              </Row>
+          }
+        </div>
       );
   }
 

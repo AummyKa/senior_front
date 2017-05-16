@@ -50,22 +50,21 @@ class LoginPage extends Component {
     // }
 
     componentWillReceiveProps (nextProps) {
+      console.log(nextProps.failLogged)
+      if(this.props.failLogged !== nextProps.failLogged){
+        if(nextProps.failLogged){
+          console.log("haha")
+          let title = 'Login fail'
+          let content = 'Your username or password are wrong, or your account is unauthorized.'
 
-      if(nextProps.failLogged){
-        let title = 'Login fail'
-        let content = 'Your username or password are wrong'
-
-        return(
-          <div>
-            {error(title,content)}
-          </div>
-        )
+          return(
+            <div>
+              {error(title,content)}
+            </div>
+          )
+        }
       }
 
-
-      if (this.props.loggedIn !== nextProps.loggedIn) {
-        this.context.router.replace('/home')
-      }
 
       if(this.props.registed !== nextProps.registed){
 
@@ -80,8 +79,6 @@ class LoginPage extends Component {
           )
         }
       }
-
-
     }
 
     render(){

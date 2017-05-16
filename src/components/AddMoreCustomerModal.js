@@ -35,12 +35,19 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+
+        let pickupTime = ''
+        if(this.props.form.getFieldValue(`pickup_time`) !== '' &&
+        typeof this.props.form.getFieldValue(`pickup_time`) !== 'undefined'){
+            pickupTime = this.props.form.getFieldValue(`pickup_time`).format('HH:mm')
+        }
+
         let payload = {
           booking_method: this.state.selectedBookingMethod,
           email: this.props.form.getFieldValue(`email`),
           name: this.props.form.getFieldValue(`name`),
           country: this.props.form.getFieldValue(`country`),
-          pickup_time: this.props.form.getFieldValue(`pickup_time`).format('HH:mm'),
+          pickup_time: pickupTime,
           pickup_place: this.props.form.getFieldValue(`pickup_place`),
           participants: this.props.form.getFieldValue(`participants`),
           phone: this.props.form.getFieldValue('phone'),
@@ -129,7 +136,6 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
  },
 
  handleBookingMethodSelect(value,option){
-   console.log(this.state.bookingMethodLists[value].name)
    this.setState({ selectedBookingMethod: this.state.bookingMethodLists[value].name });
  },
 
@@ -148,7 +154,7 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
      return (
 
          <div className = "customer-info">
-          <Form horizontal onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.handleSubmit}>
           <Row>
 
             <Col span={10}>
@@ -176,7 +182,6 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
            <FormItem
              {...formItemLayout}
              label= {'Email : '}
-             required={false}
            >
              {getFieldDecorator(`email`, {
                validateTrigger: ['onChange', 'onBlur'],
@@ -194,7 +199,6 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
            <FormItem
              {...formItemLayout}
              label={'Name : '}
-             required={false}
            >
              {getFieldDecorator(`name`, {
                validateTrigger: ['onChange', 'onBlur'],
@@ -243,9 +247,12 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
              <FormItem
                {...formItemLayout}
                label={'Price : '}
-               required={false}
+               required={true}
              >
-               {getFieldDecorator(`price`, {
+               {getFieldDecorator(`price`,{
+                 rules: [{
+                   required: true, message: 'Please input your price!',
+                 }]},{
                  validateTrigger: ['onChange', 'onBlur'],
 
                })(
@@ -283,9 +290,12 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
            <FormItem
               {...formItemLayout}
               label={'Participant : '}
+              required={true}
             >
 
-            {getFieldDecorator(`participants`)(
+            {getFieldDecorator(`participants`,{
+              rules: [{ required: true, message: 'Please input amount of participants!' }],
+            })(
               <InputNumber
                 style={{ width: '30%', marginRight: 11}}
                 min={1}

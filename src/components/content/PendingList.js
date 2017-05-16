@@ -34,7 +34,7 @@ const pendingUserData = (arrayJSON) =>{
         var objectJSON = {
           key: i,
           _id: arrayJSON[i]._id,
-          name: arrayJSON[i].name,
+          name: arrayJSON[i].fullname,
           email: arrayJSON[i].email,
           role: arrayJSON[i].role
         }

@@ -102,7 +102,7 @@ class TourCustomerRankingModal extends Component {
   }
 
   setYearRev(){
-    this.getRevTableData(this.state.selectedYear)
+    this.getAllTourCustomerRanking(this.state.selectedYear)
   }
 
   render() {

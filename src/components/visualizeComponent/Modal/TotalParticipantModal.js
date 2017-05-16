@@ -42,7 +42,7 @@ class TotalParticipantModal extends Component {
   constructor(props){
     super(props)
     this.state = {
-      selectedYear: this.props.selectedYear,
+      selectedYear: curYear,
       totalParticipantData: [],
       totalParticipantTable:[]
     }
@@ -93,6 +93,7 @@ class TotalParticipantModal extends Component {
       if(nextProps.selectedYear){
         this.setState({selectedYear:nextProps.selectedYear})
         this.getParticipantData(nextProps.selectedYear)
+        this.getParticipantTableData(nextProps.selectedYear)
       }
     }
   }
@@ -103,7 +104,8 @@ class TotalParticipantModal extends Component {
   }
 
   setYearRev(){
-    this.getRevTableData(this.state.selectedYear)
+    this.getParticipantData(this.state.selectedYear)
+    this.getParticipantTableData(this.state.selectedYear)
   }
 
   render() {
@@ -153,7 +155,7 @@ class TotalParticipantModal extends Component {
                 </div>
                 </Col>
                 <Col span = {2}>
-                    <Button type = "primary" onClick = {() => this.setYearRev().bind(this)}>GO!</Button>
+                    <Button type = "primary" onClick = {() => this.setYearRev()}>GO!</Button>
                 </Col>
             </Row>
              <Table columns={columns} dataSource={this.state.totalParticipantTable} size="small" pagination={false} />

@@ -23,79 +23,64 @@ function participantsAndFee(firstNum,secNum,guide_cost){
 }
 
 function createArray(len){
-  let arr = []
-  for(let i=1;i<len;i++){
-    arr[i]=i
+  console.log(len)
+  if(len>1){
+    let arr = []
+    for(let i=1;i<=len-1;i++){
+      arr[i]=i
+    }
+    return arr
+  }else {
+    return [1]
   }
-  return arr
+
+
 }
 
 function getHistoryGuidePaymentCondition(guide_payment){
 
-  if(typeof guide_payment!=='undefined' && typeof guide_payment !== null){
-    let data = [];
-          let first_participant_temp, last_participant_temp, fee_temp;
+        let data = [];
+        let first_participant_temp, last_participant_temp, fee_temp;
 
-          for(var i=0; i < guide_payment.length; i++){
+        for(var i=0; i < guide_payment.length; i++){
 
-            if(i==0){
-              if(typeof guide_payment[i].participants !== 'undefined'){
-                first_participant_temp = guide_payment[i].participants
-              }else{
-                first_participant_temp = 0
-              }
-
-              if(typeof guide_payment[i].fee !== 'undefined'){
-                fee_temp = guide_payment[i].fee
-              }else{
-                fee_temp = 0
-              }
-
-            }
-
-            if(fee_temp==guide_payment[i].fee){
-              if(typeof guide_payment[i].participants !== 'undefined'){
-                last_participant_temp = guide_payment[i].participants;
-              }else{
-                last_participant_temp = 0
-              }
-
-            }
-
-            if(fee_temp!=guide_payment[i].fee && i>0){
-              let payment = {first: first_participant_temp,
-                             second: last_participant_temp,
-                             fee: fee_temp};
-              data.push(payment);
-              first_participant_temp = guide_payment[i].participants;
-              fee_temp = guide_payment[i].fee;
-            }
+          if(i==0){
+              first_participant_temp = guide_payment[i].participants
+              fee_temp = guide_payment[i].fee
           }
 
-          let lastParticipant =0
-          let lastFee =0
+          if(fee_temp == guide_payment[i].fee){
+            last_participant_temp = guide_payment[i].participants
+          }
 
-          if(typeof guide_payment[guide_payment.length-1] !== 'undefined' &&
-          typeof guide_payment[guide_payment.length-1].participants !== 'undefined'){
-             lastParticipant = guide_payment[guide_payment.length-1].participants
+          if(fee_temp!=guide_payment[i].fee && i>0){
+            if(first_participant_temp>last_participant_temp){
+              last_participant_temp = first_participant_temp;
+            }
+            let payment = {first: first_participant_temp,
+                           second: last_participant_temp,
+                           fee: fee_temp};
+            data.push(payment);
+            first_participant_temp = guide_payment[i].participants
+            fee_temp = guide_payment[i].fee
+          }
+        }
+
+        if(guide_payment.length>1){
+          if(guide_payment[guide_payment.length-1].fee==guide_payment[guide_payment.length-2].fee){
+            let payment = {first: first_participant_temp,
+                           second: last_participant_temp-1,
+                           fee: fee_temp};
+            data.push(payment)
+            data.push({last: last_participant_temp, fee: fee_temp})
           }else{
-             lastParticipant = 0
+            let lastParticipant = guide_payment[guide_payment.length-1].participants
+            let lastFee = guide_payment[guide_payment.length-1].fee
+            data.push({last:lastParticipant, fee: lastFee})
           }
+        }
 
-          if(typeof guide_payment[guide_payment.length-1] !== 'undefined' &&
-              typeof guide_payment[guide_payment.length-1].fee !== 'undefined' ){
-             lastFee = guide_payment[guide_payment.length-1].fee
-          }else{
-             lastFee = 0
-          }
-
-          data.push({last:lastParticipant, fee: lastFee});
-
-          return data
-
-  }else{
-    return []
-  }
+        return data
 }
 
 
@@ -118,10 +103,12 @@ class CostModelModal extends Component{
   componentWillReceiveProps(nextProps){
 
     if(this.props.specific_tours_data !== nextProps.specific_tours_data){
-      if(typeof nextProps.specific_tours_data !== 'undefined'){
+      if(typeof nextProps.specific_tours_data !== 'undefined' && nextProps.specific_tours_data !==null){
         console.log(nextProps.specific_tours_data)
-        if(typeof getHistoryGuidePaymentCondition(nextProps.specific_tours_dataguide_payment !== 'undefined')){
+        if(typeof getHistoryGuidePaymentCondition(nextProps.specific_tours_dataguide_payment !== 'undefined'
+          && getHistoryGuidePaymentCondition(nextProps.specific_tours_data !== null))){
           let len = getHistoryGuidePaymentCondition(nextProps.specific_tours_data.guide_payment).length
+
           this.setState({dataArray:createArray(len)})
           this.setState({last_fee:getHistoryGuidePaymentCondition(nextProps.specific_tours_data.guide_payment)
             [len-1].fee})
@@ -238,15 +225,14 @@ checkFirstValue(prevValue,number){
     typeof this.state.paymentConditionHistory[number -1] === 'undefined' ||
     typeof this.state.paymentConditionHistory[number -1].first === 'undefined'
     ){
-      console.log(prevValue)
-      return 0
-    }else {
-      console.log(this.state.paymentConditionHistory[number-1].first)
+      return ''
+    }else if(prevValue){
+      prevValue++
+    }else
       return this.state.paymentConditionHistory[number-1].first
-
     }
-  }
 }
+
 
 checkSecondValue(number){
   if(typeof number !== 'undefined' && typeof this.state.paymentConditionHistory !=='undefined' ){

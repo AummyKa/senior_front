@@ -102,6 +102,7 @@ class TotalRevModal extends Component {
 
   setYearRev(){
     this.getRevTableData(this.state.selectedYear)
+    this.getRevData(this.state.selectedYear)
   }
 
 

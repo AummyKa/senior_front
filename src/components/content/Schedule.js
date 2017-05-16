@@ -31,15 +31,23 @@ const Option = Select.Option;
 const filter = ["Guide","Tour","All"]
 
 function throwOptionFilterObject(filter){
-  console.log(filter)
   let temp =[]
   if(filter){
     for (let i = 0; i < filter.length; i++) {
-      console.log(filter[i])
       temp.push(<Option key= {i}>{filter[i]}</Option>);
     }
   }
   return temp
+}
+
+function throwOptionTourNameObject(data){
+  if(data){
+    let temp = []
+    for (let i = 0; i < data.length; i++) {
+      temp.push(<Option key= {i}>{data[i].name}</Option>);
+    }
+    return temp
+  }
 }
 
 class Schedule extends Component {
@@ -60,7 +68,9 @@ class Schedule extends Component {
       showAddMoreCustomer: false,
       curTourID: '',
       addTourID: '',
-      selectedFilter:''
+      selectedFilter:'',
+      tours_name:[],
+      selectedTourName:''
     }
   }
 
@@ -81,6 +91,17 @@ class Schedule extends Component {
       attemptAction: () => this.props.dispatch({ type: 'GET_EVENT_SUMMARY_ATTEMPT' }),
       successAction: (json) => this.props.dispatch({ type: 'GET_EVENT_SUMMARY_SUCCESS', json }),
       failureAction: () => this.props.dispatch({ type: 'GET_EVENT_SUMMARY_FAILED' })
+    })
+  }
+
+  getAllTourName(){
+    apiAccess({
+      url: 'http://localhost:8000/tours/name',
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOURS_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_ALL_TOURS_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_ALL_TOURS_FAILED' })
     })
   }
 
@@ -109,8 +130,14 @@ class Schedule extends Component {
 
 handleFilterSelect(value,option){
   this.setState({selectedFilter: filter[value]})
+  if(filter[value]=="Tour"){
+    this.getAllTourName()
+  }
 }
 
+handleTourNameSelect(value,option){
+  this.setState({selectedTourName: this.state.tours_name[value].name})
+}
 
   componentWillReceiveProps(nextProps){
 
@@ -146,7 +173,6 @@ handleFilterSelect(value,option){
           // this.props.dispacth(addTour("STOP_COUNT_ADD_TOUR"))
       }
     }
-    console.log(nextProps.delete_cus_status)
     if(this.props.delete_cus_status !== nextProps.delete_cus_status){
       this.getEvent()
       if(nextProps.delete_cus_status){
@@ -158,7 +184,6 @@ handleFilterSelect(value,option){
         this.setState({selectedDate: nextProps.selectedDate})
     }
     if(this.props.showEditCustomer !== nextProps.showEditCustomer){
-      console.log(nextProps.showEditCustomer)
       if(nextProps.showEditCustomer){
         this.setState({showEachTour: false, showAddTour:false, showSlotDetail: false,showCustomerEdit: true,showAddMoreCustomer: false})
       }
@@ -176,7 +201,6 @@ handleFilterSelect(value,option){
       }
     }
 
-    console.log(nextProps.addTourID)
     if(this.props.addTourID !== nextProps.addTourID){
       if(nextProps.addTourID){
         this.setState({addTourID: nextProps.addTourID})
@@ -191,11 +215,16 @@ handleFilterSelect(value,option){
       }
     }
 
-
     if(this.props.editCustomerInTourStatus !== nextProps.editCustomerInTourStatus){
       if(nextProps.editCustomerInTourStatus){
         this.setState({showEachTour: true, showAddTour:false,showSlotDetail: false, showCustomerEdit:false,showAddMoreCustomer: false})
         this.props.dispatch(editCustomerModal("CLOSE_EDIT_CUSTOMER"))
+      }
+    }
+
+    if(this.props.all_tours_name !== nextProps.all_tours_name){
+      if(nextProps.all_tours_name){
+        this.setState({tours_name:nextProps.all_tours_name})
       }
     }
 
@@ -334,7 +363,7 @@ handleFilterSelect(value,option){
              <Col span={1} offset={15}>
               <div style = {{fontSize:'18px'}}>Filter:</div>
              </Col>
-             <Col span={4} style = {{marginLeft:'1%'}}>
+             <Col span={5} style = {{marginLeft:'1%'}}>
                <Select
                   showSearch
                   style={{width: 150}}
@@ -345,9 +374,32 @@ handleFilterSelect(value,option){
                 >
                  {throwOptionFilterObject(filter)}
                 </Select>
-             </Col>
-             <Col span={1}>
-               <Button type='primary'>Go!</Button>
+
+                {this.state.selectedFilter == "Tour" ?
+
+                  <div className = "tour-name-filter" style ={{marginTop:'2%'}}>
+                   <Row>
+                    <Col span = {19}>
+                     <Select
+                       showSearch
+                       style={{width: 150}}
+                       placeholder="Tour Name"
+                       optionFilterProp="children"
+                       onSelect={this.handleTourNameSelect.bind(this)}
+                       filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                     >
+                      {throwOptionTourNameObject(this.state.tours_name)}
+                     </Select>
+                   </Col>
+                     <Col span={1}>
+                       <Button type='primary'>Go!</Button>
+                     </Col>
+                   </Row>
+                  </div>
+                   :
+                   null
+                }
+
              </Col>
            </Row>
          </div>
@@ -380,6 +432,7 @@ handleFilterSelect(value,option){
 
 
 const mapStateToProps = (state) => ({
+  all_tours_name: state.getToursName.all_tours_name,
   editCustomerInTourStatus: state.editCustomerInTour.editCustomerInTourStatus,
   addCustomerSuccess: state.addNewCustomerInTour.addCustomerSuccess,
   addTourID: state.addCustomerModal.addTourID,

@@ -42,9 +42,9 @@ const EditCurCustomerModal = Form.create()(React.createClass({
   },
 
   componentWillReceiveProps(nextProps){
-
     if(this.props.bookingMethodLists !== nextProps.bookingMethodLists){
         if(nextProps.bookingMethodLists){
+              console.log(this.state.eachCurCustomer.pickup_time)
             this.setState({bookingMethodLists:nextProps.bookingMethodLists})
         }
       }
@@ -162,7 +162,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
      return (
 
     <div className = "customer-info">
-      <Form className = "add-tour-form" horizontal onSubmit={this.handleSubmit}>
+      <Form className = "add-tour-form" onSubmit={this.handleSubmit}>
         <Row>
           <Col span={10} >
               <FormItem
@@ -260,11 +260,11 @@ const EditCurCustomerModal = Form.create()(React.createClass({
              <FormItem
                {...formItemLayout}
                label={'Price : '}
-               required={false}
+               required={true}
              >
                {getFieldDecorator(`price`, {
                  validateTrigger: ['onChange', 'onBlur'],
-                  initialValue: this.state.eachCustomer.price,
+                initialValue: this.state.eachCustomer.price,
                })(
                  <InputNumber min={0} max={100000} placeholder="price"  style={{ width: '30%', marginRight: 11 }} />
                )}
@@ -286,11 +286,12 @@ const EditCurCustomerModal = Form.create()(React.createClass({
 
              </FormItem>
 
-
-           <FormItem
-              {...formItemLayout}
-              label="Pickup time"
-            >
+            { typeof this.state.eachCustomer.pickup_time !== 'undefined' &&
+              this.state.eachCustomer.pickup_time !== ""  ?
+              <FormItem
+                 {...formItemLayout}
+                 label="Pickup time"
+               >
               {getFieldDecorator(`pickup_time`, {
                 initialValue : moment(this.state.eachCustomer.pickup_time, format )
               })(
@@ -298,7 +299,20 @@ const EditCurCustomerModal = Form.create()(React.createClass({
                   style={{ width: '30%', marginRight: 11}}
                   format={format} placeholder = "pickup" />
               )}
-          </FormItem>
+              </FormItem>
+              :
+              <FormItem
+                 {...formItemLayout}
+                 label="Pickup time"
+               >
+              {getFieldDecorator(`pickup_time`, {
+              })(
+                <TimePicker
+                  style={{ width: '30%', marginRight: 11}}
+                  format={format} placeholder = "pickup" />
+              )}
+              </FormItem>
+            }
 
            <FormItem
               {...formItemLayout}

@@ -59,23 +59,28 @@ const AddNewTourModal = Form.create()(React.createClass({
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
 
-        let payload = {image_url : this.state.fileList,
-                       tour_name: this.props.form.getFieldValue('tourname'),
-                       tour_abbreviation: this.props.form.getFieldValue('tour_abbreviation'),
-                       place: this.props.form.getFieldValue('place'),
-                       type: this.props.form.getFieldValue('type')[0],
-                       description:this.props.form.getFieldValue('description')}
+        let payload =
+                    //   {
+                    //    tour_name: this.props.form.getFieldValue('tourname'),
+                    //    tour_abbreviation: this.props.form.getFieldValue('tour_abbreviation'),
+                    //    place: this.props.form.getFieldValue('place'),
+                    //    type: this.props.form.getFieldValue('type')[0],
+                    //    description:this.props.form.getFieldValue('description')
+                    //  },
+                     {
+                       image : this.state.fileList[0]
+                     }
 
           console.log(payload)
 
-          // apiAccess({
-          //   url: 'http://localhost:8000/tours/insert',
-          //   method: 'POST',
-          //   payload: payload,
-          //   attemptAction: () => this.props.dispatch({ type: 'ADD_NEW_TOUR_ATTEMPT' }),
-          //   successAction: (json) => this.props.dispatch({ type: 'ADD_NEW_TOUR_SUCCESS', json }),
-          //   failureAction: () => this.props.dispatch({ type: 'ADD_NEW_TOUR_FAILED' })
-          // })
+          apiAccess({
+            url: 'http://localhost:8000/tours/insert',
+            method: 'POST',
+            payload: payload,
+            attemptAction: () => this.props.dispatch({ type: 'ADD_NEW_TOUR_ATTEMPT' }),
+            successAction: (json) => this.props.dispatch({ type: 'ADD_NEW_TOUR_SUCCESS', json }),
+            failureAction: () => this.props.dispatch({ type: 'ADD_NEW_TOUR_FAILED' })
+          })
         }else
             console.log("error")
       });
@@ -85,6 +90,7 @@ const AddNewTourModal = Form.create()(React.createClass({
 normFile(e){
   console.log('Upload event:', e);
   if (Array.isArray(e)) {
+    console.log(e.fileList)
     return e;
   }
   return e && e.fileList;

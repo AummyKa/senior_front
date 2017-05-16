@@ -12,9 +12,11 @@ const login = (state = INITIAL_STATE, action) => {
       }
     case 'LOGIN_SUCCESS':
       // action: { type: 'LOGIN_SUCCESS', json: { token: '' }}
-      Cookies.set('token', action.json.token)
-
       if(action.json.login_success){
+        Cookies.set('token', action.json.token)
+        Cookies.set('userName',action.json.user.fullname)
+        Cookies.set('userRole',action.json.user.role)
+        Cookies.set('userID',action.json.user._id)
         return {
           loggedIn: true,
           session: action.json.session,

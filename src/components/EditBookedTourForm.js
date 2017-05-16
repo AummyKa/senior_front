@@ -35,8 +35,8 @@ const tourtypes = [{
 }]
 
 const tour_period = [{
-  value: 'Full-day',
-  label: 'Full-day',
+  value: 'Full-Day',
+  label: 'Full-Day',
 }, {
   value: 'Morning',
   label: 'Morning',

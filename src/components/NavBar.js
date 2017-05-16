@@ -18,7 +18,8 @@ class NavBar extends Component {
   constructor(props){
     super(props)
     this.state = {
-      current: 'mail'
+      current: 'mail',
+      userRole: Cookies.get('userRole')
     }
   }
 
@@ -26,13 +27,6 @@ class NavBar extends Component {
     router: PropTypes.object.isRequired
   }
 
-  componentWillReceiveProps(nextProps){
-    if(this.props.isLogout !== nextProps.isLogout){
-      if(nextProps.isLogout){
-
-      }
-    }
-  }
 
   handleClick = (e) => {
 
@@ -57,6 +51,8 @@ class NavBar extends Component {
     console.log(nextProps.isLogout)
     if(this.props.isLogout !== nextProps.isLogout){
       Cookies.remove('token')
+      Cookies.remove('userName')
+      Cookies.remove('userRole')
       this.context.router.replace('/')
     }
   }
@@ -69,9 +65,12 @@ class NavBar extends Component {
           selectedKeys={[this.state.current]}
           mode="horizontal">
 
+          {this.state.userRole == 'Manager' ?
           <Menu.Item key="PendingList">
             <Link to ={`/pending`}>Pending List</Link>
           </Menu.Item>
+          : null
+          }
           <Menu.Item key="Logout">
             <Icon type="loggedIn" /> Log out
           </Menu.Item>

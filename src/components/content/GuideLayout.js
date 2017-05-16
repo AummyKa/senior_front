@@ -25,6 +25,7 @@ class GuideLayout extends Component {
       btnColor3: "#DCD5D3",
       btnColor4: "#DCD5D3",
       name: "",
+      user_role: Cookies.get('userRole')
     }
   }
 
@@ -131,15 +132,20 @@ class GuideLayout extends Component {
               <Radio.Button value = "personal" style = {{height:"40px", width: "130px", textAlign:"center",
                 backgroundColor: this.state.btnColor1}}
               value={"personal"}>Personal Info</Radio.Button>
-              <Radio.Button style = {{height:"40px", width: "130px", textAlign:"center",
-                backgroundColor: this.state.btnColor2}}
-              value="experience">Experience</Radio.Button>
+
               <Radio.Button style = {{height:"40px", width: "130px", textAlign:"center",
                 backgroundColor: this.state.btnColor3}}
               value="history">History</Radio.Button>
               <Radio.Button style = {{height:"40px", width: "130px", textAlign:"center",
                 backgroundColor:this.state.btnColor4 }}
               value="timetable">Timetable</Radio.Button>
+
+            { this.state.user_role !== "Tour Guide" ?
+              <Radio.Button style = {{height:"40px", width: "130px", textAlign:"center",
+                backgroundColor: this.state.btnColor2}}
+              value="experience">Experience</Radio.Button> : null }
+
+
           </Radio.Group>
         </div>
 

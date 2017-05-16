@@ -23,18 +23,55 @@ class App extends Component {
     router: PropTypes.object.isRequired
   }
 
-  componentDidMount(){
-    this.changePage()
+
+  componentWillReceiveProps(nextProps){
+    if(this.props.loggedIn !== nextProps.loggedIn){
+      if(nextProps.loggedIn){
+          this.changePage()
+      }
+    }
   }
 
 
   changePage () {
     // Call API check token
 
-    if (!Cookies.get('token')) {
+    if (typeof Cookies.get('token')==='undefined' && Cookies.get('token') === null) {
       this.context.router.replace('/')
     }else {
-      this.context.router.replace('/home')
+      let role = Cookies.get('userRole')
+      let id = Cookies.get('userID')
+      console.log(id)
+      switch (role) {
+
+        case 'Manager':
+        this.context.router.replace('/home')
+        break;
+
+        case 'Operation':
+        this.context.router.replace('/schedule')
+        break;
+
+        case 'Customer Service':
+        this.context.router.replace('/schedule')
+        break;
+
+        case 'Finance':
+        this.context.router.replace('/schedule')
+        break;
+
+        case 'Tour Guide':
+        console.log("hi tour")
+        Cookies.set('guide_id',id)
+        this.context.router.replace('/guide/'+id)
+        break;
+
+
+        default:
+          return ''
+        }
+
+
     }
   }
 

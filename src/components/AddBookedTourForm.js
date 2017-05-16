@@ -33,8 +33,8 @@ const tourtypes = [{
 }]
 
 const tour_period = [{
-  value: 'Full-day',
-  label: 'Full-day',
+  value: 'Full-Day',
+  label: 'Full-Day',
 }, {
   value: 'Morning',
   label: 'Morning',
@@ -217,16 +217,22 @@ const AddBookedTourForm = Form.create()(React.createClass({
           let formResult = []
           for(var i = 1; i <= count; i++){
 
+            let pickupTime = ''
+            if(this.props.form.getFieldValue(`pickup_time-${i}`) !== '' &&
+            typeof this.props.form.getFieldValue(`pickup_time-${i}`) !== 'undefined'){
+                pickupTime = this.props.form.getFieldValue(`pickup_time-${i}`).format('HH:mm')
+            }
+
             var customer = {
                 booking_method: this.handleBookingMethodSelect(this.props.form.getFieldValue(`bookingMethods-${i}`)),
                 email: this.props.form.getFieldValue(`email-${i}`),
-                phone: this.props.form.getFieldValue(`phone-${i}`),
+                phone: this.props.form.getFieldValue(`phone-${i}`) || '',
                 name: this.props.form.getFieldValue(`name-${i}`),
                 country: this.props.form.getFieldValue(`country-${i}`),
-                pickup_time: this.props.form.getFieldValue(`pickup_time-${i}`).format('HH:mm'),
+                pickup_time: pickupTime,
                 pickup_place: this.props.form.getFieldValue(`pickup_place-${i}`),
                 participants: this.props.form.getFieldValue(`participants-${i}`),
-                remark: this.props.form.getFieldValue(`remark-${i}`),
+                remark: this.props.form.getFieldValue(`remark-${i}`) || '',
                 price: this.props.form.getFieldValue(`price-${i}`)
               }
 
@@ -264,7 +270,11 @@ const AddBookedTourForm = Form.create()(React.createClass({
   },
 
   handleBookingMethodSelect(value){
-    return this.state.bookingMethods[value].name ;
+    if(typeof this.state.bookingMethods[value] !== 'undefined'
+    && typeof this.state.bookingMethods[value].name !== 'undefined'){
+      return this.state.bookingMethods[value].name
+    }else
+      return 'Walk-in'
   },
 
   handleTourNameSelect(value,option){
@@ -425,8 +435,8 @@ const AddBookedTourForm = Form.create()(React.createClass({
          >
            {getFieldDecorator(`country-${k}`,  {
              rules: [{
-               required: true, message: 'Please input your password!',
-             }],
+               required: true, message: 'Please input your country!',
+             }]
            })(
              <Input placeholder="country"  style={{ width: '80%', marginRight: 5 }} />
            )}
@@ -453,11 +463,12 @@ const AddBookedTourForm = Form.create()(React.createClass({
            <FormItem
              {...formItemLayout}
              label={'Price : '}
-             required={false}
            >
              {getFieldDecorator(`price-${k}`, {
-               validateTrigger: ['onChange', 'onBlur'],
-
+               rules: [{
+                 required: true, message: 'Please input your price!',
+               }]},{
+               validateTrigger: ['onChange', 'onBlur']
              })(
                <InputNumber min={0} max={100000} placeholder="price"  style={{ width: '30%', marginRight: 11 }} />
              )}
@@ -551,7 +562,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
        </Modal>
 
-     <Form className = "add-tour-form" horizontal onSubmit={this.handleSubmit}>
+     <Form className = "add-tour-form" onSubmit={this.handleSubmit}>
 
        <Row>
       <Col span={11}>

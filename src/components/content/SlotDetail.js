@@ -106,10 +106,10 @@ class SlotDetail extends Component {
       this.setState({control_addTour:true})
     }
 
+    console.log(nextProps.addBookerAndTour)
     if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
       if(nextProps.addBookerAndTour){
         this.getTourAndBookerDetail()
-        this.screenTourAndBooker(this.state.bookerAndTourDetail)
         //this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
       }
     }

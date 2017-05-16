@@ -11,8 +11,7 @@ import changeDateFormat from '../Helpers/changeDateFormat'
 
 import {editCustomerModal} from '../actions/action-editCustomerModal'
 import {addCustomerModal} from '../actions/action-addCustomerModal'
-
-import GuideSuggestionModal from './GuideSuggestionModal'
+import { sendSuggestedGuideName } from '../actions/action-sendSuggestedGuideName'
 
 import {Modal } from 'react-bootstrap';
 
@@ -205,8 +204,9 @@ const EditBookedTourForm = Form.create()(React.createClass({
       showAddMoreCustomer: false,
       tours_name: [],
       selectedTourPeriod: '',
-      showSuggest: false,
-      selectedTourTime:''
+      selectedTourTime:'',
+      selectedDate:this.props.selectedDate,
+      selected_guide_name:''
     }
   },
 
@@ -214,7 +214,6 @@ const EditBookedTourForm = Form.create()(React.createClass({
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
 
         let payload={
              start_time: this.state.selectedTourTime,
@@ -239,7 +238,6 @@ const EditBookedTourForm = Form.create()(React.createClass({
 
 
   handleTourTime(time,timeString){
-    console.log(timeString)
     this.setState({selectedTourTime: timeString})
   },
 
@@ -320,6 +318,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
         if(typeof nextProps.eachTour.tour_guide !== 'undefined' && nextProps.eachTour.tour_guide !== null){
           this.setState({selectedGuide:<div>{nextProps.eachTour.tour_guide}</div>.props.children._id})
           this.setState({eachCurGuideTour: <div>{nextProps.eachTour.tour_guide}</div>.props.children})
+          this.setState({selected_guide_name:<div>{nextProps.eachTour.tour_guide}</div>.props.children.fullname})
         }
         this.setState({eachTour:nextProps.eachTour})
       }
@@ -364,6 +363,12 @@ const EditBookedTourForm = Form.create()(React.createClass({
       }
     }
 
+    if(this.props.suggested_guide_name !== nextProps.suggested_guide_name){
+      if(nextProps.suggested_guide_name){
+        this.setState({selected_guide_name:nextProps.suggested_guide_name})
+      }
+    }
+
   },
 
   getAllTourName(){
@@ -384,8 +389,15 @@ const EditBookedTourForm = Form.create()(React.createClass({
   },
 
   showSuggestModal(){
-    this.setState({showSuggest: true})
+    let factors ={
+      selectedTourName: this.props.form.getFieldValue(`tourname`),
+      selectedTourPeriod: this.props.form.getFieldValue(`tour_period`),
+      selectedStartDate: changeDateFormat(this.state.selectedDate),
+      page: 'edit'
+    }
+    this.props.dispatch(sendSuggestedGuideName("SHOW_SUGGESTED_GUIDE_MODAL",factors))
   },
+
 
 
   render(){
@@ -396,7 +408,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
       wrapperCol: { span: 20 },
     };
 
-    let closeSuggest = () => { this.setState({showSuggest: false}) }
+
     let closeEachTour = () => { this.setState({showCustomerEdit: false})}
     let closeCustomerDeleteWarning = () => this.setState({showCustomerDeleteWarning: false})
     let closeAddMoreCustomer = () => this.setState({showAddMoreCustomer: false})
@@ -406,22 +418,6 @@ const EditBookedTourForm = Form.create()(React.createClass({
    return (
 
      <div>
-
-       <Modal
-         show={this.state.showSuggest}
-         onHide={closeSuggest}
-         container={this}
-         aria-labelledby="contained-modal-title"
-       >
-         <Modal.Body>
-           <GuideSuggestionModal dispatch = {this.props.dispatch}
-             selectedTourName = {this.state.selectedTourName}
-             selectedTourPeriod = {this.state.selectedTourPeriod}
-             selectedStartDate = {changeDateFormat(this.props.dateTour)}
-             />
-         </Modal.Body>
-
-       </Modal>
 
        <div className="modal-container" >
            <Modal
@@ -521,7 +517,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
          <Row gutter={10}>
             <Col span={13}>
            {getFieldDecorator('tourguide', {
-             initialValue: this.state.eachCurGuideTour.fullname
+             initialValue: this.state.selected_guide_name
            })(
              <Select
                 showSearch
@@ -591,7 +587,8 @@ function mapStateToProps(state) {
         delete_cus_status: state.deleteCurCustomerInTour.delete_cus_status,
         editCustomerInTourStatus: state.editCustomerInTour.editCustomerInTourStatus,
         addCustomerSuccess: state.addNewCustomerInTour.addCustomerSuccess,
-        updateEachBookedTourStatus: state.updateEachBookedTour.updateEachBookedTourStatus
+        updateEachBookedTourStatus: state.updateEachBookedTour.updateEachBookedTourStatus,
+        suggested_guide_name: state.receiveSuggestedGuideName.suggested_guide_name
 
     };
 }

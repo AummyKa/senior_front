@@ -36,52 +36,52 @@ function createArray(len){
 
 
 }
-
-function getHistoryGuidePaymentCondition(guide_payment){
-
-        let data = [];
-        let first_participant_temp, last_participant_temp, fee_temp;
-
-        for(var i=0; i < guide_payment.length; i++){
-
-          if(i==0){
-              first_participant_temp = guide_payment[i].participants
-              fee_temp = guide_payment[i].fee
-          }
-
-          if(fee_temp == guide_payment[i].fee){
-            last_participant_temp = guide_payment[i].participants
-          }
-
-          if(fee_temp!=guide_payment[i].fee && i>0){
-            if(first_participant_temp>last_participant_temp){
-              last_participant_temp = first_participant_temp;
-            }
-            let payment = {first: first_participant_temp,
-                           second: last_participant_temp,
-                           fee: fee_temp};
-            data.push(payment);
-            first_participant_temp = guide_payment[i].participants
-            fee_temp = guide_payment[i].fee
-          }
-        }
-
-        if(guide_payment.length>1){
-          if(guide_payment[guide_payment.length-1].fee==guide_payment[guide_payment.length-2].fee){
-            let payment = {first: first_participant_temp,
-                           second: last_participant_temp-1,
-                           fee: fee_temp};
-            data.push(payment)
-            data.push({last: last_participant_temp, fee: fee_temp})
-          }else{
-            let lastParticipant = guide_payment[guide_payment.length-1].participants
-            let lastFee = guide_payment[guide_payment.length-1].fee
-            data.push({last:lastParticipant, fee: lastFee})
-          }
-        }
-
-        return data
-}
+//
+// function getHistoryGuidePaymentCondition(guide_payment){
+//
+//         let data = [];
+//         let first_participant_temp, last_participant_temp, fee_temp;
+//
+//         for(var i=0; i < guide_payment.length; i++){
+//
+//           if(i==0){
+//               first_participant_temp = guide_payment[i].participants
+//               fee_temp = guide_payment[i].fee
+//           }
+//
+//           if(fee_temp == guide_payment[i].fee){
+//             last_participant_temp = guide_payment[i].participants
+//           }
+//
+//           if(fee_temp!=guide_payment[i].fee && i>0){
+//             if(first_participant_temp>last_participant_temp){
+//               last_participant_temp = first_participant_temp;
+//             }
+//             let payment = {first: first_participant_temp,
+//                            second: last_participant_temp,
+//                            fee: fee_temp};
+//             data.push(payment);
+//             first_participant_temp = guide_payment[i].participants
+//             fee_temp = guide_payment[i].fee
+//           }
+//         }
+//
+//         if(guide_payment.length>1){
+//           if(guide_payment[guide_payment.length-1].fee==guide_payment[guide_payment.length-2].fee){
+//             let payment = {first: first_participant_temp,
+//                            second: last_participant_temp-1,
+//                            fee: fee_temp};
+//             data.push(payment)
+//             data.push({last: last_participant_temp, fee: fee_temp})
+//           }else{
+//             let lastParticipant = guide_payment[guide_payment.length-1].participants
+//             let lastFee = guide_payment[guide_payment.length-1].fee
+//             data.push({last:lastParticipant, fee: lastFee})
+//           }
+//         }
+//
+//         return data
+// }
 
 
 class CostModelModal extends Component{
@@ -102,20 +102,20 @@ class CostModelModal extends Component{
 
   componentWillReceiveProps(nextProps){
 
-    if(this.props.specific_tours_data !== nextProps.specific_tours_data){
-      if(typeof nextProps.specific_tours_data !== 'undefined' && nextProps.specific_tours_data !==null){
-        console.log(nextProps.specific_tours_data)
-        if(typeof getHistoryGuidePaymentCondition(nextProps.specific_tours_dataguide_payment !== 'undefined'
-          && getHistoryGuidePaymentCondition(nextProps.specific_tours_data !== null))){
-          let len = getHistoryGuidePaymentCondition(nextProps.specific_tours_data.guide_payment).length
-
-          this.setState({dataArray:createArray(len)})
-          this.setState({last_fee:getHistoryGuidePaymentCondition(nextProps.specific_tours_data.guide_payment)
-            [len-1].fee})
-          this.setState({paymentConditionHistory:getHistoryGuidePaymentCondition(nextProps.specific_tours_data.guide_payment)})
-        }
-      }
-    }
+    // if(this.props.specific_tours_data !== nextProps.specific_tours_data){
+    //   if(typeof nextProps.specific_tours_data !== 'undefined' && nextProps.specific_tours_data !==null){
+    //     console.log(nextProps.specific_tours_data)
+    //     if(typeof getHistoryGuidePaymentCondition(nextProps.specific_tours_dataguide_payment !== 'undefined'
+    //       && getHistoryGuidePaymentCondition(nextProps.specific_tours_data !== null))){
+    //       let len = getHistoryGuidePaymentCondition(nextProps.specific_tours_data.guide_payment).length
+    //
+    //       this.setState({dataArray:createArray(len)})
+    //       this.setState({last_fee:getHistoryGuidePaymentCondition(nextProps.specific_tours_data.guide_payment)
+    //         [len-1].fee})
+    //       this.setState({paymentConditionHistory:getHistoryGuidePaymentCondition(nextProps.specific_tours_data.guide_payment)})
+    //     }
+    //   }
+    // }
   }
 
   getTourData(){
@@ -235,40 +235,39 @@ checkFirstValue(prevValue,number){
 
 
 checkSecondValue(number){
-  if(typeof number !== 'undefined' && typeof this.state.paymentConditionHistory !=='undefined' ){
-    if(typeof this.state.paymentConditionHistory[number -1] !== 'undefined' &&
-    typeof this.state.paymentConditionHistory[number -1].second !== 'undefined'
-    ){
-      return this.state.paymentConditionHistory[number-1].second
-    }else {
-      return 0
-    }
-  }else {
-    return 0
-  }
+  // if(typeof number !== 'undefined' && typeof this.state.paymentConditionHistory !=='undefined' ){
+  //   if(typeof this.state.paymentConditionHistory[number -1] !== 'undefined' &&
+  //   typeof this.state.paymentConditionHistory[number -1].second !== 'undefined'
+  //   ){
+  //     return this.state.paymentConditionHistory[number-1].second
+  //   }else {
+  //     return ''
+  //   }
+  // }else {
+  //   return ''
+  // }
 }
 
 checkCostValue(number){
-  if(typeof number !== 'undefined'){
-    if(typeof this.state.paymentConditionHistory !=='undefined' &&
-    typeof this.state.paymentConditionHistory[number -1] !== 'undefined' &&
-    typeof this.state.paymentConditionHistory[number -1].fee !== 'undefined'
-    ){
-      return this.state.paymentConditionHistory[number-1].fee
-    }else {
-      return 0
-    }
-  }else
-    return 0
+  // if(typeof number !== 'undefined'){
+  //   if(typeof this.state.paymentConditionHistory !=='undefined' &&
+  //   typeof this.state.paymentConditionHistory[number -1] !== 'undefined' &&
+  //   typeof this.state.paymentConditionHistory[number -1].fee !== 'undefined'
+  //   ){
+  //     return this.state.paymentConditionHistory[number-1].fee
+  //   }else {
+  //     return 0
+  //   }
+  // }else
+  //   return 0
 }
 
 getNextValue(preValue){
 
-  if(typeof preValue !== 'undefined'){
+  if(typeof preValue !== 'undefined' && preValue !== ''){
     console.log(preValue)
     return preValue+1
-  }else
-    return ''
+  }
   // if(typeof this.state.paymentConditionHistory !=='undefined' &&
   // typeof this.state.paymentConditionHistory[this.state.paymentConditionHistory.length-1] !== 'undefined' &&
   // typeof this.state.paymentConditionHistory[this.state.paymentConditionHistory.length -1].last !== 'undefined'
@@ -350,7 +349,7 @@ checkLastCost(){
                        hasFeedback
                      >
                       {getFieldDecorator(`firstNumber-${k}`
-                        ,{initialValue: this.checkFirstValue(this.getNextValue(getFieldValue(`secondNumber-${k-1}`)),k)
+                        ,{initialValue:this.getNextValue(getFieldValue(`secondNumber-${k-1}`))
                         }, {
                         rules: [{
                           required: true }]
@@ -367,7 +366,7 @@ checkLastCost(){
                        {...formItemLayout}
                        hasFeedback
                      >
-                      {getFieldDecorator(`secondNumber-${k}`,{initialValue: this.checkSecondValue(k)}, {
+                      {getFieldDecorator(`secondNumber-${k}`,{initialValue: '' }, {
                         rules: [{
                           required: true }]
                         })(
@@ -380,7 +379,7 @@ checkLastCost(){
                        {...feeLayout}
                        hasFeedback
                      >
-                      {getFieldDecorator(`guide-cost-${k}`,{initialValue: this.checkCostValue(k)}, {
+                      {getFieldDecorator(`guide-cost-${k}`,{initialValue: ''}, {
                         rules: [{
                           required: true }]
                         })(
@@ -430,7 +429,7 @@ checkLastCost(){
                    hasFeedback
                  >
                    {getFieldDecorator(`lastNumber`
-                   ,{initialValue: this.getNextValue(getFieldValue(`secondNumber-${getFieldValue('keys').length-1}`))}|| 0
+                   ,{initialValue: this.getNextValue(getFieldValue(`secondNumber-${getFieldValue('keys').length}`))}|| 0
                    , {
                      rules: [{
                        required: true }]

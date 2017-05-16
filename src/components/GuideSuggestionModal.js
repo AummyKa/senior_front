@@ -4,7 +4,7 @@ import { Table, Icon, Button  } from 'antd';
 import StarRatingComponent from 'react-star-rating-component';
 
 import apiAccess from '../Helpers/apiAccess'
-
+import { sendSuggestedGuideName } from '../actions/action-sendSuggestedGuideName'
 
 
 const GuideSuggestion = React.createClass({
@@ -15,6 +15,7 @@ const GuideSuggestion = React.createClass({
       selectedTourName: this.props.selectedTourName,
       selectedStartDate: this.props.selectedStartDate,
       selectedTourPeriod: this.props.selectedTourPeriod,
+      page: this.props.page,
       selectedGuide: "",
       guideList: []
     };
@@ -54,7 +55,14 @@ const GuideSuggestion = React.createClass({
   },
 
   selectSuggestedGuide(record){
+    console.log(record)
     this.setState({selectedGuide:record.guidename})
+
+    if(this.state.page == "add"){
+      this.props.dispatch(sendSuggestedGuideName("SEND_SUGGESTED_GUIDE_NAME",record.guidename))
+    }else if(this.state.page == "edit"){
+      this.props.dispatch(sendSuggestedGuideName("SEND_SUGGESTED_GUIDE_NAME_FROM_EDIT",record.guidename))
+    }
 
   },
 
@@ -69,6 +77,7 @@ const GuideSuggestion = React.createClass({
         this.setState({guideList: nextProps.listGuideSuggestion})
       }
     }
+
   },
 
   getSuggestion(){

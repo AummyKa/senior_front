@@ -22,6 +22,7 @@ import getGuideIncomeSummary from './Guide/getGuideIncomeSummary'
 import getAllUnAvailDateEachGuide from './Guide/getAllUnAvailDateEachGuide'
 import getYearlyTotalCostFromGuide from './Guide/getYearlyTotalCostFromGuide'
 import getEachGuideUnAvailableEachDate from './Guide/getEachGuideUnAvailableEachDate'
+import receiveSuggestedGuideName from './Guide/receiveSuggestedGuideName'
 
 
 //staff
@@ -58,6 +59,7 @@ import getEventSummary from './Schedule/getEventSummary'
 import spreadSelectedDate from './Schedule/spreadSelectedDate'
 import editCustomerModal from './Schedule/editCustomerModal'
 import addCustomerModal from './Schedule/addCustomerModal'
+import getFilteredEventSummary from './Schedule/getFilteredEventSummary'
 
 //BookingMethod
 import addBookingMethods from './BookingMethod/addBookingMethods'
@@ -141,7 +143,9 @@ const admin = combineReducers({
     getGuideIncomeSummary,
     getAllUnAvailDateEachGuide,
     getYearlyTotalCostFromGuide,
-    getEachGuideUnAvailableEachDate
+    getEachGuideUnAvailableEachDate,
+    getFilteredEventSummary,
+    receiveSuggestedGuideName
 })
 
 export default admin

@@ -7,7 +7,8 @@ import moment from 'moment';
 import apiAccess from '../Helpers/apiAccess'
 import changeDateFormat from '../Helpers/changeDateFormat'
 import { addTour } from '../actions/action-addTour'
-import GuideSuggestionModal from './GuideSuggestionModal'
+import { sendSuggestedGuideName } from '../actions/action-sendSuggestedGuideName'
+
 
 // import { getAllTour } from '../actions/GET/action-getAllTour'
 
@@ -124,10 +125,10 @@ const AddBookedTourForm = Form.create()(React.createClass({
       selectedBookingMethod: "Walk-in",
       selectedTourType: "",
       selectedTourTime: "",
-      showSuggest: false,
       tours_name: [],
       bookingMethods: [],
-      selectedGuideName:''
+      selectedGuideName:'',
+      suggested_guide_name:''
 
     }
   },
@@ -189,13 +190,15 @@ const AddBookedTourForm = Form.create()(React.createClass({
       }
     }
 
-    if(nextProps.isStoppedCountingAddTour){
-      this.setState({bookingNumber: 0})
-    }
-
     if(this.props.bookingMethodLists !== nextProps.bookingMethodLists){
       if(nextProps.bookingMethodLists){
         this.setState({bookingMethods: nextProps.bookingMethodLists})
+      }
+    }
+
+    if(this.props.suggested_guide_name !== nextProps.suggested_guide_name){
+      if(nextProps.suggested_guide_name){
+        this.setState({selectedGuide:nextProps.suggested_guide_name})
       }
     }
   },
@@ -339,7 +342,13 @@ const AddBookedTourForm = Form.create()(React.createClass({
   },
 
   showSuggestModal(){
-    this.setState({showSuggest: true})
+    let factors ={
+      selectedTourName: this.state.selectedTourName,
+      selectedTourPeriod: this.state.selectedTourPeriod,
+      selectedStartDate: changeDateFormat(this.props.dateTour),
+      page:'add'
+    }
+    this.props.dispatch(sendSuggestedGuideName("SHOW_SUGGESTED_GUIDE_MODAL",factors))
   },
 
 
@@ -538,29 +547,10 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
    });
 
-   let closeSuggest = () => {
-     this.setState({showSuggest: false})
-   }
-
 
    return (
 
      <div>
-       <Modal
-         show={this.state.showSuggest}
-         onHide={closeSuggest}
-         container={this}
-         aria-labelledby="contained-modal-title"
-       >
-         <Modal.Body>
-           <GuideSuggestionModal dispatch = {this.props.dispatch}
-             selectedTourName = {this.state.selectedTourName}
-             selectedTourPeriod = {this.state.selectedTourPeriod}
-             selectedStartDate = {changeDateFormat(this.props.dateTour)}
-             />
-         </Modal.Body>
-
-       </Modal>
 
      <Form className = "add-tour-form" onSubmit={this.handleSubmit}>
 
@@ -632,6 +622,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
          <Row gutter={10}>
             <Col span={13}>
                {getFieldDecorator('tourGuide', {
+                 initialValue: this.state.selectedGuide
                  })(
                    <Select
                       showSearch
@@ -694,8 +685,8 @@ function mapStateToProps(state) {
         eachGuideName: state.getEachGuideName.eachGuideName,
         dateTour: state.addTourForm.dateTour,
         eachTour: state.getSpecificBookedTour.eachTour,
-        isStoppedCountingAddTour: state.addTourForm.isStoppedCountingAddTour,
-        guideIncomeSummary: state.getGuideIncomeSummary.guideIncomeSummary
+        guideIncomeSummary: state.getGuideIncomeSummary.guideIncomeSummary,
+        suggested_guide_name: state.receiveSuggestedGuideName.suggested_guide_name
     };
 }
 

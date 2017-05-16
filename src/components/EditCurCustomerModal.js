@@ -44,7 +44,6 @@ const EditCurCustomerModal = Form.create()(React.createClass({
   componentWillReceiveProps(nextProps){
     if(this.props.bookingMethodLists !== nextProps.bookingMethodLists){
         if(nextProps.bookingMethodLists){
-              console.log(this.state.eachCurCustomer.pickup_time)
             this.setState({bookingMethodLists:nextProps.bookingMethodLists})
         }
       }

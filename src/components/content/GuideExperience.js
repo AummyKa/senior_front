@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import { Row,Col,Button,Input, DatePicker, Table, Icon, Popconfirm, Popover, Switch} from 'antd';
 // import StarRating from 'react-star-rating';
 import {connect} from 'react-redux';
@@ -6,11 +7,11 @@ import moment from 'moment';
 import Cookies from 'js-cookie'
 
 import { Modal } from 'react-bootstrap';
-
 import StarRatingComponent from 'react-star-rating-component';
 
 import apiAccess from '../../Helpers/apiAccess'
 import AddGuideTourRatingModal from '../AddGuideTourRatingModal'
+
 
 const { MonthPicker, RangePicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
@@ -28,6 +29,7 @@ const checkActive = (isActive) =>{
     )
   }
 }
+
 
 
 class GuideExperience extends Component {
@@ -52,12 +54,29 @@ class GuideExperience extends Component {
       newExpertRating: 0,
       starFavColor:"#FDDC02",
       guideIsActive: false,
-      showChangeGuideStatus: false
+      showChangeGuideStatus: false,
+      showExperience:false
     }
   }
 
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
   componentWillMount(){
-    this.eachGuide(Cookies.get('guide_id'))
+    this.checkAuth()
+  }
+
+  checkAuth(){
+    let role = Cookies.get('userRole')
+    console.log(role)
+    if(role == 'Tour Guide'){
+      this.context.router.replace('/invalid')
+    }else{
+      console.log("haha")
+      this.eachGuide(Cookies.get('guide_id'))
+      this.setState({showExperience:true})
+    }
   }
 
   componentWillReceiveProps(nextProps){

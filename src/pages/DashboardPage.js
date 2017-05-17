@@ -30,7 +30,8 @@ class DashboardPage extends Component {
       pendinglist: false,
       tours: false,
       guideLay: false,
-      userRole: Cookies.get('userRole')
+      userRole: Cookies.get('userRole'),
+      token: Cookies.get('token')
 
     }
   }
@@ -42,7 +43,7 @@ class DashboardPage extends Component {
   render(){
           return(
           <div>
-            {this.state.userRole !== 'Tour Guide' ?
+            {this.state.userRole !== 'Tour Guide' && this.state.token ?
               <Row style = {{height:'100%',backgroundColor:'#ffffff'}}>
                   <Col xs={0} lg={4} style = {{height:'100%' }}>
                       <SideBar dispatch={this.props.dispatch} />
@@ -62,7 +63,7 @@ class DashboardPage extends Component {
               :
               <Row>
                   <NavBar dispatch={this.props.dispatch}
-                    style = {{width:'70%', margin:'0 auto'}} />
+                    style = {{width:'70%', margin:'0 auto 4% auto'}} />
                     <div style = {{width:'70%', margin:'0 auto',marginTop:'3%',marginButtom:'3%'}}>
                       {this.props.children}
 

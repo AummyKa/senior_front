@@ -19,7 +19,8 @@ class NavBar extends Component {
     super(props)
     this.state = {
       current: 'mail',
-      userRole: Cookies.get('userRole')
+      userRole: Cookies.get('userRole'),
+      token: Cookies.get('token')
     }
   }
 
@@ -50,10 +51,15 @@ class NavBar extends Component {
   componentWillReceiveProps = (nextProps) => {
     console.log(nextProps.isLogout)
     if(this.props.isLogout !== nextProps.isLogout){
-      Cookies.remove('token')
-      Cookies.remove('userName')
-      Cookies.remove('userRole')
-      this.context.router.replace('/')
+      if(nextProps.isLogout){
+        Cookies.remove('token')
+        Cookies.remove('userName')
+        Cookies.remove('userRole')
+        Cookies.remove('tour_id')
+        Cookies.remove('userID')
+        Cookies.remove('guide_id')
+        window.location.replace('http://localhost:3000/');
+      }
     }
   }
 
@@ -71,10 +77,14 @@ class NavBar extends Component {
           </Menu.Item>
           : null
           }
+
+          {this.state.token ?
           <Menu.Item key="Logout">
             <Icon type="loggedIn" /> Log out
           </Menu.Item>
-
+          :
+          null
+          }
 
       </Menu>
       </div>

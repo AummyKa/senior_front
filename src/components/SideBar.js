@@ -15,7 +15,8 @@ class SideBar extends Component {
     super(props)
     this.state={
       userName: Cookies.get('userName'),
-      userRole: Cookies.get('userRole')
+      userRole: Cookies.get('userRole'),
+      token: Cookies.get('token')
     }
   }
 
@@ -29,7 +30,7 @@ class SideBar extends Component {
     return (
 
       <div>
-      { this.state.userRole !== 'Tour Guide' ?
+      { this.state.userRole !== 'Tour Guide' && this.state.token ?
       <div className="layout-aside">
           <aside className="layout-sider">
           <div className="layout-logo">
@@ -42,7 +43,7 @@ class SideBar extends Component {
               <SubMenu key="Home" title={<span><Icon type="user" /><Link to={`/home`}>Home</Link></span>}/>
             : null
             }
-    
+
             <SubMenu key="GuideProfile" title={<span><Icon type="laptop" /><Link to={`/guide`}>Guide Profile</Link></span>}/>
             <SubMenu key="Schedule" title={<span><Icon type="notification" /><Link to={`/schedule`}>Schedule</Link></span>}/>
             <SubMenu key="Tours" title={<span><Icon type="notification" /><Link to={`/tours`}>Tours</Link></span>}/>

@@ -15,7 +15,8 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      loggedIn: false
+      loggedIn: false,
+      token: Cookies.get('token')
     }
   }
 
@@ -27,53 +28,50 @@ class App extends Component {
   componentWillReceiveProps(nextProps){
     if(this.props.loggedIn !== nextProps.loggedIn){
       if(nextProps.loggedIn){
-          this.changePage()
+        console.log(nextProps.loggedIn)
+        window.location.replace('http://localhost:3000/');
       }
     }
   }
 
 
-  changePage () {
-    // Call API check token
-
-    if (typeof Cookies.get('token')==='undefined' && Cookies.get('token') === null) {
-      this.context.router.replace('/')
-    }else {
-      let role = Cookies.get('userRole')
-      let id = Cookies.get('userID')
-      console.log(id)
-      switch (role) {
-
-        case 'Manager':
-        this.context.router.replace('/home')
-        break;
-
-        case 'Operation':
-        this.context.router.replace('/schedule')
-        break;
-
-        case 'Customer Service':
-        this.context.router.replace('/schedule')
-        break;
-
-        case 'Finance':
-        this.context.router.replace('/schedule')
-        break;
-
-        case 'Tour Guide':
-        console.log("hi tour")
-        Cookies.set('guide_id',id)
-        this.context.router.replace('/guide/'+id)
-        break;
-
-
-        default:
-          return ''
-        }
-
-
-    }
-  }
+  // changePage () {
+  //   // Call API check token
+  //   if(this.state.token){
+  //     console.log(this.state.token)
+  //     let role = Cookies.get('userRole')
+  //     let id = Cookies.get('userID')
+  //     console.log(id)
+  //     switch (role) {
+  //
+  //       case 'Manager':
+  //       this.context.router.replace('/home')
+  //       break;
+  //
+  //       case 'Operation':
+  //       this.context.router.replace('/schedule')
+  //       break;
+  //
+  //       case 'Customer Service':
+  //       this.context.router.replace('/schedule')
+  //       break;
+  //
+  //       case 'Finance':
+  //       this.context.router.replace('/schedule')
+  //       break;
+  //
+  //       case 'Tour Guide':
+  //       console.log("hi tour")
+  //       Cookies.set('guide_id',id)
+  //       this.context.router.replace('/guide/'+id)
+  //       break;
+  //
+  //
+  //       default:
+  //         return ''
+  //       }
+  //   }
+  // }
 
   render () {
     return (

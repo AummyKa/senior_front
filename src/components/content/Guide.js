@@ -52,8 +52,6 @@ class Guide extends Component{
     super(props)
 
     this.state = {
-      filteredInfo: null,
-      sortedInfo: null,
       value: '',
       data: [],
       cur_id: '',
@@ -66,22 +64,11 @@ class Guide extends Component{
     router: PropTypes.object.isRequired
   }
 
-  handleChange(pagination, filters, sorter) {
+  onChange(pagination, filters, sorter) {
+    // console.log('params', pagination, filters, sorter);
+  }
 
-    this.setState({
-      filteredInfo: filters,
-      sortedInfo: sorter,
-    });
-  }
-  clearFilters() {
-    this.setState({ filteredInfo: null });
-  }
-  clearAll() {
-    this.setState({
-      filteredInfo: null,
-      sortedInfo: null,
-    });
-  }
+
   eachGuide(event, index){
     let id = event._id
     Cookies.set('guide_id',id)
@@ -203,10 +190,7 @@ onInputChange = (e) => {
       filterDropdownVisible: this.state.filterDropdownVisible,
       onFilterDropdownVisibleChange: visible => this.setState({ filterDropdownVisible: visible }, () => this.searchInput.focus()),
 
-      filteredValue: filteredInfo.fullname || null,
-      onFilter: (value, record) => record.fullname.includes(value),
-      sorter: (a, b) => a.fullname.length - b.fullname.length,
-      sortOrder: sortedInfo.columnKey === 'fullname' && sortedInfo.order,
+      sorter: (a, b) => a.fullname.length - b.fullname.length
     },
     {
       title: 'Email',
@@ -214,7 +198,6 @@ onInputChange = (e) => {
       key: 'email',
 
       filteredValue: filteredInfo.email || null,
-      onFilter: (value, record) => record.email.includes(value),
       sorter: (a, b) => a.email.length - b.email.length,
       sortOrder: sortedInfo.columnKey === 'email' && sortedInfo.order,
     },
@@ -222,14 +205,16 @@ onInputChange = (e) => {
       title: 'Contract',
       dataIndex: 'contract',
       key: 'contract',
-      filters: [
-        { text: 'Full Time', value: 'Full Time' },
-        { text: 'Part Time', value: 'Part Time' }
-      ],
-      filteredValue: filteredInfo.contract|| null,
-      onFilter: (value, record) => record.contract.includes(value),
+      filters: [{
+          text: 'Full Time',
+          value:'Full Time',
+      }, {
+        text: 'Part Time',
+        value:'Part Time',
+      }],
+      filterMultiple: false,
+      onFilter: (value, record) => record.contract.indexOf(value) === 0,
       sorter: (a, b) => a.contract.length - b.contract.length,
-      sortOrder: sortedInfo.columnKey === 'contract' && sortedInfo.order,
     },{title: 'Status', dataIndex: 'status', key: 'status',   render: (text, record) =>
       <div>{this.checkActive(record.isActive)}</div>
     }]
@@ -251,7 +236,7 @@ onInputChange = (e) => {
         </div>
         <Table columns={columns}
           dataSource={this.state.data}
-          onChange={this.handleChange}
+          onChange={this.onChange}
           onRowClick = {this.eachGuide.bind(this)}/>
       </div>
     </div>

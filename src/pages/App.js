@@ -16,7 +16,9 @@ class App extends Component {
     super(props)
     this.state = {
       loggedIn: false,
-      token: Cookies.get('token')
+      token: Cookies.get('token'),
+      role: Cookies.get('userRole'),
+      user_id:Cookies.get('userID')
     }
   }
 
@@ -28,7 +30,6 @@ class App extends Component {
   componentWillReceiveProps(nextProps){
     if(this.props.loggedIn !== nextProps.loggedIn){
       if(nextProps.loggedIn){
-        console.log(nextProps.loggedIn)
         window.location.replace('http://localhost:3000/');
       }
     }

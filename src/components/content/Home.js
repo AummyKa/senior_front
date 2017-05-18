@@ -268,10 +268,10 @@ class Home extends Component {
                   <h4>Total Cost From Guide</h4>
                  </Col>
                 <Col span = {1} offset = {9}>
-                  <Popover placement="top" title={"See more!"}>
+                  {/*<Popover placement="top" title={"See more!"}>
                     <Icon className = "read-more-button" type="ellipsis"
                       onClick = {()=> this.handleClickShowTotalParticipant()}/>
-                 </Popover>
+                 </Popover> */}
                 </Col>
               </Row>
              </div>

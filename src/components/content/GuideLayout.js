@@ -41,12 +41,7 @@ class GuideLayout extends Component {
     const { router } = this.context;
     let guide_id = Cookies.get('guide_id')
 
-    // if (router.isActive('/guide/'+guide_id)) {
-    //   if(this.state.btnColor3!="#C5C1C0"){
-    //     this.setState({btnColor3 :"#C5C1C0",btnColor1 :"#DCD5D3",btnColor2 :"#DCD5D3",btnColor4 :"#DCD5D3"})
-    //   }else
-    //     this.setState({btnColor3 :"#DCD5D3",btnColor1 :"#C5C1C0",btnColor2 :"#C5C1C0",btnColor4 :"#C5C1C0"})
-    // }
+    //set button color
 
     if (router.isActive('/guide/'+guide_id)) {
         this.setState({btnColor3 :"#DCD5D3",btnColor1 :"#C5C1C0",btnColor2 :"#DCD5D3",btnColor4 :"#DCD5D3"})
@@ -64,20 +59,8 @@ class GuideLayout extends Component {
         this.setState({btnColor3 :"#DCD5D3",btnColor1 :"#DCD5D3",btnColor2 :"#C5C1C0",btnColor4 :"#DCD5D3"})
     }
 
-    // else if(router.isActive('/guide/'+guide_id+'/history')) {
-    //     console.log("hi")
-    //     this.setState({btnColor1 :"#DCD5D3",btnColor3 :"#C5C1C0",btnColor4 :"#DCD5D3",btnColor2 :"#DCD5D3"})
-    //
-    // }
-    //    else if(router.isActive('/guide/'+guide_id+'/timetable')) {
-    //
-    //     this.setState({btnColor1 :"#DCD5D3",btnColor3 :"#DCD5D3",btnColor4 :"#C5C1C0",btnColor2 :"#DCD5D3"})
-    //
-    // }else if(router.isActive('/guide/'+guide_id+'/experience')) {
-    //
-    //     this.setState({btnColor1 :"#DCD5D3",btnColor3 :"#DCD5D3",btnColor4 :"#DCD5D3",btnColor2 :"#C5C1C0"})
-    // }
 
+    //check if the user is a tour guide
     if(this.state.user_role == 'Tour Guide'){
       let user_id = Cookies.get('userID')
       Cookies.set('guide_id',user_id)

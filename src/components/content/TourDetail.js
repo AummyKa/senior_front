@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import AddNewTourModal from '../AddNewTourModal';
 
-import { Button, Col, Row, Icon, Select} from 'antd';
+import { Button, Col, Row, Icon, Select,Popover} from 'antd';
 import { Modal } from 'react-bootstrap';
 import apiAccess from '../../Helpers/apiAccess'
 
@@ -15,6 +15,7 @@ import EachTourPopularNation from '../EachTourPopularNation'
 import EachTourEditFormModal from '../EachTourEditFormModal'
 import EachTourYearlyParticipantSummary from '../EachTourYearlyParticipantSummary'
 import { changeYearDashBoard } from '../../actions/action-changeYearDashBoard'
+import EachTourMoreExpertGuideModal from '../EachTourMoreExpertGuideModal'
 
 import Cookies from 'js-cookie'
 // import getCurTourID from '../../actions/action-getCurTourID'
@@ -114,10 +115,15 @@ class TourDetail extends Component {
     this.setState({showEditTourModal:true})
   }
 
+  showMoreExperGuide(){
+    this.setState({showMoreExpertGuideModal:true})
+  }
+
   render() {
 
     let closeCostModelModal = () => { this.setState({showCostModelModal: false}) }
     let closeEditTourModal = () => { this.setState({showEditTourModal:false}) }
+    let closeMoreExpertGuideModal = () => { this.setState({showMoreExpertGuideModal:false}) }
 
     return (
 
@@ -148,10 +154,27 @@ class TourDetail extends Component {
             aria-labelledby="contained-modal-title"
           >
             <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title">Cost Modal</Modal.Title>
+              <Modal.Title id="contained-modal-title">Cost Model</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <CostModelModal tourId= {this.state.tour_id} dispatch = {this.props.dispatch}/>
+            </Modal.Body>
+
+          </Modal>
+      </div>
+
+      <div className="modal-container">
+          <Modal
+            show={this.state.showMoreExpertGuideModal}
+            onHide={closeMoreExpertGuideModal}
+            container={this}
+            aria-labelledby="contained-modal-title"
+          >
+            <Modal.Header closeButton>
+              <Modal.Title id="contained-modal-title">Expert Guides</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <EachTourMoreExpertGuideModal dispatch={this.props.dispatch} tourId= {this.state.tour_id} />
             </Modal.Body>
 
           </Modal>
@@ -195,7 +218,13 @@ class TourDetail extends Component {
             </div>
 
             <div className = "expert-list">
-              <div className = "expert-guide-list-title"><b>Expert Guide</b></div>
+              <div className = "expert-guide-list-title">
+                <b>Expert Guide</b>
+                <Popover placement="top" title={"See more!"}>
+                  <Icon className = "read-more-button" type="ellipsis" style={{marginLeft:'3%'}}
+                    onClick={()=>this.showMoreExperGuide()}/>
+               </Popover>
+              </div>
               <div className = "expert-list-table">
                 <EachTourExpertGuide dispatch = {this.props.dispatch} tourId = {this.state.tour_id} />
               </div>

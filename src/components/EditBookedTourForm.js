@@ -3,7 +3,7 @@ import createFragment from 'react-addons-create-fragment';
 
 import {connect} from 'react-redux';
 
-import { Table, InputNumber, Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, TimePicker } from 'antd';
+import { Table, InputNumber, Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, TimePicker,Alert } from 'antd';
 import moment from 'moment';
 
 import apiAccess from '../Helpers/apiAccess'
@@ -206,7 +206,8 @@ const EditBookedTourForm = Form.create()(React.createClass({
       selectedTourPeriod: '',
       selectedTourTime:'',
       selectedDate:this.props.selectedDate,
-      selected_guide_name:''
+      selected_guide_name:'',
+      showAlertUpdateSuccess:false
     }
   },
 
@@ -360,12 +361,18 @@ const EditBookedTourForm = Form.create()(React.createClass({
         this.getCurTour(this.state.curTourID)
         this.getGuideNameList()
         this.getAllTourName()
+        this.setState({showAlertUpdateSuccess:true})
       }
     }
 
     if(this.props.suggested_guide_name !== nextProps.suggested_guide_name){
       if(nextProps.suggested_guide_name){
         this.setState({selected_guide_name:nextProps.suggested_guide_name})
+      }
+    }
+    if(this.props.suggested_guide_id !== nextProps.suggested_guide_id){
+      if(nextProps.suggested_guide_id){
+        this.setState({selectedGuide:nextProps.suggested_guide_id})
       }
     }
 
@@ -452,7 +459,12 @@ const EditBookedTourForm = Form.create()(React.createClass({
          label="Tour name"
        >
          {getFieldDecorator('tourname',
-           { initialValue: this.state.eachTour.tour_name  }
+           { initialValue: this.state.eachTour.tour_name,
+             rules: [{
+               required: true,
+               message: "Please select a tour name.",
+             }],
+           }
          )(
            <Select
               showSearch
@@ -472,7 +484,12 @@ const EditBookedTourForm = Form.create()(React.createClass({
          label="Tour Type"
        >
          {getFieldDecorator('tourtype',
-           { initialValue: this.state.eachTour.tour_type }
+           { initialValue: this.state.eachTour.tour_type,
+             rules: [{
+               required: true,
+               message: "Please select a tour type.",
+             }],
+           }
          )(
            <Select
               showSearch
@@ -491,7 +508,13 @@ const EditBookedTourForm = Form.create()(React.createClass({
          {...formItemLayout}
          label="Tour period"
        >
-         {getFieldDecorator('tour_period',{ initialValue: this.state.eachTour.tour_period})(
+         {getFieldDecorator('tour_period',{
+           initialValue: this.state.eachTour.tour_period,
+           rules: [{
+             required: true,
+             message: "Please select a tour period.",
+           }],
+         })(
            <Select
               showSearch
               style={{ width: '80%', marginRight: 11}}
@@ -543,7 +566,11 @@ const EditBookedTourForm = Form.create()(React.createClass({
            label="Start Time"
          >
            {getFieldDecorator('tourtime', {
-             initialValue : moment(this.state.eachTour.start_time, format )
+            initialValue : moment(this.state.eachTour.start_time, format ),
+             rules: [{
+               required: true,
+               message: "Please select a tour time.",
+             }],
            })(
              <TimePicker
                style={{ width: '80%', marginRight: 11, marginLeft: 8}}
@@ -558,7 +585,10 @@ const EditBookedTourForm = Form.create()(React.createClass({
 
        <FormItem style = {{marginBottom: '1%'}}>
          <Row>
-          <Col span={3} offset={18}>
+          <Col span={16}>
+            { this.state.showAlertUpdateSuccess? <Alert message="Success Tips" type="success" showIcon closable /> : null }
+          </Col>
+          <Col span={3} offset={2}>
             <Button type="primary" style={{width:'90%'}} htmlType="submit" >Save Edit Tour</Button>
           </Col>
           <Col span={3}>
@@ -588,7 +618,8 @@ function mapStateToProps(state) {
         editCustomerInTourStatus: state.editCustomerInTour.editCustomerInTourStatus,
         addCustomerSuccess: state.addNewCustomerInTour.addCustomerSuccess,
         updateEachBookedTourStatus: state.updateEachBookedTour.updateEachBookedTourStatus,
-        suggested_guide_name: state.receiveSuggestedGuideName.suggested_guide_name
+        suggested_guide_name: state.receiveSuggestedGuideName.suggested_guide_name,
+        suggested_guide_id: state.receiveSuggestedGuideName.suggest_guide_id
 
     };
 }

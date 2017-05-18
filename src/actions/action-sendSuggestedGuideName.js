@@ -4,14 +4,16 @@ export const sendSuggestedGuideName = (type,payload) => {
   switch (type) {
     case 'SEND_SUGGESTED_GUIDE_NAME':
       return {
-        guide_name: payload,
+        guide_name: payload.guideName,
+        guide_id:payload._id,
         type: type,
         showSuggestGuideModalStatus: false
       }
 
     case 'SEND_SUGGESTED_GUIDE_NAME_FROM_EDIT':
         return {
-          guide_name: payload,
+          guide_name: payload.guideName,
+          guide_id:payload._id,
           type: type,
           showSuggestGuideModalFromEditStatus: false
         }

@@ -24,6 +24,7 @@
     "babel-preset-stage-0": "^6.16.0",
     "body-parser": "^1.15.2",
     "bootstrap-without-jquery": "^1.0.4",
+    "country-list": "^1.1.0",
     "express": "^4.14.0",
     "express-stormpath": "^3.1.8",
     "fusioncharts": "^3.12.0",

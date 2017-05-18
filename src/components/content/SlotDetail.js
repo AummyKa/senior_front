@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Row,Col,Table, Input, Button,Icon, Dropdown, Badge, Menu, Alert } from 'antd';
+import { Row,Col,Table, Input, Button,Icon, Dropdown, Badge, Menu, Alert, Tag } from 'antd';
 
 
 import { addTour } from '../../actions/action-addTour'
@@ -36,7 +36,6 @@ class SlotDetail extends Component {
   }
 
   handleChange = (pagination, filters, sorter) => {
-    console.log('Various parameters', pagination, filters, sorter);
     this.setState({
       filteredInfo: filters,
       sortedInfo: sorter,
@@ -106,7 +105,6 @@ class SlotDetail extends Component {
       this.setState({control_addTour:true})
     }
 
-    console.log(nextProps.addBookerAndTour)
     if(this.props.addBookerAndTour !== nextProps.addBookerAndTour){
       if(nextProps.addBookerAndTour){
         this.getTourAndBookerDetail()
@@ -133,20 +131,22 @@ class SlotDetail extends Component {
   }
 
   addMoreTour(){
-    console.log(this.state.control_addTour)
+      this.props.dispatch(addTour('ADD_TOUR',this.props.selectedDate))
+  }
 
-        this.props.dispatch(addTour('ADD_TOUR',this.props.selectedDate))
-      // }
-      // console.log(this.state.valid_date_status)
-      // if(this.state.valid_date_status){
-      //   this.props.dispatch(addTour('ADD_TOUR',this.props.selectedDate))
-      // }else{
-      //   this.setState({showInvalidDate: true})
-      // }
+  checkUnassignedGuide(guide){
+    if(guide == "" || typeof guide === 'undefinded' || guide == null){
+      return(
+        <Tag color="red">Unassigned</Tag>
+      )
+    }else {
+      return(
+        <div>{guide}</div>
+      )
+    }
   }
 
   screenTourAndBooker(data){
-    console.log(data)
     let tours = []
     let customers = []
 
@@ -192,7 +192,6 @@ class SlotDetail extends Component {
 }
 
 getCurTour(record){
-  console.log(record)
   let id = record.id
   apiAccess({
     url: 'http://localhost:8000/bookedtours/'+id,
@@ -248,13 +247,11 @@ getCurTour(record){
          onFilter: (value, record) => record.tour_period.includes(value)
       },
       { title: 'Guide', dataIndex: 'guide', key: 'guide', width: 160,
-        filters: [
-         { text: 'public', value: 'public' },
-         { text: 'private', value: 'private' }
-        ],
-         filteredValue: filteredInfo.guide || null,
-         onFilter: (value, record) => record.guide.includes(value)
-       },
+        sorter: (a, b) => a.guide - b.guide,
+        sortOrder: sortedInfo.columnKey === 'guide' && sortedInfo.order,
+        render:(text,record) =>
+         <div>{this.checkUnassignedGuide(record.guide)}</div>
+      },
       { title: 'Participants', dataIndex: 'participants', key: 'participants', width: 100,
         sorter: (a, b) => a.participants - b.participants,
         sortOrder: sortedInfo.columnKey === 'participants' && sortedInfo.order, },

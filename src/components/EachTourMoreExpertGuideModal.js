@@ -10,12 +10,6 @@ import apiAccess from '../Helpers/apiAccess'
 
 const createTable = (arrayJSON) =>{
   if(arrayJSON){
-    if(arrayJSON.length > 5){
-      for(var i = 0; i < 5; i++) {
-        arrayJSON[i]["key"] = i;
-      }
-      return arrayJSON
-    }else
       for(var i = 0; i < arrayJSON.length; i++) {
         arrayJSON[i]["key"] = i;
       }
@@ -27,7 +21,7 @@ const createTable = (arrayJSON) =>{
 
 
 
-class EachTourExpertGuide extends Component {
+class EachTourExpertGuideModal extends Component {
 
   constructor(props){
     super(props)
@@ -82,7 +76,7 @@ class EachTourExpertGuide extends Component {
     return (
 
        <div className = "each-tour-expert-guide">
-            <Table columns={columns} dataSource={this.state.eachTourExpertGuide} size="small" pagination={false} />
+            <Table columns={columns} dataSource={this.state.eachTourExpertGuide} size="small" />
         </div>
 
 
@@ -96,4 +90,4 @@ function mapStateToProps(state){
   }
 }
 
-export default connect(mapStateToProps)(EachTourExpertGuide)
+export default connect(mapStateToProps)(EachTourExpertGuideModal)

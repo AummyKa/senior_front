@@ -9,6 +9,8 @@ import changeDateFormat from '../Helpers/changeDateFormat'
 import { addTour } from '../actions/action-addTour'
 import { sendSuggestedGuideName } from '../actions/action-sendSuggestedGuideName'
 
+var countries = require('country-list')();
+
 
 // import { getAllTour } from '../actions/GET/action-getAllTour'
 
@@ -21,6 +23,8 @@ import CustomerInput from './CustomerInput'
 const FormItem = Form.Item;
 const Option = Select.Option;
 const format = 'HH:mm';
+const countryList = countries.getData()
+
 
 
 
@@ -79,6 +83,16 @@ function throwOptionGuideObject(data){
   return temp
 }
 
+function throwOptionCountryObject(data){
+  let temp = []
+  if(data){
+    for (let i = 0; i < data.length; i++) {
+      temp.push(<Option key= {i}><div>{data[i].name}</div></Option>);
+    }
+  }
+  return temp
+}
+
 function throwOptionBookingMethodObject(data){
   let temp = []
   for (let i = 0; i < data.length; i++) {
@@ -127,8 +141,9 @@ const AddBookedTourForm = Form.create()(React.createClass({
       selectedTourTime: "",
       tours_name: [],
       bookingMethods: [],
-      selectedGuideName:'',
-      suggested_guide_name:''
+      selectedGuideID:'',
+      suggested_guide_name:'',
+      selectedCountry:''
 
     }
   },
@@ -201,9 +216,15 @@ const AddBookedTourForm = Form.create()(React.createClass({
         this.setState({selectedGuide:nextProps.suggested_guide_name})
       }
     }
+    if(this.props.suggested_guide_id !== nextProps.suggested_guide_id){
+      if(nextProps.suggested_guide_id){
+        this.setState({selectedGuideID:nextProps.suggested_guide_id})
+      }
+    }
   },
 
   componentWillMount(){
+    console.log(throwOptionCountryObject(countryList))
     this.getAllTourName()
     this.getGuideList()
     this.getBookingMethods()
@@ -231,7 +252,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
                 email: this.props.form.getFieldValue(`email-${i}`),
                 phone: this.props.form.getFieldValue(`phone-${i}`) || '',
                 name: this.props.form.getFieldValue(`name-${i}`),
-                country: this.props.form.getFieldValue(`country-${i}`),
+                country: this.handleCountrySelect(this.props.form.getFieldValue(`country-${i}`)),
                 pickup_time: pickupTime,
                 pickup_place: this.props.form.getFieldValue(`pickup_place-${i}`),
                 participants: this.props.form.getFieldValue(`participants-${i}`),
@@ -244,21 +265,36 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
           let dateTour = changeDateFormat(this.props.dateTour)
 
-          let payLoad =
-            {
-              customers: formResult,
-              bookedTour:
+          if(typeof this.state.selectedGuideID === "undefined" ){
+            let payLoad =
               {
-                start_date : dateTour,
-                tour_name: this.state.selectedTourName,
-                tour_type: this.state.selectedTourType,
-                tour_guide: this.state.selectedGuideName,
-                start_time: this.state.selectedTourTime,
-                tour_period: this.state.selectedTourPeriod
-              },
-            }
-
-          this.addBookerAndTour(payLoad)
+                customers: formResult,
+                bookedTour:
+                {
+                  start_date : dateTour,
+                  tour_name: this.state.selectedTourName,
+                  tour_type: this.state.selectedTourType,
+                  start_time: this.state.selectedTourTime,
+                  tour_period: this.state.selectedTourPeriod
+                },
+              }
+              this.addBookerAndTour(payLoad)
+          }else {
+            let payLoad =
+              {
+                customers: formResult,
+                bookedTour:
+                {
+                  start_date : dateTour,
+                  tour_name: this.state.selectedTourName,
+                  tour_type: this.state.selectedTourType,
+                  tour_guide: this.state.selectedGuideID,
+                  start_time: this.state.selectedTourTime,
+                  tour_period: this.state.selectedTourPeriod
+                },
+              }
+              this.addBookerAndTour(payLoad)
+          }
         }
       });
     },
@@ -268,8 +304,16 @@ const AddBookedTourForm = Form.create()(React.createClass({
   },
 
   handleGuideSelect(value,option){
-    this.setState({ selectedGuideName: this.state.guide_name[value]._id});
+    this.setState({ selectedGuideID: this.state.guide_name[value]._id});
     // this.setState({ selectedGuideID: this.state.guide_name[value]._id})
+  },
+
+  handleCountrySelect(value,option){
+    if(typeof countryList[value] !== 'undefined'
+    && typeof countryList[value].name !== 'undefined'){
+      return countryList[value].name
+    }else
+      return 'Afghanistan'
   },
 
   handleBookingMethodSelect(value){
@@ -389,6 +433,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
             <FormItem
               {...formItemLayout}
               label="Booking Methods"
+              required={true}
             >
               {getFieldDecorator(`bookingMethods-${k}`, {
                 initialValue: ['Walk-in'],
@@ -443,11 +488,21 @@ const AddBookedTourForm = Form.create()(React.createClass({
            label={'Country : '}
          >
            {getFieldDecorator(`country-${k}`,  {
+             initialValue:['Afghanistan'],
              rules: [{
-               required: true, message: 'Please input your country!',
+               required: true, message: 'Please select a country!',
              }]
            })(
-             <Input placeholder="country"  style={{ width: '80%', marginRight: 5 }} />
+             <Select
+                showSearch
+                style={{ width: '80%', marginRight: 5 }}
+                placeholder="Select a country"
+                optionFilterProp="children"
+                onSelect={this.handleCountrySelect}
+                filterOption={(input, option) => option.props.children.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+              >
+               {throwOptionCountryObject(countryList)}
+              </Select>
            )}
 
          </FormItem>
@@ -560,7 +615,12 @@ const AddBookedTourForm = Form.create()(React.createClass({
          {...formItemLayout}
          label="Tour name"
        >
-         {getFieldDecorator('tourname')(
+         {getFieldDecorator('tourname',{
+           rules: [{
+             required: true,
+             message: "Please select a tour.",
+           }],
+         })(
            <Select
               showSearch
               style={{ width: '80%', marginRight: 11, marginLeft: 8 }}
@@ -578,7 +638,12 @@ const AddBookedTourForm = Form.create()(React.createClass({
          {...formItemLayout}
          label="Tour Type"
        >
-         {getFieldDecorator('tourtype')(
+         {getFieldDecorator('tourtype',{
+           rules: [{
+             required: true,
+             message: "Please select a tour type.",
+           }],
+         })(
            <Select
               showSearch
               style={{ width: '80%', marginRight: 11, marginLeft: 8  }}
@@ -596,7 +661,12 @@ const AddBookedTourForm = Form.create()(React.createClass({
          {...formItemLayout}
          label="Tour period"
        >
-         {getFieldDecorator('tour_period')(
+         {getFieldDecorator('tour_period',{
+           rules: [{
+             required: true,
+             message: "Please select a tour period.",
+           }],
+         })(
            <Select
               showSearch
               style={{ width: '80%', marginRight: 11, marginLeft: 8 }}
@@ -618,11 +688,12 @@ const AddBookedTourForm = Form.create()(React.createClass({
          <FormItem
            {...formItemLayout}
            label="Tour Guide"
+           require={false}
          >
          <Row gutter={10}>
             <Col span={13}>
                {getFieldDecorator('tourGuide', {
-                 initialValue: this.state.selectedGuide
+                 initialValue: this.state.selectedGuide,
                  })(
                    <Select
                       showSearch
@@ -649,7 +720,10 @@ const AddBookedTourForm = Form.create()(React.createClass({
            label="Tour Time"
          >
            {getFieldDecorator('tourtime', {
-
+             rules: [{
+               required: true,
+               message: "Please select a tour time.",
+             }]
            })(
              <TimePicker
                style={{ width: '80%', marginRight: 11, marginLeft: 8}}
@@ -686,7 +760,8 @@ function mapStateToProps(state) {
         dateTour: state.addTourForm.dateTour,
         eachTour: state.getSpecificBookedTour.eachTour,
         guideIncomeSummary: state.getGuideIncomeSummary.guideIncomeSummary,
-        suggested_guide_name: state.receiveSuggestedGuideName.suggested_guide_name
+        suggested_guide_name: state.receiveSuggestedGuideName.suggested_guide_name,
+        suggested_guide_id: state.receiveSuggestedGuideName.suggest_guide_id
     };
 }
 

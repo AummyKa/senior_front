@@ -42,6 +42,7 @@ const GuideSuggestion = React.createClass({
 
         var objectJSON = {
           key: i,
+          _id:arrayJSON[i]._id || '',
           guidename: arrayJSON[i].fullname || '',
           rating: guide_rate,
           favorite: guide_favorable
@@ -57,11 +58,15 @@ const GuideSuggestion = React.createClass({
   selectSuggestedGuide(record){
     console.log(record)
     this.setState({selectedGuide:record.guidename})
+    var guide_id_and_name = {
+      guideName: record.guidename,
+      _id: record._id
+    }
 
     if(this.state.page == "add"){
-      this.props.dispatch(sendSuggestedGuideName("SEND_SUGGESTED_GUIDE_NAME",record.guidename))
+      this.props.dispatch(sendSuggestedGuideName("SEND_SUGGESTED_GUIDE_NAME",guide_id_and_name))
     }else if(this.state.page == "edit"){
-      this.props.dispatch(sendSuggestedGuideName("SEND_SUGGESTED_GUIDE_NAME_FROM_EDIT",record.guidename))
+      this.props.dispatch(sendSuggestedGuideName("SEND_SUGGESTED_GUIDE_NAME_FROM_EDIT",guide_id_and_name))
     }
 
   },

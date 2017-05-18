@@ -13,12 +13,14 @@ const receiveSuggestedGuideName = (state = INITIAL_STATE, action) => {
 
       return {
         suggested_guide_name: action.guide_name,
+        suggest_guide_id:action.guide_id,
         showSuggestGuideModalStatus: action.showSuggestGuideModalStatus
       }
 
     case 'SEND_SUGGESTED_GUIDE_NAME_FROM_EDIT':
       return {
         suggested_guide_name: action.guide_name,
+        suggest_guide_id:action.guide_id,
         showSuggestGuideModalFromEditStatus: action.showSuggestGuideModalFromEditStatus
       }
 

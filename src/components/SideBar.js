@@ -4,6 +4,7 @@ import {changePage} from '../actions/action-changePage'
 import { connect } from 'react-redux'
 import { Link } from 'react-router';
 import apiAccess from '../Helpers/apiAccess'
+import { expandSideBar } from '../actions/action-expandSideBar'
 
 import Cookies from 'js-cookie'
 
@@ -16,12 +17,26 @@ class SideBar extends Component {
     this.state={
       userName: Cookies.get('userName'),
       userRole: Cookies.get('userRole'),
-      token: Cookies.get('token')
+      token: Cookies.get('token'),
+      z_index:this.props.z_index,
+      showCancelButton:false
     }
   }
 
   clickPage = (page) => {
     this.props.dispatch(changePage(page))
+  }
+
+  componentWillReceiveProps(nextProps){
+      if(nextProps.showSideBar){
+        this.setState({showCancelButton: true})
+      }else{
+        this.setState({showCancelButton: false})
+      }
+  }
+
+  closeSideBar(){
+    this.props.dispatch(expandSideBar("TOGGLE_SIDEBAR",false))
   }
 
 
@@ -31,9 +46,13 @@ class SideBar extends Component {
 
       <div>
       { this.state.userRole !== 'Tour Guide' && this.state.token ?
-      <div className="layout-aside">
+      <div className="layout-aside"  style={{zIndex:this.state.z_index}}>
           <aside className="layout-sider">
           <div className="layout-logo">
+            { this.state.showCancelButton ?
+              <Icon type="close" onClick={()=>this.closeSideBar()} />
+              : null
+            }
             <h5>Welcome!</h5>
             {this.state.userName}
           </div>
@@ -65,7 +84,8 @@ class SideBar extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  loggedIn: state.login.loggedIn
+  loggedIn: state.login.loggedIn,
+  showSideBar: state.clickSideBar.showSideBar
 })
 
 export default connect(mapStateToProps)(SideBar)

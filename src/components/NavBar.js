@@ -1,4 +1,4 @@
-import { Menu, Icon } from 'antd';
+import { Menu, Icon, Row, Col } from 'antd';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import {changePage} from '../actions/action-changePage'
@@ -6,6 +6,8 @@ import apiAccess from '../Helpers/apiAccess'
 import { connect } from 'react-redux'
 import { Link } from 'react-router'
 import Cookies from 'js-cookie'
+
+import { expandSideBar } from '../actions/action-expandSideBar'
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -20,7 +22,8 @@ class NavBar extends Component {
     this.state = {
       current: 'mail',
       userRole: Cookies.get('userRole'),
-      token: Cookies.get('token')
+      token: Cookies.get('token'),
+      showSideBar: true
     }
   }
 
@@ -48,6 +51,10 @@ class NavBar extends Component {
     }
   }
 
+  expandMenu(){
+    this.props.dispatch(expandSideBar("TOGGLE_SIDEBAR",this.state.showSideBar))
+  }
+
   componentWillReceiveProps = (nextProps) => {
     console.log(nextProps.isLogout)
     if(this.props.isLogout !== nextProps.isLogout){
@@ -61,15 +68,25 @@ class NavBar extends Component {
         window.location.replace('http://localhost:3000/');
       }
     }
+      this.setState({showSideBar:!nextProps.showSideBar})
   }
 
   render() {
     return (
       <div className = "nav-bar">
+
         <Menu
           onClick={this.handleClick}
           selectedKeys={[this.state.current]}
           mode="horizontal">
+
+          <Menu.Item key="expand">
+            <Row>
+              <Col xs={{ span: 2}} lg={{ span: 0 }}>
+                <Icon type="menu-unfold" onClick={()=>this.expandMenu()} />
+              </Col>
+            </Row>
+          </Menu.Item>
 
           {this.state.userRole == 'Manager' ?
           <Menu.Item key="PendingList">
@@ -95,7 +112,8 @@ class NavBar extends Component {
 function mapStateToProps(state) {
 
     return {
-        isLogout: state.logout.isLogout
+        isLogout: state.logout.isLogout,
+        showSideBar: state.clickSideBar.showSideBar
     };
 }
 

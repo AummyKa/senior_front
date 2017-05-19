@@ -16,6 +16,7 @@ import EachTourEditFormModal from '../EachTourEditFormModal'
 import EachTourYearlyParticipantSummary from '../EachTourYearlyParticipantSummary'
 import { changeYearDashBoard } from '../../actions/action-changeYearDashBoard'
 import EachTourMoreExpertGuideModal from '../EachTourMoreExpertGuideModal'
+import AddTourPicture from '../AddTourPicture'
 
 import Cookies from 'js-cookie'
 // import getCurTourID from '../../actions/action-getCurTourID'
@@ -37,6 +38,8 @@ function throwOptionYearObject(){
   return temp
 }
 
+const uploadContent = "upload picture here!"
+
 
 class TourDetail extends Component {
 
@@ -47,7 +50,8 @@ class TourDetail extends Component {
       showCostModelModal: false,
       tour_id: Cookies.get('tour_id'),
       selectedYear:curYear,
-      showEditTourModal:false
+      showEditTourModal:false,
+      tour_picture_url:''
     }
   }
 
@@ -56,9 +60,9 @@ class TourDetail extends Component {
   }
 
 
-  getSpecificTourData(){
+  getSpecificTourData(id){
     apiAccess({
-      url: 'http://localhost:8000/tours/'+this.state.tour_id,
+      url: 'http://localhost:8000/tours/'+id,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_DATA_ATTEMPT' }),
@@ -67,8 +71,11 @@ class TourDetail extends Component {
     })
   }
 
+
+
   componentWillMount(){
     this.getSpecificTourData(this.state.tour_id)
+    this.setState({tour_picture_url:"http://localhost:8000/tours/image/"+this.state.tour_id})
 
   }
 
@@ -79,24 +86,26 @@ class TourDetail extends Component {
     if(this.props.specific_tours_data !== nextProps.specific_tours_data){
       if(nextProps.specific_tours_data){
         this.setState({tour_data:nextProps.specific_tours_data})
-
       }
     }
 
     if(this.props.postGuidePaymentEachTourStatus !== nextProps.postGuidePaymentEachTourStatus){
       if(nextProps.postGuidePaymentEachTourStatus){
         this.setState({showCostModelModal:false})
-        this.getSpecificTourData()
+        this.getSpecificTourData(this.state.tour_id)
       }
     }
 
     if(this.props.updateEachTourStatus!==nextProps.updateEachTourStatus){
       if(nextProps.updateEachTourStatus){
         this.setState({showEditTourModal:false})
-        this.getSpecificTourData()
+        this.getSpecificTourData(this.state.tour_id)
       }
     }
 
+    if(nextProps.uploadPictureStatus){
+      window.location.replace(this.props.location.pathname)
+    }
   }
 
   showCostModelModal(){
@@ -119,11 +128,13 @@ class TourDetail extends Component {
     this.setState({showMoreExpertGuideModal:true})
   }
 
+
   render() {
 
     let closeCostModelModal = () => { this.setState({showCostModelModal: false}) }
     let closeEditTourModal = () => { this.setState({showEditTourModal:false}) }
     let closeMoreExpertGuideModal = () => { this.setState({showMoreExpertGuideModal:false}) }
+
 
     return (
 
@@ -183,8 +194,14 @@ class TourDetail extends Component {
       <div className = "tour_content">
         <Row>
           <Col span ={7}>
-
-            <div className = "tour-picture">
+            <div className = "tour-picture"
+              style={{backgroundImage: `url(${this.state.tour_picture_url})`,backgroundSize: 'cover' }}>
+              <Popover content={uploadContent}>
+                <div className="add-tour-picture">
+                  <AddTourPicture dispatch={this.props.dispatch} tourId = {this.state.tour_id}/>
+                  {/*<img style={{ width: '100px',height:'100px' }} src={this.state.tour_picture_url} />*/}
+                </div>
+             </Popover>
             </div>
 
             <div className = "tour-title" style = {{  fontSize: 20 }}>
@@ -300,7 +317,8 @@ function mapStateToProps(state){
     specific_tours_data: state.getSpecificTourData.specific_tours_data,
     postGuidePaymentEachTourStatus: state.postGuidePaymentEachTour.postGuidePaymentEachTourStatus,
     selectedTourYear: state.updateYearDashBoard.selectedTourYear,
-    updateEachTourStatus: state.updateEachTour.updateEachTourStatus
+    updateEachTourStatus: state.updateEachTour.updateEachTourStatus,
+    uploadPictureStatus: state.uploadPicture.uploadPictureStatus
   }
 }
 

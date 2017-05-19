@@ -80,6 +80,10 @@ import getYearlyBookingTypeCustomer from './Home/getYearlyBookingTypeCustomer'
 import getYearlyTourTypeCustomer from './Home/getYearlyTourTypeCustomer'
 import getTourCustomerRanking from './Home/getTourCustomerRanking'
 
+//other
+import clickSideBar from './clickSideBar'
+import uploadPicture from './uploadPicture'
+
 const admin = combineReducers({
     login,
     regist,
@@ -145,7 +149,9 @@ const admin = combineReducers({
     getYearlyTotalCostFromGuide,
     getEachGuideUnAvailableEachDate,
     getFilteredEventSummary,
-    receiveSuggestedGuideName
+    receiveSuggestedGuideName,
+    clickSideBar,
+    uploadPicture
 })
 
 export default admin

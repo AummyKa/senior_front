@@ -224,7 +224,6 @@ const AddBookedTourForm = Form.create()(React.createClass({
   },
 
   componentWillMount(){
-    console.log(throwOptionCountryObject(countryList))
     this.getAllTourName()
     this.getGuideList()
     this.getBookingMethods()

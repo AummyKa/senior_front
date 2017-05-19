@@ -106,6 +106,15 @@ class EachTourEditFormModal extends Component{
    }
  }
 
+ checkDescription(rule, value, callback){
+   if(value.length > 160 ) {
+    callback('number of characters should not exceed 160 characters');
+  }else {
+    callback()
+  }
+}
+
+
 
  checkTel(rule, value, callback){
    if(!value.match(/^[0-9]+$/) || value.length != 9){
@@ -217,29 +226,14 @@ handleTourTypeSelect(value,option){
           hasFeedback
         >
           {getFieldDecorator('description',
-          {initialValue: this.state.tour_data.description},)(
+          { initialValue: this.state.tour_data.description,
+            rules:
+            [{
+              validator:this.checkDescription
+            }],
+          })(
             <Input type="textarea" rows={4} />
           )}
-        </FormItem>
-
-        <FormItem
-          {...formItemLayout}
-          label="Upload Tour Image"
-        >
-          <div className="dropbox">
-            {getFieldDecorator('tourimage', {
-              valuePropName: 'fileList',
-              getValueFromEvent: this.normFile,
-            })(
-              <Upload.Dragger name="files" action="/upload.do">
-                <p className="ant-upload-drag-icon">
-                  <Icon type="inbox" />
-                </p>
-                <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                <p className="ant-upload-hint">Support for a single or bulk upload. Strictly prohibit from uploading company data or other band files</p>
-              </Upload.Dragger>
-            )}
-          </div>
         </FormItem>
 
 

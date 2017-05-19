@@ -7,6 +7,21 @@
 
 }
 
+.add-tour-picture{
+  right: 0;
+  position: absolute;
+  padding: 3%;
+}
+
+.add-tour-picture-btn{
+  font-size: 20px;
+}
+
+.add-tour-picture-btn:hover{
+  color:'#FD3939'
+}
+
+
 .tour-table{
   margin-left:auto;
   margin-right:auto;

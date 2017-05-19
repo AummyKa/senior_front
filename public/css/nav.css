@@ -21,6 +21,9 @@
   overflow: auto;
   padding-bottom: 24px;
   height: 100%;
+  -webkit-transition: width 2s;
+  transition: width 2s;
+  transition-delay: 2s;
 }
 
 .layout-aside .layout-sider > .menu {

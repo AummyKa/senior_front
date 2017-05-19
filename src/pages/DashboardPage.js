@@ -31,12 +31,28 @@ class DashboardPage extends Component {
       tours: false,
       guideLay: false,
       userRole: Cookies.get('userRole'),
-      token: Cookies.get('token')
+      token: Cookies.get('token'),
+      toggleSize:0,
+      z_index:100
 
     }
   }
   static contextTypes = {
     router: PropTypes.object.isRequired
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(this.props.showSideBar !== nextProps.showSideBar){
+      if(nextProps.showSideBar){
+        console.log("open")
+        this.setState({toggleSize:5})
+        this.setState({z_index:0})
+      }else{
+        console.log("close")
+        this.setState({toggleSize:0})
+        this.setState({z_index:100})
+      }
+    }
   }
 
 
@@ -45,8 +61,8 @@ class DashboardPage extends Component {
           <div>
             {this.state.userRole !== 'Tour Guide' && this.state.token ?
               <Row style = {{height:'100%',backgroundColor:'#ffffff'}}>
-                  <Col xs={0} lg={4} style = {{height:'100%' }}>
-                      <SideBar dispatch={this.props.dispatch} />
+                  <Col xs={this.state.toggleSize} lg={4} style = {{height:'100%' }}>
+                      <SideBar dispatch={this.props.dispatch} z_index={this.state.z_index} />
                           {/*{this.state.people.map(({ _id, name, age }) => {*/}
                               {/*return <div key={_id}>#{_id} Name: {name}, Age: {age}</div>*/}
                           {/*})}*/}
@@ -76,5 +92,10 @@ class DashboardPage extends Component {
 
 }
 
+function mapStateToProps(state){
+    return{
+      showSideBar: state.clickSideBar.showSideBar
+    }
+}
 
-export default (DashboardPage);
+export default connect(mapStateToProps)(DashboardPage);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row,Col,Radio, Button, Calendar } from 'antd';
+import { Row,Col,Radio, Button, Calendar, Icon, Upload, message } from 'antd';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types'
 
@@ -25,7 +25,8 @@ class GuideLayout extends Component {
       btnColor3: "#DCD5D3",
       btnColor4: "#DCD5D3",
       name: "",
-      user_role: Cookies.get('userRole')
+      user_role: Cookies.get('userRole'),
+      staff_image_url: ""
     }
   }
 
@@ -37,6 +38,8 @@ class GuideLayout extends Component {
 
 
   componentDidMount(){
+
+    this.setState({staff_image_url:"http://localhost:8000/staffs/image/"+Cookies.get('guide_id')})
 
     const { router } = this.context;
     let guide_id = Cookies.get('guide_id')
@@ -76,7 +79,13 @@ class GuideLayout extends Component {
         this.setState({name: nextProps.eachGuideName.fullname})
       }
     }
-  }
+    // if(this.props.removePictureStatus !== nextProps.removePictureStatus){
+    //   if(nextProps.removePictureStatus){
+    //       console.log("hi")
+    //       this.setState({staff_image_url:"http://localhost:8000/staffs/image/"+Cookies.get('guide_id')})
+    //   }
+    // }
+  }v
 
   eachGuide(id){
       apiAccess({
@@ -88,6 +97,18 @@ class GuideLayout extends Component {
        failureAction: () => this.props.dispatch({ type: 'GET_GUIDE_NAME_FAILED' })
      })
   }
+
+  removePicturePath(id){
+      apiAccess({
+       url: 'http://localhost:8000/staffs/remove-image/'+id,
+       method: 'GET',
+       payload: null,
+       attemptAction: () => this.props.dispatch({ type: 'REMOVE_PICTURE_PATH_ATTEMPT' }),
+       successAction: (json) => this.props.dispatch({ type: 'REMOVE_PICTURE_PATH_SUCCESS', json }),
+       failureAction: () => this.props.dispatch({ type: 'REMOVE_PICTURE_PATH_FAILED' })
+     })
+  }
+
 
   handleSizeChange = (e) => {
 
@@ -137,9 +158,34 @@ class GuideLayout extends Component {
     }
   }
 
+  handlePictureChange(info) {
+    if (info.file.status !== 'uploading') {
+      console.log(info.file, info.fileList);
+    }
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+      window.location.replace(this.props.location.pathname)
+      //this.setState({staff_image_url:"http://localhost:8000/staffs/image/"+Cookies.get('guide_id')})
+
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  }
+
+  handlePicturePreview = (file) => {
+    this.setState({
+      staff_image_url: file.url || file.thumbUrl
+    });
+  }
 
   render() {
     console.log("guide layout")
+    const props = {
+      action: '//localhost:8000/staffs/insert-image/'+Cookies.get('guide_id'),
+      onChange: this.handlePictureChange.bind(this),
+      multiple: true,
+      onPreview: this.handlePicturePreview.bind(this)
+    };
 
     return (
 
@@ -147,11 +193,13 @@ class GuideLayout extends Component {
         <div className= "guide-top-content">
           <Row type="flex" justify="center">
             <Col span={8}>
-            <img src={"http://dreamatico.com/data_images/kitten/kitten-1.jpg"}
-              alt="boohoo" className="img-guide"/>
+            <img src={this.state.staff_image_url} className="img-guide"/>
             </Col>
             <Col span={10} className = "guide-name">
               <h3>{this.state.name}</h3>
+              <Upload {...props}>
+                <Button icon="download">Upload picture</Button>
+              </Upload>
             </Col>
           </Row>
         </div>
@@ -190,7 +238,8 @@ class GuideLayout extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  eachGuideName: state.getEachGuideName.eachGuideName
+  eachGuideName: state.getEachGuideName.eachGuideName,
+  removePictureStatus: state.uploadPicture.removePictureStatus
 })
 
 export default connect(mapStateToProps)(GuideLayout)

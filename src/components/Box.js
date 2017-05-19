@@ -4,14 +4,19 @@ import PropTypes from 'prop-types'
 import Cookies from 'js-cookie'
 // import getCurTourID from '../actions/action-getCurTourID'
 
-const normal = {
+const normal={}
 
-}
+const normalImage={}
 
-const hover = {
-  backgroundColor: '#B0AAA8',
+const hover={
+  backgroundColor: '#F94F2A',
+  color: 'white',
   opacity: 1,
   height: '100%'
+}
+
+const hoverImage={
+  opacity: 0.5,
 }
 
 class Box extends Component {
@@ -21,7 +26,8 @@ class Box extends Component {
     console.log(this.props.show)
     this.state = {
       content: this.props.data,
-      hover: false
+      hover: false,
+      tour_picture_url:"http://localhost:8000/tours/image/"+this.props.data._id
     }
   }
 
@@ -51,8 +57,10 @@ class Box extends Component {
 
   render() {
     let inner = normal
+    let innerImage = normalImage
     if(this.state.hover){
       inner = hover
+      innerImage= hoverImage
     }
 
 
@@ -63,8 +71,7 @@ class Box extends Component {
               onMouseLeave={() => this.handleLeaveHover()}
               onClick = {() => this.handleClickBox(this.state.content)}>
               <div className = "box-image">
-                <img src={this.state.content.image}
-                  alt="boohoo" className="img-box"/>
+                <img src={this.state.tour_picture_url} className="img-box" style={innerImage}/>
               </div>
               <div className = "box-detail">
                   <h4>{this.state.content.tour_name}</h4>

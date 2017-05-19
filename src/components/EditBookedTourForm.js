@@ -16,12 +16,14 @@ import { sendSuggestedGuideName } from '../actions/action-sendSuggestedGuideName
 import {Modal } from 'react-bootstrap';
 
 import Cookies from 'js-cookie'
+var countries = require('country-list')();
 
 import CustomerInput from './CustomerInput'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 const format = 'HH:mm';
+const countryList = countries.getData()
 
 
 
@@ -96,6 +98,8 @@ function throwOptionTourNameObject(data){
     return temp
   }
 }
+
+
 
 function formatData(data){
   let temp = []

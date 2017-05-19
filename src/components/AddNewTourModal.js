@@ -29,30 +29,16 @@ function getBase64(img, callback) {
   reader.readAsDataURL(img);
 }
 
-function beforeUpload(file) {
-  console.log(file)
-  const isJPG = file.type === 'image/jpeg';
-  if (!isJPG) {
-    alert('You can only upload JPG file!');
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2;
-  if (!isLt2M) {
-    alert('Image must smaller than 2MB!');
-  }
-  return isJPG && isLt2M;
-}
+
 
 
 const AddNewTourModal = Form.create()(React.createClass({
 
   getInitialState() {
     return {
-      previewVisible: false,
-      previewImage: '',
-      fileList: [],
+
       }
     },
-
 
   handleSubmit(e) {
     e.preventDefault();
@@ -60,18 +46,14 @@ const AddNewTourModal = Form.create()(React.createClass({
       if (!err) {
 
         let payload =
-                    //   {
-                    //    tour_name: this.props.form.getFieldValue('tourname'),
-                    //    tour_abbreviation: this.props.form.getFieldValue('tour_abbreviation'),
-                    //    place: this.props.form.getFieldValue('place'),
-                    //    type: this.props.form.getFieldValue('type')[0],
-                    //    description:this.props.form.getFieldValue('description')
-                    //  },
-                     {
-                       image : this.state.fileList[0]
-                     }
+                  {
+                   tour_name: this.props.form.getFieldValue('tourname'),
+                   tour_abbreviation: this.props.form.getFieldValue('tour_abbreviation'),
+                   place: this.props.form.getFieldValue('place'),
+                   type: this.props.form.getFieldValue('type')[0],
+                   description:this.props.form.getFieldValue('description')
+                 }
 
-          console.log(payload)
 
           apiAccess({
             url: 'http://localhost:8000/tours/insert',
@@ -85,16 +67,6 @@ const AddNewTourModal = Form.create()(React.createClass({
             console.log("error")
       });
   },
-
-
-normFile(e){
-  console.log('Upload event:', e);
-  if (Array.isArray(e)) {
-    console.log(e.fileList)
-    return e;
-  }
-  return e && e.fileList;
-},
 
 
   //name, surname
@@ -127,30 +99,11 @@ normFile(e){
 },
 
 
-handleCancel(){
-  this.setState({ previewVisible: false })
-},
 
-handlePreview(file){
-  this.setState({
-    previewImage: file.url || file.thumbUrl,
-    previewVisible: true,
-  });
-},
-
-handleChange({ fileList }){
-  this.setState({ fileList })
-},
 
   render() {
 
-    const { previewVisible, previewImage, fileList } = this.state;
-    const uploadButton = (
-      <div>
-        <Icon type="plus" />
-        <div className="ant-upload-text">Upload</div>
-      </div>
-    );
+
 
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -168,7 +121,7 @@ handleChange({ fileList }){
       <Form horizontal onSubmit={this.handleSubmit}>
         <FormItem
           {...formItemLayout}
-          label="Toue Name"
+          label="Tour Name"
           hasFeedback
         >
           {getFieldDecorator('tourname', {
@@ -229,43 +182,6 @@ handleChange({ fileList }){
             <Input type="textarea" rows={4} />
           )}
         </FormItem>
-
-        <FormItem
-          {...formItemLayout}
-          label="Upload Tour Image"
-        >
-          <div className="dropbox">
-            {getFieldDecorator('tourimage', {
-              valuePropName: 'fileList',
-              getValueFromEvent: this.normFile,
-            })(
-              <div className="clearfix">
-              <Upload
-                action="//localhost:8000/tours/insert"
-                listType="picture-card"
-                fileList={fileList}
-                beforeUpload={beforeUpload}
-                onPreview={this.handlePreview}
-                onChange={this.handleChange}
-              >
-                {fileList.length == 1 ? null : uploadButton}
-              </Upload>
-              <Modal show={previewVisible}
-                onHide={this.handleCancel}
-                container={this}
-                aria-labelledby="contained-modal-title" style ={{paddingLeft:'0px'}}>
-                <Modal.Header closeButton>
-                </Modal.Header>
-                <Modal.Body>
-                <img alt="example" style={{ width: '100%', height:'100%'}}
-                   src={previewImage} />
-               </Modal.Body>
-              </Modal>
-            </div>
-            )}
-          </div>
-        </FormItem>
-
 
         <FormItem {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit" size="large">Add Tour</Button>

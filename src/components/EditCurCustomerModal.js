@@ -6,9 +6,11 @@ import apiAccess from '../Helpers/apiAccess'
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, TimePicker, InputNumber } from 'antd';
 import { error } from './Modal'
 
+var countries = require('country-list')();
+
 const FormItem = Form.Item;
 const Option = Select.Option;
-
+const countryList = countries.getData()
 
 
 function throwOptionBookingMethodObject(data){
@@ -18,6 +20,17 @@ function throwOptionBookingMethodObject(data){
   }
   return temp
 }
+
+function throwOptionCountryObject(data){
+  let temp = []
+  if(data){
+    for (let i = 0; i < data.length; i++) {
+      temp.push(<Option key= {i}><div>{data[i].name}</div></Option>);
+    }
+  }
+  return temp
+}
+
 
 const format = 'HH:mm';
 
@@ -65,6 +78,15 @@ const EditCurCustomerModal = Form.create()(React.createClass({
     this.setState({ selectedBookingMethod: this.state.bookingMethodLists[value].name });
   },
 
+  handleCountrySelect(value,option){
+    if(typeof countryList[value] !== 'undefined'
+    && typeof countryList[value].name !== 'undefined'){
+      return countryList[value].name
+    }else
+      return 'Afghanistan'
+  },
+
+
   handleSubmit(e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
@@ -78,7 +100,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
             email: this.props.form.getFieldValue(`email`),
             phone: this.props.form.getFieldValue(`phone`),
             name: this.props.form.getFieldValue(`name`),
-            country: this.props.form.getFieldValue(`country`),
+            country: this.handleCountrySelect(this.props.form.getFieldValue(`country`)),
             pickup_time: this.props.form.getFieldValue(`pickup_time`).format('HH:mm'),
             pickup_place: this.props.form.getFieldValue(`pickup_place`),
             participants: this.props.form.getFieldValue(`participants`),
@@ -230,9 +252,20 @@ const EditCurCustomerModal = Form.create()(React.createClass({
                {getFieldDecorator(`country`, {
                  initialValue: this.state.eachCustomer.country,
                  validateTrigger: ['onChange', 'onBlur'],
-
+                 rules: [{
+                   required: true, message: 'Please select a country!',
+                 }]
                })(
-                 <Input placeholder="country"  style={{ width: '80%', marginRight: 5 }} />
+                 <Select
+                    showSearch
+                    style={{ width: '80%', marginRight: 5 }}
+                    placeholder="Select a country"
+                    optionFilterProp="children"
+                    onSelect={this.handleCountrySelect}
+                    filterOption={(input, option) => option.props.children.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                  >
+                   {throwOptionCountryObject(countryList)}
+                  </Select>
                )}
 
              </FormItem>

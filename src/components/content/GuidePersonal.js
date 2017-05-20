@@ -24,7 +24,6 @@ class GuidePersonal extends Component {
       title: "",
       name: "",
       surname: "",
-      // birthdate: "-",
       email: "",
       lineID: "-",
       address: "-",

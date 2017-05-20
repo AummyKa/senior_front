@@ -7,6 +7,7 @@ import userData from './User/userData'
 import pendingUser from './User/pendingUser'
 import pendingApproved from './User/pendingApproved'
 import logout from './User/logout'
+import changeUserPassword from './User/changeUserPassword'
 
 //guide
 import guideDetail from './Guide/guideDetail'
@@ -28,6 +29,7 @@ import receiveSuggestedGuideName from './Guide/receiveSuggestedGuideName'
 //staff
 import getStaffLists from './Staff/getStaffLists'
 import updateStaff from './Staff/updateStaff'
+import getStaffProfile from './Staff/getStaffProfile'
 
 //Tours
 import getToursName from './Tour/getToursName'
@@ -151,7 +153,9 @@ const admin = combineReducers({
     getFilteredEventSummary,
     receiveSuggestedGuideName,
     clickSideBar,
-    uploadPicture
+    uploadPicture,
+    getStaffProfile,
+    changeUserPassword
 })
 
 export default admin

@@ -5,7 +5,6 @@ import AddNewTourModal from '../AddNewTourModal';
 import { Button, Col, Row } from 'antd';
 
 import Box from '../Box'
-import TourDetail from './TourDetail'
 
 import { Modal } from 'react-bootstrap';
 import apiAccess from '../../Helpers/apiAccess'

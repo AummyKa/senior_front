@@ -1,7 +1,9 @@
 
 const INITIAL_STATE = {
   showEditCustomer: false,
-  customerData: []
+  customerData: [],
+  showDeleteCustomerModal: false,
+  cur_cus_email:''
 }
 // { type: 'LOGIN_SUCCESS', text }
 const editCustomerModal = (state = INITIAL_STATE, action) => {
@@ -22,6 +24,20 @@ const editCustomerModal = (state = INITIAL_STATE, action) => {
       return {
         //pop up
       }
+
+    case 'SHOW_DELETE_CUSTOMER_MODAL':
+
+        return {
+            showDeleteCustomerModal:true,
+            cur_cus_email:action.email
+        }
+        
+    case 'CLOSE_DELETE_CUSTOMER_MODAL':
+        return {
+            showDeleteCustomerModal:false
+        }
+
+
 
     default:
       return state

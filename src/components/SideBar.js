@@ -54,7 +54,7 @@ class SideBar extends Component {
               : null
             }
             <h5>Welcome!</h5>
-            {this.state.userName}
+            <Link to={`/staff/`+Cookies.get('userID')} style={{ textDecoration: 'none'}}>{this.state.userName}</Link>
           </div>
           <Menu mode="inline" theme="dark">
 

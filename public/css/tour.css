@@ -21,10 +21,34 @@
   color:'#FD3939'
 }
 
+.customer-info-content{
+  padding: 24px;
+  background: #EBE9E7;
+  border-radius: 6px;
+  padding-left: 5%;
+  margin-bottom: 5px;
+}
+
+.dynamic-edit-button {
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+  font-size: 24px;
+  color: #999;
+  transition: all .3s;
+}
+.dynamic-delete-edit:hover {
+  color: #777;
+}
+
 
 .tour-table{
   margin-left:auto;
   margin-right:auto;
+}
+
+.customer-info-label{
+  font-weight: bold;
 }
 
 .gutter-example .ant-row{

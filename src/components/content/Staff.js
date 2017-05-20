@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import { Row,Col,Table, Input, Button } from 'antd';
 import apiAccess from '../../Helpers/apiAccess'
+
+import Cookies from "js-cookie"
 
 
 
@@ -36,6 +39,10 @@ class Staff extends Component{
       value: '',
       data: []
     }
+  }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
   }
 
 
@@ -83,6 +90,13 @@ class Staff extends Component{
     if(this.props.staffLists !== nextProps.staffLists){
         StaffUserData(nextProps.staffLists,this.state.data)
     }
+  }
+
+  eachStaff(event, index){
+    console.log(event._id)
+    let id = event._id
+    Cookies.set('staff_id',event._id)
+    this.context.router.push('/staff/'+id);
   }
 
 
@@ -141,6 +155,7 @@ class Staff extends Component{
         <div className="table-operations">
         </div>
         <Table columns={columns} dataSource={this.state.data} onChange={this.handleChange}
+          onRowClick = {this.eachStaff.bind(this)}
            />
       </div>
     </div>

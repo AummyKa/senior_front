@@ -172,19 +172,13 @@ class GuideLayout extends Component {
     }
   }
 
-  handlePicturePreview = (file) => {
-    this.setState({
-      staff_image_url: file.url || file.thumbUrl
-    });
-  }
 
   render() {
     console.log("guide layout")
     const props = {
       action: '//localhost:8000/staffs/insert-image/'+Cookies.get('guide_id'),
       onChange: this.handlePictureChange.bind(this),
-      multiple: true,
-      onPreview: this.handlePicturePreview.bind(this)
+      multiple: true
     };
 
     return (

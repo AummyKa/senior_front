@@ -49,6 +49,7 @@ class NavBar extends Component {
     }else{
 
     }
+
   }
 
   expandMenu(){
@@ -88,20 +89,18 @@ class NavBar extends Component {
             </Row>
           </Menu.Item>
 
-          {this.state.userRole == 'Manager' ?
+          {this.state.userRole == 'Manager' ? //80 60 40
           <Menu.Item key="PendingList">
-            <Link to ={`/pending`}>Pending List</Link>
+            <Link to ={`/pending`}><Icon type="solution" />Pending List</Link>
           </Menu.Item>
           : null
           }
 
-          {this.state.token ?
-          <Menu.Item key="Logout">
-            <Icon type="loggedIn" /> Log out
-          </Menu.Item>
-          :
-          null
-          }
+          <SubMenu title={<span><Icon type="setting" />Account</span>}>
+            <Menu.Item key="Logout" title="Logout">Log out</Menu.Item>
+            <Menu.Item title="Change Password"><Link to ={`/changePassword`}>Change Password</Link></Menu.Item>
+          </SubMenu>
+
 
       </Menu>
       </div>

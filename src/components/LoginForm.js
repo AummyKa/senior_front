@@ -9,7 +9,6 @@ import {
     Checkbox
 } from 'antd';
 
-import RegistModal from './RegistModal';
 import apiAccess from '../Helpers/apiAccess'
 
 class LoginForm extends Component {
@@ -22,6 +21,10 @@ class LoginForm extends Component {
             password: '',
             modal: false
         };
+    }
+
+    forgotPasswordModal(){
+      this.props.dispatch({type:'SHOW_FORGET_PASSWORD_MODAL'})
     }
 
     handleSubmit = (e) => {
@@ -100,7 +103,7 @@ class LoginForm extends Component {
                     Checkbox > Remember me < /Checkbox>
                 )
             } <
-            a className = "login-form-forgot" > Forgot password < /a> <
+            a className = "login-form-forgot" onClick={()=>this.forgotPasswordModal()} > Forgot password < /a> <
             Button type = "primary"
             htmlType = "submit"
             className = "login-form-button" >

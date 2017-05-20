@@ -6,6 +6,8 @@ import {connect} from 'react-redux';
 import { Table, InputNumber, Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, TimePicker,Alert } from 'antd';
 import moment from 'moment';
 
+import EachCustomerInEachTourList from './EachCustomerInEachTourList'
+
 import apiAccess from '../Helpers/apiAccess'
 import changeDateFormat from '../Helpers/changeDateFormat'
 
@@ -211,7 +213,8 @@ const EditBookedTourForm = Form.create()(React.createClass({
       selectedTourTime:'',
       selectedDate:this.props.selectedDate,
       selected_guide_name:'',
-      showAlertUpdateSuccess:false
+      showAlertUpdateSuccess:false,
+      cur_cus_email:''
     }
   },
 
@@ -332,6 +335,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
     if(this.props.delete_cus_status !== nextProps.delete_cus_status){
       if(nextProps.delete_cus_status){
         this.setState({showCustomerDeleteWarning: false})
+        this.props.dispatch(editCustomerModal("CLOSE_DELETE_CUSTOMER_MODAL"))
         this.getCurTour(this.state.curTourID)
         this.getGuideNameList()
         this.getAllTourName()
@@ -340,6 +344,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
 
     if(this.props.editCustomerInTourStatus !== nextProps.editCustomerInTourStatus){
       if(nextProps.editCustomerInTourStatus){
+        this.props.dispatch(editCustomerModal("CLOSE_EDIT_CUSTOMER"))
         this.getCurTour(this.state.curTourID)
         this.getGuideNameList()
         this.getAllTourName()
@@ -377,6 +382,19 @@ const EditBookedTourForm = Form.create()(React.createClass({
     if(this.props.suggested_guide_id !== nextProps.suggested_guide_id){
       if(nextProps.suggested_guide_id){
         this.setState({selectedGuide:nextProps.suggested_guide_id})
+      }
+    }
+
+    if(this.props.showDeleteCustomerModal !== nextProps.showDeleteCustomerModal){
+      if(nextProps.showDeleteCustomerModal){
+        this.setState({showCustomerDeleteWarning:true})
+
+      }
+    }
+
+    if(this.props.cur_cus_email !== nextProps.cur_cus_email){
+      if(nextProps.cur_cus_email){
+        this.setState({cur_cus_email:nextProps.cur_cus_email})
       }
     }
 
@@ -447,7 +465,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
              </Modal.Body>
 
              <Modal.Footer>
-              <Button type="danger" onClick = {() => this.deleteCustomer(this.state.curTourID,this.state.cusTourDelete)}>
+              <Button type="danger" onClick = {() => this.deleteCustomer(this.state.curTourID,this.state.cur_cus_email)}>
                 Delete</Button>
             </Modal.Footer>
 
@@ -603,7 +621,8 @@ const EditBookedTourForm = Form.create()(React.createClass({
 
      </Form>
 
-     <Table columns={this.columns} dataSource={formatData(this.state.eachTour.customers)} scroll={{ x: 1700 }}/>
+        <EachCustomerInEachTourList dispatch={this.props.dispatch}/>
+      {/*}<Table columns={this.columns} dataSource={formatData(this.state.eachTour.customers)} scroll={{ x: 1700 }}/>*/}
 
      </div>
    );
@@ -623,8 +642,9 @@ function mapStateToProps(state) {
         addCustomerSuccess: state.addNewCustomerInTour.addCustomerSuccess,
         updateEachBookedTourStatus: state.updateEachBookedTour.updateEachBookedTourStatus,
         suggested_guide_name: state.receiveSuggestedGuideName.suggested_guide_name,
-        suggested_guide_id: state.receiveSuggestedGuideName.suggest_guide_id
-
+        suggested_guide_id: state.receiveSuggestedGuideName.suggest_guide_id,
+        showDeleteCustomerModal: state.editCustomerModal.showDeleteCustomerModal,
+        cur_cus_email: state.editCustomerModal.cur_cus_email
     };
 }
 

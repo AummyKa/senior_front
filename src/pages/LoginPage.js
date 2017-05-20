@@ -4,10 +4,12 @@ import { connect } from 'react-redux'
 
 import LoginForm from '../components/LoginForm';
 import RegistModal from '../components/RegistModal';
+import apiAccess from '../Helpers/apiAccess'
+
 
 import { error, info } from '../components/Modal'
 
-import { Col, Row } from 'antd';
+import { Col, Row, Modal, Icon, Input, Alert } from 'antd';
 
 
 const font_style={
@@ -32,8 +34,11 @@ class LoginPage extends Component {
     constructor (props) {
         super(props)
         this.state = {
-          people: []
-
+          people: [],
+          showForgotPassword:false,
+          userEmail:'',
+          showSuccessfulForgetPassword:false,
+          showUnsuccessfulForgetPassword:false
         }
     }
 
@@ -66,6 +71,28 @@ class LoginPage extends Component {
         }
       }
 
+      if(this.props.showForgotPasswordModal !== nextProps.showForgotPasswordModal){
+        if(nextProps.showForgotPasswordModal){
+          this.setState({showForgotPassword:true})
+        }
+      }
+
+      if(this.props.getResetPasswordStatus !== nextProps.getResetPasswordStatus){
+        if(nextProps.getResetPasswordStatus){
+          this.setState({
+            showSuccessfulForgetPassword:nextProps.getResetPasswordStatus,
+            showUnsuccessfulForgetPassword:false
+          })
+        }
+      }
+
+      if(this.props.emailForgetPassewordInValidStatus!==nextProps.emailForgetPassewordInValidStatus){
+        if(nextProps.emailForgetPassewordInValidStatus){
+          this.setState({
+            showUnsuccessfulForgetPassword:nextProps.emailForgetPassewordInValidStatus,
+            showSuccessfulForgetPassword:false})
+        }
+      }
 
       if(this.props.registed !== nextProps.registed){
 
@@ -82,7 +109,30 @@ class LoginPage extends Component {
       }
     }
 
+    onChangeEmail(e){
+      this.setState({ userEmail: e.target.value });
+    }
+
+    handleForgotPassword(){
+      let email = this.state.userEmail
+      if(email){
+        apiAccess({
+          url: 'http://localhost:8000/forget-password',
+          method: 'POST',
+          payload: {
+            email: email
+          },
+          attemptAction: () => this.props.dispatch({ type: 'SEND_EMAIL_FORGET_PASSWORD_ATTEMPT' }),
+          successAction: (json) => this.props.dispatch({ type: 'SEND_EMAIL_FORGET_PASSWORD_SUCCESS', json }),
+          failureAction: () => this.props.dispatch({ type: 'SEND_EMAIL_FORGET_PASSWORD_FAILED' })
+        })
+      }
+
+    }
+
     render(){
+
+      let closeForgotPassword = () => { this.setState({showForgotPassword: false})}
 
         return(
             <div>
@@ -102,6 +152,35 @@ class LoginPage extends Component {
                         <LoginForm dispatch={this.props.dispatch} />
                         <RegistModal dispatch={this.props.dispatch}  / >
 
+                          <Modal title="Forgot Password" visible={this.state.showForgotPassword}
+                            onOk={this.handleForgotPassword.bind(this)} onCancel={closeForgotPassword}
+                          >
+                            <p style={{fontSize:'12px'}}>Please input your email and submit</p>
+                            <p style={{fontSize:'12px'}}>Your reset password will be sent via email</p>
+                              <Input
+                                placeholder="Enter your email address"
+                                prefix={<Icon type="user" />}
+                                onChange={this.onChangeEmail.bind(this)}
+                              />
+                            {this.state.showSuccessfulForgetPassword ?
+                              <Alert
+                                  message="Your reset password is send to your email"
+                                  type="success"
+                                  showIcon
+                                />
+                              : null
+                            }
+                            {this.state.showUnsuccessfulForgetPassword ?
+                              <Alert
+                                message="Error: Your email is invalid"
+                                type="error"
+                                showIcon
+                              />
+                              : null
+                            }
+
+                          </Modal>
+
                     </Col>
             </Row>
             </div>
@@ -114,7 +193,10 @@ const mapStateToProps = (state) => ({
   loggedIn: state.login.loggedIn,
   registed: state.regist.registed,
   failLogged: state.login.failLogged,
-  isLogout: state.logout.isLogout
+  isLogout: state.logout.isLogout,
+  showForgotPasswordModal: state.changeUserPassword.showForgotPasswordModal,
+  emailForgetPassewordInValidStatus: state.changeUserPassword.emailForgetPassewordInValidStatus,
+  getResetPasswordStatus: state.changeUserPassword.getResetPasswordStatus
 })
 
 

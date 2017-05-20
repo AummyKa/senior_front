@@ -13,6 +13,19 @@ export const editCustomerModal = (type,record) => {
                 type: 'CLOSE_EDIT_CUSTOMER'
             }
 
+        case 'SHOW_DELETE_CUSTOMER_MODAL':
+          console.log(record)
+            return {
+                type:'SHOW_DELETE_CUSTOMER_MODAL',
+                email:record
+            }
+
+        case 'CLOSE_DELETE_CUSTOMER_MODAL':
+            return {
+                type:'CLOSE_DELETE_CUSTOMER_MODAL',
+            }
+
+
         default:
             return ""
     }

@@ -208,9 +208,9 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
              {getFieldDecorator(`email`, {
                validateTrigger: ['onChange', 'onBlur'],
                rules: [{
+                 type: 'email',
                  required: true,
-                 whitespace: true,
-                 message: "Please input customer's email.",
+                 message: "Please input a valid customer's email.",
                }],
              })(
                <Input placeholder="email" style={{ width: '80%', marginRight: 5 }} />

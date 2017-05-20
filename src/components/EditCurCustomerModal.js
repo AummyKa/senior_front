@@ -215,9 +215,9 @@ const EditCurCustomerModal = Form.create()(React.createClass({
                  initialValue: this.state.eachCustomer.email,
                  validateTrigger: ['onChange', 'onBlur'],
                  rules: [{
+                   type: 'email',
                    required: true,
-                   whitespace: true,
-                   message: "Please input customer's email.",
+                   message: "Please input a valid customer's email.",
                  }],
                })(
                  <Input placeholder="email" style={{ width: '80%', marginRight: 5 }} />

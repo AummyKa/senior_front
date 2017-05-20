@@ -33,8 +33,12 @@ import TourDetail from './components/content/TourDetail'
 //Agency
 import BookingMethod from './components/content/BookingMethod'
 
+//Staff
+import StaffProfile from './components/content/StaffProfile'
+
 import Home from './components/content/Home'
 import InvalidPage from './components/content/InvalidPage'
+import ChangePassword from './components/content/ChangePassword'
 
 // import { requireAuth } from './Helpers/requireAuth'
 import Cookies from 'js-cookie'
@@ -90,15 +94,15 @@ function isGuideAccess(nextState, replace){
 
 }
 
-// function backToFirstPage(nextState, replace){
-//   let guide_id = Cookies.get('userID')
-//   if (token && userRole === 'Tour guide') {
-//       replace({ pathname: '/guide/'+guide_id })
-//   }else if (token && userRole === 'Manager') {
-//       replace({ pathname: '/guide/'+guide_id })
+// function privateAccess(nextState, replace){
+//   let user_id = Cookies.get('userID')
+//   if(!token){
+//     replace({ pathname: '/' })
+//   }else if(token && userRole == 'Tour Guide'){
+//     Cookies.set('guide_id',guide_id)
+//     replace({ pathname: '/guide/'+guide_id })
 //   }
 // }
-
 
 ReactDOM.render(
 
@@ -118,6 +122,10 @@ ReactDOM.render(
                 <IndexRoute component={InvalidPage}/>
               </Route>
 
+              <Route path="/changePassword">
+                <IndexRoute component={ChangePassword}/>
+              </Route>
+
               <Route path="/guide">
                 <IndexRoute component={Guide} onEnter={isGuideAccess}/>
                 <Route path=":guideId"component={GuideLayout}> //tab
@@ -129,13 +137,16 @@ ReactDOM.render(
               </Route>
 
                 <Route path="/tours" >
-                  <IndexRoute component={Tours} onEnter={notRequireGuideAuth}/>/>
+                  <IndexRoute component={Tours} onEnter={notRequireGuideAuth}/>
                   <Route path=":tourId"component={TourDetail} />
                 </Route>
 
                 <Route path="/schedule" component={Schedule} onEnter={notRequireGuideAuth}/>
                 <Route path="/pending" component={PendingList} onEnter={requireManagerAuth}/>
-                <Route path="/staff" component={Staff} onEnter={notRequireGuideAuth}/>
+                <Route path="/staff">
+                  <IndexRoute component={Staff} onEnter={notRequireGuideAuth}/>
+                  <Route path=":staffId" component={StaffProfile}/>
+                </Route>
                 <Route path="/bookingMethod" component={BookingMethod} onEnter={notRequireGuideAuth}/>
               </Route>
           </Route>

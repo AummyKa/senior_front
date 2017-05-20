@@ -111,6 +111,7 @@ const RegistForm = Form.create()(React.createClass({
     const value = e.target.value;
     this.setState({ passwordDirty: this.state.passwordDirty || !!value });
   },
+
   checkPassword(rule, value, callback) {
     const form = this.props.form;
 
@@ -121,10 +122,11 @@ const RegistForm = Form.create()(React.createClass({
     }
 
   },
+  
   checkConfirm(rule, value, callback) {
     const form = this.props.form;
-    if(value.length < 6 || value.length > 14 ) {
-     callback('Your password must have 6 to 14 characters');
+    if(value.length < 8 || value.length > 14 ) {
+     callback('Your password must have 8 to 14 characters');
    }else if (value && this.state.passwordDirty) {
       form.validateFields(['confirm'], { force: true });
     }

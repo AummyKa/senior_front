@@ -111,7 +111,7 @@ class PopNationModal extends Component {
         <div className = "table-month-rev-summary">
 
         <Row>
-          <Col span={14}>
+          <Col xs={0} lg={14}>
 
             <div className = "pop-nation-chart-summary">
               <ComposedChart layout="vertical" width={300} height={250} data={this.state.amountNationsSummary}
@@ -127,7 +127,7 @@ class PopNationModal extends Component {
             </div>
 
           </Col>
-          <Col span={10}>
+          <Col xs={24} lg={10}>
             <Row>
               <Col span = {14}><h5><b>Monthly revenue summary</b></h5></Col>
 

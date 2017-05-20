@@ -87,7 +87,7 @@ class BoxAbove extends Component {
       if(typeof data[0] !== 'undefined' && typeof data[0].participants){
         amt_customer = data[0].participants
       }
-    
+
 
     let result = tourname+ ': '+amt_customer+ ' customers'
     this.setState({mostYearlyPopularTour:result})
@@ -158,40 +158,40 @@ class BoxAbove extends Component {
 
     return (
 
-      <div>
-         <Row>
-           <Col className="gutter-row" span={4} >
+      <div className="customer-box-above">
+         <Row gutter={8}>
+           <Col xs={24} lg={4} >
              <div className="total-customer" >
                <h3>Total customers</h3>
-               <div className="total-box"><p style = {{fontSize: '50px'}}>{this.state.netCustomers}</p></div>
+               <p>{this.state.netCustomers}</p>
              </div>
            </Col>
-           <Col className="gutter-row" span={5}>
+           <Col xs={12} lg={5}>
              <div className="individual-customer" >
                <h4>Individual Customer</h4>
-               <div className="text-box">{this.state.individualCustomers}</div>
+               <p>{this.state.individualCustomers}</p>
              </div>
 
              <div className="agency-customer">
                <h4>Agency</h4>
-               <div className="text-box">{this.state.agencyCustomer}</div>
+               <p>{this.state.agencyCustomer}</p>
              </div>
            </Col>
-           <Col className="gutter-row" span={5}>
+           <Col xs={12} lg={5}>
              <div className="public-tour" >
                <h4>Public Tour</h4>
-               <div className="text-box">{this.state.publicCustomers}</div>
+               <p>{this.state.publicCustomers}</p>
              </div>
              <div className="private-tour">
                <h4>Private Tour</h4>
-               <div className="text-box">{this.state.privateCustomers}</div>
+               <p>{this.state.privateCustomers}</p>
              </div>
            </Col>
 
-           <Col className="gutter-row" span={10}>
+           <Col xs={24} lg={10}>
              <div className="popular-tour" >
                <h3>Most Popular Tour</h3>
-               <div className="text-box">{this.state.mostYearlyPopularTour}</div>
+               <p>{this.state.mostYearlyPopularTour}</p>
              </div>
            </Col>
 

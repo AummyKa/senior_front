@@ -12,23 +12,6 @@ import { error, info } from '../components/Modal'
 import { Col, Row, Modal, Icon, Input, Alert } from 'antd';
 
 
-const font_style={
-    padding: 20
-}
-
-
-const login_style= {
-    padding: 10,
-    margin: 20,
-    marginTop: 160,
-    marginLeft: 50,
-    marginRight:50,
-    fontSize: 18,
-    textAlign: "center",
-    maxHeight: 100
-}
-
-
 class LoginPage extends Component {
 
     constructor (props) {
@@ -136,18 +119,19 @@ class LoginPage extends Component {
 
         return(
             <div>
-                <Row>
-                    <Col span={17}>
+                <Row className="login-page">
+                    <Col xs={{ span: 0 }} lg={{ span: 17 }}>
                         <div className="login-background">
                             {/*{this.state.people.map(({ _id, name, age }) => {*/}
                                 {/*return <div key={_id}>#{_id} Name: {name}, Age: {age}</div>*/}
                             {/*})}*/}
-                            <h1>Food tour</h1>
+                            <h1>Administration and Information System <br/>for a Tour Operator</h1>
                         </div>
                     </Col>
 
-                    <Col span={5} style = {login_style}>
-                        <h2 style={font_style}>Login</h2>
+                    <Col xs={{ span: 24 }} lg={{ span: 5 }}>
+                      <div className="login-form">
+                        <h2 style={{fontSize:'2rem', marginBottom:'20px'}}>Login</h2>
 
                         <LoginForm dispatch={this.props.dispatch} />
                         <RegistModal dispatch={this.props.dispatch}  / >
@@ -155,8 +139,8 @@ class LoginPage extends Component {
                           <Modal title="Forgot Password" visible={this.state.showForgotPassword}
                             onOk={this.handleForgotPassword.bind(this)} onCancel={closeForgotPassword}
                           >
-                            <p style={{fontSize:'12px'}}>Please input your email and submit</p>
-                            <p style={{fontSize:'12px'}}>Your reset password will be sent via email</p>
+                            <p style={{fontSize:'2rem'}}>Please input your email and submit</p>
+                            <p style={{fontSize:'2rem'}}>Your reset password will be sent via email</p>
                               <Input
                                 placeholder="Enter your email address"
                                 prefix={<Icon type="user" />}
@@ -180,7 +164,7 @@ class LoginPage extends Component {
                             }
 
                           </Modal>
-
+                        </div>
                     </Col>
             </Row>
             </div>

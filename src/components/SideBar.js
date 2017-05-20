@@ -19,7 +19,8 @@ class SideBar extends Component {
       userRole: Cookies.get('userRole'),
       token: Cookies.get('token'),
       z_index:this.props.z_index,
-      showCancelButton:false
+      showCancelButton:false,
+      sideBar_width:this.props.sideBar_width
     }
   }
 
@@ -46,7 +47,7 @@ class SideBar extends Component {
 
       <div>
       { this.state.userRole !== 'Tour Guide' && this.state.token ?
-      <div className="layout-aside"  style={{zIndex:this.state.z_index}}>
+      <div className="layout-aside"  style={{zIndex:this.state.z_index, width:this.state.sideBar_width}}>
           <aside className="layout-sider">
           <div className="layout-logo">
             { this.state.showCancelButton ?

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { BarChart, AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-         Bar, ComposedChart, PieChart, Pie, Sector, Cell  } from 'recharts';
+         Bar, ComposedChart, PieChart, Pie, Sector, Cell, ResponsiveContainer  } from 'recharts';
 import { Col, Row, Table, Select, Button } from 'antd'
 
 import apiAccess from '../../Helpers/apiAccess'
@@ -67,7 +67,7 @@ class TotalParticipant extends Component {
 
     return (
 
-      <div>
+      <ResponsiveContainer>
           <AreaChart width={600} height={200} data={this.state.totalParticipantData}
                  margin={{top: 10, right: 30, left: 0, bottom: 0}}>
              <XAxis dataKey="month"/>
@@ -77,7 +77,7 @@ class TotalParticipant extends Component {
              <Area type='monotone' dataKey='participants' stroke='#D67A01' fill='#ECF000' />
            </AreaChart>
 
-      </div>
+      </ResponsiveContainer>
 
     );
   }

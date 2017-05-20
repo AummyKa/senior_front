@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { BarChart, AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-         Bar, ComposedChart, PieChart, Pie, Sector, Cell  } from 'recharts';
+         Bar, ComposedChart, PieChart, Pie, Sector, Cell, ResponsiveContainer  } from 'recharts';
 import { Col, Row, Table } from 'antd'
 import Cookies from 'js-cookie'
 
@@ -75,7 +75,7 @@ class TourCustomerRanking extends Component {
 
     return (
 
-      <div>
+      <ResponsiveContainer>
 
          <ComposedChart layout="vertical" width={300} height={250} data={this.state.totalCustomerTourRankingData}
              margin={{top: 10, right: 10, bottom: 20, left: 2}}>
@@ -87,7 +87,7 @@ class TourCustomerRanking extends Component {
            <Bar dataKey='participants' barSize={15} fill='#B85D02'/>
         </ComposedChart>
 
-      </div>
+      </ResponsiveContainer>
 
     );
   }

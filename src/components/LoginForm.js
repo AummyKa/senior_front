@@ -77,7 +77,7 @@ class LoginForm extends Component {
                     Input addonBefore = { < Icon type = "lock" / >
                     }
                     type = "text"
-                    placeholder = "username" / >
+                    placeholder = "Username" / >
                 )
             } <
             /Form.Item> <

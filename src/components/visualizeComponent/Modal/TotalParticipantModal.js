@@ -121,7 +121,7 @@ class TotalParticipantModal extends Component {
         <div className = "table-month-rev-summary">
 
         <Row>
-          <Col span={14}>
+          <Col xs={0} lg={14}>
 
             <div className = "total-rev-area-chart">
               <AreaChart width={600} height={200} data={this.state.totalParticipantData}
@@ -135,7 +135,7 @@ class TotalParticipantModal extends Component {
             </div>
 
           </Col>
-          <Col span={10}>
+          <Col xs={24} lg={10}>
             <Row>
               <Col span = {14}><h5><b>Monthly participants summary</b></h5></Col>
 

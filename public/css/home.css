@@ -1,127 +1,74 @@
-.total-revenue, .each-tour-total-revenue, .popular-nation, .total-participant,
-.each-tour-total-customers, .total-cost-from-guide{
-  background-color: #F0EAE6;
+.home-dashboard{
   font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  width: 100%;
+  padding: 1%;
 }
 
-
-.total-revenue{
-  width: 650px;
-  height: 30%;
-  padding-bottom: 3%;
+.customer-box-above{
+  margin: auto;
+  margin-bottom: 20px;
 }
 
-.total-participant{
-  width: 650px;
-  height: 30%;
-  padding-bottom: 3%;
+.customer-box-above h3{
+  font-size: 2.5rem;
 }
 
-.total-cost-from-guide{
-  width: 650px;
-  height: 30%;
-  padding-bottom: 3%;
+.customer-box-above h4{
+  font-size: 2rem;
 }
 
-.table-month-rev-summary{
-  padding-left: 3%;
-  padding-right: 3%;
+.customer-box-above p{
+  font-size: 1.5rem;
 }
 
-.read-more-button {
-  cursor: pointer;
-  position: relative;
-  top: 4px;
-  right: 4px;
-  font-size: 24px;
-  color: #900C3F;
-  transition: all .3s;
-}
-.read-more-button:hover {
-  color: #FF5733;
+.total-customer, .private-tour, .popular-tour{
+  background: #900C3F;
 }
 
-.total-rev-area-chart{
-  top: 50%;
-  transform: translate(-6%,20%);
+.individual-customer, .private-tour{
+  background: #C70039;
 }
 
-.total-revenue-label, .each-tour-total-revenue-label, .popular-nation-label, .year-selection, .total-participant-label
-,.each-tour-total-customers-label, .total-cost-from-guide-label{
-    background-color: #FAE9DD;
-    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 15px;
-    height: 50px;
-    padding: 5px;
-    margin-top: 20px;
-    color: #494848;
+.agency-customer, .public-tour{
+  background: #FF5733;
 }
 
-.year-selection{
- width: 100%;
- padding: 10px;
- margin-bottom: 1%;
- margin-top: -3%;
-
+.total-customer, .individual-customer, .agency-customer, .public-tour, .private-tour
+,.popular-tour{
+  padding: 5%;
+  text-align: center;
+  color: #FBAF9F;
 }
 
-.total-revenue-label{
-  width: 650px;
-  margin-bottom: 15px;
+.visualize-box, .recharts-wrapper, .piechart-container{
+  background-color: #F0EAE6;
 }
 
-.total-cost-from-guide-label{
-  width: 650px;
-  margin-bottom: 15px;
+.year-selection, .visualize-label{
+  background-color: #FAE9DD;
 }
 
-.select-total-rev-year{
-  margin-bottom: 10px
-}
-
-.each-tour-total-revenue{
-  width: 300px;
-  height: 350px;
-}
-
-.each-tour-total-revenue-label{
-  width: 300px;
-  margin-bottom: 30px;
-}
-
-.each-tour-total-customers{
-  width: 300px;
-  height: 350px;
-}
-
-.each-tour-total-customers-label{
-  width: 300px;
-  margin-bottom: 30px;
-}
-
-.tour-ranking-chart-summary{
-  top: 50%;
-  transform: translate(-6%,5%);
-}
-
-.popular-nation{
-  width: 300px;
-  height: 550px;
+.year-go{
   margin-top: 20px;
 }
 
-.popular-nation-label{
-  width: 300px;
-  margin-bottom: 10px;
+.visualize-box{
+  height: 40vh;
+  width: : 100%;
+  margin-bottom: 50px;
 }
 
+@media (max-width: 1000px) {
+  .visualize-box{
+    width: : 100%;
+    height: 200px;
+    margin-bottom: 50px;
+  }
 
-.little-box-label{
-  width: 10px;
-  height: 10px;
+   .modal-lg{
+      max-width: 800px;
+    }
 }
-
 
 .popular-color-label{
   background-color: #FFF8F8;
@@ -129,99 +76,20 @@
   margin-bottom: 10px;
 }
 
-.piechart-container{
-  -webkit-box-sizing: border-box;
- -moz-box-sizing: border-box;
- box-sizing: border-box;
- padding: 10px;
- width: 300px;
- height: 300px;
-
+@media (max-width: 800px) {
+  .modal-lg{
+    max-width: 600px;
+  }
 }
 
-.fav-nation{
-  background-color: #F4F1EE;
-  width: 300px;
-  height: 400px;
-  margin-top: 20px;
+@media (max-width: 600px) {
+  .modal-lg{
+    max-width: 400px;
+  }
 }
 
-.guide-rev{
-  background-color: #F4F1EE;
-  width: 300px;
-  height: 400px;
-  margin-top: 20px;
-  margin-left: 20px;
-}
-
-.guide-rev-graph{
-  background-color: #F4F1EE;
-  width: 300px;
-  height: 400px;
-  margin-top: 20px;
-  margin-left: 20px;
-}
-
-
-.gutter-example .ant-row > div {
-  background: transparent;
-  border: 0;
-}
-
-.total-customer, .individual-customer, .agency-customer, .public-tour, .private-tour
-,.popular-tour{
-  padding: 10px 10px;
-  text-align: center;
-  color: #FBAF9F;
-}
-
-.text-box{
-  font-size: 30px;
-  margin: 0;
-  margin-top: -5px;
-}
-
-.total-customer {
-  background: #900C3F;
-  height: 160px;
-}
-
-.individual-customer {
-  background: #C70039;
-  height: 80px;
-  width: 99%;
-  padding:2%;
-  margin-left: 1%;
-}
-
-.agency-customer {
-  background: #FF5733;
-  height: 80px;
-  width: 99%;
-  padding:2%;
-  margin-left: 1%;
-}
-
-.public-tour {
-  background: #FF5733;
-  height: 80px;
-  width: 99%;
-  padding:2%;
-  margin-left: 1%;
-}
-
-.private-tour {
-  background: #C70039;
-  height: 80px;
-  width: 99%;
-  padding:2%;
-  margin-left: 1%;
-}
-
-.popular-tour{
-  background: #900C3F;
-  height: 160px;
-  width: 90%;
-  margin-left:5%;
-  margin-right:5%;
+@media (max-width: 400px) {
+  .modal-lg{
+    max-width: 350px;
+  }
 }

@@ -33,7 +33,8 @@ class DashboardPage extends Component {
       userRole: Cookies.get('userRole'),
       token: Cookies.get('token'),
       toggleSize:0,
-      z_index:100
+      z_index:100,
+      sideBar_width: 0
 
     }
   }
@@ -45,12 +46,14 @@ class DashboardPage extends Component {
     if(this.props.showSideBar !== nextProps.showSideBar){
       if(nextProps.showSideBar){
         console.log("open")
-        this.setState({toggleSize:5})
+        this.setState({toggleSize:24})
+        this.setState({sideBar_width:'100%'})
         this.setState({z_index:0})
       }else{
         console.log("close")
         this.setState({toggleSize:0})
         this.setState({z_index:100})
+        this.setState({sideBar_width:0})
       }
     }
   }
@@ -62,15 +65,15 @@ class DashboardPage extends Component {
             {this.state.userRole !== 'Tour Guide' && this.state.token ?
               <Row style = {{height:'100%',backgroundColor:'#ffffff'}}>
                   <Col xs={this.state.toggleSize} lg={4} style = {{height:'100%' }}>
-                      <SideBar dispatch={this.props.dispatch} z_index={this.state.z_index} />
+                      <SideBar dispatch={this.props.dispatch} z_index={this.state.z_index} width={this.state.sideBar_width} />
                           {/*{this.state.people.map(({ _id, name, age }) => {*/}
                               {/*return <div key={_id}>#{_id} Name: {name}, Age: {age}</div>*/}
                           {/*})}*/}
                   </Col>
 
-                  <Col xs={24} lg={20} >
+                  <Col xs={24} lg={20} style={{overflowX:'hidden'}}>
                     <NavBar dispatch={this.props.dispatch} />
-                      <div style={{ padding: 60 }}>
+                      <div>
                         {this.props.children}
 
                       </div>

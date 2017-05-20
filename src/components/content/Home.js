@@ -97,7 +97,7 @@ class Home extends Component {
 
     return (
 
-      <div>
+      <div className="home-dashboard">
 
         <div className="modal-container">
             <Modal
@@ -191,18 +191,14 @@ class Home extends Component {
 
         <div className = "year-selection">
           <Row>
-
             <Col span={6}>
-              <div className ="year-title" style = {{marginTop: '-7%'}}>
-                <h3>{this.state.selectedYear}</h3>
+              <div className ="year-title">
+                <h1>{this.state.selectedYear}</h1>
               </div>
             </Col>
 
-            <Col span={1}  offset ={11} >
-              <Icon type="calendar" style = {{fontSize: "22px"}} />
-            </Col>
-
-            <Col span={4}>
+            <Col xs={{ span: 6, offset: 2 }} lg={{ span: 6, offset: 12 }} className="year-go">
+              <Icon type="calendar" />
               <Select
                  showSearch
                  style={{width: 150}}
@@ -214,8 +210,6 @@ class Home extends Component {
                >
                 {throwOptionYearObject()}
                </Select>
-             </Col>
-             <Col span={1}>
                <Button type = "primary" onClick = {() => this.setYearRev()}>GO!</Button>
             </Col>
          </Row>
@@ -226,9 +220,9 @@ class Home extends Component {
         </div>
 
         <Row gutter={16}>
-         <Col span={16}>
-           <div className = "total-revenue">
-             <div className = "total-revenue-label">
+         <Col xs={24} lg={16}>
+           <div className = "visualize-box">
+             <div className = "visualize-label">
                <Row>
                  <Col span = {14}>
                   <h4>Total Revenue Summary</h4>
@@ -244,8 +238,8 @@ class Home extends Component {
              <TotalRev dispatch = {this.props.dispatch}/>
            </div>
 
-           <div className = "total-participant">
-             <div className = "total-participant-label">
+           <div className = "visualize-box">
+             <div className = "visualize-label">
                <Row>
                  <Col span = {14}>
                   <h4>Total Customer Summary</h4>
@@ -261,8 +255,8 @@ class Home extends Component {
              <TotalParticipant dispatch = {this.props.dispatch} />
            </div>
 
-           <div className = "total-cost-from-guide">
-             <div className = "total-cost-from-guide-label">
+           <div className = "visualize-box">
+             <div className = "visualize-label">
                <Row>
                  <Col span = {14}>
                   <h4>Total Cost From Guide</h4>
@@ -280,9 +274,9 @@ class Home extends Component {
 
          </Col>
 
-         <Col span={8}>
-           <div className = "each-tour-total-revenue">
-             <div className = "each-tour-total-revenue-label">
+         <Col xs={24} lg={8}>
+           <div className = "visualize-box">
+             <div className = "visualize-label">
                 <Row>
                   <Col span = {17}>
                    <h4>Tour Revenue Ranking</h4>
@@ -298,8 +292,8 @@ class Home extends Component {
              <TourRevRanking dispatch = {this.props.dispatch}/>
            </div>
 
-           <div className = "each-tour-total-customers">
-             <div className = "each-tour-total-customers-label">
+           <div className = "visualize-box">
+             <div className = "visualize-label">
                 <Row>
                   <Col span = {17}>
                    <h4>Tour Customer Ranking</h4>
@@ -315,8 +309,8 @@ class Home extends Component {
              <TourCustomerRanking dispatch = {this.props.dispatch}/>
            </div>
 
-           <div className = "popular-nation">
-             <div className = "popular-nation-label">
+           <div className = "visualize-box">
+             <div className = "visualize-label">
                <Row>
                  <Col span = {17}>
                   <h4>Popular Nation</h4>

@@ -53,9 +53,9 @@ const AddGuideTourRatingModal = Form.create()(React.createClass({
 
   componentWillReceiveProps(nextProps){
 
-    if(this.props.tours_data !== nextProps.tours_data){
-      this.setState({listAllTourName: nextProps.tours_data})
-      console.log(nextProps.tours_data)
+    if(this.props.all_tours_name !== nextProps.all_tours_name){
+      this.setState({listAllTourName: nextProps.all_tours_name})
+      console.log(nextProps.all_tours_name)
     }
 
     if(this.props.addGuideExpertStatus !== nextProps.addGuideExpertStatus){
@@ -240,7 +240,7 @@ function mapStateToProps(state) {
 
     return {
         addGuideExpertStatus: state.addGuideExpertField.addGuideExpertStatus,
-        tours_data: state.getTours.tours_data
+        all_tours_name: state.getToursName.all_tours_name
 
     };
 }

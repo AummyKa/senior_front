@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { BarChart, AreaChart, Area, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-         Bar, ComposedChart, PieChart, Pie, Sector, Cell  } from 'recharts';
+         Bar, ComposedChart, PieChart, Pie, Sector, Cell, ResponsiveContainer  } from 'recharts';
 import { Col, Row, Table } from 'antd'
 
 import Cookies from 'js-cookie'

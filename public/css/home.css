@@ -40,8 +40,8 @@
   color: #FBAF9F;
 }
 
-.visualize-box, .recharts-wrapper, .piechart-container{
-  background-color: #F0EAE6;
+.visualize-label .label-box{
+  padding-left: 15px;
 }
 
 .year-selection, .visualize-label{
@@ -74,6 +74,11 @@
   background-color: #FFF8F8;
   padding: 5px;
   margin-bottom: 10px;
+}
+
+.little-box-label{
+  width: 10px;
+  height: 10px;
 }
 
 @media (max-width: 800px) {

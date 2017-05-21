@@ -155,33 +155,13 @@ class GuideHistory extends Component {
 
       <div className = "guide-content" >
 
-        <div className = "guide-rev-top-detail">
-        <Row>
-           <Col span={12}>
-           <ul>
-            <li>Amount of working month</li><br/>
-            <li>Average salary</li><br/><br/>
-          </ul>
-           </Col>
-
-           <Col span={12}>
-             <ul>
-              <li>{this.state.amount_of_working_month}     tours</li><br/>
-              <li>{this.state.average_salary}     baht</li><br/><br/>
-            </ul>
-           </Col>
-      </Row>
-      </div>
-
         <div className = "guide-tourlist">
           <Row>
-            <Col span={6}>
+            <Col xs={12} lg={6}>
               <h4>List of responsible tours</h4>
             </Col>
-            <Col span={5} offset={11}>
+            <Col xs={{span:10, offset:1}} lg={{span:7, offset:11}}>
               <MonthPicker onChange={this.handleMonthChange.bind(this)} placeholder="Select month" />
-            </Col>
-            <Col span={1}>
               <Button type="primary" onClick={()=>this.changeDate()} >Go!</Button>
             </Col>
           </Row>

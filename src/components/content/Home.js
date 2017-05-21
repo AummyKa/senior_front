@@ -224,7 +224,7 @@ class Home extends Component {
            <div className = "visualize-box">
              <div className = "visualize-label">
                <Row>
-                 <Col span = {14}>
+                 <Col span = {14} className="label-box">
                   <h4>Total Revenue Summary</h4>
                  </Col>
                 <Col span = {1} offset = {9}>
@@ -241,7 +241,7 @@ class Home extends Component {
            <div className = "visualize-box">
              <div className = "visualize-label">
                <Row>
-                 <Col span = {14}>
+                 <Col span = {14} className="label-box">
                   <h4>Total Customer Summary</h4>
                  </Col>
                 <Col span = {1} offset = {9}>
@@ -258,7 +258,7 @@ class Home extends Component {
            <div className = "visualize-box">
              <div className = "visualize-label">
                <Row>
-                 <Col span = {14}>
+                 <Col span = {14} className="label-box">
                   <h4>Total Cost From Guide</h4>
                  </Col>
                 <Col span = {1} offset = {9}>
@@ -278,7 +278,7 @@ class Home extends Component {
            <div className = "visualize-box">
              <div className = "visualize-label">
                 <Row>
-                  <Col span = {17}>
+                  <Col span = {17} className="label-box">
                    <h4>Tour Revenue Ranking</h4>
                   </Col>
                  <Col span = {1} offset = {5}>
@@ -295,7 +295,7 @@ class Home extends Component {
            <div className = "visualize-box">
              <div className = "visualize-label">
                 <Row>
-                  <Col span = {17}>
+                  <Col span = {17} className="label-box">
                    <h4>Tour Customer Ranking</h4>
                   </Col>
                  <Col span = {1} offset = {5}>
@@ -312,7 +312,7 @@ class Home extends Component {
            <div className = "visualize-box">
              <div className = "visualize-label">
                <Row>
-                 <Col span = {17}>
+                 <Col span = {17} className="label-box">
                   <h4>Popular Nation</h4>
                  </Col>
                 <Col span = {1} offset = {5}>

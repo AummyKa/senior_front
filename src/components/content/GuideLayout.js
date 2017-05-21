@@ -186,10 +186,10 @@ class GuideLayout extends Component {
       <div>
         <div className= "guide-top-content">
           <Row type="flex" justify="center">
-            <Col span={8}>
+            <Col xs={24} lg={8}>
             <img src={this.state.staff_image_url} className="img-guide"/>
             </Col>
-            <Col span={10} className = "guide-name">
+            <Col xs={24} lg={10} className = "guide-name">
               <h3>{this.state.name}</h3>
               <Upload {...props}>
                 <Button icon="download">Upload picture</Button>

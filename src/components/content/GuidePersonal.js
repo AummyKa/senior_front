@@ -189,7 +189,7 @@ class GuidePersonal extends Component {
       <div className = "guide-content" >
 
         <Row>
-           <Col span={4}>
+           <Col xs={10} lg={4}>
              <ul>
               <li>Title</li><br/>
               <li>Name</li><br/>
@@ -198,7 +198,7 @@ class GuidePersonal extends Component {
             </ul>
 
            </Col>
-           <Col span={8}>
+           <Col xs={14} lg={8}>
              <ul>
                <li>{this.state.title}</li><br/>
                <li>{this.state.name}</li><br/>
@@ -206,7 +206,7 @@ class GuidePersonal extends Component {
                <li>{this.state.email}</li><br/>
             </ul>
            </Col>
-           <Col span={4}>
+           <Col xs={10} lg={4}>
              <ul>
               <li>LineID</li><br/>
               <li>Phone</li><br/>
@@ -214,7 +214,7 @@ class GuidePersonal extends Component {
               <li>Address</li><br/>
             </ul>
            </Col>
-           <Col span={8}>
+           <Col xs={14} lg={8}>
              <ul>
 
                <li>{this.state.edit ? this.guideShowEdit(this.state.lineID,"lineID") :this.state.lineID}</li><br/>

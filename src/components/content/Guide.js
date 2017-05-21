@@ -222,7 +222,7 @@ onInputChange = (e) => {
 
 
     return (
-      <div>
+      <div className = "guide-info">
       <div className = "topic">
         <h2>Guide</h2>
       </div>

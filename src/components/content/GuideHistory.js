@@ -57,10 +57,6 @@ class GuideHistory extends Component {
   constructor(props){
     super(props)
     this.state = {
-      current_m_salary: "28,500",
-      amount_of_working_month: "72",
-      average_salary: "30,000",
-      cur_m_working_tour: "7",
       selectedMonth:curMonth,
       selectedYear:curYear,
       guideIncomeSummary:[]
@@ -107,6 +103,7 @@ class GuideHistory extends Component {
   }
 
   componentWillMount(){
+
     this.getHistoryData(this.state.selectedYear,this.state.selectedMonth)
   }
 
@@ -160,8 +157,9 @@ class GuideHistory extends Component {
             <Col xs={12} lg={6}>
               <h4>List of responsible tours</h4>
             </Col>
+
             <Col xs={{span:10, offset:1}} lg={{span:7, offset:11}}>
-              <MonthPicker onChange={this.handleMonthChange.bind(this)} placeholder="Select month" />
+              <MonthPicker defaultValue={moment(curYear+'-'+curMonth, 'YYYY-MM')} onChange={this.handleMonthChange.bind(this)} placeholder="Select month" />
               <Button type="primary" onClick={()=>this.changeDate()} >Go!</Button>
             </Col>
           </Row>

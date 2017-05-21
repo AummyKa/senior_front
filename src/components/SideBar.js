@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Menu, Icon } from 'antd';
 import {changePage} from '../actions/action-changePage'
 import { connect } from 'react-redux'
@@ -24,6 +25,10 @@ class SideBar extends Component {
     }
   }
 
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
   clickPage = (page) => {
     this.props.dispatch(changePage(page))
   }
@@ -38,6 +43,17 @@ class SideBar extends Component {
 
   closeSideBar(){
     this.props.dispatch(expandSideBar("TOGGLE_SIDEBAR",false))
+  }
+
+  moveToProfilePage(){
+    const { router } = this.context;
+    let id = Cookies.get('userID')
+    Cookies.set('staff_id',id)
+    this.context.router.replace('/staff/'+id)
+
+    if(router.isActive('/staff')) {
+      this.props.dispatch({type:"REFRESH_STAFF_PAGE"})
+    }
   }
 
 
@@ -55,7 +71,7 @@ class SideBar extends Component {
               : null
             }
             <h5>Welcome!</h5>
-            <Link to={`/staff/`+Cookies.get('userID')} style={{ textDecoration: 'none'}}>{this.state.userName}</Link>
+            <a onClick={()=>this.moveToProfilePage()}>{this.state.userName}</a>
           </div>
           <Menu mode="inline" theme="dark">
 

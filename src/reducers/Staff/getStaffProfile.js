@@ -1,5 +1,6 @@
 const INITIAL_STATE = {
-  staffProfile : {}
+  staffProfile : {},
+  refreshStaffPage:false
 }
 
 // { type: 'LOGIN_SUCCESS', text }
@@ -21,6 +22,10 @@ const getStaffProfile = (state = INITIAL_STATE, action) => {
         console.log("fail")
       return {
         //pop up
+      }
+    case 'REFRESH_STAFF_PAGE':
+      return{
+        refreshStaffPage:true
       }
 
     default:

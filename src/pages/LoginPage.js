@@ -125,13 +125,13 @@ class LoginPage extends Component {
                             {/*{this.state.people.map(({ _id, name, age }) => {*/}
                                 {/*return <div key={_id}>#{_id} Name: {name}, Age: {age}</div>*/}
                             {/*})}*/}
-                            <h1>Administration and Information System <br/>for a Tour Operator</h1>
+                            <h1>Local Tour</h1>
                         </div>
                     </Col>
 
-                    <Col xs={{ span: 24 }} lg={{ span: 5 }}>
+                    <Col xs={{ span: 24 }} lg={{ span: 7 }}>
                       <div className="login-form">
-                        <h2 style={{fontSize:'2rem', marginBottom:'20px'}}>Login</h2>
+                        <h2 style={{fontSize:'2rem', marginBottom:'20px'}}>Welcome to Local Tour</h2>
 
                         <LoginForm dispatch={this.props.dispatch} />
                         <RegistModal dispatch={this.props.dispatch}  / >

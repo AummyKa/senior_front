@@ -35,7 +35,11 @@ class GuidePersonal extends Component {
   }
 
   componentDidMount(){
+    if(Cookies.get('userRole')==="Tour Guide"){
+      this.eachGuide(Cookies.get('userID'))
+    }else {
       this.eachGuide(Cookies.get('guide_id'))
+    }
   }
 
   eachGuide(id){

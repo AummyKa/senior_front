@@ -32,7 +32,6 @@ class StaffProfile extends Component {
   componentDidMount(){
 
     this.setState({staff_image_url:"http://localhost:8000/staffs/image/"+Cookies.get('staff_id')})
-
     //set button color
     //check if the user is a tour guide
     // if(this.state.userID == 'Tour Guide'){
@@ -64,6 +63,12 @@ class StaffProfile extends Component {
     if(this.props.updateStaffStatus !== nextProps.updateStaffStatus){
       if(nextProps.updateStaffStatus){
         this.setState({edit:false})
+        this.eachStaff(Cookies.get('userID'))
+      }
+    }
+
+    if(this.props.refreshStaffPage !== nextProps.refreshStaffPage){
+      if(nextProps.refreshStaffPage){
         this.eachStaff(Cookies.get('userID'))
       }
     }
@@ -276,7 +281,8 @@ class StaffProfile extends Component {
 const mapStateToProps = (state) => ({
   staffProfile: state.getStaffProfile.staffProfile,
   removePictureStatus: state.uploadPicture.removePictureStatus,
-  updateStaffStatus: state.updateStaff.updateStaffStatus
+  updateStaffStatus: state.updateStaff.updateStaffStatus,
+  refreshStaffPage: state.getStaffProfile.refreshStaffPage
 })
 
 export default connect(mapStateToProps)(StaffProfile)

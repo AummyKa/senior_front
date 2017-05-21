@@ -243,7 +243,7 @@ filterSchedule(selected){
       }
     }
     if(this.props.delete_status !== nextProps.delete_status){
-      if(nextProps.delete_tatus){
+      if(nextProps.delete_status){
         this.getEvent()
       }
     }

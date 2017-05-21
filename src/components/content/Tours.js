@@ -78,7 +78,7 @@ class Tours extends Component {
 
   TourBox({item, show, handleClickBox,dispatch}){
     return (
-      <Col className="gutter-row" span={8}>
+      <Col xs={24} sm={12} lg={{span:6,offset:1}} className="gutter-row">
         <Box
           dispatch = {dispatch}
           data = {item}
@@ -95,7 +95,7 @@ class Tours extends Component {
 
     return (
 
-      <div>
+      <div className="tour-list-show-case">
         <div className="modal-container" >
           <Modal
             show={this.state.showAddNewTour}
@@ -113,7 +113,7 @@ class Tours extends Component {
           </Modal>
         </div>
 
-        <div className = "topic">
+        <div className = "tour-topic">
           <h2>Tours</h2>
         </div>
 

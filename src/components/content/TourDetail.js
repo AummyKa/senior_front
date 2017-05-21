@@ -193,7 +193,7 @@ class TourDetail extends Component {
 
       <div className = "tour_content">
         <Row>
-          <Col span ={7}>
+          <Col lg ={7} xs={24} >
             <div className = "tour-picture"
               style={{backgroundImage: `url(${this.state.tour_picture_url})`,backgroundSize: 'cover' }}>
               <Popover content={uploadContent}>
@@ -248,7 +248,7 @@ class TourDetail extends Component {
             </div>
 
           </Col>
-          <Col span ={16} offset = {1}>
+          <Col lg={{span :16, offset:1 }} xs={24} >
 
             <div className = "edit-and-year-selected">
               <Row>
@@ -259,11 +259,11 @@ class TourDetail extends Component {
                   </div>
                 </Col>
 
-                <Col span={1}  offset ={6} >
+                <Col lg={{span:1,offset:6}} xs={{span:1, offset:2}}>
                   <Icon type="calendar" style = {{fontSize: "22px"}} />
                 </Col>
 
-                <Col span={6}>
+                <Col lg={6}>
                   <Select
                      showSearch
                      style={{width: 150}}

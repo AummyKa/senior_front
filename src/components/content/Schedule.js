@@ -491,26 +491,26 @@ filterSchedule(selected){
           </Modal>
       </div>
 
-      <div className = "schedule-container" style = {{marginTop:'-4%'}}>
+      <div className = "schedule-container" >
          <div className = "schedule-filter">
            <Row>
              <Col span ={2}>
                 <h2>Schedule</h2>
              </Col>
-             <Col span={1} offset={15}>
-              <div style = {{fontSize:'18px'}}>Filter:</div>
-             </Col>
-             <Col span={5} style = {{marginLeft:'1%'}}>
-               <Select
-                  showSearch
-                  style={{width: 150}}
-                  placeholder="Filter"
-                  optionFilterProp="children"
-                  onSelect={this.handleFilterSelect.bind(this)}
-                  filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                >
-                 {throwOptionFilterObject(filter)}
-                </Select>
+             <Col xs={{ span: 6, offset: 10 }} lg={{ span: 5, offset: 17 }}>
+             <div>
+               <div style = {{fontSize:'18px'}}>Filter:</div>
+                 <Select
+                    showSearch
+                    style={{width: 150}}
+                    placeholder="Filter"
+                    optionFilterProp="children"
+                    onSelect={this.handleFilterSelect.bind(this)}
+                    filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                  >
+                   {throwOptionFilterObject(filter)}
+                  </Select>
+             </div>
 
                 {this.state.selectedFilter == "Tour" ?
 

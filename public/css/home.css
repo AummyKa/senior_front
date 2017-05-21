@@ -1,7 +1,7 @@
 .home-dashboard{
   font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
   width: 100%;
-  padding: 1%;
+  padding: 5%;
 }
 
 .customer-box-above{
@@ -47,6 +47,11 @@
 
 .year-selection, .visualize-label{
   background-color: #FAE9DD;
+  margin-bottom:1%;
+}
+
+.year-title{
+  padding-left: 15px;
 }
 
 .visualize-label{

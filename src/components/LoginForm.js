@@ -102,20 +102,14 @@ class LoginForm extends Component {
                 })( <
                     Checkbox > Remember me < /Checkbox>
                 )
-            } <
-            a className = "login-form-forgot" onClick={()=>this.forgotPasswordModal()} > Forgot password < /a> <
-            Button type = "primary"
-            htmlType = "submit"
-            className = "login-form-button" >
-            Log in
-            <
-            /Button>
+            } <a className = "login-form-forgot" onClick={()=>this.forgotPasswordModal()}/>
+              <a> Forgot password < /a>
+              <Button type = "primary" htmlType = "submit" className = "login-form-button" >
+                Log in </Button>
 
-            <
-            /Form.Item>
+            </Form.Item>
 
-            <
-            /Form>
+            </Form>
         );
     }
 

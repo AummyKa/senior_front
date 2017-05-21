@@ -142,7 +142,7 @@ class Staff extends Component{
     }];
 
     return (
-      <div>
+      <div className="staff-content">
       <div className = "topic">
         <h2>Staff</h2>
       </div>

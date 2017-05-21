@@ -7,6 +7,10 @@
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 
+.staff-list-content{
+  padding:5%;
+}
+
 .staff-top-content{
   width: 50%;
   margin: 0 auto;

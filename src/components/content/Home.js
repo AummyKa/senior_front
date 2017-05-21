@@ -193,7 +193,7 @@ class Home extends Component {
           <Row>
             <Col span={6}>
               <div className ="year-title">
-                <h1>{this.state.selectedYear}</h1>
+                <h2>{this.state.selectedYear}</h2>
               </div>
             </Col>
 

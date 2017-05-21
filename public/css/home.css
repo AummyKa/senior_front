@@ -40,9 +40,8 @@
   color: #FBAF9F;
 }
 
-.little-box-label{
-  width: 15px;
-  height: 15px;
+.visualize-label .label-box{
+  padding-left: 15px;
 }
 
 .year-selection, .visualize-label{
@@ -84,6 +83,11 @@
   background-color: #FFF8F8;
   padding: 5px;
   margin-bottom: 10px;
+}
+
+.little-box-label{
+  width: 15px;
+  height: 15px;
 }
 
 @media (max-width: 800px) {

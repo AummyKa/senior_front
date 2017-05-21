@@ -1,3 +1,7 @@
+.guide-info{
+  padding: 5%;
+}
+
 .guide-container{
   margin-top: 1%
 }
@@ -19,6 +23,7 @@
 }
 
 .btn-edit-status{
+  font-size: 1.5rem;
   color: #FA3030;
 }
 
@@ -30,6 +35,7 @@
 .guide-top-content{
   width: 50%;
   margin: 0 auto;
+  margin-top: 20px;
 }
 
 .img-guide{
@@ -61,14 +67,14 @@
 }
 
 .guide-content{
-  padding-left: 40px;
-  padding-right: 40px;
-  padding-top: 30px;
-  padding-bottom: 30px;
-  font-size: 18px;
+  padding: 5%;
+  font-size: 1.2rem;
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 
+.guide-tourlist h4{
+  font-size: 2rem;
+}
 
 .guide-calendar{
   background-color: #E9E8E8;
@@ -76,8 +82,7 @@
   height: 480px;
   font-family: "Helvetica Neue",Helvetica;
   margin-bottom: -50px;
-  font-size: 15px;
-  margin-top: -15px;
+  font-size: 1.5rem;
 }
 
 
@@ -87,7 +92,6 @@
   font-family: "Helvetica Neue",Helvetica;
   margin-left: 10px;
   height: 480px;
-  margin-top: -15px;
 }
 
 .selectedDay, .unavail-time, .combo-button, .submit-avail-button{
@@ -100,7 +104,7 @@
   height: 50px;
   color: white;
   background-color: #175EC4;
-  font-size: 20px;
+  font-size: 1.5rem;
   vertical-align: middle;
 }
 
@@ -108,7 +112,7 @@
   border-radius: 10px;
   height: 50px;
   color: white;
-  font-size: 20px;
+  font-size: 1.5rem;
   vertical-align: middle;
 }
 
@@ -117,6 +121,7 @@
 }
 
 .btn-edit-avail{
+  font-size: 1.5rem;
   background-color: #04247E;
 }
 
@@ -155,10 +160,8 @@
 }
 
 .btn-edit-guide-profile, .btn-save-guide-edit{
-  font-size: 20px;
+  font-size: 1.5rem;
   color: #fff;
-  width: 10%;
-  height: 10%;
 }
 
 .btn-save-guide-edit{
@@ -204,4 +207,26 @@
 
 .editable-row-operations a {
   margin-right: 8px;
+}
+
+.guide-content .star-rate{
+  font-size: 1.5rem;
+}
+
+@media (max-width: 1200px) {
+  .guide-detail{
+    width: 100%;
+    margin: 0px;
+  }
+
+  .guide-calendar{
+    height: 480px;
+    margin-bottom: -50px;
+  }
+
+  .edit-calendar{
+    margin-top: 50px;
+    margin-left: 0px;
+  }
+
 }

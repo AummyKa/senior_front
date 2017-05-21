@@ -131,6 +131,7 @@ class LoginPage extends Component {
 
                     <Col xs={{ span: 24 }} lg={{ span: 7 }}>
                       <div className="login-form">
+
                         <h2 style={{fontSize:'2rem', marginBottom:'20px'}}>Welcome to Local Tour!!</h2>
 
                         <LoginForm dispatch={this.props.dispatch} />

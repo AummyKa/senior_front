@@ -154,13 +154,12 @@ class GuideHistory extends Component {
 
         <div className = "guide-tourlist">
           <Row>
-            <Col span={6}>
+            <Col xs={12} lg={6}>
               <h4>List of responsible tours</h4>
             </Col>
-            <Col span={5} offset={11}>
+
+            <Col xs={{span:10, offset:1}} lg={{span:7, offset:11}}>
               <MonthPicker defaultValue={moment(curYear+'-'+curMonth, 'YYYY-MM')} onChange={this.handleMonthChange.bind(this)} placeholder="Select month" />
-            </Col>
-            <Col span={1}>
               <Button type="primary" onClick={()=>this.changeDate()} >Go!</Button>
             </Col>
           </Row>

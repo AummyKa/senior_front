@@ -37,10 +37,8 @@ class GuideExperience extends Component {
   constructor(props){
     super(props)
     this.state = {
-      startdate: "2010-03-01",
       startMonthInput: "2000-02",
       endMonthInput:"2000-03",
-      amount_of_workTours: "200",
       filterDropdownVisible: false,
       searchText: '',
       filtered: false,
@@ -384,8 +382,8 @@ class GuideExperience extends Component {
       render: (record,index) =>
       <span>
         { record.editable ?
-          <Button type="primary" onClick = {() => this.updateRating(record,index)}>Save Rating</Button>
-        : <Button type="primary" onClick = {() => this.editRating(record,index)}>Edit Rating</Button>
+          <Button type="primary" onClick = {() => this.updateRating(record,index)}>Save</Button>
+        : <Button type="primary" onClick = {() => this.editRating(record,index)}>Edit</Button>
         }
         <span className="ant-divider" />
           <Popconfirm title="Are you sure？" okText="Yes" cancelText="No"
@@ -422,72 +420,67 @@ class GuideExperience extends Component {
         </div>
 
       <div className = "guide-content" >
+
         <Row>
-           <Col span={12}>
-           <ul>
-            <li>StartDate</li><br/>
-            <li>Amount of working tours</li><br/>
-            <li>Status</li><br/>
-            <li>favorable point</li><br/>
-
-          </ul>
-           </Col>
-
-           <Col span={12}>
-             <ul>
-              <li>{this.state.startdate}</li><br/>
-              <li>{this.state.amount_of_workTours}  tours</li><br/>
-              <li>
-                <Row>
-                  <Col span={3}>
-                    {this.state.guideIsActive ? <div>Active</div> :
-                    <div style ={{color:'red'}}>InActive</div> }
-                  </Col>
-                  <Col span={2} offset={1}>
-                     <Switch checkedChildren={'Active'} unCheckedChildren={'inActive'}
-                       onChange={this.handleChangeGuideStatus.bind(this)}
-                       disabled={!this.state.showChangeGuideStatus} defaultChecked ={this.state.guideIsActive}  />
-                  </Col>
-                  <Col span={3} offset={3}>
-                    { this.state.showChangeGuideStatus ?
-                      <Button onClick={()=>this.saveGuideStatus()}>Save!</Button>
-                      :<Button onClick={()=>this.changeGuideStatus()}>Edit Status</Button>
-                    }
-                  </Col>
-                </Row>
-              </li><br/>
-              <li>
-                <Row>
-                  <Col span={6}>
-                    <StarRatingComponent
-                      name="favorable"
-                      starCount={5}
-                      onStarClick = {this.countingFavStar.bind(this)}
-                      value={this.state.guideProfile.favorable}
-                      editing={this.state.favEditable}
-                      starColor= {this.state.starFavColor}
-                      emptyStarColor= "#000000"
-                      renderStarIcon={() => <span><Icon className = "star-rate" type="star" /></span>}
-                    />
-                  </Col>
-                  <Col span={3} style={{marginLeft:'1px'}}>
-                    { this.state.favEditable ?
-                      <Button style = {{marginLeft: 50}} onClick = {()=> this.savefavorable() }>Save!</Button>
-                    : <Button style = {{marginLeft: 50}} onClick = {()=> this.editfavorable() }>Edit !</Button>
-                    }
-                  </Col>
-                </Row>
-              </li><br/>
-            </ul>
-           </Col>
+          <Col span={12}>
+            Status
+          </Col>
+          <Col span={12}>
+            <Row>
+              <Col xs={12} lg={3}>
+                {this.state.guideIsActive ? <div>Active</div> :
+                <div style ={{color:'red'}}>InActive</div> }
+              </Col>
+              <Col xs={12} lg={{span:2, offset:1}}>
+                 <Switch checkedChildren={'Active'} unCheckedChildren={'inActive'}
+                   onChange={this.handleChangeGuideStatus.bind(this)}
+                   disabled={!this.state.showChangeGuideStatus} defaultChecked ={this.state.guideIsActive}  />
+              </Col>
+              <Col xs={24} lg={{span:3, offset:3 }}>
+                { this.state.showChangeGuideStatus ?
+                  <Button onClick={()=>this.saveGuideStatus()}>Save!</Button>
+                  :<Button onClick={()=>this.changeGuideStatus()}>Edit Status</Button>
+                }
+              </Col>
+            </Row>
+          </Col>
         </Row>
+
+          <Row style={{marginTop:'10px'}}>
+            <Col span={12}>
+              Favorable Point
+            </Col>
+            <Col span={12}>
+            <Row>
+              <Col xs={24} lg={6}>
+                <StarRatingComponent
+                  name="favorable"
+                  starCount={5}
+                  onStarClick = {this.countingFavStar.bind(this)}
+                  value={this.state.guideProfile.favorable}
+                  editing={this.state.favEditable}
+                  starColor= {this.state.starFavColor}
+                  emptyStarColor= "#000000"
+                  renderStarIcon={() => <span><Icon className = "star-rate" type="star" /></span>}
+                />
+              </Col>
+              <Col xs={24} lg={{span:6, offset:4}} style={{marginLeft:'1px'}}>
+                { this.state.favEditable ?
+                  <Button onClick = {()=> this.savefavorable() }>Save!</Button>
+                : <Button onClick = {()=> this.editfavorable() }>Edit !</Button>
+                }
+              </Col>
+            </Row>
+            </Col>
+          </Row>
+
 
         <div className = "tour-table">
           <h4>List of responsible tour</h4>
           <div className="table-operations" style = {{marginButtom: 10}}>
             <Button onClick={this.sortRateUp}>Rating Max to Min</Button>
             <Button onClick={this.clearSort}>Clear all sorting</Button>
-            <Button style = {{ left: "48.5%" }} type="primary" onClick={this.addTourRating.bind(this)}>Add more Rating</Button>
+            <Button type="primary" onClick={this.addTourRating.bind(this)}>Add more Rating</Button>
           </div>
           <Table columns={expertColumns} dataSource={this.state.guideProfileExpert}  size="middle" />
         </div>

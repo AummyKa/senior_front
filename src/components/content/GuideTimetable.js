@@ -251,9 +251,9 @@ class GuideTimetable extends Component {
 
     return (
       <div>
-        <div className = "guide-content" >
+        <div className className="timetable-content">
           <Row justify="space-between">
-              <Col span={16}>
+              <Col xs={24} lg={16}>
                 <div className = "guide-calendar">
 
                   <BigCalendar
@@ -269,7 +269,7 @@ class GuideTimetable extends Component {
               </div>
               </Col>
 
-            <Col span={8}>
+            <Col xs={24} lg={8}>
               <div className = "edit-calendar">
                 <div className = "selectedDay">
                   <h4>Selected Day</h4>

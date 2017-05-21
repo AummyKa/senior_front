@@ -48,6 +48,10 @@
   background-color: #FAE9DD;
 }
 
+.visualize-label{
+  padding-left: 15px;
+}
+
 .year-go{
   margin-top: 20px;
 }
@@ -77,8 +81,8 @@
 }
 
 .little-box-label{
-  width: 10px;
-  height: 10px;
+  width: 15px;
+  height: 15px;
 }
 
 @media (max-width: 800px) {

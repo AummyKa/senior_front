@@ -83,7 +83,6 @@
   font-family: "Helvetica Neue",Helvetica;
   margin-bottom: -50px;
   font-size: 1.5rem;
-  margin-top: -15px;
 }
 
 
@@ -93,7 +92,6 @@
   font-family: "Helvetica Neue",Helvetica;
   margin-left: 10px;
   height: 480px;
-  margin-top: -15px;
 }
 
 .selectedDay, .unavail-time, .combo-button, .submit-avail-button{
@@ -211,9 +209,24 @@
   margin-right: 8px;
 }
 
-@media (max-width: 1000px) {
+.guide-content .star-rate{
+  font-size: 1.5rem;
+}
+
+@media (max-width: 1200px) {
   .guide-detail{
     width: 100%;
     margin: 0px;
   }
+
+  .guide-calendar{
+    height: 480px;
+    margin-bottom: -50px;
+  }
+
+  .edit-calendar{
+    margin-top: 50px;
+    margin-left: 0px;
+  }
+
 }

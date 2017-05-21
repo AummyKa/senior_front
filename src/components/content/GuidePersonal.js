@@ -192,7 +192,7 @@ class GuidePersonal extends Component {
 
       <div className = "guide-content" >
 
-        <Row>
+        <Row className="padding-div">
            <Col xs={10} lg={4}>
              <ul>
               <li>Title</li><br/>

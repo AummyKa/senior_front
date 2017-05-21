@@ -57,10 +57,6 @@ class GuideHistory extends Component {
   constructor(props){
     super(props)
     this.state = {
-      current_m_salary: "28,500",
-      amount_of_working_month: "72",
-      average_salary: "30,000",
-      cur_m_working_tour: "7",
       selectedMonth:curMonth,
       selectedYear:curYear,
       guideIncomeSummary:[]
@@ -107,6 +103,7 @@ class GuideHistory extends Component {
   }
 
   componentWillMount(){
+
     this.getHistoryData(this.state.selectedYear,this.state.selectedMonth)
   }
 
@@ -155,31 +152,13 @@ class GuideHistory extends Component {
 
       <div className = "guide-content" >
 
-        <div className = "guide-rev-top-detail">
-        <Row>
-           <Col span={12}>
-           <ul>
-            <li>Amount of working month</li><br/>
-            <li>Average salary</li><br/><br/>
-          </ul>
-           </Col>
-
-           <Col span={12}>
-             <ul>
-              <li>{this.state.amount_of_working_month}     tours</li><br/>
-              <li>{this.state.average_salary}     baht</li><br/><br/>
-            </ul>
-           </Col>
-      </Row>
-      </div>
-
         <div className = "guide-tourlist">
           <Row>
             <Col span={6}>
               <h4>List of responsible tours</h4>
             </Col>
             <Col span={5} offset={11}>
-              <MonthPicker onChange={this.handleMonthChange.bind(this)} placeholder="Select month" />
+              <MonthPicker defaultValue={moment(curYear+'-'+curMonth, 'YYYY-MM')} onChange={this.handleMonthChange.bind(this)} placeholder="Select month" />
             </Col>
             <Col span={1}>
               <Button type="primary" onClick={()=>this.changeDate()} >Go!</Button>

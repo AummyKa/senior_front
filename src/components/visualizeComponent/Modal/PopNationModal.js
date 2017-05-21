@@ -99,10 +99,8 @@ class PopNationModal extends Component {
 
   render() {
 
-    const columns = [{ title: 'Month', dataIndex: 'month'},
-                    {  title: 'Public',dataIndex: 'public'},
-                    {  title: 'Private',dataIndex: 'private'},
-                    {  title: 'Total', dataIndex: 'total'}];
+    const columns = [{ title: 'Country', dataIndex: 'country'},
+                    {  title: 'Participants',dataIndex: 'participants'}];
 
 
     return (
@@ -150,7 +148,7 @@ class PopNationModal extends Component {
                     <Button type = "primary" onClick = {() => this.setYearRev()}>GO!</Button>
                 </Col>
             </Row>
-             <Table columns={columns} dataSource={this.state.totalRevTable} size="small" pagination={false} />
+             <Table columns={columns} dataSource={this.state.amountNationsSummary} size="small" pagination={false} />
           </Col>
         </Row>
 

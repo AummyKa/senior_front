@@ -19,10 +19,28 @@ String.prototype.capitalize = function() {
 
 
 
-function throwOptionTourNameObject(data){
+function throwOptionTourNameObject(data,currentTourExpert){
   if(data){
     let temp = []
-    for (let i = 0; i < data.length; i++) {
+
+    for(let k=0;k<currentTourExpert.length;k++){
+      for(let j=0;j<data.length;j++){
+
+        if(data[j].name == currentTourExpert[k].tour){
+          console.log('this index is '+ k)
+          console.log('before splice')
+          console.log(data[j])
+          data.splice(j, 1);
+          break;
+          console.log('after splice')
+          console.log(data)
+        }
+      }
+    }
+
+    console.log(data)
+
+    for(let i = 0; i < data.length; i++) {
       temp.push(<Option key= {i}>{data[i].name}</Option>);
     }
     return temp
@@ -30,13 +48,13 @@ function throwOptionTourNameObject(data){
 }
 
 
-
 const AddGuideTourRatingModal = Form.create()(React.createClass({
 
   getInitialState() {
     return{
       listAllTourName: [],
-      uuid: 1
+      uuid: 1,
+      guideCurrentTourExpert:[]
     }
   },
 
@@ -51,11 +69,24 @@ const AddGuideTourRatingModal = Form.create()(React.createClass({
     })
   },
 
+  eachGuide(id){
+      apiAccess({
+       url: 'http://localhost:8000/staffs/'+id,
+       method: 'GET',
+       payload: null,
+       attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_ATTEMPT' }),
+       successAction: (json) => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_SUCCESS', json }),
+       failureAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_FAILED' })
+     })
+  },
+
   componentWillReceiveProps(nextProps){
 
     if(this.props.all_tours_name !== nextProps.all_tours_name){
-      this.setState({listAllTourName: nextProps.all_tours_name})
-      console.log(nextProps.all_tours_name)
+      if(nextProps.all_tours_name){
+        this.setState({listAllTourName: nextProps.all_tours_name})
+        console.log(nextProps.all_tours_name)
+      }
     }
 
     if(this.props.addGuideExpertStatus !== nextProps.addGuideExpertStatus){
@@ -64,25 +95,34 @@ const AddGuideTourRatingModal = Form.create()(React.createClass({
       }
     }
 
+    if(this.props.curGuideProfile !== nextProps.curGuideProfile){
+      if(nextProps.curGuideProfile){
+        console.log(nextProps.curGuideProfile.expert)
+        this.setState({guideCurrentTourExpert: nextProps.curGuideProfile.expert})
+        // this.setState({guideRatingData: this.createGuideRatingData(nextProps.curGuideProfile)})
+      }
+    }
+
   },
 
   componentWillMount(){
     this.getAllTour()
+    this.eachGuide(Cookies.get('guide_id'))
   },
 
   handleSubmit(e){
       e.preventDefault();
 
       this.props.form.validateFieldsAndScroll((err, values) => {
-        console.log(values)
+
         if (!err) {
           const count = this.props.form.getFieldValue('keys').length
-          console.log(count)
+
           let payload = []
           for(var i = 1; i <= count; i++){
-            console.log(this.props.form.getFieldValue(`tourname-${i}`))
+
             let val = this.props.form.getFieldValue(`tourname-${i}`)
-            console.log(val)
+
             let tourname = this.handleTourNameSelect(val)
             var expert = {
                 tour: tourname,
@@ -98,8 +138,6 @@ const AddGuideTourRatingModal = Form.create()(React.createClass({
 
   handleTourNameSelect(value){
     if(this.state.listAllTourName){
-      console.log(value)
-      console.log(this.state.listAllTourName)
       let name = this.state.listAllTourName[value].name
       return name
     }
@@ -194,7 +232,7 @@ const AddGuideTourRatingModal = Form.create()(React.createClass({
                        optionFilterProp="children"
                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                      >
-                      {throwOptionTourNameObject(this.state.listAllTourName)}
+                      {throwOptionTourNameObject(this.state.listAllTourName,this.state.guideCurrentTourExpert)}
                      </Select>
 
                 )}
@@ -240,7 +278,8 @@ function mapStateToProps(state) {
 
     return {
         addGuideExpertStatus: state.addGuideExpertField.addGuideExpertStatus,
-        all_tours_name: state.getToursName.all_tours_name
+        all_tours_name: state.getToursName.all_tours_name,
+        curGuideProfile: state.guideProfile.curGuideProfile
 
     };
 }

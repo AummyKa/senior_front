@@ -71,7 +71,7 @@ class DashboardPage extends Component {
                           {/*})}*/}
                   </Col>
 
-                  <Col xs={24} lg={20} style={{overflowX:'hidden'}}>
+                  <Col xs={24} lg={20}>
                     <NavBar dispatch={this.props.dispatch} />
                       <div>
                         {this.props.children}

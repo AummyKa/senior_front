@@ -60,7 +60,7 @@ class EditAgencyModal extends Component{
 
 
  checkTel(rule, value, callback){
-   if(!value.match(/^[0-9]+$/) || value.length != 9){
+   if(!value.match(/^[0-9]+$/) || value.length != 10){
      callback('the input should be an appropriate phone number');
    }else {
      callback()

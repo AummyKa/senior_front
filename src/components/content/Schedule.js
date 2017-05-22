@@ -107,15 +107,20 @@ class Schedule extends Component {
   }
 
   showThatSlotFromEvent(event,e){
-    let start = event.start
-    let cutStart = start.substring(0,10)
-    let arr = cutStart.split('-')
-    console.log(arr)
-    //Tue May 23 2017
-    // this.props.dispatch(getSelectedDate("GET_SELECTED_DATE",start))
+    // let start = event.start
+    // let cutStart = start.substring(0,10)
+    // let arr = cutStart.split('-')
+    // let reverse_arr = arr.reverse()
+    // let day_str = reverse_arr.toString().split(',').join(' ')
+    //
+    // let dataPack={
+    //   dateString: day_str,
+    //   date_for_querry: cutStart
+    // }
+    //
+    // this.props.dispatch(getSelectedDate("GET_SELECTED_DATE_FROM_EVENT",dataPack))
     // this.setState({showSlotDetail : true})
-    console.log(event)
-    console.log(e)
+
   }
 
   getEvent(){
@@ -423,7 +428,7 @@ filterSchedule(selected){
                 <Modal.Title id="contained-modal-title">
                   Add more Customer</Modal.Title>
               </Modal.Header>
-              <Modal.Body>
+              <Modal.Body style={{backgroundColor:'#FACBB6'}}>
                 <AddMoreCustomerModal dispatch = {this.props.dispatch} addTourID = {this.state.addTourID} />
               </Modal.Body>
 

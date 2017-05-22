@@ -1,12 +1,13 @@
 
+
 // { type: 'LOGIN_SUCCESS', text }
 export const getSelectedDate = (type,selectedDate) => {
   switch (type) {
     case 'GET_SELECTED_DATE_FROM_EVENT':
-
-
-
-
+    return{
+      type: "VALID_SELECTED_DATE_FROM_EVENT",
+      datePack: selectedDate
+    }
 
     case 'GET_SELECTED_DATE':
       let start = selectedDate.toString().substring(0,15)

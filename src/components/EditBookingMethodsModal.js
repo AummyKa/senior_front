@@ -58,14 +58,14 @@ class EditBookingMethodsModal extends Component{
    }
  }
 
-
- checkTel(rule, value, callback){
-   if(!value.match(/^[0-9]+$/) || value.length != 9){
-     callback('the input should be an appropriate phone number');
-   }else {
-     callback()
-   }
- }
+ //
+ // checkTel(rule, value, callback){
+ //   if(!value.match(/^[0-9]+$/) || value.length != 11){
+ //     callback('the input should be an appropriate phone number');
+ //   }else {
+ //     callback()
+ //   }
+ // }
 
 
  checkBookingMethodName(rule, value, callback){

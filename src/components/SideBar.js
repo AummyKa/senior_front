@@ -80,11 +80,11 @@ class SideBar extends Component {
             : null
             }
 
-            <SubMenu key="GuideProfile" title={<span><Icon type="laptop" /><Link to={`/guide`}>Guide Profile</Link></span>}/>
+            <SubMenu key="GuideProfile" title={<span><Icon type="laptop" /><Link to={`/guide`}>Tour Guides</Link></span>}/>
             <SubMenu key="Schedule" title={<span><Icon type="notification" /><Link to={`/schedule`}>Schedule</Link></span>}/>
             <SubMenu key="Tours" title={<span><Icon type="notification" /><Link to={`/tours`}>Tours</Link></span>}/>
-            <SubMenu key="Staff" title={<span><Icon type="notification" /><Link to={`/staff`}>Staff</Link></span>}/>
-            <SubMenu key="BookingMethod" title={<span><Icon type="notification" /><Link to={`/bookingMethod`}>Booking Method</Link></span>}/>
+            <SubMenu key="Staff" title={<span><Icon type="notification" /><Link to={`/staff`}>Staffs</Link></span>}/>
+            <SubMenu key="BookingMethod" title={<span><Icon type="notification" /><Link to={`/bookingMethod`}>Booking Methods</Link></span>}/>
           </Menu>
 
       </aside>

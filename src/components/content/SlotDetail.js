@@ -31,7 +31,8 @@ class SlotDetail extends Component {
       delete_status: false,
       control_addTour:false,
       filteredInfo: null,
-      sortedInfo: null
+      sortedInfo: null,
+      date_for_querry:''
     }
   }
 
@@ -61,9 +62,9 @@ class SlotDetail extends Component {
   }
 
   componentWillMount(){
+    // this.setState({date_for_querry:changeDateFormat(this.props.selectedDate)})
     this.getTourAndBookerDetail()
     this.screenTourAndBooker(this.state.bookerAndTourDetail)
-    this.setState({selectedDate:this.props.selectedDate})
     this.setState({valid_date_status:this.props.valid_date_status})
     this.setState({delete_status:this.props.delete_status})
   }
@@ -73,7 +74,6 @@ class SlotDetail extends Component {
     this.setState({curDeletingTourID: _id})
     this.setState({showTourDeleteWarning:true})
   }
-
 
   deleteEachTour(_id){
     apiAccess({
@@ -90,7 +90,7 @@ class SlotDetail extends Component {
   getTourAndBookerDetail(){
     let date = changeDateFormat(this.props.selectedDate)
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/date/'+date,
+      url: 'http://localhost:8000/bookedtours/date/'+ date,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_BOOKER_AND_TOUR_ATTEMPT' }),
@@ -128,6 +128,12 @@ class SlotDetail extends Component {
       }
     }
 
+    // if(this.props.readyFormatDate !== nextProps.readyFormatDate){
+    //   if(nextProps.readyFormatDate){
+    //     console.log(nextProps.readyFormatDate)
+    //     this.setState({date_for_querry:nextProps.readyFormatDate})
+    //   }
+    // }
   }
 
   addMoreTour(){
@@ -320,7 +326,8 @@ const mapStateToProps = (state) => ({
    selectedDate: state.spreadSelectedDate.selectedDate,
    valid_date_status: state.spreadSelectedDate.valid_date_status,
    delete_status: state.deletedTour.delete_status,
-   showAddTourModal: state.addTourForm.showAddTourModal
+   showAddTourModal: state.addTourForm.showAddTourModal,
+   readyFormatDate: state.spreadSelectedDate.readyFormatDate
 })
 
 export default connect(mapStateToProps)(SlotDetail)

@@ -4,6 +4,11 @@
   padding: 5%;
 }
 
+.home-dashboard .ant-btn-primary{
+  background-color: #f47ca2;
+  border-color: #f47ca2;
+}
+
 .read-more-button{
   font-size: 3rem;
 }

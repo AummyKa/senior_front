@@ -117,7 +117,7 @@ class Staff extends Component{
       sortOrder: sortedInfo.columnKey === 'fullname' && sortedInfo.order,
     },
     {
-      title: 'Email',
+      title: 'E-mail',
       dataIndex: 'email',
       key: 'email',
 
@@ -144,7 +144,7 @@ class Staff extends Component{
     return (
       <div className="staff-list-content">
       <div className = "topic">
-        <h2>Staff</h2>
+        <h2>Staffs</h2>
       </div>
 
       <div className = "guide-filter">

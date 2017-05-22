@@ -191,7 +191,7 @@ class BookingMethod extends Component{
     },
 
     {
-      title: 'Email',
+      title: 'E-mail',
       dataIndex: 'email',
       key: 'email',
 
@@ -337,7 +337,7 @@ class BookingMethod extends Component{
         <div className="booking-method-table" style ={{marginTop: '3%'}} >
           <Row>
             <Col span = {5}>
-              <h4><b>Booking Individually</b></h4>
+              <h4><b>Individual Booking</b></h4>
             </Col>
             <Col span = {8}>
               <Button type = "primary" onClick = {() => this.showAddBookingMethods()} >Add More Methods</Button>

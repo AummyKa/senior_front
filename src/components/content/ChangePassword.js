@@ -136,7 +136,7 @@ class ChangePassword extends Component{
 
 
     return (
-    <div>
+    <div style={{padding:'5%'}}>
 
 
 
@@ -191,7 +191,7 @@ class ChangePassword extends Component{
       </FormItem>
 
       <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit" size="large">Submit</Button>
+          <Button type="primary" htmlType="submit" size="large" style={{backgroundColor:'#19BC9D', borderColor:'white'}}>Submit</Button>
       </FormItem>
 
       </Form>

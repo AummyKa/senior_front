@@ -155,7 +155,7 @@ class GuideHistory extends Component {
         <div className = "guide-tourlist">
           <Row>
             <Col xs={12} lg={6}>
-              <h4>List of responsible tours</h4>
+              <h4>List of Responsible Tours</h4>
             </Col>
 
             <Col xs={{span:10, offset:1}} lg={{span:7, offset:11}}>

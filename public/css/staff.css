@@ -8,6 +8,10 @@
   padding:5%;
 }
 
+.staff-list-content .ant-pagination-item{
+  background: #19BC9D;
+}
+
 .staff-profile-wrapper{
   padding:5%;
 }

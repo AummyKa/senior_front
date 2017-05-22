@@ -15,6 +15,11 @@
   padding:5%
 }
 
+.tour_content .ant-btn-primary{
+  background-color: #19BC9D;
+  border-color: white;
+}
+
 .tour-list-show-case{
   padding-left: 3%;
   padding-right: 3%;

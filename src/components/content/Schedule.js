@@ -397,7 +397,7 @@ filterSchedule(selected){
 
     return (
 
-      <div>
+      <div className="schedule-popup-container">
 
         <Modal
           show={this.state.showSuggestGuide}
@@ -426,9 +426,9 @@ filterSchedule(selected){
             >
               <Modal.Header closeButton>
                 <Modal.Title id="contained-modal-title">
-                  Add more Customer</Modal.Title>
+                  Add More Customer</Modal.Title>
               </Modal.Header>
-              <Modal.Body style={{backgroundColor:'#FACBB6'}}>
+              <Modal.Body style={{backgroundColor:'#ebe9e7'}}>
                 <AddMoreCustomerModal dispatch = {this.props.dispatch} addTourID = {this.state.addTourID} />
               </Modal.Body>
 
@@ -447,7 +447,7 @@ filterSchedule(selected){
                 <Modal.Title id="contained-modal-title">
                   Edit Customer</Modal.Title>
               </Modal.Header>
-              <Modal.Body>
+              <Modal.Body style={{backgroundColor:'#ebe9e7'}}>
                  <EditCurCustomerModal eachCurCustomer ={this.state.editCurCustomer} curTourID = {this.state.curTourID}  />
               </Modal.Body>
 
@@ -463,7 +463,7 @@ filterSchedule(selected){
               aria-labelledby="contained-modal-title"
             >
               <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title">Add Tour and Guide at {this.state.selectedDate}</Modal.Title>
+                <Modal.Title id="contained-modal-title">Add Tour Booking: {this.state.selectedDate}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
 
@@ -503,7 +503,7 @@ filterSchedule(selected){
             aria-labelledby="contained-modal-title"
           >
             <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title">Tour lists at {this.state.selectedDate} </Modal.Title>
+              <Modal.Title id="contained-modal-title">Tour Lists: {this.state.selectedDate} </Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <SlotDetail dispatch = {this.props.dispatch} />

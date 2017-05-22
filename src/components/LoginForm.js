@@ -72,13 +72,13 @@ class LoginForm extends Component {
                 getFieldDecorator('username', {
                     rules: [{
                         required: true,
-                        message: 'Please input your username!'
+                        message: 'Please input your e-mail!'
                     }],
                 })( <
                     Input addonBefore = { < Icon type = "lock" / >
                     }
                     type = "text"
-                    placeholder = "Username" / >
+                    placeholder = "E-mail" / >
                 )
             } <
             /Form.Item> <
@@ -96,20 +96,14 @@ class LoginForm extends Component {
                 )
             } <
             /Form.Item> <
-            Form.Item > {
-                getFieldDecorator('remember', {
-                    valuePropName: 'checked',
-                    initialValue: true,
-                })( <
-                    Checkbox > Remember me < /Checkbox>
-                )
-            } <a className = "login-form-forgot" onClick={()=>this.forgotPasswordModal()}>
-              Forgot password </a>
+            Form.Item >
               <Button htmlType = "submit" className = "login-form-button" >
                 Log in </Button>
-
             </Form.Item>
-
+            <Form.Item >
+              <a className = "login-form-forgot" onClick={()=>this.forgotPasswordModal()}>
+                Forgot password </a>
+            </Form.Item >
             </Form>
         );
     }

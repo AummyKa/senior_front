@@ -122,7 +122,7 @@ const RegistForm = Form.create()(React.createClass({
     }
 
   },
-  
+
   checkConfirm(rule, value, callback) {
     const form = this.props.form;
     if(value.length < 8 || value.length > 14 ) {
@@ -198,7 +198,7 @@ const RegistForm = Form.create()(React.createClass({
         >
           {getFieldDecorator('email', {
             rules: [{
-              type: 'email', message: 'The input is not valid E-mail!'}]
+              required: true, type: 'email', message: 'The input is not valid E-mail!'}]
             })(
             <Input />
           )}

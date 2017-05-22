@@ -148,7 +148,7 @@ class TourDetail extends Component {
             aria-labelledby="contained-modal-title"
           >
             <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title">Cost Modal</Modal.Title>
+              <Modal.Title id="contained-modal-title">Edit Tour Information</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <EachTourEditFormModal tourId= {this.state.tour_id} dispatch = {this.props.dispatch}/>

@@ -210,7 +210,7 @@ class GuideLayout extends Component {
 
               <Radio.Button style = {{height:"40px", width: "130px", textAlign:"center",
                 backgroundColor: this.state.btnColor3}}
-              value="history">History</Radio.Button>
+              value="history">Assigned Tours</Radio.Button>
               <Radio.Button style = {{height:"40px", width: "130px", textAlign:"center",
                 backgroundColor:this.state.btnColor4 }}
               value="timetable">Timetable</Radio.Button>

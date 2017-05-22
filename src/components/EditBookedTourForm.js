@@ -478,7 +478,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
       <Col span={11} offset = {1}>
        <FormItem
          {...formItemLayout}
-         label="Tour name"
+         label="Tour Name"
        >
          {getFieldDecorator('tourname',
            { initialValue: this.state.eachTour.tour_name,
@@ -528,7 +528,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
 
        <FormItem
          {...formItemLayout}
-         label="Tour period"
+         label="Tour Period"
        >
          {getFieldDecorator('tour_period',{
            initialValue: this.state.eachTour.tour_period,
@@ -578,7 +578,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
          </Col>
           <Col span={9}>
             <Button style = {{backgroundColor: '#FFD310', color: 'white'}} onClick = {()=> this.showSuggestModal()} >
-              Suggest guide!</Button>
+              Suggest Tour Guide!</Button>
          </Col>
    </Row>
          </FormItem>
@@ -614,7 +614,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
             <Button type="primary" style={{width:'90%'}} htmlType="submit" >Save Edit Tour</Button>
           </Col>
           <Col span={3}>
-            <Button type="primary" className = 'add-more-customer' onClick = {() => this.addMoreCustomer()}>Add more customer</Button>
+            <Button type="primary" className = 'add-more-customer' onClick = {() => this.addMoreCustomer()}>Add More Customer</Button>
           </Col>
          </Row>
        </FormItem>

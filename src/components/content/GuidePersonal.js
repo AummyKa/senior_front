@@ -212,7 +212,7 @@ class GuidePersonal extends Component {
            </Col>
            <Col xs={10} lg={4}>
              <ul>
-              <li>LineID</li><br/>
+              <li>Line ID</li><br/>
               <li>Phone</li><br/>
               <li>Workplace</li><br/>
               <li>Address</li><br/>

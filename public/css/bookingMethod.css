@@ -1,3 +1,13 @@
 .booking-method-wrapper{
   padding:5%
 }
+
+.booking-method-wrapper .ant-btn-primary{
+  background-color: #19BC9D;
+  border-color: white;
+}
+
+.booking-method-wrapper .ant-pagination-item{
+  background-color: #19BC9D;
+  border-color: white;
+}

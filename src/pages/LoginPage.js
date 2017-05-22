@@ -80,8 +80,8 @@ class LoginPage extends Component {
       if(this.props.registed !== nextProps.registed){
 
         if(nextProps.registed){
-          let title = 'Register successful'
-          let content = 'You can login when your registration is approved'
+          let title = 'Registration Complete!!'
+          let content = 'You can login after your account is approved'
 
           return(
             <div>

@@ -200,7 +200,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
     }
 
     if(this.props.all_tours_name !== nextProps.all_tours_name){
-      if(nextProps.all_tours_name){        
+      if(nextProps.all_tours_name){
         this.setState({tours_name: nextProps.all_tours_name})
       }
     }
@@ -453,14 +453,14 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
          <FormItem
            {...formItemLayout}
-           label= {'Email : '}
+           label= {'E-mail : '}
          >
            {getFieldDecorator(`email-${k}`, {
              rules: [{
                required: true,
-               type: 'email', message: 'The input is not valid E-mail!'}]
+               type: 'email', message: 'The input is not a valid e-mail!'}]
            })(
-             <Input placeholder="email" style={{ width: '80%', marginRight: 5 }} />
+             <Input placeholder="E-mail" style={{ width: '80%', marginRight: 5 }} />
            )}
 
          </FormItem>
@@ -477,7 +477,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
                message: "Please input customer's name.",
              }],
            })(
-             <Input placeholder="name"  style={{ width: '80%', marginRight: 5 }} />
+             <Input placeholder="Name"  style={{ width: '80%', marginRight: 5 }} />
            )}
 
          </FormItem>
@@ -514,7 +514,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
            {getFieldDecorator(`phone-${k}`, {
              validateTrigger: ['onChange', 'onBlur']
            },{ validator: this.checkTel})(
-             <Input placeholder="phone"  style={{ width: '80%', marginRight: 5 }} />
+             <Input placeholder="Phone"  style={{ width: '80%', marginRight: 5 }} />
            )}
 
          </FormItem>
@@ -533,7 +533,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
                }]},{
                validateTrigger: ['onChange', 'onBlur']
              })(
-               <InputNumber min={0} max={100000} placeholder="price"  style={{ width: '30%', marginRight: 11 }} />
+               <InputNumber min={0} max={100000} placeholder="Price"  style={{ width: '30%', marginRight: 11 }} />
              )}
 
            </FormItem>
@@ -547,7 +547,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
                validateTrigger: ['onChange', 'onBlur'],
 
              })(
-               <Input placeholder="choose a location"  style={{ width: '70%', marginRight: 11 }} />
+               <Input placeholder="Choose a location"  style={{ width: '70%', marginRight: 11 }} />
              )}
 
            </FormItem>
@@ -555,13 +555,13 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
          <FormItem
             {...formItemLayout}
-            label={'Pickup time'}
+            label={'Pickup Time'}
             required={false}
           >
             {getFieldDecorator(`pickup_time-${k}`)(
               <TimePicker
                 style={{ width: '30%', marginRight: 11}}
-                format={format} placeholder = "pickup" />
+                format={format} placeholder = "Time" />
             )}
           </FormItem>
 
@@ -612,7 +612,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
       <Col span={11}>
        <FormItem
          {...formItemLayout}
-         label="Tour name"
+         label="Tour Name"
        >
          {getFieldDecorator('tourname',{
            rules: [{
@@ -658,7 +658,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
        <FormItem
          {...formItemLayout}
-         label="Tour period"
+         label="Tour Period"
        >
          {getFieldDecorator('tour_period',{
            rules: [{
@@ -708,7 +708,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
                </Col>
                 <Col span={9}>
                   <Button style = {{backgroundColor: '#FFD310', color: 'white'}} onClick = {()=> this.showSuggestModal()} >
-                    Suggest guide!</Button>
+                    Suggest Tour Guide!</Button>
                </Col>
          </Row>
 
@@ -716,17 +716,17 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
          <FormItem
            {...formItemLayout}
-           label="Tour Time"
+           label="Start Time"
          >
            {getFieldDecorator('tourtime', {
              rules: [{
                required: true,
-               message: "Please select a tour time.",
+               message: "Please select start time.",
              }]
            })(
              <TimePicker
                style={{ width: '80%', marginRight: 11, marginLeft: 8}}
-               format={format} placeholder = "tourtime"
+               format={format} placeholder = "Start time"
                onChange={this.handleTourTime} />
            )}
          </FormItem>

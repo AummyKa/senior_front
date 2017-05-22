@@ -2,12 +2,34 @@
   padding: 5%;
 }
 
+.guide-info .ant-btn-primary{
+  background-color: #19BC9D;
+  border-color: white;
+}
+
+.guide-info .ant-pagination-item{
+  background-color: #19BC9D;
+  border-color: white;
+}
+
 .guide-container{
   margin-top: 1%
 }
 
 .guide-profile-wrapper{
   padding:5%;
+}
+
+.guide-profile-wrapper .ant-btn-primary{
+  color: white;
+  border-color: white;
+  background-color: #19BC9D;
+}
+
+.guide-profile-wrapper .ant-pagination-item{
+  color: white;
+  border-color: white;
+  background-color: #19BC9D;
 }
 
 .custom-filter-dropdown {
@@ -166,14 +188,7 @@
 .btn-edit-guide-profile, .btn-save-guide-edit{
   font-size: 1.5rem;
   color: #fff;
-}
-
-.btn-save-guide-edit{
-  background-color: #0590C8;
-}
-
-.btn-edit-guide-profile{
-  background-color: #EC643C;
+  background: #19BC9D;
 }
 
 .normal-input .ant-input {

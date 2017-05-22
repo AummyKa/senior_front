@@ -14,7 +14,6 @@ const columns = [
   {
   title: 'Name',
   dataIndex: 'name',
-  render: text => <a href="#">{text}</a>,
 }, {
   title: 'Email',
   dataIndex: 'email',

@@ -193,7 +193,7 @@ onInputChange = (e) => {
       sorter: (a, b) => a.fullname.length - b.fullname.length
     },
     {
-      title: 'Email',
+      title: 'E-mail',
       dataIndex: 'email',
       key: 'email',
 
@@ -224,7 +224,7 @@ onInputChange = (e) => {
     return (
       <div className = "guide-info">
       <div className = "topic">
-        <h2>Guide</h2>
+        <h2>Tour Guides</h2>
       </div>
 
       <div className = "guide-filter">

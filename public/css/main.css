@@ -51,3 +51,8 @@
 .star-rate{
   font-size: 18px;
 }
+
+.login-page .ant-btn-primary{
+  background-color: #19BC9D;
+  border-color: white;
+}

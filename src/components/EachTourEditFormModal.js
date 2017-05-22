@@ -157,11 +157,11 @@ handleTourTypeSelect(value,option){
       <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
         <FormItem
           {...formItemLayout}
-          label="Toue Name"
+          label="Tour Name"
           hasFeedback
         >
           {getFieldDecorator('tourname',
-          {initialValue: this.state.tour_data.tour_name}, {
+          {initialValue: this.state.tour_data.tour_name,
             rules: [{
               required: true, message: 'Please input your E-mail!'
             }, {
@@ -177,7 +177,7 @@ handleTourTypeSelect(value,option){
           hasFeedback
         >
           {getFieldDecorator('tour_abbreviation',
-          {initialValue: this.state.tour_data.tour_abbreviation},{
+          {initialValue: this.state.tour_data.tour_abbreviation,
             rules: [{
               required: true, message: 'Please input a tour abbreviation!'
             }],
@@ -191,9 +191,9 @@ handleTourTypeSelect(value,option){
           hasFeedback
         >
           {getFieldDecorator('place',
-          {initialValue: this.state.tour_data.place}, {
+          {initialValue: this.state.tour_data.place,
             rules: [{
-              required: true, message: 'Please input your place!',
+              required: true, message: 'Please input your place!'
             }],
           })(
             <Input />
@@ -238,7 +238,7 @@ handleTourTypeSelect(value,option){
 
 
         <FormItem {...tailFormItemLayout}>
-          <Button type="primary" htmlType="submit" size="large">Edit</Button>
+          <Button type="primary" htmlType="submit" size="large" style={{backgroundColor:'#19BC9D', borderColor:'white'}}>Edit</Button>
         </FormItem>
       </Form>
     );

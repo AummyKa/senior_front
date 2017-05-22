@@ -126,6 +126,7 @@ class LoginPage extends Component {
                                 {/*return <div key={_id}>#{_id} Name: {name}, Age: {age}</div>*/}
                             {/*})}*/}
                             <h1>Local Tour</h1>
+                            <h3>Admistration System</h3>
                         </div>
                     </Col>
 

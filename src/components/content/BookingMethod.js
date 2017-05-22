@@ -259,7 +259,7 @@ class BookingMethod extends Component{
 
     return (
 
-      <div>
+      <div className="booking-method-wrapper">
 
         <div className="modal-container" >
           <Modal

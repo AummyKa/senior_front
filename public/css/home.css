@@ -4,9 +4,12 @@
   padding: 5%;
 }
 
+.read-more-button{
+  font-size: 3rem;
+}
+
 .customer-box-above{
   margin: auto;
-  margin-bottom: 20px;
 }
 
 .customer-box-above h3{
@@ -55,6 +58,8 @@
 
 .visualize-label{
   padding-left: 15px;
+  margin-bottom: 5%;
+  margin-top: 20px;
 }
 
 .year-go{
@@ -64,11 +69,23 @@
 .visualize-box{
   height: 40vh;
   width: : 100%;
-  margin-bottom: 50px;
+  margin-bottom: 100px;
+}
+
+.visualize-box-pop-nation{
+  height: 100%;
+  width: : 100%;
+  margin-bottom: 20px;
 }
 
 @media (max-width: 1000px) {
   .visualize-box{
+    width: : 100%;
+    height: 200px;
+    margin-bottom: 100px;
+  }
+
+  .visualize-box-pop-nation{
     width: : 100%;
     height: 200px;
     margin-bottom: 50px;

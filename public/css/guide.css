@@ -6,6 +6,10 @@
   margin-top: 1%
 }
 
+.guide-profile-wrapper{
+  padding:5%;
+}
+
 .custom-filter-dropdown {
   padding: 8px;
   border-radius: 6px;
@@ -68,7 +72,7 @@
 
 .guide-content{
   padding: 5%;
-  font-size: 1.2rem;
+  font-size: 1.8rem;
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 

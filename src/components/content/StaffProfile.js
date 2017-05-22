@@ -204,7 +204,7 @@ class StaffProfile extends Component {
 
     return (
 
-      <div>
+      <div className="staff-profile-wrapper">
         <div className= "staff-top-content">
           <Row type="flex" justify="center">
             <Col span={8}>

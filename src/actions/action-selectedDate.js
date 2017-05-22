@@ -2,9 +2,16 @@
 // { type: 'LOGIN_SUCCESS', text }
 export const getSelectedDate = (type,selectedDate) => {
   switch (type) {
+    case 'GET_SELECTED_DATE_FROM_EVENT':
+
+
+
+
+
     case 'GET_SELECTED_DATE':
       let start = selectedDate.toString().substring(0,15)
       let today = new Date()
+      console.log(start)
 
       if(selectedDate.getTime() - today.getTime() >= 0){
         return{

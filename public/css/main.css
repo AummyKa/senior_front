@@ -1,9 +1,10 @@
 .login-page{
   width:100%;
+  background-color: #F4997C;
 }
 
 .login-background {
-  background-image: url(./img/city_bg.jpg);
+  background-image: url(./img/fruit_bg2.jpg);
   width: 100%;
   height: 100vh;
   overflow-x: hidden;
@@ -13,22 +14,33 @@
   background-repeat: no-repeat;
 }
 
-.login-background h1{
-    font-size: 4rem;
+.login-background h1, .login-background h3{
     margin: 0;
     position: relative;
     left: 5%;
     top: 50%;
     transform: translate(0, 15%);
+    color:#F4997C;
+}
+
+.login-background h1{
+   font-size: 4rem;
+}
+
+.login-background h3{
+  margin-top:1%;
+  font-size: 2.5rem;
 }
 
 .login-form{
   text-align: center;
-  padding: 10%;
+  padding: 0 10% 0;
+  color:#5F0707;
 }
 
 .login-form h2{
     font-size: 2rem;
+    margin-top: 50%;
 }
 
 .example-input .ant-input {

@@ -1,13 +1,14 @@
 .staff-content{
-  padding-left: 40px;
-  padding-right: 40px;
-  padding-top: 30px;
-  padding-bottom: 30px;
+  padding:5%;
   font-size: 18px;
   font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 
 .staff-list-content{
+  padding:5%;
+}
+
+.staff-profile-wrapper{
   padding:5%;
 }
 

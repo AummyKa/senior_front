@@ -39,7 +39,11 @@ class GuideLayout extends Component {
 
   componentDidMount(){
 
-    this.setState({staff_image_url:"http://localhost:8000/staffs/image/"+Cookies.get('guide_id')})
+    if(Cookies.get('guide_id')===Cookies.get('userID')){
+      this.setState({staff_image_url:"http://localhost:8000/staffs/image/"+Cookies.get('userID')})
+    }else{
+      this.setState({staff_image_url:"http://localhost:8000/staffs/image/"+Cookies.get('guide_id')})
+    }
 
     const { router } = this.context;
     let guide_id = Cookies.get('guide_id')
@@ -183,7 +187,7 @@ class GuideLayout extends Component {
 
     return (
 
-      <div>
+      <div className="guide-profile-wrapper">
         <div className= "guide-top-content">
           <Row type="flex" justify="center">
             <Col xs={24} lg={8}>

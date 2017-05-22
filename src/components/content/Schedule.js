@@ -101,8 +101,21 @@ class Schedule extends Component {
   }
 
   showThatSlot(start){
+    console.log(start)
     this.props.dispatch(getSelectedDate("GET_SELECTED_DATE",start))
     this.setState({showSlotDetail : true})
+  }
+
+  showThatSlotFromEvent(event,e){
+    let start = event.start
+    let cutStart = start.substring(0,10)
+    let arr = cutStart.split('-')
+    console.log(arr)
+    //Tue May 23 2017
+    // this.props.dispatch(getSelectedDate("GET_SELECTED_DATE",start))
+    // this.setState({showSlotDetail : true})
+    console.log(event)
+    console.log(e)
   }
 
   getEvent(){
@@ -178,6 +191,8 @@ handleGuideSelect(value,option){
   this.setState({ selectedGuideID: this.state.guide_name[value]._id});
   // this.setState({ selectedGuideID: this.state.guide_name[value]._id})
 }
+
+
 
 filterSchedule(selected){
   apiAccess({
@@ -296,6 +311,7 @@ filterSchedule(selected){
 
     if(this.props.all_tours_name !== nextProps.all_tours_name){
       if(nextProps.all_tours_name){
+        console.log(throwOptionTourNameObject(nextProps.all_tours_name))
         this.setState({tours_name:nextProps.all_tours_name})
       }
     }
@@ -497,7 +513,7 @@ filterSchedule(selected){
              <Col span ={2}>
                 <h2>Schedule</h2>
              </Col>
-             <Col xs={{ span: 6, offset: 10 }} lg={{ span: 5, offset: 17 }}>
+             <Col xs={{ span: 6, offset: 10 }} lg={{ span: 5, offset: 17 }} style={{zIndex:'100'}}>
              <div>
                <div style = {{fontSize:'18px'}}>Filter:</div>
                  <Select
@@ -578,6 +594,7 @@ filterSchedule(selected){
                 events={this.state.events}
                 eventPropGetter={(this.eventStyleGetter)}
                 views={['month']}
+                onSelectEvent={(event,e)=> this.showThatSlotFromEvent(event,e)}
                 onSelectSlot={(slotInfo) => this.showThatSlot(slotInfo.start)}/>
                 </div>
             </Col>

@@ -12,3 +12,8 @@
 #components-form-demo-register .icp-selector {
   width: 60px;
 }
+
+.login-form-button{
+  background-color: #19BC9D;
+  color:#fff;
+}

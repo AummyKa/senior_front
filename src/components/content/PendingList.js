@@ -171,7 +171,7 @@ const PendingList = React.createClass({
 
 
     return (
-      <div>
+      <div className="pendingList-wrapper">
       <div className = "topic">
         <h2>PendingList</h2>
       </div>

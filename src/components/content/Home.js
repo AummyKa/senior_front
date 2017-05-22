@@ -198,7 +198,7 @@ class Home extends Component {
             </Col>
 
             <Col xs={{ span: 6, offset: 2 }} lg={{ span: 6, offset: 12 }} className="year-go">
-              <Icon type="calendar" />
+              <Icon type="calendar" style={{fontSize:'2rem'}} />
               <Select
                  showSearch
                  style={{width: 150}}
@@ -227,7 +227,7 @@ class Home extends Component {
                  <Col span = {14} className="label-box">
                   <h4>Total Revenue Summary</h4>
                  </Col>
-                <Col span = {1} offset = {9}>
+                <Col span = {1} offset = {8}>
                   <Popover placement="top" title={"See more!"}>
                     <Icon className = "read-more-button" type="ellipsis"
                       onClick = {()=> this.handleClickshowMoreTotalRevenue()}/>
@@ -244,7 +244,7 @@ class Home extends Component {
                  <Col span = {14} className="label-box">
                   <h4>Total Customer Summary</h4>
                  </Col>
-                <Col span = {1} offset = {9}>
+                <Col span = {1} offset = {8}>
                   <Popover placement="top" title={"See more!"}>
                     <Icon className = "read-more-button" type="ellipsis"
                       onClick = {()=> this.handleClickShowTotalParticipant()}/>
@@ -261,7 +261,7 @@ class Home extends Component {
                  <Col span = {14} className="label-box">
                   <h4>Total Cost From Guide</h4>
                  </Col>
-                <Col span = {1} offset = {9}>
+                <Col span = {1} offset = {8}>
                   {/*<Popover placement="top" title={"See more!"}>
                     <Icon className = "read-more-button" type="ellipsis"
                       onClick = {()=> this.handleClickShowTotalParticipant()}/>
@@ -281,7 +281,7 @@ class Home extends Component {
                   <Col span = {17} className="label-box">
                    <h4>Tour Revenue Ranking</h4>
                   </Col>
-                 <Col span = {1} offset = {5}>
+                 <Col span = {1} offset = {4}>
                    <Popover placement="top" title={"See more!"}>
                      <Icon className = "read-more-button" type="ellipsis"
                        onClick = {()=> this.handleClickShowMoreTourRevRanking()}/>
@@ -298,7 +298,7 @@ class Home extends Component {
                   <Col span = {17} className="label-box">
                    <h4>Tour Customer Ranking</h4>
                   </Col>
-                 <Col span = {1} offset = {5}>
+                 <Col span = {1} offset = {4}>
                    <Popover placement="top" title={"See more!"}>
                      <Icon className = "read-more-button" type="ellipsis"
                        onClick = {()=> this.handleClickShowMoreTourCustomerRanking()}/>
@@ -309,13 +309,13 @@ class Home extends Component {
              <TourCustomerRanking dispatch = {this.props.dispatch}/>
            </div>
 
-           <div className = "visualize-box">
+           <div className = "visualize-box-pop-nation">
              <div className = "visualize-label">
                <Row>
                  <Col span = {17} className="label-box">
                   <h4>Popular Nation</h4>
                  </Col>
-                <Col span = {1} offset = {5}>
+                <Col span = {1} offset = {4}>
                   <Popover placement="top" title={"See more!"}>
                     <Icon className = "read-more-button" type="ellipsis"
                       onClick = {()=> this.handleClickShowMoreNationsSummary()}/>

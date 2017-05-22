@@ -200,7 +200,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
     }
 
     if(this.props.all_tours_name !== nextProps.all_tours_name){
-      if(nextProps.all_tours_name){
+      if(nextProps.all_tours_name){        
         this.setState({tours_name: nextProps.all_tours_name})
       }
     }
@@ -263,8 +263,8 @@ const AddBookedTourForm = Form.create()(React.createClass({
           }
 
           let dateTour = changeDateFormat(this.props.dateTour)
-
-          if(typeof this.state.selectedGuideID === "undefined" ){
+          console.log(this.state.selectedGuideID)
+          if(typeof this.state.selectedGuideID === "undefined" || this.state.selectedGuideID == ''  ){
             let payLoad =
               {
                 customers: formResult,

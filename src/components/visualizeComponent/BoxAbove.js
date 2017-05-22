@@ -158,7 +158,7 @@ class BoxAbove extends Component {
 
     return (
 
-      <div className="customer-box-above">
+      <div className="customer-box-above" style={{backgroundColor:'#900C3F'}}>
          <Row gutter={8}>
            <Col xs={24} lg={4} >
              <div className="total-customer" >

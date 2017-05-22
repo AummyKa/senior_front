@@ -82,8 +82,8 @@ class DashboardPage extends Component {
               :
               <Row>
                   <NavBar dispatch={this.props.dispatch}
-                    style = {{width:'70%', margin:'0 auto 4% auto'}} />
-                    <div style = {{width:'70%', margin:'0 auto',marginTop:'3%',marginButtom:'3%'}}>
+                    style = {{margin:'0 auto 4% auto'}} />
+                    <div style = {{margin:'0 auto',marginTop:'3%',marginButtom:'3%'}}>
                       {this.props.children}
 
                     </div>

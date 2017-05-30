@@ -111,6 +111,9 @@
   font-size: 1.5rem;
 }
 
+.assigned-tour-wrapper{
+  padding:2%;
+}
 
 .edit-calendar{
   background-color: #E9E8E8;

@@ -668,7 +668,6 @@ const EditBookedTourForm = Form.create()(React.createClass({
      </Form>
 
         <EachCustomerInEachTourList dispatch={this.props.dispatch}/>
-      {/*}<Table columns={this.columns} dataSource={formatData(this.state.eachTour.customers)} scroll={{ x: 1700 }}/>*/}
 
      </div>
    );

@@ -20,6 +20,7 @@ import TotalParticipantModal from '../visualizeComponent/Modal/TotalParticipantM
 import TourCustomerRanking from '../visualizeComponent/TourCustomerRanking'
 import TourCustomerRankingModal from '../visualizeComponent/Modal/TourCustomerRankingModal'
 import TotalCostFromGuide from '../visualizeComponent/TotalCostFromGuide'
+import AgencyParticipantsRanking from '../visualizeComponent/AgencyParticipantsRanking'
 
 import { changeYearDashBoard } from '../../actions/action-changeYearDashBoard'
 
@@ -270,6 +271,23 @@ class Home extends Component {
               </Row>
              </div>
              <TotalCostFromGuide dispatch={this.props.dispatch}/>
+           </div>
+
+           <div className = "visualize-box">
+             <div className = "visualize-label">
+               <Row>
+                 <Col span = {14} className="label-box">
+                  <h4>Agency ranking</h4>
+                 </Col>
+                <Col span = {1} offset = {8}>
+                  {/*<Popover placement="top" title={"See more!"}>
+                    <Icon className = "read-more-button" type="ellipsis"
+                      onClick = {()=> this.handleClickShowTotalParticipant()}/>
+                 </Popover> */}
+                </Col>
+              </Row>
+             </div>
+              <AgencyParticipantsRanking dispatch={this.props.dispatch} />
            </div>
 
          </Col>

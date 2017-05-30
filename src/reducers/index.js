@@ -81,6 +81,7 @@ import getYearlyTotalCustomer from './Home/getYearlyTotalCustomer'
 import getYearlyBookingTypeCustomer from './Home/getYearlyBookingTypeCustomer'
 import getYearlyTourTypeCustomer from './Home/getYearlyTourTypeCustomer'
 import getTourCustomerRanking from './Home/getTourCustomerRanking'
+import getAgencyTotalParticipants from './Home/getAgencyTotalParticipants'
 
 //other
 import clickSideBar from './clickSideBar'
@@ -155,7 +156,8 @@ const admin = combineReducers({
     clickSideBar,
     uploadPicture,
     getStaffProfile,
-    changeUserPassword
+    changeUserPassword,
+    getAgencyTotalParticipants
 })
 
 export default admin

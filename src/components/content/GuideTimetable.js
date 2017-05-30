@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 
 import { Row,Col,Button, Input, Tag } from 'antd';
+import {Modal} from 'react-bootstrap'
 import moment from 'moment';
 
 import BigCalendar from 'react-big-calendar';
@@ -33,11 +34,13 @@ class GuideTimetable extends Component {
       eveningClicked: false,
       fullDayClicked: false,
       guideUnavailableDates:[],
-      eachGuideUnAvailableEachDate:[]
+      eachGuideUnAvailableEachDate:[],
+      showEditSlot:false
     }
   }
 
   choosingDate(start){
+    this.setState({showEditSlot:true})
     let strDate = start.toString().substring(0,15)
     let date = changeDateFormat(strDate)
     let id = Cookies.get('guide_id')
@@ -45,6 +48,27 @@ class GuideTimetable extends Component {
 
     apiAccess({
       url: 'http://localhost:8000/staffs/unavailability/'+id+'/'+date,
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_EACH_GUIDE_UNAVAIL_EACH_DATE_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_EACH_GUIDE_UNAVAIL_EACH_DATE_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_EACH_GUIDE_UNAVAIL_EACH_DATE_FAILED' })
+    })
+
+  }
+
+  choosingDateByEvent(event,e){
+    this.setState({showEditSlot:true})
+    let start = event.start
+    let cutStart = start.substring(0,10)
+    let arr = cutStart.split('-')
+    let day_str = arr.toString().split(',').join('-')
+
+    let id = Cookies.get('guide_id')
+    this.setState({selectedDate:day_str})
+
+    apiAccess({
+      url: 'http://localhost:8000/staffs/unavailability/'+id+'/'+day_str,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_EACH_GUIDE_UNAVAIL_EACH_DATE_ATTEMPT' }),
@@ -204,6 +228,7 @@ class GuideTimetable extends Component {
     if(this.props.addUnAvailDateEachGuideStatus !== nextProps.addUnAvailDateEachGuideStatus){
       if(nextProps.addUnAvailDateEachGuideStatus){
         this.getGuideUnAvailibility()
+        this.setState({showEditSlot:false})
       }
     }
     if(this.props.allUnAvailDateEachGuide !== nextProps.allUnAvailDateEachGuide){
@@ -249,8 +274,80 @@ class GuideTimetable extends Component {
         future: { after: new Date() }
     }
 
+    let closeEditSlot = () => { this.setState({showEditSlot:false}) }
+
     return (
       <div>
+
+        <Modal
+          show={this.state.showEditSlot}
+          onHide={closeEditSlot}
+          container={this}
+          aria-labelledby="contained-modal-title"
+        >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title">
+            Edit Timetable
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <div className = "edit-calendar">
+            <div className = "selectedDay">
+              <h4>Selected Day</h4>
+              <Input
+                 size="large"
+                 style={{ fontSize: 20 ,width: 150, textAlign: 'center' }}
+                 type="text"
+                 value={this.state.selectedDate}
+                 placeholder="YYYY-MM-DD"
+                 onChange={this.handleInputChange}
+                 onFocus={this.showCurrentDate}
+                 width = {120}
+               />
+            </div>
+            <div className = "unavail-time">
+              <h4>Unavailable time</h4>
+
+              { !this.state.morningClicked && !this.state.afternoonClicked && !this.state.eveningClicked && !this.state.fullDayClicked
+                ? this.showAllAvailabileTag() : null
+              }
+
+              { this.state.morningClicked ?
+                <Tag closable={true} color="#FFC300" afterClose={() => this.handleTagClose("Morning")}>Morning</Tag> : null
+              }
+              { this.state.afternoonClicked ?
+                <Tag closable={true} color="#FF5733" afterClose={() => this.handleTagClose("Afternoon")}>Afternoon</Tag> : null
+              }
+              { this.state.eveningClicked ?
+                <Tag closable={true} color="#3B9DF9" afterClose={() => this.handleTagClose("Evening")}>Evening</Tag> : null
+              }
+              { this.state.fullDayClicked ?
+                <Tag closable={true} color="#581845" afterClose={() => this.handleTagClose("Full-Day")}>Full Day</Tag> : null
+              }
+
+            </div>
+            <div className = "combo-button">
+              <Row gutter = {16}>
+                <Col span = {10}><Button className = "Morning-btn" onClick ={()=> this.handleUnavailClicked("Morning")}>
+                  <h4>Morning</h4></Button></Col>
+                <Col span = {10}><Button className = "Afternoon-btn" onClick ={()=> this.handleUnavailClicked("Afternoon")}>
+                  <h4>Afternoon</h4></Button></Col>
+                <Col span = {10}><Button className = "Evening-btn" onClick ={()=> this.handleUnavailClicked("Evening")}>
+                  <h4>Evening</h4></Button></Col>
+                <Col span = {10}><Button className = "Fullday-btn" onClick ={()=> this.handleUnavailClicked("Full-Day")}>
+                  <h4>Fullday</h4></Button></Col>
+              </Row>
+            </div>
+            <div className = "submit-avail-button">
+              <Button className = "btn-submit-avail" type = "primary" onClick = {() => this.submitUnAvailability()}> Submit</Button>
+            </div>
+          </div>
+        </Modal.Body>
+
+        </Modal>
+
+
         <div className className="timetable-content">
           <Row justify="space-between">
               <Col xs={24} lg={16}>
@@ -264,12 +361,13 @@ class GuideTimetable extends Component {
                 eventPropGetter={(this.eventStyleGetter)}
                 views={['month']}
                 onSelectSlot={(slotInfo) => this.choosingDate(slotInfo.start)}
+                onSelectEvent={(event,e) => this.choosingDateByEvent(event,e)}
               />
 
               </div>
               </Col>
 
-            <Col xs={24} lg={8}>
+            <Col xs={0} lg={8}>
               <div className = "edit-calendar">
                 <div className = "selectedDay">
                   <h4>Selected Day</h4>

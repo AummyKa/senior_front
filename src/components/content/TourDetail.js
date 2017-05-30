@@ -285,7 +285,7 @@ class TourDetail extends Component {
              </Row>
             </div>
 
-            { Cookies.get('userID') == "Manager" ?
+            { Cookies.get('userRole') == "Manager" ?
               <div className = "tour-graph">
                 <div className = "tour-graph-title"><b>Tour Revenue</b></div>
 

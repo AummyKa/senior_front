@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Row,Col,Radio,Button,Input, DatePicker,Form, Table } from 'antd';
+import { Row,Col,Radio,Button,Input, DatePicker,Form, Table, Select, Tag } from 'antd';
 import {connect} from 'react-redux';
 import apiAccess from '../../Helpers/apiAccess'
+import EachAssignedTour from '../EachAssignedTour'
 
 import moment from 'moment';
-import { Select } from 'antd';
+
+import { Modal } from 'react-bootstrap'
 import Cookies from 'js-cookie'
 
 const Option = Select.Option;
@@ -21,23 +23,7 @@ const monthFormat = 'YYYY-MM';
 // const dateFormat = 'YYYY-MM-DD';
 // moment.locale('en_US');
 
-//
-const expertData = [{
-  key: '1',
-  tour: "Offbeat Floating Markets Food Tour",
-  numberOfTours: 3,
-  rate:4
-}, {
-  key: '2',
-  tour: "Historic Bangrak Food Tasting and Culture Tour",
-  numberOfTours: 5,
-  rate: 3
-}, {
-  key: '3',
-  tour: "Eating Adventure at Chatuchak Market",
-  numberOfTours: 11,
-  rate: 5
-}];
+
 
 const createTable = (arrayJSON) =>{
   if(arrayJSON){
@@ -59,7 +45,11 @@ class GuideHistory extends Component {
     this.state = {
       selectedMonth:curMonth,
       selectedYear:curYear,
-      guideIncomeSummary:[]
+      guideIncomeSummary:[],
+      showEachAssignedTourModal:false,
+      eachAssignedTourTitle:"",
+      selectedBookedTourID:"",
+      eachTourInfo:[]
     }
   }
 
@@ -77,14 +67,6 @@ class GuideHistory extends Component {
     })
   }
 
-  startDateInput(date,dateString){
-    this.setState({startMonthInput : dateString})
-  }
-
-  endDateInput(date,dateString){
-    this.setState({endMonthInput : dateString})
-  }
-
   handleMonthChange(date, dateString) {
     let year = parseInt(dateString.substring(0,4))
     let month = parseInt(dateString.substring(5,dateString.length))
@@ -93,10 +75,18 @@ class GuideHistory extends Component {
     this.setState({selectedYear:year})
   }
 
+  eachAssignedTour(event,index){
+    console.log(event)
+    let title = event.start_date+"  "+event.tour_name
+    this.setState({selectedBookedTourID:event._id})
+    this.setState({eachTourInfo:event})
+    this.setState({eachAssignedTourTitle:title})
+    this.setState({showEachAssignedTourModal:true})
+  }
+
   componentWillReceiveProps(nextProps){
     if(this.props.guideIncomeSummary !== nextProps.guideIncomeSummary){
       if(nextProps.guideIncomeSummary){
-        console.log(nextProps.guideIncomeSummary.summarizedData)
         this.setState({guideIncomeSummary:createTable(nextProps.guideIncomeSummary.summarizedData)})
       }
     }
@@ -111,6 +101,21 @@ class GuideHistory extends Component {
     this.getHistoryData(this.state.selectedYear,this.state.selectedMonth)
   }
 
+  checkStatus(record){
+    let this_date = new Date(record.start_date).valueOf()
+    let today = new Date()
+    if(this_date < today){
+      return(
+        <Tag color="#87d068">Completed</Tag>
+      )
+    }else{
+      return(
+        <Tag color="#FACE0B">Upcoming</Tag>
+      )
+    }
+
+  }
+
   render() {
 
     let { sortedInfo, filteredInfo } = this.state;
@@ -118,6 +123,14 @@ class GuideHistory extends Component {
     filteredInfo = filteredInfo || {};
 
     const columns = [
+    {
+      title:'Status',
+      dataIndex: 'status',
+      render: (text, record) =>
+      <div>
+        {this.checkStatus(record)}
+      </div>
+    },
     {
       title: 'Start Date',
       dataIndex: 'start_date'
@@ -148,26 +161,53 @@ class GuideHistory extends Component {
       dataIndex: 'payment'
     }]
 
+    let closeEachAssignedTourModal = () => { this.setState({showEachAssignedTourModal:false})}
+
     return (
+
+      <div>
+
+      <Modal
+        show={this.state.showEachAssignedTourModal}
+        onHide={closeEachAssignedTourModal}
+        container={this}
+        bsSize="lg"
+        aria-labelledby="contained-modal-title"
+      >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title">
+          {this.state.eachAssignedTourTitle}
+        </Modal.Title>
+      </Modal.Header>
+
+      <Modal.Body>
+        <EachAssignedTour dispatch={this.props.dispatch}
+                          bookedTourID={this.state.selectedBookedTourID}
+                          eachTourInfo={this.state.eachTourInfo}/>
+      </Modal.Body>
+
+      </Modal>
 
       <div className = "guide-content" >
 
         <div className = "guide-tourlist">
           <Row>
-            <Col xs={12} lg={6}>
+            <Col xs={12} lg={7}>
               <h4>List of Responsible Tours</h4>
             </Col>
 
-            <Col xs={{span:10, offset:1}} lg={{span:7, offset:11}}>
+            <Col xs={{span:10, offset:1}} lg={{span:7, offset:10}}>
               <MonthPicker defaultValue={moment(curYear+'-'+curMonth, 'YYYY-MM')} onChange={this.handleMonthChange.bind(this)} placeholder="Select month" />
               <Button type="primary" onClick={()=>this.changeDate()} >Go!</Button>
             </Col>
           </Row>
 
-           <Table columns={columns} dataSource={this.state.guideIncomeSummary} size="middle" />
+           <Table columns={columns} dataSource={this.state.guideIncomeSummary}
+               onRowClick = {this.eachAssignedTour.bind(this)} size="middle" />
         </div>
 
       </div>
+    </div>
     );
   }
 }

@@ -8,10 +8,54 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 
 
+const bookingMethodData = (arrayJSON) =>{
+
+  let resultJSON = []
+  let count = 0
+  if(arrayJSON && arrayJSON.length > 0){
+    for(let i =0;i<arrayJSON.length;i++){
+      if(arrayJSON[i].type == "Individual"){
+        arrayJSON[count]["key"] = count;
+        resultJSON[count] = arrayJSON[i]
+        count++
+      }
+    }
+  }
+
+  return resultJSON
+}
+
 class AddBookingMethodsModal extends Component{
 
   constructor(props){
     super(props)
+    this.state={
+      bookingMethodLists:[]
+    }
+  }
+
+  getBookingMethods(){
+    apiAccess({
+      url: 'http://localhost:8000/bookingmethods/',
+      method: 'GET',
+      payload: null,
+      attemptAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'GET_BOOKING_METHODS_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_FAILED' })
+    })
+  }
+
+  componentWillMount(){
+    this.getBookingMethods()
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(this.props.bookingMethodLists !== nextProps.bookingMethodLists){
+      if(nextProps.bookingMethodLists){
+        let bookingMethodLists = bookingMethodData(nextProps.bookingMethodLists)
+        this.setState({bookingMethodLists:bookingMethodLists})
+      }
+    }
   }
 
 
@@ -24,7 +68,6 @@ class AddBookingMethodsModal extends Component{
                          description: this.props.form.getFieldValue('description'),
                          type: 'Individual'}
 
-            console.log(payload)
 
             apiAccess({
               url: 'http://localhost:8000/bookingmethods/insert',
@@ -41,33 +84,19 @@ class AddBookingMethodsModal extends Component{
   }
 
 
-
-
-  //name, surname
-  checkString(rule, value, callback){
-    if(!value.match(/^[a-zA-Z]/)){
-      console.log("nooo")
-      callback('input should contains only alphabets');
-    }else if(value.length > 40 ) {
-     callback('number of characters should not exceed 40 characters');
-   }else {
-     callback()
-   }
- }
-
-
- checkTel(rule, value, callback){
-   if(!value.match(/^[0-9]+$/) || value.length != 10){
-     callback('the input should be an appropriate phone number');
-   }else {
-     callback()
-   }
- }
-
  checkBookingMethodName(rule, value, callback){
+   console.log(value)
+    console.log(this.state.bookingMethodLists)
+   for(let i=0; i<this.state.bookingMethodLists.length;i++){
+
+     if(value == this.state.bookingMethodLists[i].name){
+       callback('Booking method name is already used');
+     }
+   }
+
    if(value.length > 50 ){
-     callback('Agency name should not exceed 50 characters');
-   }else {
+     callback('Booking method name should not exceed 50 characters');
+   }else{
     callback()
   }
 }
@@ -90,17 +119,18 @@ class AddBookingMethodsModal extends Component{
     return (
 
       <div>
-      <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
+      <Form onSubmit={this.handleSubmit.bind(this)}>
         <FormItem
           {...formItemLayout}
           label="Booking Method Name"
           hasFeedback
+          require={true}
         >
           {getFieldDecorator('bookingMethodName', {
             rules: [{
               required: true, message: 'Please input your agency name!'
             }, {
-              validator: this.checkBookingMethodName,
+              validator: this.checkBookingMethodName.bind(this),
             }],
           })(
             <Input />
@@ -131,8 +161,8 @@ class AddBookingMethodsModal extends Component{
 
 function mapStateToProps(state){
   return{
-
+    bookingMethodLists: state.getBookingMethods.bookingMethodLists
   }
 }
 
-export default Form.create({})(AddBookingMethodsModal)
+export default connect(mapStateToProps)(Form.create({})(AddBookingMethodsModal))

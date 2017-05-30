@@ -7,11 +7,30 @@ import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Butto
 const FormItem = Form.Item;
 const Option = Select.Option;
 
+const agencyData = (arrayJSON) =>{
+  console.log(arrayJSON)
+  let resultJSON = []
+  let count = 0
+  if(arrayJSON && arrayJSON.length > 0){
+    console.log(arrayJSON)
+    for(let i =0;i<arrayJSON.length;i++){
+      if(arrayJSON[i].type == "Agency"){
+        arrayJSON[i]["key"] = count;
+        resultJSON[count] = arrayJSON[i]
+        count++
+      }
+    }
+  }
+  return resultJSON
+}
 
 class AddAgencyModal extends Component{
 
   constructor(props){
     super(props)
+    this.state={
+      agencyLists:[]
+    }
   }
 
 
@@ -43,35 +62,42 @@ class AddAgencyModal extends Component{
   }
 
 
-
-
-  //name, surname
-  checkString(rule, value, callback){
-    if(!value.match(/^[a-zA-Z]/)){
-      console.log("nooo")
-      callback('input should contains only alphabets');
-    }else if(value.length > 40 ) {
-     callback('number of characters should not exceed 40 characters');
-   }else {
-     callback()
-   }
- }
-
-
- checkTel(rule, value, callback){
-   if(!value.match(/^[0-9]+$/) || value.length != 10){
-     callback('the input should be an appropriate phone number');
-   }else {
-     callback()
-   }
- }
-
  checkAgencyName(rule, value, callback){
+   for(let i=0; i<this.state.agencyLists.length;i++){
+     if(value == this.state.agencyLists[i].name){
+       callback('Agency name is already used');
+     }
+   }
+
    if(value.length > 50 ){
      callback('Agency name should not exceed 50 characters');
-   }else {
+   }else{
     callback()
   }
+}
+
+getBookingMethods(){
+  apiAccess({
+    url: 'http://localhost:8000/bookingmethods/',
+    method: 'GET',
+    payload: null,
+    attemptAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_ATTEMPT' }),
+    successAction: (json) => this.props.dispatch({ type: 'GET_BOOKING_METHODS_SUCCESS', json }),
+    failureAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_FAILED' })
+  })
+}
+
+componentWillReceiveProps(nextProps){
+  if(this.props.bookingMethodLists !== nextProps.bookingMethodLists){
+    if(nextProps.bookingMethodLists){
+      let agencyLists = agencyData(nextProps.bookingMethodLists)
+      this.setState({agencyLists:agencyLists})
+    }
+  }
+}
+
+componentWillMount(){
+  this.getBookingMethods()
 }
 
 
@@ -92,17 +118,18 @@ class AddAgencyModal extends Component{
     return (
 
       <div>
-      <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
+      <Form onSubmit={this.handleSubmit.bind(this)}>
         <FormItem
           {...formItemLayout}
           label="Agency Name"
           hasFeedback
+          require={true}
         >
           {getFieldDecorator('agencyName', {
             rules: [{
               required: true, message: 'Please input your agency name!'
             }, {
-              validator: this.checkAgencyName,
+              validator: this.checkAgencyName.bind(this),
             }],
           })(
             <Input />
@@ -115,11 +142,8 @@ class AddAgencyModal extends Component{
           hasFeedback
         >
           {getFieldDecorator('email', {
-            rules: [{
-              type: 'email', message: 'The input is not valid E-mail!'
-            }],
           })(
-            <Input />
+            <Input type="textarea" placeholder="Agency Email Contacts" autosize />
           )}
         </FormItem>
         <FormItem
@@ -127,12 +151,8 @@ class AddAgencyModal extends Component{
           label="Phone"
           hasFeedback
         >
-          {getFieldDecorator('phone', {
-            rules: [{
-              validator: this.checkTel
-            }],
-          })(
-            <Input />
+          {getFieldDecorator('phone')(
+            <Input type="textarea" placeholder="Agency Phone Contacts" autosize />
           )}
         </FormItem>
 
@@ -159,8 +179,8 @@ class AddAgencyModal extends Component{
 
 function mapStateToProps(state){
   return{
-
+    bookingMethodLists: state.getBookingMethods.bookingMethodLists
   }
 }
 
-export default Form.create({})(AddAgencyModal)
+export default connect(mapStateToProps)(Form.create({})(AddAgencyModal))

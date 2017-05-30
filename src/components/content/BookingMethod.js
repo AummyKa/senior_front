@@ -15,15 +15,21 @@ import Cookies from 'js-cookie'
 
 
 const agencyData = (arrayJSON) =>{
-  console.log(arrayJSON)
+
   let resultJSON = []
   let count = 0
   if(arrayJSON && arrayJSON.length > 0){
-    console.log(arrayJSON)
     for(let i =0;i<arrayJSON.length;i++){
       if(arrayJSON[i].type == "Agency"){
-        arrayJSON[i]["key"] = count;
-        resultJSON[count] = arrayJSON[i]
+
+        var arr ={
+          name: arrayJSON[i].name,
+          email: arrayJSON[i].email,
+          phone: arrayJSON[i].phone,
+          description: arrayJSON[i].description,
+          key: count
+        }
+        resultJSON.push(arr)
         count++
       }
     }
@@ -38,7 +44,6 @@ const bookingMethodData = (arrayJSON) =>{
   if(arrayJSON && arrayJSON.length > 0){
     for(let i =0;i<arrayJSON.length;i++){
       if(arrayJSON[i].type == "Individual"){
-        console.log(arrayJSON[i])
         arrayJSON[count]["key"] = count;
         resultJSON[count] = arrayJSON[i]
         count++
@@ -104,7 +109,6 @@ class BookingMethod extends Component{
 
     if(this.props.bookingMethodLists !== nextProps.bookingMethodLists){
       if(nextProps.bookingMethodLists){
-        console.log(nextProps.bookingMethodLists)
         let agencyLists = agencyData(nextProps.bookingMethodLists)
         let bookingMethodLists = bookingMethodData(nextProps.bookingMethodLists)
         this.setState({agencyLists:agencyLists})

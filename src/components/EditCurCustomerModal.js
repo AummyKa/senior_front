@@ -92,7 +92,8 @@ const EditCurCustomerModal = Form.create()(React.createClass({
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
 
-        console.log(values)
+        let pickupTime =  this.props.form.getFieldValue(`pickup_time_hour`)+':'+
+                          this.props.form.getFieldValue(`pickup_time_min`)
 
         let payload = {
             _id: this.state.eachCustomer._id,
@@ -101,7 +102,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
             phone: this.props.form.getFieldValue(`phone`),
             name: this.props.form.getFieldValue(`name`),
             country: this.handleCountrySelect(this.props.form.getFieldValue(`country`)),
-            pickup_time: this.props.form.getFieldValue(`pickup_time`).format('HH:mm'),
+            pickup_time: pickupTime,
             pickup_place: this.props.form.getFieldValue(`pickup_place`),
             participants: this.props.form.getFieldValue(`participants`),
             price: this.props.form.getFieldValue('price'),
@@ -161,6 +162,22 @@ const EditCurCustomerModal = Form.create()(React.createClass({
  checkTel(rule, value, callback){
    if(!value.match(/^[0-9]+$/) || value.length != 9){
      callback('the input should be an appropriate phone number');
+   }else {
+     callback()
+   }
+ },
+
+ checkCharIntHour(rule, value, callback){
+   if(!value.match(/^[0-9]+$/) || value.length < 2 || value > 24 || value <0){
+     callback('the input should be an appropriate hour');
+   }else {
+     callback()
+   }
+ },
+
+ checkCharIntMin(rule, value, callback){
+   if(!value.match(/^[0-9]+$/) || value.length < 2 || value > 60 || value <0){
+     callback('the input should be an appropriate minute');
    }else {
      callback()
    }
@@ -322,28 +339,70 @@ const EditCurCustomerModal = Form.create()(React.createClass({
               this.state.eachCustomer.pickup_time !== ""  ?
               <FormItem
                  {...formItemLayout}
-                 label="Pickup time"
+                 label={'Pickup Time'}
+                 required={false}
                >
-              {getFieldDecorator(`pickup_time`, {
-                initialValue : moment(this.state.eachCustomer.pickup_time, format )
-              })(
-                <TimePicker
-                  style={{ width: '30%', marginRight: 11}}
-                  format={format} placeholder = "pickup" />
-              )}
-              </FormItem>
+                   <Row>
+                    <Col span="3">
+                     <FormItem>
+                       {getFieldDecorator(`pickup_time_hour`,
+                         {initialValue: this.state.eachCustomer.pickup_time.split(':')[0]},{
+                         rules: [
+                       { validator: this.checkCharIntHour}]}
+                       )(
+                       <Input placeholder="00"/>
+                       )}
+                     </FormItem>
+                   </Col>
+                   <Col span="1">
+                     <p className="ant-form-split">:</p>
+                   </Col>
+                   <Col span="3">
+                     <FormItem>
+                       {getFieldDecorator(`pickup_time_min`,
+                         {initialValue: this.state.eachCustomer.pickup_time.split(':')[1]},{
+                         rules: [
+                       { validator: this.checkCharIntMin}]})(
+                       <Input placeholder="00"/>
+                       )}
+                     </FormItem>
+                   </Col>
+                 </Row>
+               </FormItem>
               :
               <FormItem
                  {...formItemLayout}
-                 label="Pickup time"
+                 label={'Pickup Time'}
+                 required={false}
                >
-              {getFieldDecorator(`pickup_time`, {
-              })(
-                <TimePicker
-                  style={{ width: '30%', marginRight: 11}}
-                  format={format} placeholder = "pickup" />
-              )}
-              </FormItem>
+                   <Row>
+                    <Col span="3">
+                     <FormItem>
+                       {getFieldDecorator(`pickup_time_hour`,
+                         {initialValue: this.state.eachCustomer.pickup_time.split(':')[0]},{
+                         rules: [{
+                          required: true
+                        }]},
+                       { validator: this.checkCharInt}
+                       )(
+                       <Input placeholder="00"/>
+                       )}
+                     </FormItem>
+                   </Col>
+                   <Col span="1">
+                     <p className="ant-form-split">:</p>
+                   </Col>
+                   <Col span="3">
+                     <FormItem>
+                       {getFieldDecorator(`pickup_time_min`,
+                         {initialValue: this.state.eachCustomer.pickup_time.split(':')[1]})(
+                       <Input placeholder="00"/>
+                       )}
+                     </FormItem>
+                   </Col>
+                 </Row>
+
+               </FormItem>
             }
 
            <FormItem

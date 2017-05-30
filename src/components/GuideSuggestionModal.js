@@ -7,6 +7,40 @@ import apiAccess from '../Helpers/apiAccess'
 import { sendSuggestedGuideName } from '../actions/action-sendSuggestedGuideName'
 
 
+function createGuideSuggestData(arrayJSON){
+  console.log(arrayJSON[1])
+  let resultJSON = []
+
+  if(arrayJSON){
+    for(var i = 0; i < arrayJSON.length; i++) {
+      let guide_rate = 0
+      let guide_favorable = 0
+
+      if(typeof arrayJSON[i].expert !== 'undefined' &&
+      typeof arrayJSON[i].expert.rate !== 'undefined'){
+        guide_rate = arrayJSON[i].expert.rate
+      }
+
+      if(typeof arrayJSON[i].favorable !== 'undefined'){
+        guide_favorable = arrayJSON[i].favorable
+      }
+
+      var objectJSON = {
+        key: i,
+        _id:arrayJSON[i]._id || '',
+        guidename: arrayJSON[i].fullname || '',
+        rating: guide_rate,
+        favorite: guide_favorable
+      }
+
+      resultJSON[i] = objectJSON
+  }
+  console.log(resultJSON)
+}
+  return resultJSON
+}
+
+
 const GuideSuggestion = React.createClass({
 
   getInitialState() {
@@ -19,40 +53,6 @@ const GuideSuggestion = React.createClass({
       selectedGuide: "",
       guideList: []
     };
-  },
-
-  createGuideSuggestData(arrayJSON){
-    console.log(arrayJSON)
-    let resultJSON = []
-
-    if(arrayJSON!=null){
-      for(var i = 0; i < arrayJSON.length; i++) {
-        let guide_rate = 0
-        let guide_favorable = 0
-
-        if(typeof arrayJSON[i].expert !== 'undefined' &&
-        typeof arrayJSON[i].expert.rate !== 'undefined'){
-          guide_rate = arrayJSON[i].expert.rate
-        }
-
-        if(typeof arrayJSON[i].expert !== 'undefined' &&
-        typeof arrayJSON[i].expert.favorable !== 'undefined'){
-          guide_favorable = arrayJSON[i].expert.favorable
-        }
-
-        var objectJSON = {
-          key: i,
-          _id:arrayJSON[i]._id || '',
-          guidename: arrayJSON[i].fullname || '',
-          rating: guide_rate,
-          favorite: guide_favorable
-        }
-
-        resultJSON[i] = objectJSON
-    }
-    console.log(resultJSON)
-  }
-    return resultJSON
   },
 
   selectSuggestedGuide(record){
@@ -79,7 +79,8 @@ const GuideSuggestion = React.createClass({
     console.log(nextProps.listGuideSuggestion)
     if(this.props.listGuideSuggestion !== nextProps.listGuideSuggestion){
       if(nextProps.listGuideSuggestion){
-        this.setState({guideList: nextProps.listGuideSuggestion})
+        console.log(nextProps.listGuideSuggestion)
+        this.setState({guideList: createGuideSuggestData(nextProps.listGuideSuggestion)})
       }
     }
 
@@ -121,7 +122,7 @@ const GuideSuggestion = React.createClass({
         />
       </span>
     },{
-      title: 'favorite', dataIndex: 'favorite',
+      title: 'Favorite', dataIndex: 'favorite',
       render: (text, record) =>
       <span>
         <StarRatingComponent
@@ -142,7 +143,7 @@ const GuideSuggestion = React.createClass({
     return (
 
     <div>
-      <Table columns={columns} dataSource={this.createGuideSuggestData(this.state.guideList)} size="small" pagination = {false} />
+      <Table columns={columns} dataSource={this.state.guideList} size="small" pagination = {false} />
     </div>
     );
   },

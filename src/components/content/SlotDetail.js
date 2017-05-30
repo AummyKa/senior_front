@@ -63,7 +63,14 @@ class SlotDetail extends Component {
 
   componentWillMount(){
     // this.setState({date_for_querry:changeDateFormat(this.props.selectedDate)})
-    this.getTourAndBookerDetail()
+    console.log(this.props.readyFormatDate)
+    if(this.props.readyFormatDate){
+      this.getTourAndBookerDetail(this.props.readyFormatDate)
+
+    }else{
+      let date = changeDateFormat(this.props.selectedDate)
+      this.getTourAndBookerDetail(date)
+    }
     this.screenTourAndBooker(this.state.bookerAndTourDetail)
     this.setState({valid_date_status:this.props.valid_date_status})
     this.setState({delete_status:this.props.delete_status})
@@ -87,8 +94,8 @@ class SlotDetail extends Component {
   }
 
 
-  getTourAndBookerDetail(){
-    let date = changeDateFormat(this.props.selectedDate)
+  getTourAndBookerDetail(date){
+
     apiAccess({
       url: 'http://localhost:8000/bookedtours/date/'+ date,
       method: 'GET',
@@ -128,12 +135,12 @@ class SlotDetail extends Component {
       }
     }
 
-    // if(this.props.readyFormatDate !== nextProps.readyFormatDate){
-    //   if(nextProps.readyFormatDate){
-    //     console.log(nextProps.readyFormatDate)
-    //     this.setState({date_for_querry:nextProps.readyFormatDate})
-    //   }
-    // }
+    if(this.props.readyFormatDate !== nextProps.readyFormatDate){
+      if(nextProps.readyFormatDate){
+        console.log(nextProps.readyFormatDate)
+        this.setState({date_for_querry:nextProps.readyFormatDate})
+      }
+    }
   }
 
   addMoreTour(){

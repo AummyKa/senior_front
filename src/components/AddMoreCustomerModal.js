@@ -58,11 +58,8 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
 
-        let pickupTime = ''
-        if(this.props.form.getFieldValue(`pickup_time`) !== '' &&
-        typeof this.props.form.getFieldValue(`pickup_time`) !== 'undefined'){
-            pickupTime = this.props.form.getFieldValue(`pickup_time`).format('HH:mm')
-        }
+        let pickupTime =  this.props.form.getFieldValue(`pickup_time_hour`)+':'+
+                          this.props.form.getFieldValue(`pickup_time_min`)
 
         let payload = {
           booking_method: this.state.selectedBookingMethod,
@@ -152,6 +149,22 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
  checkTel(rule, value, callback){
    if(!value.match(/^[0-9]+$/) || value.length != 9){
      callback('the input should be an appropriate phone number');
+   }else {
+     callback()
+   }
+ },
+
+ checkCharIntHour(rule, value, callback){
+   if(!value.match(/^[0-9]+$/) || value.length < 2 || value > 24 || value <0){
+     callback('the input should be an appropriate hour');
+   }else {
+     callback()
+   }
+ },
+
+ checkCharIntMin(rule, value, callback){
+   if(!value.match(/^[0-9]+$/) || value.length < 2 || value > 60 || value <0){
+     callback('the input should be an appropriate minute');
    }else {
      callback()
    }
@@ -309,16 +322,37 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
              </FormItem>
 
 
-           <FormItem
-              {...formItemLayout}
-              label="Pickup time"
-            >
-              {getFieldDecorator(`pickup_time`)(
-                <TimePicker
-                  style={{ width: '30%', marginRight: 11}}
-                  format={format} placeholder = "pickup" />
-              )}
-            </FormItem>
+             <FormItem
+                {...formItemLayout}
+                label={'Pickup Time'}
+                required={false}
+              >
+                  <Row>
+                   <Col span="3">
+                    <FormItem>
+                      {getFieldDecorator(`pickup_time_hour`,{
+                        rules: [
+                      { validator: this.checkCharIntHour}]}
+                      )(
+                      <Input placeholder="00"/>
+                      )}
+                    </FormItem>
+                  </Col>
+                  <Col span="1">
+                    <p className="ant-form-split">:</p>
+                  </Col>
+                  <Col span="3">
+                    <FormItem>
+                      {getFieldDecorator(`pickup_time_min`,{
+                        rules: [
+                      { validator: this.checkCharIntMin}]}
+                      )(
+                      <Input placeholder="00"/>
+                      )}
+                    </FormItem>
+                  </Col>
+                </Row>
+              </FormItem>
 
            <FormItem
               {...formItemLayout}

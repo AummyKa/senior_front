@@ -2,7 +2,7 @@
 const INITIAL_STATE = {
   selectedDate: '',
   valid_date_status: false,
-  readyFormatDate:''
+  readyFormatDate:'',
 }
 
 // { type: 'LOGIN_SUCCESS', text }

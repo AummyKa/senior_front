@@ -168,7 +168,7 @@ class BoxAbove extends Component {
            </Col>
            <Col xs={12} lg={5}>
              <div className="individual-customer" >
-               <h4>Individual Customer</h4>
+               <h4>Direct Customer</h4>
                <p>{this.state.individualCustomers}</p>
              </div>
 

@@ -90,7 +90,8 @@ class Schedule extends Component {
       showSuggestGuide: false,
       guide_suggested_factors:[],
       guide_name:[],
-      selectedGuideID:''
+      selectedGuideID:'',
+      readyFormatDate:''
 
     }
   }
@@ -107,19 +108,21 @@ class Schedule extends Component {
   }
 
   showThatSlotFromEvent(event,e){
-    // let start = event.start
-    // let cutStart = start.substring(0,10)
-    // let arr = cutStart.split('-')
-    // let reverse_arr = arr.reverse()
-    // let day_str = reverse_arr.toString().split(',').join(' ')
-    //
-    // let dataPack={
-    //   dateString: day_str,
-    //   date_for_querry: cutStart
-    // }
-    //
-    // this.props.dispatch(getSelectedDate("GET_SELECTED_DATE_FROM_EVENT",dataPack))
-    // this.setState({showSlotDetail : true})
+    let start = event.start
+    let cutStart = start.substring(0,10)
+    let arr = cutStart.split('-')
+    let reverse_arr = arr.reverse()
+    let day_str = reverse_arr.toString().split(',').join(' ')
+
+    let dataPack={
+      dateString: day_str,
+      date_for_querry: cutStart
+    }
+
+    console.log(dataPack)
+
+    this.props.dispatch(getSelectedDate("GET_SELECTED_DATE_FROM_EVENT",dataPack))
+    this.setState({showSlotDetail : true})
 
   }
 
@@ -271,6 +274,13 @@ filterSchedule(selected){
     if(nextProps.selectedDate){
         this.setState({selectedDate: nextProps.selectedDate})
     }
+
+    if(this.props.readyFormatDate !== nextProps.readyFormatDate){
+      if(nextProps.readyFormatDate){
+        this.setState({readyFormatDate:nextProps.readyFormatDate})
+      }
+    }
+
     if(this.props.showEditCustomer !== nextProps.showEditCustomer){
       if(nextProps.showEditCustomer){
         this.setState({showEachTour: false, showAddTour:false, showSlotDetail: false,
@@ -487,7 +497,9 @@ filterSchedule(selected){
                     {this.state.selectedTourName} at {this.state.selectedDate}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                  <EditBookedTourForm selectedDate = {this.state.selectedDate} eachTourData = {this.props.eachTour} />
+                  <EditBookedTourForm selectedDate = {this.state.selectedDate}
+                                      readyFormatDate = {this.state.readyFormatDate}
+                                      eachTourData = {this.props.eachTour} />
                 </Modal.Body>
 
               </Modal>
@@ -635,7 +647,8 @@ const mapStateToProps = (state) => ({
   showSuggestGuideModalStatus: state.receiveSuggestedGuideName.showSuggestGuideModalStatus,
   guide_suggested_factors: state.receiveSuggestedGuideName.guide_suggested_factors,
   eachGuideName: state.getEachGuideName.eachGuideName,
-  showSuggestGuideModalFromEditStatus: state.receiveSuggestedGuideName.showSuggestGuideModalFromEditStatus
+  showSuggestGuideModalFromEditStatus: state.receiveSuggestedGuideName.showSuggestGuideModalFromEditStatus,
+  readyFormatDate:state.spreadSelectedDate.readyFormatDate
 
 })
 

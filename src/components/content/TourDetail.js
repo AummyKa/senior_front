@@ -285,14 +285,18 @@ class TourDetail extends Component {
              </Row>
             </div>
 
-            <div className = "tour-graph">
-              <div className = "tour-graph-title"><b>Tour Revenue</b></div>
+            { Cookies.get('userID') == "Manager" ?
+              <div className = "tour-graph">
+                <div className = "tour-graph-title"><b>Tour Revenue</b></div>
 
-              <div className = "tour-rev-chart">
-                <EachTourRevChart tourId= {this.state.tour_id} dispatch = {this.props.dispatch} />
+                <div className = "tour-rev-chart">
+                  <EachTourRevChart tourId= {this.state.tour_id} dispatch = {this.props.dispatch} />
+                </div>
+
               </div>
+              : null
+            }
 
-            </div>
 
             <div className = "each-tour-popular-nation">
               <div className = "each-tour-popular-nation-title"><b>Popular Nation</b></div>

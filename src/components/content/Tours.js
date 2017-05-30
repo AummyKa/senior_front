@@ -44,6 +44,7 @@ class Tours extends Component {
     }
     if(nextProps.add_newTour_success_status){
       this.setState({showAddNewTour:false})
+      this.getTours()
     }
   }
 

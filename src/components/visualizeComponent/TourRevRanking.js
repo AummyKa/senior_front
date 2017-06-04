@@ -87,7 +87,6 @@ class TourRevRanking extends Component {
     return (
 
       <ResponsiveContainer>
-
          <ComposedChart layout="vertical" width={300} height={250} data={this.state.tourRankingData}
              margin={{top: 10, right: 10, bottom: 20, left: 2}}>
            <XAxis type="number"/>
@@ -97,7 +96,6 @@ class TourRevRanking extends Component {
            <CartesianGrid stroke='#f5f5f5'/>
            <Bar dataKey='revenue' barSize={15} fill='#FFC300'/>
         </ComposedChart>
-
       </ResponsiveContainer>
 
     );

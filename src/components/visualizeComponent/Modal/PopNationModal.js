@@ -108,28 +108,10 @@ class PopNationModal extends Component {
       <div>
         <div className = "table-month-rev-summary">
 
-        <Row>
-          <Col xs={0} lg={14}>
-
-            <div className = "pop-nation-chart-summary">
-              <ComposedChart layout="vertical" width={300} height={250} data={this.state.amountNationsSummary}
-                >
-                <XAxis type="number"/>
-                <YAxis dataKey="country" type="category"/>
-                <Tooltip/>
-                <Legend/>
-                <CartesianGrid stroke='#f5f5f5'/>
-                <Bar dataKey='participants' barSize={14} fill='#FFC300'/>
-
-             </ComposedChart>
-            </div>
-
-          </Col>
-          <Col xs={24} lg={10}>
-            <Row>
+          <Row>
               <Col span = {14}><h5><b>Monthly revenue summary</b></h5></Col>
 
-              <Col span = {8}>
+              <Col span = {7}>
                 <div className = "select-year">
                   <Select
                      showSearch
@@ -149,10 +131,6 @@ class PopNationModal extends Component {
                 </Col>
             </Row>
              <Table columns={columns} dataSource={this.state.amountNationsSummary} size="small" pagination={false} />
-          </Col>
-        </Row>
-
-
        </div>
       </div>
 

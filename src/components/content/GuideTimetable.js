@@ -329,13 +329,13 @@ class GuideTimetable extends Component {
             </div>
             <div className = "combo-button">
               <Row gutter = {16}>
-                <Col span = {10}><Button className = "Morning-btn" onClick ={()=> this.handleUnavailClicked("Morning")}>
+                <Col span = {10} offset={2}><Button className = "Morning-btn" onClick ={()=> this.handleUnavailClicked("Morning")}>
                   <h4>Morning</h4></Button></Col>
-                <Col span = {10}><Button className = "Afternoon-btn" onClick ={()=> this.handleUnavailClicked("Afternoon")}>
+                <Col span = {10} ><Button className = "Afternoon-btn" onClick ={()=> this.handleUnavailClicked("Afternoon")}>
                   <h4>Afternoon</h4></Button></Col>
-                <Col span = {10}><Button className = "Evening-btn" onClick ={()=> this.handleUnavailClicked("Evening")}>
+                <Col span = {10} offset={2}><Button className = "Evening-btn" onClick ={()=> this.handleUnavailClicked("Evening")}>
                   <h4>Evening</h4></Button></Col>
-                <Col span = {10}><Button className = "Fullday-btn" onClick ={()=> this.handleUnavailClicked("Full-Day")}>
+                <Col span = {10} ><Button className = "Fullday-btn" onClick ={()=> this.handleUnavailClicked("Full-Day")}>
                   <h4>Fullday</h4></Button></Col>
               </Row>
             </div>
@@ -405,11 +405,11 @@ class GuideTimetable extends Component {
                 </div>
                 <div className = "combo-button">
                   <Row gutter = {16}>
-                    <Col span = {10}><Button className = "Morning-btn" onClick ={()=> this.handleUnavailClicked("Morning")}>
+                    <Col span = {10} offset={2}><Button className = "Morning-btn" onClick ={()=> this.handleUnavailClicked("Morning")}>
                       <h4>Morning</h4></Button></Col>
                     <Col span = {10}><Button className = "Afternoon-btn" onClick ={()=> this.handleUnavailClicked("Afternoon")}>
                       <h4>Afternoon</h4></Button></Col>
-                    <Col span = {10}><Button className = "Evening-btn" onClick ={()=> this.handleUnavailClicked("Evening")}>
+                    <Col span = {10} offset={2}><Button className = "Evening-btn" onClick ={()=> this.handleUnavailClicked("Evening")}>
                       <h4>Evening</h4></Button></Col>
                     <Col span = {10}><Button className = "Fullday-btn" onClick ={()=> this.handleUnavailClicked("Full-Day")}>
                       <h4>Fullday</h4></Button></Col>

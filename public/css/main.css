@@ -24,12 +24,12 @@
 }
 
 .login-background h1{
-   font-size: 4rem;
+   font-size: 7vh;
 }
 
 .login-background h3{
   margin-top:1%;
-  font-size: 2.5rem;
+  font-size: 4vh;
 }
 
 .login-form{

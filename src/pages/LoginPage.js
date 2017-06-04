@@ -125,7 +125,7 @@ class LoginPage extends Component {
                             {/*{this.state.people.map(({ _id, name, age }) => {*/}
                                 {/*return <div key={_id}>#{_id} Name: {name}, Age: {age}</div>*/}
                             {/*})}*/}
-                            <h1>Local Tour</h1>
+                            <h1>Bangkok Food Tour</h1>
                             <h3>Admistration System</h3>
                         </div>
                     </Col>
@@ -133,17 +133,18 @@ class LoginPage extends Component {
                     <Col xs={{ span: 24 }} lg={{ span: 7 }}>
                       <div className="login-form">
 
-                        <h2 style={{fontSize:'2rem', marginBottom:'20px'}}>Welcome to Local Tour!!</h2>
+                        <h2 style={{fontSize:'3.5vh', marginBottom:'20px'}}>Welcome to Local Tour!!</h2>
 
                         <LoginForm dispatch={this.props.dispatch} />
                         <RegistModal dispatch={this.props.dispatch}  / >
 
-                          <Modal title="Forgot Password" visible={this.state.showForgotPassword}
+                          <Modal style={{fontSize:'3vh'}} title="Forgot Password" visible={this.state.showForgotPassword}
                             onOk={this.handleForgotPassword.bind(this)} onCancel={closeForgotPassword}
                           >
-                            <p style={{fontSize:'2rem'}}>Please input your email and submit</p>
-                            <p style={{fontSize:'2rem'}}>Your reset password will be sent via email</p>
+                            <p style={{fontSize:'2vh'}}>Please input your email and submit</p>
+                            <p style={{fontSize:'2vh'}}>Your reset password will be sent via email</p>
                               <Input
+                                style={{fontSize:'2vh'}}
                                 placeholder="Enter your email address"
                                 prefix={<Icon type="user" />}
                                 onChange={this.onChangeEmail.bind(this)}

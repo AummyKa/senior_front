@@ -118,27 +118,10 @@ class TourCustomerRankingModal extends Component {
         <div className = "table-month-rev-summary">
 
         <Row>
-          <Col xs={0} lg={14}>
 
-            <div className = "tour-ranking-chart-summary">
-              <ComposedChart layout="vertical" width={300} height={250} data={this.state.tourCustomerRankingData}
-                  margin={{top: 10, right: 10, bottom: 20, left: 2}}>
-                <XAxis type="number"/>
-                <YAxis dataKey="tour_abbreviation" type="category"/>
-                <Tooltip/>
-                <Legend/>
-                <CartesianGrid stroke='#f5f5f5'/>
-                <Bar dataKey='participants' barSize={15} fill='#B85D02'/>
+            <Col span = {14}><h5><b>Tour Revenue Summary</b></h5></Col>
 
-             </ComposedChart>
-            </div>
-
-          </Col>
-          <Col xs={24} lg={10}>
-            <Row>
-              <Col span = {14}><h5><b>Tour Revenue Summary</b></h5></Col>
-
-              <Col span = {8}>
+              <Col span = {7}>
                 <div className = "select-year">
                   <Select
                      showSearch
@@ -158,9 +141,6 @@ class TourCustomerRankingModal extends Component {
                 </Col>
             </Row>
              <Table columns={columns} dataSource={this.state.tourCustomerRankingTableData} size="small" pagination={false} />
-          </Col>
-        </Row>
-
 
        </div>
       </div>

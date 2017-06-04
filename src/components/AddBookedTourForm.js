@@ -346,9 +346,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
     // can use data-binding to get
     const keys = form.getFieldValue('keys');
     // We need at least one passenger
-    if (keys.length === 1) {
-      return;
-    }
+    
     // can use data-binding to set
     form.setFieldsValue({
       keys: keys.filter(key => key !== keys.slice(-1).pop()),
@@ -441,7 +439,6 @@ const AddBookedTourForm = Form.create()(React.createClass({
                <Icon style = {{ right: '4%' }}
                  className="dynamic-delete-button"
                  type="minus-circle-o"
-                 disabled={keys.length === 1}
                  onClick={() => this.remove(k)}
                />
             </Col>

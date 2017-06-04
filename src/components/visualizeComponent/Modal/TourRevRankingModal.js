@@ -117,30 +117,10 @@ class TourRevRankingModal extends Component {
     return (
 
       <div>
-        <div className = "table-month-rev-summary">
-
-        <Row>
-          <Col xs={0} lg={14}>
-
-            <div className = "tour-ranking-chart-summary">
-              <ComposedChart layout="vertical" width={300} height={250} data={this.state.tourRevRankingData}
-                  margin={{top: 10, right: 10, bottom: 20, left: 2}}>
-                <XAxis type="number"/>
-                <YAxis dataKey="tour_abbreviation" type="category"/>
-                <Tooltip/>
-                <Legend/>
-                <CartesianGrid stroke='#f5f5f5'/>
-                <Bar dataKey='revenue' barSize={15} fill='#FFC300'/>
-
-             </ComposedChart>
-            </div>
-
-          </Col>
-          <Col xs={24} lg={10}>
-            <Row>
+          <Row>
               <Col span = {14}><h5><b>Tour Revenue Summary</b></h5></Col>
 
-              <Col span = {8}>
+              <Col span = {7}>
                 <div className = "select-year">
                   <Select
                      showSearch
@@ -160,11 +140,7 @@ class TourRevRankingModal extends Component {
                 </Col>
             </Row>
              <Table columns={columns} dataSource={this.state.allTourRevTableRankingData} size="small" pagination={false} />
-          </Col>
-        </Row>
 
-
-       </div>
       </div>
 
     );
@@ -174,7 +150,7 @@ class TourRevRankingModal extends Component {
 function mapStateToProps(state){
   return{
     revTourRanking: state.getTourRevRanking.revTourRanking,
-      selectedYear: state.updateYearDashBoard.selectedYear
+    selectedYear: state.updateYearDashBoard.selectedYear
   }
 }
 

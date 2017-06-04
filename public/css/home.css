@@ -30,15 +30,15 @@
 }
 
 .total-customer, .private-tour, .popular-tour{
-  background: #900C3F;
+  background: #9B2F10;
 }
 
 .individual-customer, .private-tour{
-  background: #C70039;
+  background: #7D5E18;
 }
 
 .agency-customer, .public-tour{
-  background: #FF5733;
+  background: #C73B0B;
 }
 
 .total-customer, .individual-customer, .agency-customer, .public-tour, .private-tour

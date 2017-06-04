@@ -21,6 +21,8 @@ import TourCustomerRanking from '../visualizeComponent/TourCustomerRanking'
 import TourCustomerRankingModal from '../visualizeComponent/Modal/TourCustomerRankingModal'
 import TotalCostFromGuide from '../visualizeComponent/TotalCostFromGuide'
 import AgencyParticipantsRanking from '../visualizeComponent/AgencyParticipantsRanking'
+import ParticipantsFromAgencyModal from '../visualizeComponent/Modal/ParticipantsFromAgencyModal'
+import CostFromGuideModal from '../visualizeComponent/Modal/CostFromGuideModal'
 
 import { changeYearDashBoard } from '../../actions/action-changeYearDashBoard'
 
@@ -52,7 +54,9 @@ class Home extends Component {
       showMoreTotalRevenue:false,
       showMoreParticipantSummary:false,
       selectedYear:curYear,
-      showMoreTourCustomerRankingSummary:false
+      showMoreTourCustomerRankingSummary:false,
+      showMoreTotalAgency:false,
+      showMoreTotalCostFromGuide:false
     }
   }
 
@@ -73,12 +77,20 @@ class Home extends Component {
     this.setState({showMoreTourCustomerRankingSummary: true})
   }
 
+  handleClickShowTotalAgency(){
+    this.setState({showMoreTotalAgency: true})
+  }
+
   handleYearSelect(value,option){
   this.setState({selectedYear: value})
   }
 
   handleClickShowTotalParticipant(value,option){
     this.setState({showMoreParticipantSummary: true})
+  }
+
+  handleClickShowTotalCostFromGuide(){
+    this.setState({showMoreTotalCostFromGuide:true})
   }
 
   setYearRev(){
@@ -95,10 +107,46 @@ class Home extends Component {
     let closeShowMoreTotalRevenue = () => { this.setState({showMoreTotalRevenue:false}) }
     let closeShowMoreParticipantSummary = () => { this.setState({showMoreParticipantSummary:false}) }
     let closeShowMoreTourCustomerRankingSummary = () => { this.setState({showMoreTourCustomerRankingSummary: false}) }
+    let closeShowMoreTotalAgency = () => { this.setState({showMoreTotalAgency:false}) }
+    let closeShowMoreTotalCostFromGuide = () => { this.setState({showMoreTotalCostFromGuide:false}) }
 
     return (
 
       <div className="home-dashboard">
+
+        <div className="modal-container">
+            <Modal
+              show={this.state.showMoreTotalAgency}
+              onHide={closeShowMoreTotalAgency}
+              container={this}
+              aria-labelledby="contained-modal-title"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title">Participants From Agency</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <ParticipantsFromAgencyModal dispatch = {this.props.dispatch} />
+              </Modal.Body>
+
+            </Modal>
+        </div>
+
+        <div className="modal-container">
+            <Modal
+              show={this.state.showMoreTotalCostFromGuide}
+              onHide={closeShowMoreTotalCostFromGuide}
+              container={this}
+              aria-labelledby="contained-modal-title"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title">Cost From Guide</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <CostFromGuideModal dispatch={this.props.dispatch}/>
+              </Modal.Body>
+
+            </Modal>
+        </div>
 
         <div className="modal-container">
             <Modal
@@ -120,7 +168,6 @@ class Home extends Component {
 
         <div className="modal-container">
             <Modal
-              bsSize="lg"
               show={this.state.showMoreTourRevRanking}
               onHide={closeShowMoreTourRevRanking}
               container={this}
@@ -138,14 +185,13 @@ class Home extends Component {
 
         <div className="modal-container">
             <Modal
-              bsSize="lg"
               show={this.state.showMoreNationsSummary}
               onHide={closeShowMoreNationsSummary}
               container={this}
               aria-labelledby="contained-modal-title"
             >
               <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title">Tour Total Revenue Summary</Modal.Title>
+                <Modal.Title id="contained-modal-title">Popular Nation Summary</Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <PopNationModal dispatch = {this.props.dispatch} />
@@ -174,7 +220,6 @@ class Home extends Component {
 
         <div className="modal-container">
             <Modal
-              bsSize="lg"
               show={this.state.showMoreTourCustomerRankingSummary}
               onHide={closeShowMoreTourCustomerRankingSummary}
               container={this}
@@ -263,10 +308,10 @@ class Home extends Component {
                   <h4>Total Cost From Guide</h4>
                  </Col>
                 <Col span = {1} offset = {8}>
-                  {/*<Popover placement="top" title={"See more!"}>
+                  <Popover placement="top" title={"See more!"}>
                     <Icon className = "read-more-button" type="ellipsis"
-                      onClick = {()=> this.handleClickShowTotalParticipant()}/>
-                 </Popover> */}
+                      onClick = {()=> this.handleClickShowTotalCostFromGuide()}/>
+                 </Popover>
                 </Col>
               </Row>
              </div>
@@ -277,13 +322,13 @@ class Home extends Component {
              <div className = "visualize-label">
                <Row>
                  <Col span = {14} className="label-box">
-                  <h4>Agency ranking</h4>
+                  <h4>Participants From Agency Ranking</h4>
                  </Col>
                 <Col span = {1} offset = {8}>
-                  {/*<Popover placement="top" title={"See more!"}>
+                  <Popover placement="top" title={"See more!"}>
                     <Icon className = "read-more-button" type="ellipsis"
-                      onClick = {()=> this.handleClickShowTotalParticipant()}/>
-                 </Popover> */}
+                      onClick = {()=> this.handleClickShowTotalAgency()}/>
+                 </Popover>
                 </Col>
               </Row>
              </div>

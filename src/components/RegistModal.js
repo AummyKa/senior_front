@@ -32,7 +32,7 @@ const RegistModal = React.createClass({
     return (
 
       <div>
-      <a onClick={() => this.setState({ show: true})}><h4> Create an account </h4></a>
+      <a onClick={() => this.setState({ show: true})} style={{fontSize:'3vh'}}> Create an account </a>
 
       <div className="modal-container" >
 

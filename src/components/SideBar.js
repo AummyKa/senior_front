@@ -71,20 +71,26 @@ class SideBar extends Component {
               : null
             }
             <h5>Welcome!</h5>
-            <a onClick={()=>this.moveToProfilePage()}>{this.state.userName}</a>
+            <a onClick={()=>this.moveToProfilePage()} style={{fontSize:'2.5vh'}} >{this.state.userName}</a>
           </div>
           <Menu mode="inline" theme="dark">
 
             {this.state.userRole == 'Manager' ?
-              <SubMenu key="Home" title={<span><Icon type="user" /><Link to={`/home`}>Home</Link></span>}/>
+              <SubMenu key="Home" title={<span><Icon type="user" />
+              <Link to={`/home`} style={{fontSize:'2vh'}} >Home</Link></span>}/>
             : null
             }
 
-            <SubMenu key="GuideProfile" title={<span><Icon type="laptop" /><Link to={`/guide`}>Tour Guides</Link></span>}/>
-            <SubMenu key="Schedule" title={<span><Icon type="notification" /><Link to={`/schedule`}>Tour Schedule</Link></span>}/>
-            <SubMenu key="Tours" title={<span><Icon type="notification" /><Link to={`/tours`}>Tours</Link></span>}/>
-            <SubMenu key="Staff" title={<span><Icon type="notification" /><Link to={`/staff`}>Staffs</Link></span>}/>
-            <SubMenu key="BookingMethod" title={<span><Icon type="notification" /><Link to={`/bookingMethod`}>Booking Methods</Link></span>}/>
+            <SubMenu key="GuideProfile" title={<span><Icon type="laptop" />
+            <Link to={`/guide`} style={{fontSize:'2vh'}} >Tour Guides</Link></span>}/>
+            <SubMenu key="Schedule" title={<span><Icon type="notification" />
+            <Link to={`/schedule`} style={{fontSize:'2vh'}} >Tour Schedule</Link></span>}/>
+            <SubMenu key="Tours" title={<span><Icon type="notification" />
+            <Link to={`/tours`} style={{fontSize:'2vh'}} >Tours</Link></span>}/>
+            <SubMenu key="Staff" title={<span><Icon type="notification" />
+            <Link to={`/staff`} style={{fontSize:'2vh'}} >Staffs</Link></span>}/>
+            <SubMenu key="BookingMethod" title={<span><Icon type="notification" />
+            <Link to={`/bookingMethod`} style={{fontSize:'2vh'}} >Booking Methods</Link></span>}/>
           </Menu>
 
       </aside>

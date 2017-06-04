@@ -19,6 +19,16 @@ function throwOptionYearObject(){
   return temp
 }
 
+function topFiveRanking(data){
+  let temp = []
+  if(data.length>5){
+    temp = data.slice(0, 5);
+    return temp
+  }else{
+    return data
+  }
+}
+
 
 
 const Option = Select.Option;
@@ -38,8 +48,8 @@ class AgencyParticipantsRanking extends Component {
   componentWillReceiveProps(nextProps){
     if(this.props.agencyTotalParticipants !== nextProps.agencyTotalParticipants){
       if(nextProps.agencyTotalParticipants){
-        console.log(nextProps.agencyTotalParticipants)
-        this.setState({totalParticipantAgencyData:nextProps.agencyTotalParticipants})
+        let limitArray = topFiveRanking(nextProps.agencyTotalParticipants)
+        this.setState({totalParticipantAgencyData:limitArray})
       }
     }
 

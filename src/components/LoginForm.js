@@ -97,11 +97,11 @@ class LoginForm extends Component {
             } <
             /Form.Item> <
             Form.Item >
-              <Button htmlType = "submit" className = "login-form-button" >
+              <Button style={{fontSize:'2.5vh'}} htmlType = "submit" className = "login-form-button" >
                 Log in </Button>
             </Form.Item>
             <Form.Item >
-              <a className = "login-form-forgot" onClick={()=>this.forgotPasswordModal()}>
+              <a style={{fontSize:'2.5vh'}} className = "login-form-forgot" onClick={()=>this.forgotPasswordModal()}>
                 Forgot password </a>
             </Form.Item >
             </Form>

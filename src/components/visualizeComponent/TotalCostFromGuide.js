@@ -47,7 +47,6 @@ class TotalCostFromGuide extends Component {
 
     if(this.props.yearlyTotalCostFromGuide !== nextProps.yearlyTotalCostFromGuide){
       if(nextProps.yearlyTotalCostFromGuide){
-        console.log(nextProps.yearlyTotalCostFromGuide)
         this.setState({yearlyTotalCostFromGuide:nextProps.yearlyTotalCostFromGuide})
       }
     }
@@ -94,7 +93,6 @@ class TotalCostFromGuide extends Component {
 
 function mapStateToProps(state){
   return{
-    totalRevData: state.getTotalRev.totalRevData,
     selectedYear: state.updateYearDashBoard.selectedYear,
     yearlyTotalCostFromGuide: state.getYearlyTotalCostFromGuide.yearlyTotalCostFromGuide
   }

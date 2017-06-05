@@ -56,6 +56,7 @@ class AgencyParticipantsRanking extends Component {
     if(this.props.selectedYear!==nextProps.selectedYear){
       if(nextProps.selectedYear){
         this.setState({selectedYear:nextProps.selectedYear})
+        this.getTotalParticipantsAgencyData(nextProps.selectedYear)
       }
     }
   }
@@ -73,6 +74,7 @@ class AgencyParticipantsRanking extends Component {
   }
 
   getTotalParticipantsAgencyData(year){
+    console.log(year)
     apiAccess({
       url: 'http://localhost:8000/bookedtours/total-participants/agency/'+year,
       method: 'GET',

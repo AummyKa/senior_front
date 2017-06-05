@@ -94,7 +94,6 @@ class BoxAbove extends Component {
   }
 
   checkTourTypeCustomer(data){
-    console.log(data)
     for(let i=0;i<data.length;i++){
       if(data[i].tour_type == "Public"){
         this.setState({publicCustomers:data[i].participants})

@@ -36,7 +36,6 @@ class CostFromGuideModal extends Component {
   }
 
   getCostData(year){
-    console.log(year)
     apiAccess({
       url: 'http://localhost:8000/staffs/tour-guides/summary/payment/'+year,
       method: 'GET',
@@ -59,14 +58,12 @@ class CostFromGuideModal extends Component {
     }
     if(this.props.yearlyTotalCostFromGuide !== nextProps.yearlyTotalCostFromGuide){
       if(nextProps.yearlyTotalCostFromGuide){
-        console.log(nextProps.yearlyTotalCostFromGuide)
         this.setState({yearlyTotalCostFromGuide:nextProps.yearlyTotalCostFromGuide})
       }
     }
   }
 
   handleYearSelect(value,option){
-    console.log(value)
     this.setState({selectedYear: value})
   }
 

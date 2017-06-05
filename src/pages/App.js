@@ -26,6 +26,9 @@ class App extends Component {
     router: PropTypes.object.isRequired
   }
 
+  componentWillMount(){
+    console.log(process.env.NODE_ENV)
+  }
 
   componentWillReceiveProps(nextProps){
     if(this.props.loggedIn !== nextProps.loggedIn){

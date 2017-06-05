@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
-import { Table, Icon, Button  } from 'antd';
+import { Table, Icon, Button, Tag  } from 'antd';
 import StarRatingComponent from 'react-star-rating-component';
 
 import apiAccess from '../Helpers/apiAccess'
@@ -8,7 +8,7 @@ import { sendSuggestedGuideName } from '../actions/action-sendSuggestedGuideName
 
 
 function createGuideSuggestData(arrayJSON){
-  console.log(arrayJSON[1])
+  console.log(arrayJSON)
   let resultJSON = []
 
   if(arrayJSON){
@@ -30,7 +30,8 @@ function createGuideSuggestData(arrayJSON){
         _id:arrayJSON[i]._id || '',
         guidename: arrayJSON[i].fullname || '',
         rating: guide_rate,
-        favorite: guide_favorable
+        favorite: guide_favorable,
+        contract: arrayJSON[i].contract
       }
 
       resultJSON[i] = objectJSON
@@ -102,6 +103,20 @@ const GuideSuggestion = React.createClass({
     })
   },
 
+  tagContract(contract){
+    console.log(contract)
+    if(contract == "Part Time"){
+      return(
+        <Tag color="#FDAA5C">Part Time</Tag>
+      )
+
+    }else if(contract == "Full Time."){
+      return(
+        <Tag color="#82D8EB">Full Time</Tag>
+      )
+    }
+  },
+
   render() {
 
     const columns = [{
@@ -135,6 +150,13 @@ const GuideSuggestion = React.createClass({
           renderStarIcon={() => <span><Icon type="star" /></span>}
         />
       </span>
+      },{
+        title: 'Contract',
+        dataIndex: 'contract',
+        render: (text, record) =>
+        <div>
+          {this.tagContract(record.contract)}
+        </div>
       },{ title: 'Action', dataIndex: '', key: 'x',
           render: (text, record) =>
           <span><Button type="primary" onClick = {() => this.selectSuggestedGuide(record)}>Select</Button></span>

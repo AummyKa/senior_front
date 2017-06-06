@@ -601,19 +601,24 @@ filterSchedule(selected){
 
           <Row>
             <Col span = {24} style = {{height: 450}}>
-              <div className = "big-table">
-                  <h3 className='callout'>
-                  </h3>
-                  <BigCalendar
-                    selectable
-                {...this.props}
-                culture='en-GB'
-                events={this.state.events}
-                eventPropGetter={(this.eventStyleGetter)}
-                views={['month']}
-                onSelectEvent={(event,e)=> this.showThatSlotFromEvent(event,e)}
-                onSelectSlot={(slotInfo) => this.showThatSlot(slotInfo.start)}/>
+
+                <div className = "big-table">
+                    <h3 className='callout'></h3>
+                  <Row>
+                    <div className="schedule-calendar">
+                      <BigCalendar
+                        selectable
+                      {...this.props}
+                      culture='en-GB'
+                      events={this.state.events}
+                      eventPropGetter={(this.eventStyleGetter)}
+                      views={['month']}
+                      onSelectEvent={(event,e)=> this.showThatSlotFromEvent(event,e)}
+                      onSelectSlot={(slotInfo) => this.showThatSlot(slotInfo.start)}/>
+                    </div>
+                  </Row>
                 </div>
+
             </Col>
             </Row>
 

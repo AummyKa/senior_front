@@ -19,8 +19,8 @@ const apiConfig = (url) =>{
     let result = "http://localhost:8000/"+url
     return result
   }else if(process.env.NODE_ENV == "production"){
-    let server_url = "http://128.199.234.89/"
-    let result = "http://128.199.234.89/"+url
+    let server_url = "http://128.199.234.89:8000/"
+    let result = "http://128.199.234.89:8000/"+url
     return result
   }
 }
@@ -196,8 +196,9 @@ class GuideLayout extends Component {
 
   render() {
     console.log("guide layout")
+    let url = 'staffs/insert-image/'+Cookies.get('guide_id')
     const props = {
-      action: '//localhost:8000/staffs/insert-image/'+Cookies.get('guide_id'),
+      action: apiConfig(url),
       onChange: this.handlePictureChange.bind(this),
       multiple: true
     };

@@ -25,8 +25,8 @@ const apiConfig = (url) =>{
     let result = "http://localhost:8000/"+url
     return result
   }else if(process.env.NODE_ENV == "production"){
-    let server_url = "http://128.199.234.89/"
-    let result = "http://128.199.234.89/"+url
+    let server_url = "http://128.199.234.89:8000/"
+    let result = "http://128.199.234.89:8000/"+url
     return result
   }
 }

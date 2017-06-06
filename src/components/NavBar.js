@@ -14,6 +14,19 @@ const MenuItemGroup = Menu.ItemGroup;
 
 
 
+const apiConfig = (url) =>{
+  if(process.env.NODE_ENV == "development"){
+    let server_url = "http://localhost:3000/"
+    let result = "http://localhost:3000/"+url
+    return result
+  }else if(process.env.NODE_ENV == "production"){
+    let server_url = "http://128.199.234.89/"
+    let result = "http://128.199.234.89/"+url
+    return result
+  }
+}
+
+
 class NavBar extends Component {
 
 
@@ -66,7 +79,7 @@ class NavBar extends Component {
         Cookies.remove('tour_id')
         Cookies.remove('userID')
         Cookies.remove('guide_id')
-        window.location.replace('http://localhost:3000/');
+        window.location.replace(apiConfig(""));
       }
     }
       this.setState({showSideBar:!nextProps.showSideBar})

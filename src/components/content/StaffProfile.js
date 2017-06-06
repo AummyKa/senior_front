@@ -14,8 +14,8 @@ const apiConfig = (url) =>{
     let result = "http://localhost:8000/"+url
     return result
   }else if(process.env.NODE_ENV == "production"){
-    let server_url = "http://128.199.234.89/"
-    let result = "http://128.199.234.89/"+url
+    let server_url = "http://128.199.234.89:8000/"
+    let result = "http://128.199.234.89:8000/"+url
     return result
   }
 }
@@ -210,9 +210,9 @@ class StaffProfile extends Component {
   }
 
   render() {
-
-    const props = {
-      action: '//localhost:8000/staffs/insert-image/'+Cookies.get('staff_id'),
+    let url = 'staffs/insert-image/'+Cookies.get('staff_id')
+    const props = {    
+      action: apiConfig(url),
       onChange: this.handlePictureChange.bind(this),
       multiple: true,
       onPreview: this.handlePicturePreview.bind(this)

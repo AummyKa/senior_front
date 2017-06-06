@@ -96,7 +96,7 @@ class BookingMethod extends Component{
 
   getBookingMethods(){
     apiAccess({
-      url: 'http://localhost:8000/bookingmethods/',
+      url: 'bookingmethods/',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_ATTEMPT' }),
@@ -162,7 +162,7 @@ class BookingMethod extends Component{
 
   deleteBookingMethod(record){
     apiAccess({
-      url: 'http://localhost:8000/bookingmethods/delete/'+record._id,
+      url: 'bookingmethods/delete/'+record._id,
       method: 'DELETE',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'DELETE_BOOKING_METHOD_ATTEMPT' }),

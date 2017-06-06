@@ -37,7 +37,7 @@ class CostFromGuideModal extends Component {
 
   getCostData(year){
     apiAccess({
-      url: 'http://localhost:8000/staffs/tour-guides/summary/payment/'+year,
+      url: 'staffs/tour-guides/summary/payment/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_YEARLY_TOTAL_COST_FROM_GUIDE_ATTEMPT' }),

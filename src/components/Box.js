@@ -19,15 +19,28 @@ const hoverImage={
   opacity: 0.5,
 }
 
+const apiConfig = (url) =>{
+  if(process.env.NODE_ENV == "development"){
+    let server_url = "http://localhost:8000/"
+    let result = "http://localhost:8000/"+url
+    return result
+  }else if(process.env.NODE_ENV == "production"){
+    let server_url = "http://128.199.234.89/"
+    let result = "http://128.199.234.89/"+url
+    return result
+  }
+}
+
+
 class Box extends Component {
 
   constructor(props){
     super(props)
-    console.log(this.props.show)
+    let imgUrl = "tours/image/"+this.props.data._id
     this.state = {
       content: this.props.data,
       hover: false,
-      tour_picture_url:"http://localhost:8000/tours/image/"+this.props.data._id
+      tour_picture_url:apiConfig(imgUrl)
     }
   }
 

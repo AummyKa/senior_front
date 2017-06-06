@@ -52,7 +52,7 @@ class TotalParticipant extends Component {
 
   getParticipantData(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/participants/'+year,
+      url: 'bookedtours/summary/participants/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_TOTAL_PARTICIPANT_ATTEMPT' }),

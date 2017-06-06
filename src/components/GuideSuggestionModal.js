@@ -90,7 +90,7 @@ const GuideSuggestion = React.createClass({
   getSuggestion(){
 
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/guide-suggestion/',
+      url: 'bookedtours/guide-suggestion/',
       method: 'POST',
       payload: {
         tour_name: this.state.selectedTourName,

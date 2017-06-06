@@ -60,7 +60,7 @@ const AddGuideTourRatingModal = Form.create()(React.createClass({
 
   getAllTour(){
     apiAccess({
-      url: 'http://localhost:8000/tours/name',
+      url: 'tours/name',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOURS_ATTEMPT' }),
@@ -71,7 +71,7 @@ const AddGuideTourRatingModal = Form.create()(React.createClass({
 
   eachGuide(id){
       apiAccess({
-       url: 'http://localhost:8000/staffs/'+id,
+       url: 'staffs/'+id,
        method: 'GET',
        payload: null,
        attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_ATTEMPT' }),
@@ -146,7 +146,7 @@ const AddGuideTourRatingModal = Form.create()(React.createClass({
   addExpertField(payload){
     let id = Cookies.get('guide_id')
     apiAccess({
-      url: 'http://localhost:8000/staffs/add-expert/'+id,
+      url: 'staffs/add-expert/'+id,
       method: 'POST',
       payload: payload,
       attemptAction: () => this.props.dispatch({ type: 'ADD_GUIDE_EXPERT_FIELD_ATTEMPT' }),

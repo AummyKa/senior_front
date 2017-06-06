@@ -94,7 +94,7 @@ constructor(props){
 
   getCurTour(id){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/'+id,
+      url: 'bookedtours/'+id,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_BOOKED_TOUR_ATTEMPT' }),

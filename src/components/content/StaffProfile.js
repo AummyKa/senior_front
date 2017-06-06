@@ -7,6 +7,20 @@ import apiAccess from '../../Helpers/apiAccess'
 
 import Cookies from 'js-cookie'
 
+
+const apiConfig = (url) =>{
+  if(process.env.NODE_ENV == "development"){
+    let server_url = "http://localhost:8000/"
+    let result = "http://localhost:8000/"+url
+    return result
+  }else if(process.env.NODE_ENV == "production"){
+    let server_url = "http://128.199.234.89/"
+    let result = "http://128.199.234.89/"+url
+    return result
+  }
+}
+
+
 class StaffProfile extends Component {
 
   constructor(props){
@@ -31,7 +45,9 @@ class StaffProfile extends Component {
 
   componentDidMount(){
 
-    this.setState({staff_image_url:"http://localhost:8000/staffs/image/"+Cookies.get('staff_id')})
+    let staff_img_url = "staffs/image/"+Cookies.get('staff_id')
+
+    this.setState({staff_image_url:apiConfig(staff_img_url)})
     //set button color
     //check if the user is a tour guide
     // if(this.state.userID == 'Tour Guide'){
@@ -77,7 +93,7 @@ class StaffProfile extends Component {
 
   eachStaff(id){
       apiAccess({
-       url: 'http://localhost:8000/staffs/'+id,
+       url: 'staffs/'+id,
        method: 'GET',
        payload: null,
        attemptAction: () => this.props.dispatch({ type: 'GET_STAFF_PROFILE_ATTEMPT' }),
@@ -88,7 +104,7 @@ class StaffProfile extends Component {
 
   removePicturePath(id){
       apiAccess({
-       url: 'http://localhost:8000/staffs/remove-image/'+id,
+       url: 'staffs/remove-image/'+id,
        method: 'GET',
        payload: null,
        attemptAction: () => this.props.dispatch({ type: 'REMOVE_PICTURE_PATH_ATTEMPT' }),
@@ -104,7 +120,7 @@ class StaffProfile extends Component {
     if (info.file.status === 'done') {
       message.success(`${info.file.name} file uploaded successfully`);
       window.location.replace(this.props.location.pathname)
-      //this.setState({staff_image_url:"http://localhost:8000/staffs/image/"+Cookies.get('guide_id')})
+      //this.setState({staff_image_url:"staffs/image/"+Cookies.get('guide_id')})
 
     } else if (info.file.status === 'error') {
       message.error(`${info.file.name} file upload failed.`);
@@ -183,7 +199,7 @@ class StaffProfile extends Component {
                       console.log(payload)
 
     apiAccess({
-      url: 'http://localhost:8000/staffs/update-info/'+id,
+      url: 'staffs/update-info/'+id,
       method: 'POST',
       payload: payload,
       attemptAction: () => this.props.dispatch({ type: 'UPDATE_STAFF_ATTEMPT' }),

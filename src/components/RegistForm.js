@@ -93,7 +93,7 @@ const RegistForm = Form.create()(React.createClass({
           console.log(payload)
 
           apiAccess({
-            url: 'http://localhost:8000/register',
+            url: 'register',
             method: 'POST',
             payload: payload,
             attemptAction: () => this.props.dispatch({ type: 'REGIST_ATTEMPT' }),

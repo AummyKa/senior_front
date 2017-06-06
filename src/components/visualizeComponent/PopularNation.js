@@ -84,7 +84,7 @@ class PopularNation extends Component {
 
   getPopularNation(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/total-participants/country/'+year,
+      url: 'bookedtours/total-participants/country/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_SUMMARY_AMOUNT_NATIONS_ATTEMPT' }),

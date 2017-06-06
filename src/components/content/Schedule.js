@@ -128,7 +128,7 @@ class Schedule extends Component {
 
   getEvent(){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/calendar/public-private',
+      url: 'bookedtours/calendar/public-private',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_EVENT_SUMMARY_ATTEMPT' }),
@@ -139,7 +139,7 @@ class Schedule extends Component {
 
   getAllTourName(){
     apiAccess({
-      url: 'http://localhost:8000/tours/name',
+      url: 'tours/name',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOURS_ATTEMPT' }),
@@ -150,7 +150,7 @@ class Schedule extends Component {
 
   getGuideList(){
     apiAccess({
-      url: 'http://localhost:8000/staffs/tour-guides/name',
+      url: 'staffs/tour-guides/name',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_NAME_ATTEMPT' }),
@@ -204,7 +204,7 @@ handleGuideSelect(value,option){
 
 filterSchedule(selected){
   apiAccess({
-    url: 'http://localhost:8000/bookedtours/calendar/'+selected+'/public-private',
+    url: 'bookedtours/calendar/'+selected+'/public-private',
     method: 'GET',
     payload: null,
     attemptAction: () => this.props.dispatch({ type: 'GET_FILTERED_EVENT_SUMMARY_ATTEMPT' }),
@@ -218,7 +218,7 @@ filterSchedule(selected){
 //   let selected_Guide = this.state.selectedG
 //
 //   apiAccess({
-//     url: 'http://localhost:8000/bookedtours/calendar/'+selected_Tour+'/public-private',
+//     url: 'bookedtours/calendar/'+selected_Tour+'/public-private',
 //     method: 'GET',
 //     payload: null,
 //     attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_EVENT_SUMMARY_ATTEMPT' }),

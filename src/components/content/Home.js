@@ -83,6 +83,7 @@ class Home extends Component {
 
   handleYearSelect(value,option){
   this.setState({selectedYear: value})
+  this.props.dispatch(changeYearDashBoard('CHANGE_YEAR',value))
   }
 
   handleClickShowTotalParticipant(value,option){
@@ -93,11 +94,11 @@ class Home extends Component {
     this.setState({showMoreTotalCostFromGuide:true})
   }
 
-  setYearRev(){
-    // Cookies.set('selectedYearInDashBoard',this.state.selectedYear)
-    // this.getRevData(this.state.selectedYear)
-    this.props.dispatch(changeYearDashBoard('CHANGE_YEAR',this.state.selectedYear))
-  }
+  // setYearRev(){
+  //   // Cookies.set('selectedYearInDashBoard',this.state.selectedYear)
+  //   // this.getRevData(this.state.selectedYear)
+  //
+  // }
 
 
   render() {
@@ -256,7 +257,6 @@ class Home extends Component {
                >
                 {throwOptionYearObject()}
                </Select>
-               <Button type = "primary" onClick = {() => this.setYearRev()}>GO!</Button>
             </Col>
          </Row>
         </div>

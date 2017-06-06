@@ -68,7 +68,7 @@ class ChangePassword extends Component{
          console.log(payload)
 
          apiAccess({
-           url: 'http://localhost:8000/change-password',
+           url: 'change-password',
            method: 'POST',
            payload: payload,
            attemptAction: () => this.props.dispatch({ type: 'CHANGE_PASSWORD_ATTEMPT' }),

@@ -37,7 +37,7 @@ class ParticipantsFromAgencyModal extends Component {
 
   getTotalParticipantsAgencyData(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/total-participants/agency/'+year,
+      url: 'bookedtours/total-participants/agency/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_AGENCY_TOTAL_PARTICIPANTS_ATTEMPT' }),

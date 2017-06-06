@@ -84,7 +84,7 @@ class SlotDetail extends Component {
 
   deleteEachTour(_id){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/delete-bookedtour/'+_id,
+      url: 'bookedtours/delete-bookedtour/'+_id,
       method: 'DELETE',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'DELETE_BOOKER_AND_TOUR_ATTEMPT' }),
@@ -97,7 +97,7 @@ class SlotDetail extends Component {
   getTourAndBookerDetail(date){
 
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/date/'+ date,
+      url: 'bookedtours/date/'+ date,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_BOOKER_AND_TOUR_ATTEMPT' }),
@@ -207,7 +207,7 @@ class SlotDetail extends Component {
 getCurTour(record){
   let id = record.id
   apiAccess({
-    url: 'http://localhost:8000/bookedtours/'+id,
+    url: 'bookedtours/'+id,
     method: 'GET',
     payload: null,
     attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_BOOKED_TOUR_ATTEMPT' }),

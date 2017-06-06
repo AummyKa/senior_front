@@ -75,7 +75,7 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
         }
 
           apiAccess({
-            url: 'http://localhost:8000/bookedtours/insert-customer/'+this.state.tourID,
+            url: 'bookedtours/insert-customer/'+this.state.tourID,
             method: 'POST',
             payload: payload,
             attemptAction: () => this.props.dispatch({ type: 'ADD_MORE_CUSTOMER_IN_TOUR_ATTEMPT' }),
@@ -102,7 +102,7 @@ const AddMoreCustomerModal = Form.create()(React.createClass({
 
   getBookingMethods(){
     apiAccess({
-      url: 'http://localhost:8000/bookingmethods/',
+      url: 'bookingmethods/',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_ATTEMPT' }),

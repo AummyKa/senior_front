@@ -24,7 +24,7 @@ class BoxAbove extends Component {
 
   getYearlyTotalCustomer(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/total-participants/'+year,
+      url: 'bookedtours/total-participants/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_YEARLY_TOTAL_CUSTOMER_ATTEMPT' }),
@@ -35,7 +35,7 @@ class BoxAbove extends Component {
 
   getYearlyBookingTypeCustomer(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/total-participants/bookingmethod-type/'+year,
+      url: 'bookedtours/total-participants/bookingmethod-type/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_YEARLY_TOTAL_BOOKINGTYPE_CUSTOMER_ATTEMPT' }),
@@ -46,7 +46,7 @@ class BoxAbove extends Component {
 
   getYearlyTourTypeCustomer(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/total-participants/tour-type/'+year,
+      url: 'bookedtours/total-participants/tour-type/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_YEARLY_TOTAL_TOURTYPE_CUSTOMER_ATTEMPT' }),
@@ -57,7 +57,7 @@ class BoxAbove extends Component {
 
   getMostPopularTour(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/most-popular-tour/participants/'+year,
+      url: 'bookedtours/most-popular-tour/participants/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOUR_CUSTOMERS_RANKING_ATTEMPT' }),

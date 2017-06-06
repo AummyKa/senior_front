@@ -51,7 +51,7 @@ class Tours extends Component {
 
   getTours(){
     apiAccess({
-      url: 'http://localhost:8000/tours',
+      url: 'tours',
       method: 'GET',
       payload: null,
       attemptAction: this.props.getAllTourAttempt,

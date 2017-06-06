@@ -65,7 +65,7 @@ class TotalRev extends Component {
 
   getRevData(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/revenue/'+year,
+      url: 'bookedtours/summary/revenue/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_TOTAL_REV_ATTEMPT' }),

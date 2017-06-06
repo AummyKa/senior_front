@@ -24,7 +24,19 @@ import {connect} from 'react-redux';
 
 const Option = Select.Option;
 let today = new Date();
-let curYear = today.getFullYear();
+let curYear = today.getFullYear()
+
+const apiConfig = (url) =>{
+  if(process.env.NODE_ENV == "development"){
+    let server_url = "http://localhost:8000/"
+    let result = "http://localhost:8000/"+url
+    return result
+  }else if(process.env.NODE_ENV == "production"){
+    let server_url = "http://128.199.234.89/"
+    let result = "http://128.199.234.89/"+url
+    return result
+  }
+}
 
 function throwOptionYearObject(){
   let today = new Date();
@@ -62,7 +74,7 @@ class TourDetail extends Component {
 
   getSpecificTourData(id){
     apiAccess({
-      url: 'http://localhost:8000/tours/'+id,
+      url: 'tours/'+id,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_DATA_ATTEMPT' }),
@@ -74,8 +86,9 @@ class TourDetail extends Component {
 
 
   componentWillMount(){
+    let img_url =  "tours/image/"+this.state.tour_id
     this.getSpecificTourData(this.state.tour_id)
-    this.setState({tour_picture_url:"http://localhost:8000/tours/image/"+this.state.tour_id})
+    this.setState({tour_picture_url:apiConfig(img_url)})
 
   }
 
@@ -114,10 +127,7 @@ class TourDetail extends Component {
 
   handleYearSelect(value,option){
   this.setState({selectedYear: value})
-  }
-
-  setSelectedYear(){
-    this.props.dispatch(changeYearDashBoard('CHANGE_TOUR_DASHBOARD_YEAR',this.state.selectedYear))
+  this.props.dispatch(changeYearDashBoard('CHANGE_TOUR_DASHBOARD_YEAR',value))
   }
 
   editTour(){
@@ -253,17 +263,13 @@ class TourDetail extends Component {
             <div className = "edit-and-year-selected">
               <Row>
 
-                <Col span={6}>
+                <Col xs={6} lg={5}>
                   <div className ="year-title" style = {{marginTop: '-11%'}}>
                     <h3>{this.state.selectedYear}</h3>
                   </div>
                 </Col>
 
-                <Col lg={{span:1,offset:6}} xs={{span:1, offset:2}}>
-                  <Icon type="calendar" style = {{fontSize: "22px"}} />
-                </Col>
-
-                <Col lg={6}>
+                <Col xs={{ span: 10, offset: 1 }} lg={{ span: 6, offset: 9 }}>
                   <Select
                      showSearch
                      style={{width: 150}}
@@ -276,10 +282,7 @@ class TourDetail extends Component {
                     {throwOptionYearObject()}
                    </Select>
                  </Col>
-                 <Col span={2}>
-                   <Button type = "primary" onClick = {() => this.setSelectedYear()}>GO!</Button>
-                </Col>
-                <Col span={3} >
+                <Col xs={{ span: 2, offset: 1 }} lg={3}>
                   <Button style={{backgroundColor:'#900C3F',color:'#ffffff'}} onClick = {() => this.editTour()}>Edit Tour!</Button>
                </Col>
              </Row>

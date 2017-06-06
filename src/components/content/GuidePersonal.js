@@ -45,7 +45,7 @@ class GuidePersonal extends Component {
   eachGuide(id){
     console.log(id)
       apiAccess({
-       url: 'http://localhost:8000/staffs/'+id,
+       url: 'staffs/'+id,
        method: 'GET',
        payload: null,
        attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_ATTEMPT' }),
@@ -105,7 +105,7 @@ class GuidePersonal extends Component {
                       console.log(payload)
 
     apiAccess({
-      url: 'http://localhost:8000/staffs/update-info/'+id,
+      url: 'staffs/update-info/'+id,
       method: 'POST',
       payload: payload,
       attemptAction: () => this.props.dispatch({ type: 'UPDATE_STAFF_ATTEMPT' }),

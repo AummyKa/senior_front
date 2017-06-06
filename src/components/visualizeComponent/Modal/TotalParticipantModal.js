@@ -50,7 +50,7 @@ class TotalParticipantModal extends Component {
 
   getParticipantTableData(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/participants/tour-type/'+year,
+      url: 'bookedtours/summary/participants/tour-type/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_TOTAL_PARTICIPANT_TABLE_ATTEMPT' }),
@@ -62,7 +62,7 @@ class TotalParticipantModal extends Component {
   getParticipantData(year){
     console.log(year)
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/participants/'+year,
+      url: 'bookedtours/summary/participants/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_TOTAL_PARTICIPANT_ATTEMPT' }),

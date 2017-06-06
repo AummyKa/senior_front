@@ -100,7 +100,7 @@ class LoginPage extends Component {
       let email = this.state.userEmail
       if(email){
         apiAccess({
-          url: 'http://localhost:8000/forget-password',
+          url: 'forget-password',
           method: 'POST',
           payload: {
             email: email

@@ -11,6 +11,21 @@ import apiAccess from '../../Helpers/apiAccess'
 
 import Cookies from 'js-cookie'
 
+
+
+const apiConfig = (url) =>{
+  if(process.env.NODE_ENV == "development"){
+    let server_url = "http://localhost:8000/"
+    let result = "http://localhost:8000/"+url
+    return result
+  }else if(process.env.NODE_ENV == "production"){
+    let server_url = "http://128.199.234.89/"
+    let result = "http://128.199.234.89/"+url
+    return result
+  }
+}
+
+
 class GuideLayout extends Component {
 
   constructor(props){
@@ -40,9 +55,11 @@ class GuideLayout extends Component {
   componentDidMount(){
 
     if(Cookies.get('guide_id')===Cookies.get('userID')){
-      this.setState({staff_image_url:"http://localhost:8000/staffs/image/"+Cookies.get('userID')})
+      let url = "staffs/image/"+Cookies.get('userID')
+      this.setState({staff_image_url:apiConfig(url)})
     }else{
-      this.setState({staff_image_url:"http://localhost:8000/staffs/image/"+Cookies.get('guide_id')})
+      let url = "staffs/image/"+Cookies.get('guide_id')
+      this.setState({staff_image_url:apiConfig(url)})
     }
 
     const { router } = this.context;
@@ -86,14 +103,14 @@ class GuideLayout extends Component {
     // if(this.props.removePictureStatus !== nextProps.removePictureStatus){
     //   if(nextProps.removePictureStatus){
     //       console.log("hi")
-    //       this.setState({staff_image_url:"http://localhost:8000/staffs/image/"+Cookies.get('guide_id')})
+    //       this.setState({staff_image_url:"staffs/image/"+Cookies.get('guide_id')})
     //   }
     // }
   }v
 
   eachGuide(id){
       apiAccess({
-       url: 'http://localhost:8000/staffs/'+id+'/name',
+       url: 'staffs/'+id+'/name',
        method: 'GET',
        payload: null,
        attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_NAME_ATTEMPT' }),
@@ -104,7 +121,7 @@ class GuideLayout extends Component {
 
   removePicturePath(id){
       apiAccess({
-       url: 'http://localhost:8000/staffs/remove-image/'+id,
+       url: 'staffs/remove-image/'+id,
        method: 'GET',
        payload: null,
        attemptAction: () => this.props.dispatch({ type: 'REMOVE_PICTURE_PATH_ATTEMPT' }),
@@ -169,7 +186,7 @@ class GuideLayout extends Component {
     if (info.file.status === 'done') {
       message.success(`${info.file.name} file uploaded successfully`);
       window.location.replace(this.props.location.pathname)
-      //this.setState({staff_image_url:"http://localhost:8000/staffs/image/"+Cookies.get('guide_id')})
+      //this.setState({staff_image_url:"staffs/image/"+Cookies.get('guide_id')})
 
     } else if (info.file.status === 'error') {
       message.error(`${info.file.name} file upload failed.`);

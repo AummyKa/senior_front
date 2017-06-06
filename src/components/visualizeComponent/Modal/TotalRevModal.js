@@ -50,7 +50,7 @@ class TotalRevModal extends Component {
 
   getRevTableData(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/revenue/tour-type/'+year,
+      url: 'bookedtours/summary/revenue/tour-type/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_TOTAL_REV_TABLE_ATTEMPT' }),
@@ -61,7 +61,7 @@ class TotalRevModal extends Component {
 
   getRevData(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/revenue/'+year,
+      url: 'bookedtours/summary/revenue/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_TOTAL_REV_ATTEMPT' }),

@@ -77,7 +77,7 @@ class Guide extends Component{
 
   getGuideList(){
     apiAccess({
-      url: 'http://localhost:8000/staffs/tour-guides',
+      url: 'staffs/tour-guides',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_ATTEMPT' }),

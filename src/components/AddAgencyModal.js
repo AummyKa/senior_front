@@ -48,7 +48,7 @@ class AddAgencyModal extends Component{
             console.log(payload)
 
             apiAccess({
-              url: 'http://localhost:8000/bookingmethods/insert',
+              url: 'bookingmethods/insert',
               method: 'POST',
               payload: payload,
               attemptAction: () => this.props.dispatch({ type: 'ADD_NEW_BOOKING_METHOD_ATTEMPT' }),
@@ -78,7 +78,7 @@ class AddAgencyModal extends Component{
 
 getBookingMethods(){
   apiAccess({
-    url: 'http://localhost:8000/bookingmethods/',
+    url: 'bookingmethods/',
     method: 'GET',
     payload: null,
     attemptAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_ATTEMPT' }),

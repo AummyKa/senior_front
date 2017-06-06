@@ -120,7 +120,7 @@ class CostModelModal extends Component{
 
   getTourData(){
     apiAccess({
-      url: 'http://localhost:8000/tours/'+this.state.tour_id,
+      url: 'tours/'+this.state.tour_id,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_DATA_ATTEMPT' }),
@@ -170,7 +170,7 @@ class CostModelModal extends Component{
         });
 
           apiAccess({
-            url: 'http://localhost:8000/tours/update-guide-payment/'+this.state.tour_id,
+            url: 'tours/update-guide-payment/'+this.state.tour_id,
             method: 'POST',
             payload:{ guide_payment },
             attemptAction: () => this.props.dispatch({ type: 'POST_GUIDE_PAYMENT_EACH_TOUR_ATTEMPT' }),

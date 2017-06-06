@@ -69,7 +69,7 @@ class EachTourEditFormModal extends Component{
           console.log(payload)
 
           apiAccess({
-            url: 'http://localhost:8000/tours/update/'+this.state.tour_id,
+            url: 'tours/update/'+this.state.tour_id,
             method: 'POST',
             payload: payload,
             attemptAction: () => this.props.dispatch({ type: 'UPDATE_EACH_TOUR_ATTEMPT' }),
@@ -84,7 +84,7 @@ class EachTourEditFormModal extends Component{
 
   getTourData(){
     apiAccess({
-      url: 'http://localhost:8000/tours/'+this.state.tour_id,
+      url: 'tours/'+this.state.tour_id,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_DATA_ATTEMPT' }),

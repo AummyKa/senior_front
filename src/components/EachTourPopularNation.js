@@ -99,7 +99,7 @@ class EachTourPopularNation extends Component {
 
   getPopularNation(year){
     apiAccess({
-      url: 'http://localhost:8000/tours/'+this.state.tour_id +'/popular-nation/'+year,
+      url: 'tours/'+this.state.tour_id +'/popular-nation/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_AMOUNT_NATIONS_OF_EACH_TOUR_ATTEMPT' }),

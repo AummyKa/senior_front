@@ -37,7 +37,7 @@ class NavBar extends Component {
     if(e.key=="Logout"){
       let token = Cookies.get('token')
       apiAccess({
-        url: 'http://localhost:8000/logout',
+        url: 'logout',
         method: 'POST',
         payload: {
           token: token

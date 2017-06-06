@@ -69,7 +69,7 @@ class EachTourCostModel extends Component {
   getTourData(){
     console.log(this.state.tour_id)
     apiAccess({
-      url: 'http://localhost:8000/tours/'+this.state.tour_id,
+      url: 'tours/'+this.state.tour_id,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_TOUR_DATA_ATTEMPT' }),

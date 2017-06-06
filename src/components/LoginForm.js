@@ -34,7 +34,7 @@ class LoginForm extends Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 apiAccess({
-                    url: 'http://localhost:8000/login',
+                    url: 'login',
                     method: 'POST',
                     payload: {
                         username: this.props.form.getFieldValue('username'), //username is an email

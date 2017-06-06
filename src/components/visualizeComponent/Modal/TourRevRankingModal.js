@@ -50,7 +50,7 @@ class TourRevRankingModal extends Component {
 
   getAllTourRevRanking(year){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/revenue/tour-name/'+year,
+      url: 'bookedtours/summary/revenue/tour-name/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOUR_REV_RANKING_ATTEMPT' }),

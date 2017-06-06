@@ -56,7 +56,7 @@ const AddNewTourModal = Form.create()(React.createClass({
 
 
           apiAccess({
-            url: 'http://localhost:8000/tours/insert',
+            url: 'tours/insert',
             method: 'POST',
             payload: payload,
             attemptAction: () => this.props.dispatch({ type: 'ADD_NEW_TOUR_ATTEMPT' }),

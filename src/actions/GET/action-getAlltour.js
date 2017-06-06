@@ -2,7 +2,7 @@ import apiAccess from '../../Helpers/apiAccess'
 // { type: 'LOGIN_SUCCESS', text }
 export const getAllTour = () => {
   apiAccess({
-    url: 'http://localhost:8000/tours',
+    url: 'tours',
     method: 'GET',
     payload: null,
     attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOURS_ATTEMPT' }),

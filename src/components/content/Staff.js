@@ -7,7 +7,6 @@ import apiAccess from '../../Helpers/apiAccess'
 import Cookies from "js-cookie"
 
 
-
 const StaffUserData = (arrayJSON,resultJSON) =>{
 
   if(arrayJSON!=null){
@@ -69,7 +68,7 @@ class Staff extends Component{
 
   getStaffs(){
     apiAccess({
-      url: 'http://localhost:8000/staffs/non-tour-guides',
+      url: 'staffs/non-tour-guides',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_STAFF_ATTEMPT' }),

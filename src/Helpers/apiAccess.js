@@ -1,5 +1,17 @@
 import Cookies from 'js-cookie'
 
+const apiConfig = (url) =>{
+  if(process.env.NODE_ENV == "development"){
+    let server_url = "http://localhost:8000/"
+    let result = "http://localhost:8000/"+url
+    return result
+  }else if(process.env.NODE_ENV == "production"){
+    let server_url = "http://128.199.234.89/"
+    let result = "http://128.199.234.89/"+url
+    return result
+  }
+}
+
 const apiAccess = ({
 url,
 method,
@@ -9,12 +21,15 @@ successAction,
 failureAction
 }) => {
 
-attemptAction()
+let result_url = apiConfig(url)
 
+attemptAction()
 
 if(method == "POST" || method == "DELETE"){
 
-  fetch(url, {
+
+
+  fetch(result_url, {
       method: method,
       headers: {
           'Content-Type': 'application/json',
@@ -38,7 +53,7 @@ if(method == "POST" || method == "DELETE"){
 
 }else if(method == "GET") {
 
-  fetch(url, {
+  fetch(result_url, {
       method: method,
       headers: {
           'Content-Type': 'application/json',

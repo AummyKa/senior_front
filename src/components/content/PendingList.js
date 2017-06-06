@@ -92,7 +92,7 @@ const PendingList = React.createClass({
   },
   getPendingList(){
     apiAccess({
-      url: 'http://localhost:8000/pending',
+      url: 'pending',
       method: 'GET',
       attemptAction: () => this.props.dispatch({ type: 'GET_PENDING_USER_ATTEMPT' }),
       successAction: (json) => this.props.dispatch({ type: 'GET_PENDING_USER_SUCCESS', json }),
@@ -111,7 +111,7 @@ const PendingList = React.createClass({
           console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!")
           console.log(result_id)
           apiAccess({
-            url: 'http://localhost:8000/activate-pending-users',
+            url: 'activate-pending-users',
             method: 'POST',
             payload: result_id,
             attemptAction: () => props.dispatch({ type: 'APPROVE_PENDING_USER_ATTEMPT' }),

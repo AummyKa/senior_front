@@ -62,7 +62,7 @@ class TourCustomerRanking extends Component {
   getAllTourCustomerRanking(year){
     console.log(year)
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/summary/participants/tour-name/'+year,
+      url: 'bookedtours/summary/participants/tour-name/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOUR_CUSTOMERS_RANKING_ATTEMPT' }),

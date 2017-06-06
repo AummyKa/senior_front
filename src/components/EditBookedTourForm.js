@@ -238,7 +238,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
            }
 
            apiAccess({
-             url: 'http://localhost:8000/bookedtours/update/'+this.state.curTourID,
+             url: 'bookedtours/update/'+this.state.curTourID,
              method: 'POST',
              payload: payload,
              attemptAction: () => this.props.dispatch({ type: 'UPDATE_EACH_BOOKED_TOUR_ATTEMPT' }),
@@ -273,7 +273,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
 
   getCurTour(id){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/'+id,
+      url: 'bookedtours/'+id,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_SPECIFIC_BOOKED_TOUR_ATTEMPT' }),
@@ -291,7 +291,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
 
   deleteCustomer(tourID,cusEmail){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/delete-customer/'+tourID,
+      url: 'bookedtours/delete-customer/'+tourID,
       method: 'DELETE',
       payload:{ email: cusEmail  },
       attemptAction: () => this.props.dispatch({ type: 'DELETE_CUR_CUS_IN_TOUR_ATTEMPT' }),
@@ -303,7 +303,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
 
   getGuideNameList(){
     apiAccess({
-      url: 'http://localhost:8000/staffs/tour-guides/name',
+      url: 'staffs/tour-guides/name',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_NAME_ATTEMPT' }),
@@ -413,7 +413,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
 
   getAllTourName(){
     apiAccess({
-      url: 'http://localhost:8000/tours/name',
+      url: 'tours/name',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOURS_ATTEMPT' }),

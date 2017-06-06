@@ -32,7 +32,7 @@ class EachTourYearlyParticipantSummary extends Component {
 
   getEachTourYearlyParticipants(year){
     apiAccess({
-      url: 'http://localhost:8000/tours/'+this.state.tour_id+'/participants/tour-type/'+year,
+      url: 'tours/'+this.state.tour_id+'/participants/tour-type/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_EACH_TOUR_YEARLY_PARTICIPANTS_ATTEMPT' }),

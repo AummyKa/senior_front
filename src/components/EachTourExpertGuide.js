@@ -39,7 +39,7 @@ class EachTourExpertGuide extends Component {
 
   getEachTourExpert(){
     apiAccess({
-      url: 'http://localhost:8000/tours/'+ this.state.tour_id +'/tour-guide-expert',
+      url: 'tours/'+ this.state.tour_id +'/tour-guide-expert',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_EACH_TOUR_EXPERT_GUIDE_ATTEMPT' }),

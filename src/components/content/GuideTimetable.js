@@ -47,7 +47,7 @@ class GuideTimetable extends Component {
     this.setState({selectedDate:date})
 
     apiAccess({
-      url: 'http://localhost:8000/staffs/unavailability/'+id+'/'+date,
+      url: 'staffs/unavailability/'+id+'/'+date,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_EACH_GUIDE_UNAVAIL_EACH_DATE_ATTEMPT' }),
@@ -68,7 +68,7 @@ class GuideTimetable extends Component {
     this.setState({selectedDate:day_str})
 
     apiAccess({
-      url: 'http://localhost:8000/staffs/unavailability/'+id+'/'+day_str,
+      url: 'staffs/unavailability/'+id+'/'+day_str,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_EACH_GUIDE_UNAVAIL_EACH_DATE_ATTEMPT' }),
@@ -151,7 +151,7 @@ class GuideTimetable extends Component {
     console.log(unAvailList)
 
     apiAccess({
-      url: 'http://localhost:8000/staffs/update-unavailability/'+id+'/'+this.state.selectedDate,
+      url: 'staffs/update-unavailability/'+id+'/'+this.state.selectedDate,
       method: 'POST',
       payload: unAvailList,
       attemptAction: () => this.props.dispatch({ type: 'ADD_UNAVAIL_DATE_EACH_GUIDE_ATTEMPT' }),
@@ -164,7 +164,7 @@ class GuideTimetable extends Component {
   getGuideUnAvailibility(){
     let id = Cookies.get('guide_id')
     apiAccess({
-      url: 'http://localhost:8000/staffs/tour-guides/calendar/unavailability/'+id,
+      url: 'staffs/tour-guides/calendar/unavailability/'+id,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_ALL_UNAVAIL_DATE_EACH_GUIDE_ATTEMPT' }),
@@ -348,11 +348,9 @@ class GuideTimetable extends Component {
         </Modal>
 
 
-        <div className className="timetable-content">
-          <Row justify="space-between">
-              <Col xs={24} lg={16}>
-                <div className = "guide-calendar">
-
+        <div className className="timetable-content" style = {{marginBottom:'5%'}}>
+          <Row>
+            <div className = "guide-calendar">
                   <BigCalendar
                     selectable
                 {...this.props}
@@ -363,64 +361,10 @@ class GuideTimetable extends Component {
                 onSelectSlot={(slotInfo) => this.choosingDate(slotInfo.start)}
                 onSelectEvent={(event,e) => this.choosingDateByEvent(event,e)}
               />
-
-              </div>
-              </Col>
-
-            <Col xs={0} lg={8}>
-              <div className = "edit-calendar">
-                <div className = "selectedDay">
-                  <h4>Selected Day</h4>
-                  <Input
-                     size="large"
-                     style={{ fontSize: 20 ,width: 150, textAlign: 'center' }}
-                     type="text"
-                     value={this.state.selectedDate}
-                     placeholder="YYYY-MM-DD"
-                     onChange={this.handleInputChange}
-                     onFocus={this.showCurrentDate}
-                     width = {120}
-                   />
-                </div>
-                <div className = "unavail-time">
-                  <h4>Unavailable time</h4>
-
-                  { !this.state.morningClicked && !this.state.afternoonClicked && !this.state.eveningClicked && !this.state.fullDayClicked
-                    ? this.showAllAvailabileTag() : null
-                  }
-
-                  { this.state.morningClicked ?
-                    <Tag closable={true} color="#FFC300" afterClose={() => this.handleTagClose("Morning")}>Morning</Tag> : null
-                  }
-                  { this.state.afternoonClicked ?
-                    <Tag closable={true} color="#FF5733" afterClose={() => this.handleTagClose("Afternoon")}>Afternoon</Tag> : null
-                  }
-                  { this.state.eveningClicked ?
-                    <Tag closable={true} color="#3B9DF9" afterClose={() => this.handleTagClose("Evening")}>Evening</Tag> : null
-                  }
-                  { this.state.fullDayClicked ?
-                    <Tag closable={true} color="#581845" afterClose={() => this.handleTagClose("Full-Day")}>Full Day</Tag> : null
-                  }
-
-                </div>
-                <div className = "combo-button">
-                  <Row gutter = {16}>
-                    <Col span = {10} offset={2}><Button className = "Morning-btn" onClick ={()=> this.handleUnavailClicked("Morning")}>
-                      <h4>Morning</h4></Button></Col>
-                    <Col span = {10}><Button className = "Afternoon-btn" onClick ={()=> this.handleUnavailClicked("Afternoon")}>
-                      <h4>Afternoon</h4></Button></Col>
-                    <Col span = {10} offset={2}><Button className = "Evening-btn" onClick ={()=> this.handleUnavailClicked("Evening")}>
-                      <h4>Evening</h4></Button></Col>
-                    <Col span = {10}><Button className = "Fullday-btn" onClick ={()=> this.handleUnavailClicked("Full-Day")}>
-                      <h4>Fullday</h4></Button></Col>
-                  </Row>
-                </div>
-                <div className = "submit-avail-button">
-                  <Button className = "btn-submit-avail" type = "primary" onClick = {() => this.submitUnAvailability()}> Submit</Button>
-                </div>
-              </div>
-            </Col>
+            </div>
           </Row>
+
+
         </div>
 
       </div>

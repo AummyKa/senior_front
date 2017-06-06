@@ -64,7 +64,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
 
   getBookingMethods(){
     apiAccess({
-      url: 'http://localhost:8000/bookingmethods/',
+      url: 'bookingmethods/',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_ATTEMPT' }),
@@ -112,7 +112,7 @@ const EditCurCustomerModal = Form.create()(React.createClass({
         console.log(payload)
 
           apiAccess({
-            url: 'http://localhost:8000/bookedtours/update-customer/'+this.state.curTourID,
+            url: 'bookedtours/update-customer/'+this.state.curTourID,
             method: 'POST',
             payload: payload,
             attemptAction: () => this.props.dispatch({ type: 'EDIT_CUSTOMER_IN_TOUR_ATTEMPT' }),

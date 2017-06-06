@@ -32,7 +32,7 @@ class EditBookingMethodsModal extends Component{
             console.log(payload)
 
             apiAccess({
-              url: 'http://localhost:8000/bookingmethods/update/'+ this.state.selectedBookingMethod._id,
+              url: 'bookingmethods/update/'+ this.state.selectedBookingMethod._id,
               method: 'POST',
               payload: payload,
               attemptAction: () => this.props.dispatch({ type: 'UPDATE_BOOKING_METHODS_ATTEMPT' }),

@@ -39,7 +39,7 @@ class EachTourRevChart extends Component {
       year = curYear
     }
     apiAccess({
-      url: 'http://localhost:8000/tours/'+ this.state.tour_id +'/revenue/'+year,
+      url: 'tours/'+ this.state.tour_id +'/revenue/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_EACH_TOUR_YEARLY_REVENUE_ATTEMPT' }),
@@ -50,7 +50,7 @@ class EachTourRevChart extends Component {
 
   getEachTourYearlyRevenueTable(year){
     apiAccess({
-      url: 'http://localhost:8000/tours/'+ this.state.tour_id +'/revenue/tour-type/'+year,
+      url: 'tours/'+ this.state.tour_id +'/revenue/tour-type/'+year,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_EACH_TOUR_YEARLY_REVENUE_TABLE_ATTEMPT' }),

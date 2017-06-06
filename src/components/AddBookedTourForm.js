@@ -150,7 +150,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
   getGuideList(){
     apiAccess({
-      url: 'http://localhost:8000/staffs/tour-guides/name',
+      url: 'staffs/tour-guides/name',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_NAME_ATTEMPT' }),
@@ -161,7 +161,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
   getAllTourName(){
     apiAccess({
-      url: 'http://localhost:8000/tours/name',
+      url: 'tours/name',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_ALL_TOURS_ATTEMPT' }),
@@ -172,7 +172,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
   getBookingMethods(){
     apiAccess({
-      url: 'http://localhost:8000/bookingmethods/',
+      url: 'bookingmethods/',
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_BOOKING_METHODS_ATTEMPT' }),
@@ -183,7 +183,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
 
   addBookerAndTour(payload){
     apiAccess({
-      url: 'http://localhost:8000/bookedtours/insert',
+      url: 'bookedtours/insert',
       method: 'POST',
       payload: payload,
       attemptAction: () => this.props.dispatch({ type: 'POST_BOOKER_AND_TOUR_ATTEMPT' }),

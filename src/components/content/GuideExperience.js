@@ -125,7 +125,7 @@ class GuideExperience extends Component {
 
   eachGuide(id){
       apiAccess({
-       url: 'http://localhost:8000/staffs/'+id,
+       url: 'staffs/'+id,
        method: 'GET',
        payload: null,
        attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_PROFILE_ATTEMPT' }),
@@ -234,7 +234,7 @@ class GuideExperience extends Component {
     }
 
     apiAccess({
-      url: 'http://localhost:8000/staffs/update-favorable/'+id,
+      url: 'staffs/update-favorable/'+id,
       method: 'POST',
       payload: payload,
       attemptAction: () => this.props.dispatch({ type: 'UPDATE_STAFF_ATTEMPT' }),
@@ -275,7 +275,7 @@ class GuideExperience extends Component {
         }
 
     apiAccess({
-      url: 'http://localhost:8000/staffs/update-expert/'+id,
+      url: 'staffs/update-expert/'+id,
       method: 'POST',
       payload: payload,
       attemptAction: () => this.props.dispatch({ type: 'UPDATE_EXPERT_EACH_GUIDE_ATTEMPT' }),
@@ -295,7 +295,7 @@ class GuideExperience extends Component {
     }]
 
     apiAccess({
-      url: 'http://localhost:8000/staffs/remove-expert/'+ id,
+      url: 'staffs/remove-expert/'+ id,
       method: 'POST',
       payload: payload,
       attemptAction: () => this.props.dispatch({ type: 'DELETE_EACH_GUID_EXPERT_ATTEMPT' }),
@@ -319,7 +319,7 @@ class GuideExperience extends Component {
     console.log(this.state.guideIsActive)
 
     apiAccess({
-     url: 'http://localhost:8000/staffs/tour-guides/update-status/'+id,
+     url: 'staffs/tour-guides/update-status/'+id,
      method: 'POST',
      payload: {
        isActive: this.state.guideIsActive

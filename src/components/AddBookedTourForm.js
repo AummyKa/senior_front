@@ -15,7 +15,6 @@ var countries = require('country-list')();
 // import { getAllTour } from '../actions/GET/action-getAllTour'
 
 import { error } from './Modal'
-import Geosuggest from 'react-geosuggest';
 import { Modal } from 'react-bootstrap';
 
 import CustomerInput from './CustomerInput'
@@ -346,7 +345,7 @@ const AddBookedTourForm = Form.create()(React.createClass({
     // can use data-binding to get
     const keys = form.getFieldValue('keys');
     // We need at least one passenger
-    
+
     // can use data-binding to set
     form.setFieldsValue({
       keys: keys.filter(key => key !== keys.slice(-1).pop()),

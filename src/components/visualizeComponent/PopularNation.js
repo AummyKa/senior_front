@@ -117,7 +117,7 @@ listNations(data) {
     if(data.length !== 0){
 
       const list = data.map((key,index) =>
-        <div>
+        <div key={index}>
           <Col span = {3} ><div className = "little-box-label" style = {{backgroundColor: COLORS[index]}}/></Col>
           <Col span = {9} ><div>{key.country}</div></Col>
         </div>
@@ -151,7 +151,7 @@ listNations(data) {
                     >
 
                     {
-                    	this.state.amountNationsSummary.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
+                    	this.state.amountNationsSummary.map((entry, index) => <Cell key={entry} fill={COLORS[index % COLORS.length]}/>)
                     }
                   </Pie>
                 </PieChart>

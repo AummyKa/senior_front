@@ -407,6 +407,7 @@ class GuideExperience extends Component {
             show={this.state.showAddRatingModal}
             onHide={closeRatingModal}
             container={this}
+            responsive={true}
             aria-labelledby="contained-modal-title"
           >
             <Modal.Header closeButton>

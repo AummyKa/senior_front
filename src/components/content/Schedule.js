@@ -413,6 +413,7 @@ filterSchedule(selected){
           show={this.state.showSuggestGuide}
           onHide={closeSuggestGuide}
           container={this}
+          responsive={true}
           aria-labelledby="contained-modal-title"
         >
           <Modal.Body>
@@ -431,6 +432,7 @@ filterSchedule(selected){
               show={this.state.showAddMoreCustomer}
               onHide={closeAddMoreCustomer}
               bsSize="lg"
+              responsive={true}
               container={this}
               aria-labelledby="contained-modal-title"
             >
@@ -450,6 +452,7 @@ filterSchedule(selected){
               show={this.state.showCustomerEdit}
               onHide={closeCustomerEdit}
               bsSize="lg"
+              responsive={true}
               container={this}
               aria-labelledby="contained-modal-title"
             >
@@ -469,6 +472,7 @@ filterSchedule(selected){
               show={this.state.showAddTour}
               onHide={closeAddTour}
               bsSize = "large"
+              responsive={true}
               container={this}
               aria-labelledby="contained-modal-title"
             >
@@ -489,6 +493,7 @@ filterSchedule(selected){
                 show={this.state.showEachTour}
                 onHide={closeEachTour}
                 bsSize = "large"
+                responsive={true}
                 container={this}
                 aria-labelledby="contained-modal-title"
               >
@@ -512,6 +517,7 @@ filterSchedule(selected){
             show={this.state.showSlotDetail}
             onHide={closeSlot}
             container={this}
+            responsive={true}
             aria-labelledby="contained-modal-title"
           >
             <Modal.Header closeButton>

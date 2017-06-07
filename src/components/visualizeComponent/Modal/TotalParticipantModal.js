@@ -137,9 +137,9 @@ class TotalParticipantModal extends Component {
           </Col>
           <Col xs={24} lg={10}>
             <Row>
-              <Col span = {14}><h5><b>Monthly participants summary</b></h5></Col>
+              <Col xs={0} lg={12} ><h5><b>Monthly participants summary</b></h5></Col>
 
-              <Col span = {8}>
+              <Col xs={10} lg={8} >
                 <div className = "select-year">
                   <Select
                      showSearch

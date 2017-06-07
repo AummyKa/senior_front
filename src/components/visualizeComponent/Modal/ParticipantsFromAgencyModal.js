@@ -83,7 +83,7 @@ class ParticipantsFromAgencyModal extends Component {
       <div className="participants-agency-wrapper">
         <div className="agency-year-selection" style={{marginBottom:'2%'}}>
           <Row>
-            <Col span={7} offset={14}>
+            <Col xs={{span:8, offset:13}} lg={{span:7, offset:14}} >
             <Select
                showSearch
                style={{width: 150}}

@@ -310,12 +310,17 @@ getCurTour(record){
           <Button onClick={this.clearFilters}>Clear filters</Button>
           <Button onClick={this.clearAll}>Clear filters and sorters</Button>
         </div>
-        <span>
-          { this.state.showInvalidDate ?
-            <Alert message="Cannot add event in the past" type="error" closable onClose={onClose}/> : null }
 
-        <Button type="primary" className = 'add-tour' onClick={()=> this.addMoreTour() }>Add tour</Button>
-        </span>
+        <Row>
+          <Col xs={19} lg={22}>
+            { this.state.showInvalidDate ?
+              <Alert message="Cannot add event in the past" type="error" closable onClose={onClose}/> : null }
+          </Col>
+          <Col xs={5} lg={2}>
+              <Button type="primary" className = 'add-tour' onClick={()=> this.addMoreTour() }>Add tour</Button>
+          </Col>
+        </Row>
+
         <Table className="components-table-demo-nested" columns={columns}
           dataSource={this.state.tourList} onChange={this.handleChange}
           />

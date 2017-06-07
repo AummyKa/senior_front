@@ -1,3 +1,16 @@
+.pendingList-wrapper{
+  padding:5%;
+}
+
+.pendingList-wrapper .ant-btn-primary{
+  background-color: #19BC9D;
+  border-color: white;
+}
+
+.pendingList-wrapper .ant-pagination-item{
+  background-color: #19BC9D;
+  border-color: white;
+}
 
 .layout-aside {
   position: fixed;

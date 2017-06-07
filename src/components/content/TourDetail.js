@@ -155,6 +155,7 @@ class TourDetail extends Component {
             show={this.state.showEditTourModal}
             onHide={closeEditTourModal}
             container={this}
+            responsive={true}
             aria-labelledby="contained-modal-title"
           >
             <Modal.Header closeButton>

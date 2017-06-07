@@ -119,9 +119,9 @@ class TourCustomerRankingModal extends Component {
 
         <Row>
 
-            <Col span = {14}><h5><b>Tour Revenue Summary</b></h5></Col>
+            <Col xs={13} lg={14} ><h5><b>Tour Revenue Summary</b></h5></Col>
 
-              <Col span = {7}>
+              <Col xs={8} lg={7} >
                 <div className = "select-year">
                   <Select
                      showSearch

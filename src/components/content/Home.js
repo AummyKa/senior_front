@@ -120,6 +120,7 @@ class Home extends Component {
               show={this.state.showMoreTotalAgency}
               onHide={closeShowMoreTotalAgency}
               container={this}
+              responsive={true}
               aria-labelledby="contained-modal-title"
             >
               <Modal.Header closeButton>
@@ -137,6 +138,7 @@ class Home extends Component {
               show={this.state.showMoreTotalCostFromGuide}
               onHide={closeShowMoreTotalCostFromGuide}
               container={this}
+              responsive={true}
               aria-labelledby="contained-modal-title"
             >
               <Modal.Header closeButton>
@@ -154,6 +156,7 @@ class Home extends Component {
               bsSize="large"
               show={this.state.showMoreTotalRevenue}
               onHide={closeShowMoreTotalRevenue}
+              responsive={true}
               container={this}
               aria-labelledby="contained-modal-title"
             >
@@ -172,6 +175,7 @@ class Home extends Component {
               show={this.state.showMoreTourRevRanking}
               onHide={closeShowMoreTourRevRanking}
               container={this}
+              responsive={true}
               aria-labelledby="contained-modal-title"
             >
               <Modal.Header closeButton>
@@ -189,6 +193,7 @@ class Home extends Component {
               show={this.state.showMoreNationsSummary}
               onHide={closeShowMoreNationsSummary}
               container={this}
+              responsive={true}
               aria-labelledby="contained-modal-title"
             >
               <Modal.Header closeButton>
@@ -207,6 +212,7 @@ class Home extends Component {
               show={this.state.showMoreParticipantSummary}
               onHide={closeShowMoreParticipantSummary}
               container={this}
+              responsive={true}
               aria-labelledby="contained-modal-title"
             >
               <Modal.Header closeButton>
@@ -224,6 +230,7 @@ class Home extends Component {
               show={this.state.showMoreTourCustomerRankingSummary}
               onHide={closeShowMoreTourCustomerRankingSummary}
               container={this}
+              responsive={true}
               aria-labelledby="contained-modal-title"
             >
               <Modal.Header closeButton>

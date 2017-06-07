@@ -58,7 +58,7 @@ class GuideHistory extends Component {
      console.log(year)
      console.log(month)
     apiAccess({
-      url: '  staffs/tour-guides/income-summary/'+guide_id+'/'+year+'/'+month,
+      url: 'staffs/tour-guides/income-summary/'+guide_id+'/'+year+'/'+month,
       method: 'GET',
       payload: null,
       attemptAction: () => this.props.dispatch({ type: 'GET_GUIDE_INCOME_SUMMARY_ATTEMPT' }),

@@ -11,7 +11,17 @@ import Cookies from 'js-cookie'
 // import getCurTourID from '../../actions/action-getCurTourID'
 import {connect} from 'react-redux';
 
-
+const apiConfig = (url) =>{
+  if(process.env.NODE_ENV == "development"){
+    let server_url = "http://localhost:8000/"
+    let result = "http://localhost:8000/"+url
+    return result
+  }else if(process.env.NODE_ENV == "production"){
+    let server_url = "http://128.199.234.89:8000/"
+    let result = "http://128.199.234.89:8000/"+url
+    return result
+  }
+}
 
 class AddTourPicture extends React.Component {
 
@@ -36,8 +46,10 @@ class AddTourPicture extends React.Component {
   }
 
   render() {
+    let insert_url = 'tours/insert-image/'+this.state.tourId
+
     const props = {
-      action: '//localhost:8000/tours/insert-image/'+this.state.tourId,
+      action: apiConfig(insert_url),
       onChange: this.handleChange.bind(this),
       multiple: true,
     };

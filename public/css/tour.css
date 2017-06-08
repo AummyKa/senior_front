@@ -15,6 +15,10 @@
   padding:5%
 }
 
+.height-controller{
+  height: 30vh;
+}
+
 .tour_content .ant-btn-primary{
   background-color: #19BC9D;
   border-color: white;

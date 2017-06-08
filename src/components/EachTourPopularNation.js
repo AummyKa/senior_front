@@ -144,7 +144,7 @@ class EachTourPopularNation extends Component {
       <div>
         <div className = "each-tour-popular-nation-container" style ={{paddingTop:'5%'}}>
           <Row>
-            <Col span={9}>
+            <Col lg={9}>
               <PieChart width={300} height={170} onMouseEnter={this.onPieEnter}>
                 <Pie
                   data={this.state.amountNationsOfEachTour}
@@ -165,12 +165,12 @@ class EachTourPopularNation extends Component {
               </PieChart>
 
               <div className = "other-color-label-below">
-                <Col span = {3} offset={5} ><div className = "little-box-label" style = {{backgroundColor: COLORS[COLORS.length-1]}}/></Col>
-                <Col span = {10} offset={1} ><div>Other countries</div></Col>
+                <Col lg={{span:3, offset: 5}} ><div className = "little-box-label" style = {{backgroundColor: COLORS[COLORS.length-1]}}/></Col>
+                <Col lg={{span:10, offset: 1}} ><div>Other countries</div></Col>
               </div>
 
             </Col>
-            <Col span={12} offset={1}>
+            <Col lg={{span:12, offset:1}}>
               <div className = "pop-nation-table">
                 <Table dataSource ={Array.prototype.slice.apply(this.state.amountNationsOfEachTourTable || [])} columns={columns} size='small'/ >
               </div>

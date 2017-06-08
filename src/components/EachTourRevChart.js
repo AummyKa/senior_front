@@ -98,23 +98,28 @@ class EachTourRevChart extends Component {
     return (
 
       <div>
-          <AreaChart width={650} height={230} data={this.state.eachTourYearlyRevenue}
-                 margin={{top: 10, right: 30, left: 0, bottom: 0}}>
-             <XAxis dataKey="month"/>
-             <YAxis/>
-             <CartesianGrid strokeDasharray="3 3"/>
-             <Tooltip/>
-             <Area type='monotone' dataKey='revenue' stroke='#FF5733' fill='#FFC300' />
-           </AreaChart>
 
-             <div className = "each-tour-month-rev-summary">
-              <Row>
-                <Col span = {10}><h5><b>Monthly revenue summary</b></h5></Col>
-                <Col span = {6} offset = {8}><h5>Year</h5></Col>
-              </Row>
-                <Table columns={columns} dataSource={Array.prototype.slice.apply(this.state.eachTourYearlyRevenueTable || [])}
-                  pagination={false} size="small" />
-            </div>
+        <div className ="height-controller">
+          <ResponsiveContainer>
+            <AreaChart width={650} height={230} data={this.state.eachTourYearlyRevenue}
+                   margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+               <XAxis dataKey="month"/>
+               <YAxis/>
+               <CartesianGrid strokeDasharray="3 3"/>
+               <Tooltip/>
+               <Area type='monotone' dataKey='revenue' stroke='#FF5733' fill='#FFC300' />
+             </AreaChart>
+          </ResponsiveContainer>
+        </div>
+
+          <div className = "each-tour-month-rev-summary">
+            <Row>
+              <Col span = {10}><h5><b>Monthly revenue summary</b></h5></Col>
+              <Col span = {6} offset = {8}><h5>Year</h5></Col>
+            </Row>
+              <Table columns={columns} dataSource={Array.prototype.slice.apply(this.state.eachTourYearlyRevenueTable || [])}
+                pagination={false} size="small" />
+          </div>
 
       </div>
 

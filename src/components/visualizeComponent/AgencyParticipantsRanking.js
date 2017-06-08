@@ -90,7 +90,7 @@ class AgencyParticipantsRanking extends Component {
 
     return (
 
-      <div>
+      <ResponsiveContainer>
         <BarChart width={600} height={300} data={this.state.totalParticipantAgencyData}
             margin={{top: 5, right: 30, left: 20, bottom: 5}}>
          <XAxis dataKey="agency_name"/>
@@ -100,7 +100,7 @@ class AgencyParticipantsRanking extends Component {
          <Legend />
          <Bar dataKey="participants" fill="#FACE0B" />
       </BarChart>
-      </div>
+      </ResponsiveContainer>
 
     );
   }

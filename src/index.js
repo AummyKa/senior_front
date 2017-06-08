@@ -5,7 +5,7 @@ import {createStore} from 'redux'
 import {Provider} from 'react-redux'
 // import configureStore from '../store/configureStore'
 
-import {Router, IndexRoute, Route, hashHistory} from 'react-router';
+import {Router, IndexRoute, Route, browserHistory} from 'react-router';
 import reducer from './reducers'
 import enUS from 'antd/lib/locale-provider/en_US';
 import { LocaleProvider } from 'antd';
@@ -108,7 +108,7 @@ ReactDOM.render(
 
     <LocaleProvider locale={enUS}>
         <Provider store={store}>
-        <Router history={hashHistory}>
+        <Router history={browserHistory}>
           <Route path="/" component={App} >
             <IndexRoute component={LoginPage} onEnter={isOnSession} />
             <Route component={DashboardPage} path="/home">

@@ -115,7 +115,6 @@ class EachTourRevChart extends Component {
           <div className = "each-tour-month-rev-summary">
             <Row>
               <Col span = {10}><h5><b>Monthly revenue summary</b></h5></Col>
-              <Col span = {6} offset = {8}><h5>Year</h5></Col>
             </Row>
               <Table columns={columns} dataSource={Array.prototype.slice.apply(this.state.eachTourYearlyRevenueTable || [])}
                 pagination={false} size="small" />

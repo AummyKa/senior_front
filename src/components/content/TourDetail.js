@@ -117,6 +117,7 @@ class TourDetail extends Component {
     }
 
     if(nextProps.uploadPictureStatus){
+      console.log(this.props.location.pathname)
       window.location.replace(this.props.location.pathname)
     }
   }

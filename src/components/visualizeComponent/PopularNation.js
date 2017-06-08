@@ -149,18 +149,14 @@ listNations(data) {
                       nameKey={'country'}
                       valueKey={'participants'}
                     >
-
                     {
                     	this.state.amountNationsSummary.map((entry, index) => <Cell key={entry} fill={COLORS[index % COLORS.length]}/>)
                     }
                   </Pie>
                 </PieChart>
 
-
                 <div className= "popular-color-label">
-
                     {this.listNations(this.state.amountNationsSummary)}
-
                 </div>
 
                 <div className = "pop-nation-table">

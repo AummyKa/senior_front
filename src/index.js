@@ -108,7 +108,7 @@ ReactDOM.render(
 
     <LocaleProvider locale={enUS}>
         <Provider store={store}>
-        <Router history={hasHistory}>
+        <Router history={hashHistory}>
           <Route path="/" component={App} >
             <IndexRoute component={LoginPage} onEnter={isOnSession} />
             <Route component={DashboardPage} path="/home">

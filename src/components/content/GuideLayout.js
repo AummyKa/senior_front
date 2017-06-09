@@ -185,7 +185,7 @@ class GuideLayout extends Component {
     }
     if (info.file.status === 'done') {
       message.success(`${info.file.name} file uploaded successfully`);
-      window.location.replace(this.props.location.pathname)
+      window.location.reload()
       //this.setState({staff_image_url:"staffs/image/"+Cookies.get('guide_id')})
 
     } else if (info.file.status === 'error') {

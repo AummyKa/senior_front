@@ -65,10 +65,12 @@ class SlotDetail extends Component {
     // this.setState({date_for_querry:changeDateFormat(this.props.selectedDate)})
     console.log(this.props.readyFormatDate)
     if(this.props.readyFormatDate){
+      this.setState({selectedDate:this.props.readyFormatDate})
       this.getTourAndBookerDetail(this.props.readyFormatDate)
 
     }else{
       let date = changeDateFormat(this.props.selectedDate)
+      this.setState({selectedDate:date})
       this.getTourAndBookerDetail(date)
     }
     this.screenTourAndBooker(this.state.bookerAndTourDetail)
@@ -118,19 +120,19 @@ class SlotDetail extends Component {
         //this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
       }
     }
-
     if(this.props.bookerAndTourDetail !== nextProps.bookerAndTourDetail){
       if(nextProps.bookerAndTourDetail){
-        this.setState({bookerAndTourDetail:nextProps.bookerAndTourDetail})
         this.screenTourAndBooker(nextProps.bookerAndTourDetail)
+        this.setState({bookerAndTourDetail:nextProps.bookerAndTourDetail})
       }
     }
     this.setState({wholeBookerAndTour: nextProps.bookerAndTourDetail})
 
     if(this.props.delete_status !== nextProps.delete_status){
       if(nextProps.delete_status){
-        this.getTourAndBookerDetail()
+        console.log("hi")
         this.setState({showTourDeleteWarning: false})
+        this.getTourAndBookerDetail(this.state.selectedDate)
         this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
       }
     }

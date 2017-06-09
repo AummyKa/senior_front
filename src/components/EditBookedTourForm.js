@@ -231,9 +231,9 @@ const EditBookedTourForm = Form.create()(React.createClass({
 
         let payload={
              start_time: time,
-             tour_period: this.props.form.getFieldValue(`tour_period`),
-             tour_name: this.props.form.getFieldValue(`tourname`),
-             tour_type: this.props.form.getFieldValue(`tourtype`),
+             tour_period: this.state.selectedTourPeriod,
+             tour_name: this.state.selectedTourName,
+             tour_type: this.state.selectedTourType,
              tour_guide: this.state.selectedGuide
            }
 
@@ -258,6 +258,14 @@ const EditBookedTourForm = Form.create()(React.createClass({
   handleGuideSelect(value,option){
     this.setState({ selectedGuide: this.state.guide_name[value]._id});
     // this.setState({ selectedGuideID: this.state.guide_name[value]._id})
+  },
+
+  handleTourNameSelect(value,option){
+    this.setState({selectedTourName: this.state.tours_name[value].name })
+  },
+
+  handleTourTypeSelect(value,option){
+    this.setState({selectedTourType: tourtypes[value].value })
   },
 
 
@@ -333,6 +341,9 @@ const EditBookedTourForm = Form.create()(React.createClass({
           this.setState({selectedGuide:<div>{nextProps.eachTour.tour_guide}</div>.props.children._id})
           this.setState({eachCurGuideTour: <div>{nextProps.eachTour.tour_guide}</div>.props.children})
           this.setState({selected_guide_name:<div>{nextProps.eachTour.tour_guide}</div>.props.children.fullname})
+          this.setState({selectedTourName: <div>{nextProps.eachTour.tour_name}</div>.props.children})
+          this.setState({selectedTourType: <div>{nextProps.eachTour.tour_type}</div>.props.children})
+          this.setState({selectedTourPeriod: <div>{nextProps.eachTour.tour_period}</div>.props.children})
         }
         this.setState({eachTour:nextProps.eachTour})
 
@@ -497,7 +508,7 @@ const EditBookedTourForm = Form.create()(React.createClass({
            </Modal>
        </div>
 
-     <Form ref= "addTourForm" className = "add-tour-form" horizontal onSubmit={this.handleSubmit}>
+     <Form ref= "addTourForm" className = "add-tour-form" onSubmit={this.handleSubmit}>
 
        <Row>
       <Col span={11} offset = {1}>

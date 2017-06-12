@@ -53,7 +53,7 @@ class App extends Component {
 
   render () {
     return (
-      <div>
+      <div style={{cursor: "pointer"}}>
         <LocaleProvider locale={enUS}>
           {this.props.children}
         </LocaleProvider>

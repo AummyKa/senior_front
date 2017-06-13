@@ -65,7 +65,7 @@ class Box extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-
+    
   }
 
   render() {

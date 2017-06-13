@@ -6,11 +6,16 @@ import { Button, Col, Row } from 'antd';
 
 import Box from '../Box'
 
-import { Modal } from 'react-bootstrap';
+import { Modal, Pagination } from 'react-bootstrap';
 import apiAccess from '../../Helpers/apiAccess'
 import {closeAllTourBox} from '../../actions/action-closeAllTourBox'
 import {connect} from 'react-redux';
 
+
+Array.prototype.subarray=function(start,end){
+     if(!end){ end=-1;}
+    return this.slice(start, this.length+1-(end*-1));
+}
 
 class Tours extends Component {
 
@@ -19,8 +24,20 @@ class Tours extends Component {
     this.state = {
       tours_data: [],
       showAddNewTour: false,
-      showTourBox: true
+      showTourBox: true,
+      activePage: 1,
+      tours_data_length:0,
+      amount_display_tour:9,
+      tours_sub_data:[]
     }
+  }
+
+  handlePaginationSelect(eventKey) {
+    console.log(eventKey)
+    this.setState({
+      activePage: eventKey
+    });
+
   }
 
   addNewTour(){
@@ -39,7 +56,14 @@ class Tours extends Component {
   componentWillReceiveProps(nextProps){
     if(this.props.tours_data !== nextProps.tours_data){
       if(nextProps.tours_data){
+        let len = nextProps.tours_data.length/this.state.amount_display_tour
+        let final_len = Math.ceil(len)
+        if(final_len<1){
+          let len = 1
+        }
+        this.setState({tours_data_length:final_len})
         this.setState({tours_data: nextProps.tours_data})
+        this.setState({tours_sub_data: nextProps.tours_data})
       }
     }
     if(nextProps.add_newTour_success_status){
@@ -61,16 +85,56 @@ class Tours extends Component {
   }
 
 
-  renderTour(data){
-    console.log(this.state.showTourBox)
-    if (data !== undefined) {
+  renderTour(data,key){
+    if (data !== undefined && data.length>0) {
       const TourBox = this.TourBox
-      return data.map((item,index) => (
-            <TourBox
-              dispatch = {this.props.dispatch}
-              key = {index}
-              item = {item}  />
-        ));
+
+
+        let lastCut = key*this.state.amount_display_tour - data.length - 1
+        let firstCut = (key*this.state.amount_display_tour) - this.state.amount_display_tour
+
+        console.log(data)
+        console.log(key)
+        console.log(firstCut)
+        console.log(lastCut)
+        console.log(data.subarray(firstCut))
+        console.log(data.subarray(firstCut,lastCut))
+
+        if(data.length <= this.state.amount_display_tour){
+
+          return data.map((item,index) => (
+                <TourBox
+                  dispatch = {this.props.dispatch}
+                  key = {index}
+                  item = {item}  />
+            ));
+
+        }else if(data.length <= key*this.state.amount_display_tour){
+          let subData = data.subarray(firstCut)
+          // let arr = []
+          // for(let i=0;i<subData.length;i++){
+          //   arr[i] = i
+          // }
+          return subData.map((item) => (
+                <TourBox
+                  dispatch = {this.props.dispatch}
+                  key = {item._id}
+                  item = {item}  />
+            ));
+        }else{
+          let subData = data.subarray(firstCut, lastCut)
+          // let arr = []
+          // for(let i=0;i<subData.length;i++){
+          //   arr[i] = i
+          // }
+          return subData.map((item) => (
+                <TourBox
+                  dispatch = {this.props.dispatch}
+                  key = {item._id}
+                  item = {item}  />
+            ));
+        }
+
     }else {
       return []
     }
@@ -121,9 +185,25 @@ class Tours extends Component {
         <div className = "tour-table">
             <div className="gutter-example">
               <Row gutter={16}>
-                {this.renderTour(this.state.tours_data)}
+                {this.renderTour(this.state.tours_sub_data,this.state.activePage)}
               </Row>
             </div>
+        </div>
+
+        <div className = "tour-pagination" style={{textAlign:"center"}} >
+          <Pagination
+            prev
+            next
+            first
+            last
+            ellipsis
+            boundaryLinks
+            bsSize="medium"
+            items={this.state.tours_data_length}
+            maxButtons={5}
+            activePage={this.state.activePage}
+            onSelect={this.handlePaginationSelect.bind(this)} />
+
         </div>
           <Button type = "dash" className = "btn-add-tour-form" onClick = {() => this.addNewTour()}> + </Button>
 

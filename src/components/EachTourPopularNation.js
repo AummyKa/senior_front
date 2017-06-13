@@ -159,7 +159,7 @@ class EachTourPopularNation extends Component {
                 >
 
                 {
-                  this.state.amountNationsOfEachTour.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
+                  this.state.amountNationsOfEachTour.map((entry, index) => <Cell key={entry} fill={COLORS[index % COLORS.length]}/>)
                 }
                 </Pie>
               </PieChart>

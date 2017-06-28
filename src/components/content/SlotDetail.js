@@ -122,6 +122,7 @@ class SlotDetail extends Component {
     }
     if(this.props.bookerAndTourDetail !== nextProps.bookerAndTourDetail){
       if(nextProps.bookerAndTourDetail){
+        console.log(nextProps.bookerAndTourDetail)
         this.screenTourAndBooker(nextProps.bookerAndTourDetail)
         this.setState({bookerAndTourDetail:nextProps.bookerAndTourDetail})
       }
@@ -171,7 +172,8 @@ class SlotDetail extends Component {
         let total_p = 0;
         for(var j =0; j < data[i].customers.length; j++){
           if(typeof data[i].customers[j] !== null && typeof data[i].customers[j] !== 'undefined'){
-            if(typeof data[i].customers[j].participants !== null && typeof data[i].customers[j].participants !== 'undefined'){
+            console.log(data[i].customers[j])
+            if(data[i].customers[j] && typeof data[i].customers[j].participants !== 'undefined'){
               total_p += data[i].customers[j].participants
             }
           }

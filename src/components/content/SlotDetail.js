@@ -63,7 +63,6 @@ class SlotDetail extends Component {
 
   componentWillMount(){
     // this.setState({date_for_querry:changeDateFormat(this.props.selectedDate)})
-    console.log(this.props.readyFormatDate)
     if(this.props.readyFormatDate){
       this.setState({selectedDate:this.props.readyFormatDate})
       this.getTourAndBookerDetail(this.props.readyFormatDate)
@@ -122,7 +121,6 @@ class SlotDetail extends Component {
     }
     if(this.props.bookerAndTourDetail !== nextProps.bookerAndTourDetail){
       if(nextProps.bookerAndTourDetail){
-        console.log(nextProps.bookerAndTourDetail)
         this.screenTourAndBooker(nextProps.bookerAndTourDetail)
         this.setState({bookerAndTourDetail:nextProps.bookerAndTourDetail})
       }
@@ -131,7 +129,6 @@ class SlotDetail extends Component {
 
     if(this.props.delete_status !== nextProps.delete_status){
       if(nextProps.delete_status){
-        console.log("hi")
         this.setState({showTourDeleteWarning: false})
         this.getTourAndBookerDetail(this.state.selectedDate)
         this.props.dispatch(addTour("CLOSE_ADD_TOUR"))
@@ -140,7 +137,6 @@ class SlotDetail extends Component {
 
     if(this.props.readyFormatDate !== nextProps.readyFormatDate){
       if(nextProps.readyFormatDate){
-        console.log(nextProps.readyFormatDate)
         this.setState({date_for_querry:nextProps.readyFormatDate})
       }
     }
@@ -172,7 +168,6 @@ class SlotDetail extends Component {
         let total_p = 0;
         for(var j =0; j < data[i].customers.length; j++){
           if(typeof data[i].customers[j] !== null && typeof data[i].customers[j] !== 'undefined'){
-            console.log(data[i].customers[j])
             if(data[i].customers[j] && typeof data[i].customers[j].participants !== 'undefined'){
               total_p += data[i].customers[j].participants
             }

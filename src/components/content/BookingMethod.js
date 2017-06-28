@@ -38,19 +38,24 @@ const agencyData = (arrayJSON) =>{
 }
 
 const bookingMethodData = (arrayJSON) =>{
-
+  console.log(arrayJSON)
   let resultJSON = []
   let count = 0
   if(arrayJSON && arrayJSON.length > 0){
     for(let i =0;i<arrayJSON.length;i++){
       if(arrayJSON[i].type == "Individual"){
-        arrayJSON[count]["key"] = count;
-        resultJSON[count] = arrayJSON[i]
+
+        var arr ={
+          name: arrayJSON[i].name,
+          description: arrayJSON[i].description,
+          key: count
+        }
+        console.log(arr)
+        resultJSON.push(arr)
         count++
       }
     }
   }
-
   return resultJSON
 }
 

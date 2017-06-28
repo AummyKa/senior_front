@@ -170,7 +170,12 @@ class SlotDetail extends Component {
 
         let total_p = 0;
         for(var j =0; j < data[i].customers.length; j++){
-          total_p += data[i].customers[j].participants
+          if(typeof data[i].customers[j] !== null && typeof data[i].customers[j] !== 'undefined'){
+            if(typeof data[i].customers[j].participants !== null && typeof data[i].customers[j].participants !== 'undefined'){
+              total_p += data[i].customers[j].participants
+            }
+          }
+
         }
 
         let guide =''

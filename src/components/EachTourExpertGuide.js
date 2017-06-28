@@ -82,7 +82,7 @@ class EachTourExpertGuide extends Component {
     return (
 
        <div className = "each-tour-expert-guide">
-            <Table columns={columns} dataSource={this.state.eachTourExpertGuide} size="small" pagination={false} />
+            <Table columns={columns} dataSource={this.state.eachTourExpertGuide} size="small"/>
         </div>
 
 

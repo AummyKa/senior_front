@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import { Row,Col,Table, Input, Button, Icon } from 'antd';
+import { Row,Col,Table, Input, Button, Icon, Popconfirm } from 'antd';
 import apiAccess from '../../Helpers/apiAccess'
 
 import Cookies from "js-cookie"
@@ -84,14 +84,21 @@ class Staff extends Component{
   componentWillReceiveProps(nextProps){
 
     if(this.props.staffLists !== nextProps.staffLists){
+      if(nextProps.staffLists){
         StaffUserData(nextProps.staffLists,this.state.data)
+      }
+    }
+    if(this.props.deleteStaffStatus !== nextProps.deleteStaffStatus){
+      if(nextProps.deleteStaffStatus){
+        window.location.reload()
+      }
     }
   }
 
-  eachStaff(event, index){
+  eachStaff(record){
     console.log(event._id)
-    let id = event._id
-    Cookies.set('staff_id',event._id)
+    let id = record._id
+    Cookies.set('staff_id',record._id)
     this.context.router.push('/staff/'+id);
   }
 
@@ -132,6 +139,19 @@ class Staff extends Component{
     this.getStaffs()
   }
 
+  deleteStaff = (record) =>{
+    apiAccess({
+      url: 'delete-user',
+      method: 'POST',
+      payload: {
+        _id: record._id
+      },
+      attemptAction: () => this.props.dispatch({ type: 'DELETE_STAFF_ATTEMPT' }),
+      successAction: (json) => this.props.dispatch({ type: 'DELETE_STAFF_SUCCESS', json }),
+      failureAction: () => this.props.dispatch({ type: 'DELETE_STAFF_FAILED' })
+    })
+  }
+
 
   render() {
 
@@ -167,7 +187,6 @@ class Staff extends Component{
       title: 'E-mail',
       dataIndex: 'email',
       key: 'email',
-
       filteredValue: filteredInfo.email || null,
       onFilter: (value, record) => record.email.includes(value),
       sorter: (a, b) => a.email.length - b.email.length,
@@ -185,6 +204,18 @@ class Staff extends Component{
       filterMultiple: false,
       onFilter: (value, record) => record.role.indexOf(value) === 0,
       sorter: (a, b) => a.role.length - b.role.length,
+    },{ title: 'Action', dataIndex: '', key: 'x', width: 230,
+      render: (text, record) =>
+      <span>
+          <Button type="primary" onClick = {() => this.eachStaff(record)} >View</Button>
+          {Cookies.get('userRole') == "Manager" ? <span className="ant-divider" /> : null}
+          {Cookies.get('userRole') == "Manager" ?
+              <Popconfirm title="Are you sure？" okText="Yes" cancelText="No"
+                onConfirm = {() => this.deleteStaff(record)}>
+                <Button type="danger">Delete</Button>
+              </Popconfirm>
+          : null}
+      </span>
     }];
 
     return (
@@ -201,7 +232,6 @@ class Staff extends Component{
         <div className="table-operations">
         </div>
         <Table columns={columns} dataSource={this.state.data} onChange={this.handleChange}
-          onRowClick = {this.eachStaff.bind(this)}
            />
       </div>
     </div>
@@ -212,7 +242,8 @@ class Staff extends Component{
 const mapStateToProps = (state) => {
 
     return {
-        staffLists: state.getStaffLists.staffLists
+        staffLists: state.getStaffLists.staffLists,
+        deleteStaffStatus: state.deleteStaff.deleteStaffStatus
     };
 }
 

@@ -30,6 +30,7 @@ import receiveSuggestedGuideName from './Guide/receiveSuggestedGuideName'
 import getStaffLists from './Staff/getStaffLists'
 import updateStaff from './Staff/updateStaff'
 import getStaffProfile from './Staff/getStaffProfile'
+import deleteStaff from './Staff/deleteStaff'
 
 //Tours
 import getToursName from './Tour/getToursName'
@@ -157,7 +158,8 @@ const admin = combineReducers({
     uploadPicture,
     getStaffProfile,
     changeUserPassword,
-    getAgencyTotalParticipants
+    getAgencyTotalParticipants,
+    deleteStaff
 })
 
 export default admin

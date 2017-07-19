@@ -15,7 +15,6 @@ import Cookies from 'js-cookie'
 
 
 const agencyData = (arrayJSON) =>{
-
   let resultJSON = []
   let count = 0
   if(arrayJSON && arrayJSON.length > 0){
@@ -23,6 +22,7 @@ const agencyData = (arrayJSON) =>{
       if(arrayJSON[i].type == "Agency"){
 
         var arr ={
+          _id: arrayJSON[i]._id,
           name: arrayJSON[i].name,
           email: arrayJSON[i].email,
           phone: arrayJSON[i].phone,
@@ -38,7 +38,6 @@ const agencyData = (arrayJSON) =>{
 }
 
 const bookingMethodData = (arrayJSON) =>{
-  console.log(arrayJSON)
   let resultJSON = []
   let count = 0
   if(arrayJSON && arrayJSON.length > 0){
@@ -46,6 +45,7 @@ const bookingMethodData = (arrayJSON) =>{
       if(arrayJSON[i].type == "Individual"){
 
         var arr ={
+          _id: arrayJSON[i]._id,
           name: arrayJSON[i].name,
           description: arrayJSON[i].description,
           key: count
@@ -154,13 +154,11 @@ class BookingMethod extends Component{
   }
 
   editAgency(record){
-    console.log(record)
     this.setState({selectedBookingMethod: record})
     this.setState({showEditAgencyModal: true})
   }
 
   editBookingMethod(record){
-    console.log(record)
     this.setState({selectedBookingMethod: record})
     this.setState({showEditBookingMethodsModal: true})
   }
